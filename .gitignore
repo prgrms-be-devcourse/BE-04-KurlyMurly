@@ -8,6 +8,7 @@ build/
 ## yml
 *.yml
 !application.yml
+!workflow.yml
 
 ### STS ###
 .apt_generated

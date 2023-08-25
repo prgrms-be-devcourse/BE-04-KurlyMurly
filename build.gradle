@@ -8,7 +8,11 @@ group = 'com.devcourse'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '20'
+    sourceCompatibility = '19'
+}
+
+jar {
+    enabled = false
 }
 
 repositories {
@@ -23,7 +27,7 @@ dependencies {
 
     // db
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'com.mysql:mysql-connector-j'
     runtimeOnly 'com.h2database:h2'
 
     // swagger
