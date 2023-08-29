@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.module.product.domain;
+package com.devcourse.kurlymurly.module.product.domain.category;
 
 import com.devcourse.kurlymurly.module.BaseEntity;
 import jakarta.persistence.Column;
@@ -20,5 +20,13 @@ public class Category extends BaseEntity {
     public Category(String name, String subCategory) {
         this.name = name;
         this.subCategory = subCategory;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
     }
 }
