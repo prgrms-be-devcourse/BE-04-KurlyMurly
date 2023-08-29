@@ -14,7 +14,7 @@ public class Product extends BaseEntity {
     /** 샛별 배송, 일반 배송 */
     public enum Delivery { EXPRESS, NORMAL }
 
-    public enum Status { NORMAL, SOLD_OUT }
+    public enum Status { NORMAL, SOLD_OUT, DELETED }
 
     @Column(nullable = false)
     private Long categoryId;
@@ -57,5 +57,17 @@ public class Product extends BaseEntity {
         this.detail = detail;
         this.status = Status.NORMAL;
         this.isKurlyOnly = isKurlyOnly;
+    }
+
+    public void softDelete() {
+        this.status = Status.DELETED;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }
