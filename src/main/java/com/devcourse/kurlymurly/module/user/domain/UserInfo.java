@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.module.user.domain.user;
+package com.devcourse.kurlymurly.module.user.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
