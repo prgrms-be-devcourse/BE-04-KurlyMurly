@@ -59,6 +59,12 @@ public class Product extends BaseEntity {
         this.isKurlyOnly = isKurlyOnly;
     }
 
+    public void validateOrderable() {
+        if (this.status != Status.NORMAL) {
+            throw new IllegalStateException("유효하지 않은 상품입니다.");
+        }
+    }
+
     public void softDelete() {
         this.status = Status.DELETED;
     }

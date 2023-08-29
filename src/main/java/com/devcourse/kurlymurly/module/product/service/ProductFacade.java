@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ProductFacade {
     private final ProductCreate productCreate;
     private final ProductRetrieve productRetrieve;
@@ -24,12 +24,19 @@ public class ProductFacade {
         this.categoryRetrieve = categoryRetrieve;
     }
 
+    @Transactional
     public CreateProduct.Response createProduct(CreateProduct.Request request) {
         Category category = categoryRetrieve.findByIdOrThrow(request.categoryId());
         productCreate.create(request);
         return toResponse(category, request);
     }
 
+    public void validateOrderable(Long id) {
+        Product product = productRetrieve.findByIdOrThrow(id);
+        product.validateOrderable();
+    }
+
+    @Transactional
     public void delete(Long id) {
         Product product = productRetrieve.findByIdOrThrow(id);
         product.softDelete();
