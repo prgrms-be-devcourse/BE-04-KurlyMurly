@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.module.product.domain.category.service;
+package com.devcourse.kurlymurly.module.product.service;
 
 import com.devcourse.kurlymurly.module.product.domain.category.Category;
 import com.devcourse.kurlymurly.module.product.domain.category.CategoryRepository;

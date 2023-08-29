@@ -3,7 +3,6 @@ package com.devcourse.kurlymurly.module.product.service;
 import com.devcourse.kurlymurly.module.product.ProductFixture;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.category.Category;
-import com.devcourse.kurlymurly.module.product.domain.category.service.CategoryRetrieve;
 import com.devcourse.kurlymurly.web.dto.CreateProduct;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
