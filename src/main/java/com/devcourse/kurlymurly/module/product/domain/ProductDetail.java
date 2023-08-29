@@ -8,28 +8,41 @@ import jakarta.persistence.Enumerated;
 @Embeddable
 public class ProductDetail {
     /** 냉동, 냉장, 상온 */
-    public enum Type { FROZEN, REFRIGERATE, ROOM_TEMPERATURE }
+    public enum StorageType { FROZEN, REFRIGERATE, ROOM_TEMPERATURE }
 
     @Column(length = 20, nullable = false)
     private String seller;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StorageType storageType;
+
+    @Column(length = 20, nullable = false)
+    private String saleUnit;
+
+    @Column(length = 20, nullable = false)
+    private String weight;
+
     @Column(length = 50, nullable = false)
     private String origin;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Type type;
+    private String allergyInfo;
 
-    @Column(nullable = false)
-    private boolean isKurlyOnly;
+    @Column(length = 50, nullable = false)
+    private String expirationInformation;
 
     protected ProductDetail() {
     }
 
-    public ProductDetail(String seller, String origin, Type type, boolean isKurlyOnly) {
+    public ProductDetail(String seller, StorageType storageType, String saleUnit, String weight,
+                         String origin, String allergyInfo, String expirationInformation) {
         this.seller = seller;
+        this.storageType = storageType;
+        this.saleUnit = saleUnit;
+        this.weight = weight;
         this.origin = origin;
-        this.type = type;
-        this.isKurlyOnly = isKurlyOnly;
+        this.allergyInfo = allergyInfo;
+        this.expirationInformation = expirationInformation;
     }
 }
