@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.module.user.domain.address;
+package com.devcourse.kurlymurly.module.user.domain.shipping;
 
 import com.devcourse.kurlymurly.module.BaseEntity;
 import jakarta.persistence.Column;
