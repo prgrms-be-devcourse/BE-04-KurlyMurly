@@ -1,8 +1,11 @@
 package com.devcourse.kurlymurly.module.user.service;
 
+import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
+import com.devcourse.kurlymurly.module.user.domain.cart.Cart;
+import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,13 +20,20 @@ public class UserService {
     private static final String NOT_SAME_PASSWORD = "동일한 비밀번호를 입력";
 
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
+    private final ProductFacade productFacade;
+    private final CartRepository cartRepository;
 
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            ProductFacade productFacade,
+            CartRepository cartRepository
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.productFacade = productFacade;
+        this.cartRepository = cartRepository;
     }
 
     @Transactional
@@ -41,6 +51,13 @@ public class UserService {
         }
 
         userRepository.save(newUser);
+    }
+
+    @Transactional
+    public void addCart(Long id, Long productId, int quantity) {
+        productFacade.validateOrderable(productId);
+        Cart cart = new Cart(id, productId, quantity);
+        cartRepository.save(cart);
     }
 
     private void checkPassword(String password, String checkPassword) {
