@@ -54,7 +54,7 @@ public enum ProductFixture {
         this.isKurlyOnly = isKurlyOnly;
     }
 
-    public Product getProduct() {
+    public Product toEntity() {
         ProductDetail detail = new ProductDetail(this.seller,
                 this.storageType,
                 this.saleUnit,
@@ -72,7 +72,7 @@ public enum ProductFixture {
                 this.isKurlyOnly);
     }
 
-    public CreateProduct.Request getCreateRequest() {
+    public CreateProduct.Request toRequest() {
         return new CreateProduct.Request(
                 this.categoryId,
                 this.name,

@@ -61,7 +61,13 @@ public class Product extends BaseEntity {
 
     public void validateOrderable() {
         if (this.status != Status.NORMAL) {
-            throw new IllegalStateException("유효하지 않은 상품입니다.");
+            throw new IllegalStateException("주문할 수 없는 상품입니다.");
+        }
+    }
+
+    public void validateSupportable() {
+        if (this.status == Status.DELETED) {
+            throw new IllegalStateException("삭제된 상품입니다. ID : " + this.getId());
         }
     }
 

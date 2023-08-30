@@ -2,8 +2,9 @@ package com.devcourse.kurlymurly.module.product.service;
 
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.category.Category;
-import com.devcourse.kurlymurly.module.product.domain.category.service.CategoryRetrieve;
+import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.web.dto.CreateProduct;
+import com.devcourse.kurlymurly.web.dto.SupportProduct;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,15 +14,21 @@ public class ProductFacade {
     private final ProductCreate productCreate;
     private final ProductRetrieve productRetrieve;
     private final CategoryRetrieve categoryRetrieve;
+    private final ProductSupportCreate productSupportCreate;
+    private final ProductSupportRetrieve productSupportRetrieve;
 
     public ProductFacade(
             ProductCreate productCreate,
             ProductRetrieve productRetrieve,
-            CategoryRetrieve categoryRetrieve
+            CategoryRetrieve categoryRetrieve,
+            ProductSupportCreate productSupportCreate,
+            ProductSupportRetrieve productSupportRetrieve
     ) {
         this.productCreate = productCreate;
         this.productRetrieve = productRetrieve;
         this.categoryRetrieve = categoryRetrieve;
+        this.productSupportCreate = productSupportCreate;
+        this.productSupportRetrieve = productSupportRetrieve;
     }
 
     @Transactional
@@ -34,6 +41,21 @@ public class ProductFacade {
     public void validateOrderable(Long id) {
         Product product = productRetrieve.findByIdOrThrow(id);
         product.validateOrderable();
+    }
+
+    @Transactional
+    public void createProductSupport(Long userId, Long productId, SupportProduct.Request request) {
+        Product product = productRetrieve.findByIdOrThrow(productId);
+        product.validateSupportable();
+
+        productSupportCreate.create(userId, productId, request);
+    }
+
+    @Transactional
+    public void updateProductSupport(Long userId, Long supportId, SupportProduct.Request request) {
+        ProductSupport support = productSupportRetrieve.findByIdOrThrow(supportId);
+        support.validateAuthor(userId);
+        support.update(request.title(), request.content(), request.isSecret());
     }
 
     @Transactional

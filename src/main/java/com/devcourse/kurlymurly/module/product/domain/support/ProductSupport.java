@@ -7,6 +7,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "product_supports")
 public class ProductSupport extends BaseEntity {
@@ -41,5 +43,21 @@ public class ProductSupport extends BaseEntity {
         this.content = content;
         this.isSecret = isSecret;
         this.status = Status.NORMAL;
+    }
+
+    public void update(String title, String content, boolean isSecret) {
+        this.title = title;
+        this.content = content;
+        this.isSecret = isSecret;
+    }
+
+    public void validateAuthor(Long userId) {
+        if (!Objects.equals(this.userId, userId)) {
+            throw new IllegalArgumentException("작성자가 아닙니다. ID : " + userId);
+        }
+    }
+
+    public boolean isSecret() {
+        return isSecret;
     }
 }
