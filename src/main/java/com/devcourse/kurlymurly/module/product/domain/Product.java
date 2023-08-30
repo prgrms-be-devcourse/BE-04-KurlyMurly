@@ -11,7 +11,10 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "products")
 public class Product extends BaseEntity {
-    public enum Status { NORMAL, SOLD_OUT }
+    /** 샛별 배송, 일반 배송 */
+    public enum Delivery { EXPRESS, NORMAL }
+
+    public enum Status { NORMAL, SOLD_OUT, DELETED }
 
     @Column(nullable = false)
     private Long categoryId;
@@ -25,6 +28,12 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private int price;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Delivery delivery;
+
+    // todo: images
+
     @Embedded
     private ProductDetail detail;
 
@@ -32,15 +41,33 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private Status status;
 
+    @Column(nullable = false)
+    private boolean isKurlyOnly;
+
     protected Product() {
     }
 
-    public Product(Long categoryId, String name, String description, int price, ProductDetail detail) {
+    public Product(Long categoryId, String name, String description, int price, Delivery delivery,
+                   ProductDetail detail, boolean isKurlyOnly) {
         this.categoryId = categoryId;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.delivery = delivery;
         this.detail = detail;
         this.status = Status.NORMAL;
+        this.isKurlyOnly = isKurlyOnly;
+    }
+
+    public void softDelete() {
+        this.status = Status.DELETED;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }
