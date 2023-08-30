@@ -36,13 +36,13 @@ public class UserController {
         return ApiResponse.ok();
     }
 
-    @GetMapping("/checkId")
+    @PostMapping("/checkId")
     public ApiResponse<Boolean> checkId(@RequestBody CheckId.Request request) {
         Boolean result = userService.checkId(request.loginId());
         return ApiResponse.ok(result);
     }
 
-    @GetMapping("/checkAddress")
+    @PostMapping("/checkAddress")
     public ApiResponse<Boolean> checkEmail(@RequestBody CheckEmail.Request request) {
         Boolean result = userService.checkEmail(request.email());
         return ApiResponse.ok(result);
