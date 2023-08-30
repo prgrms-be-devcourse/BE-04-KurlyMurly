@@ -8,9 +8,32 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
+    protected User() {
+    }
+
+    public User(String name, String loginId, String password, String email, UserInfo info, String phoneNumber) {
+        this.name = name;
+        this.loginId = loginId;
+        this.password = password;
+        this.tier = Tier.THE_PURPLE;
+        this.email = email;
+        this.info = info;
+        this.payPassword = null;
+        this.phoneNumber = phoneNumber;
+        this.role = Role.ROLE_USER;
+        this.status = UserStatus.NORMAL;
+    }
+
+    public enum Role { ROLE_USER, ROLE_ADMIN }
+
+    public enum UserStatus { CANCEL, NORMAL }
+
     public enum Tier {
         THE_PURPLE,
         PURPLE,
@@ -19,9 +42,8 @@ public class User extends BaseEntity {
         FRIENDS;
     }
 
-    public enum Role {ROLE_USER, ROLE_ADMIN;}
-
-    public enum UserStatus {CANCEL,NORMAL;}
+    @Column(nullable = false, length = 10)
+    private String name;
 
     @Column(nullable = false, length = 50)
     private String loginId;
@@ -49,6 +71,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 10)
     private Role role;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
     private UserStatus status;
 }
