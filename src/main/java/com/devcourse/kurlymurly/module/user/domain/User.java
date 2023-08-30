@@ -15,9 +15,9 @@ import java.security.NoSuchAlgorithmException;
 @Table(name = "users")
 public class User extends BaseEntity {
 
-    public enum Role {ROLE_USER, ROLE_ADMIN;}
+    public enum Role { ROLE_USER, ROLE_ADMIN }
 
-    public enum UserStatus {CANCEL, NORMAL;}
+    public enum UserStatus { CANCEL, NORMAL }
 
     public enum Tier {
         THE_PURPLE,

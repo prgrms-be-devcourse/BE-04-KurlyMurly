@@ -10,9 +10,9 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "payments")
 public class Payment extends BaseEntity {
-    public enum Type {CREDIT, EASY;}
+    public enum Type { CREDIT, EASY }
 
-    public enum PaymentStatus {DEFAULT,NORMAL,EXPIRED;}
+    public enum PaymentStatus { DEFAULT,NORMAL,EXPIRED }
 
     @Column(nullable = false)
     private Long userId;
