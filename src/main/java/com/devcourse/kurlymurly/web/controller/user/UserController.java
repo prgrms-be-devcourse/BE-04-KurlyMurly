@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ApiResponse<Long> save(@RequestBody JoinUser.Request request) {
+    public ApiResponse<Long> join(@RequestBody JoinUser.Request request) {
         userService.join(request);
         return ApiResponse.ok();
     }
