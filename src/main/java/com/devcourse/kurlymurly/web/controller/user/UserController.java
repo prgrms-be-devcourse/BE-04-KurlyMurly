@@ -1,6 +1,8 @@
 package com.devcourse.kurlymurly.web.controller.user;
 
 import com.devcourse.kurlymurly.module.user.service.UserService;
+import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
+import com.devcourse.kurlymurly.web.dto.user.CheckId;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,15 +36,15 @@ public class UserController {
         return ApiResponse.ok();
     }
 
-    @GetMapping("/checkId/{id}")
-    public ApiResponse<Boolean> checkId(@PathVariable String id) {
-        Boolean result = userService.checkId(id);
+    @GetMapping("/checkId")
+    public ApiResponse<Boolean> checkId(@RequestBody CheckId.Request request) {
+        Boolean result = userService.checkId(request.loginId());
         return ApiResponse.ok(result);
     }
 
-    @GetMapping("/checkAddress/{email}")
-    public ApiResponse<Boolean> checkEmail(@PathVariable String email) {
-        Boolean result = userService.checkEmail(email);
+    @GetMapping("/checkAddress")
+    public ApiResponse<Boolean> checkEmail(@RequestBody CheckEmail.Request request) {
+        Boolean result = userService.checkEmail(request.email());
         return ApiResponse.ok(result);
     }
 }
