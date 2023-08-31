@@ -17,8 +17,8 @@ public class Order extends BaseEntity {
 
     public enum Status {
         PROCESSING,
-        DELIVERY_ING,
-        DELIVERY_DONE,
+        DELIVERING,
+        DELIVERED,
         CANCELED
     }
 
@@ -62,11 +62,11 @@ public class Order extends BaseEntity {
     }
 
     public void deliveringOrder() {
-        this.status = Status.DELIVERY_ING;
+        this.status = Status.DELIVERING;
     }
 
     public void deliveryDoneOrder() {
-        this.status = Status.DELIVERY_DONE;
+        this.status = Status.DELIVERED;
     }
 
     public void cancelOrder() {
