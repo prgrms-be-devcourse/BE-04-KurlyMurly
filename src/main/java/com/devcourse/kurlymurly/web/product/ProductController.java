@@ -74,4 +74,14 @@ public class ProductController {
         productFacade.delete(id);
         return KurlyResponse.noData();
     }
+
+    @DeleteMapping("/{id}/favorite")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> cancelProduct(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long id
+    ) {
+        productFacade.cancelFavorite(user.getId(), id);
+        return KurlyResponse.noData();
+    }
 }
