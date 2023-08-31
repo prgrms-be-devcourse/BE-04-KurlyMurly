@@ -7,6 +7,10 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
+
 @Entity
 @Table(name = "orders")
 public class Order extends BaseEntity {
@@ -14,7 +18,8 @@ public class Order extends BaseEntity {
     public enum Status {
         PROCESSING,
         DELIVERING,
-        DELIVERED
+        DELIVERED,
+        CANCELED
     }
 
     @Column(nullable = false)
@@ -42,13 +47,54 @@ public class Order extends BaseEntity {
     protected Order() {
     }
 
-    public Order(Long userId, Long shippingId, String orderNumber, int deliveryFee, int totalPrice, String payment) {
+    public Order(Long userId, Long shippingId, int totalPrice, String payment) {
         this.userId = userId;
         this.shippingId = shippingId;
-        this.orderNumber = orderNumber;
-        this.deliveryFee = deliveryFee;
+        this.orderNumber = generateOrderNumber();
+        this.deliveryFee = checkDeliveryFee();
         this.totalPrice = totalPrice;
         this.payment = payment;
         this.status = Status.PROCESSING;
+    }
+
+    public void processingOrder() {
+        this.status = Status.PROCESSING;
+    }
+
+    public void deliveringOrder() {
+        this.status = Status.DELIVERING;
+    }
+
+    public void deliveryDoneOrder() {
+        this.status = Status.DELIVERED;
+    }
+
+    public void cancelOrder() {
+        this.status = Status.CANCELED;
+    }
+
+    private int checkDeliveryFee() {
+        if(totalPrice > 40000) {
+            return 0;
+        }
+
+        return 4000;
+    }
+
+    private String generateOrderNumber() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String currentDate = localDateTime.format(DateTimeFormatter.ofPattern("yyMMddss"));
+
+        int randomDigits = new Random().nextInt(10000);
+
+        return currentDate + randomDigits;
+    }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public String getStatus() {
+        return status.toString();
     }
 }
