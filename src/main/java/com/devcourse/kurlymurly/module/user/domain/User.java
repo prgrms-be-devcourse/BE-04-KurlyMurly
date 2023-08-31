@@ -74,4 +74,12 @@ public class User extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
     private UserStatus status;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
 }

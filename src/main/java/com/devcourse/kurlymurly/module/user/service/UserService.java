@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.module.user.service;
 
+import com.devcourse.kurlymurly.global.jwt.JwtTokenProvider;
 import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
@@ -7,6 +8,7 @@ import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.cart.Cart;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
+import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,22 +20,36 @@ public class UserService {
     private static final String EXIST_SAME_ID = "사용 불가능한 아이디 입니다.";
     private static final String EXIST_SAME_EMAIL = "사용 불가능한 이메일 입니다.";
     private static final String NOT_SAME_PASSWORD = "동일한 비밀번호를 입력";
+    private static final String FAIL_USER_LOGIN = "아이디, 비밀번호를 확인해주세요";
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProductFacade productFacade;
     private final CartRepository cartRepository;
+    private final JwtTokenProvider tokenProvider;
 
     public UserService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             ProductFacade productFacade,
-            CartRepository cartRepository
+            CartRepository cartRepository,
+            JwtTokenProvider tokenProvider
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.productFacade = productFacade;
         this.cartRepository = cartRepository;
+        this.tokenProvider = tokenProvider;
+    }
+
+    public LoginUser.Response logIn(LoginUser.Request request) {
+        User user = userRepository.findByLoginId(request.loginId())
+                .filter(u -> u.getPassword().equals(request.password()))
+                .orElseThrow(() -> new IllegalArgumentException(FAIL_USER_LOGIN));
+
+        String token = tokenProvider.createToken(String.format("%s:%s", user.getId(), user.getRole()));    // 토큰 생성
+
+        return new LoginUser.Response(user.getRole().name(), token);
     }
 
     @Transactional
