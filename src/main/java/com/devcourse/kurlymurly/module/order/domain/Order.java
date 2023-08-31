@@ -28,7 +28,7 @@ public class Order extends BaseEntity {
     @Column(nullable = false)
     private Long shippingId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String orderNumber;
 
     @Column(nullable = false)
@@ -94,7 +94,7 @@ public class Order extends BaseEntity {
         return totalPrice;
     }
 
-    public String getStatus() {
-        return status.toString();
+    public Status getStatus() {
+        return status;
     }
 }

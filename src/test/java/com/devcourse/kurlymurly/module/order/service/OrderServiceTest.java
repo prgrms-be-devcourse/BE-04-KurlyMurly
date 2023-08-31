@@ -81,7 +81,7 @@ class OrderServiceTest {
 
         // mocking
         given(orderRepository.save(any())).willReturn(order);
-        given(orderRepository.findAllByUserId(any())).willReturn(Optional.of(List.of(order)));
+        given(orderRepository.findAllByUserId(any())).willReturn(List.of(order));
 
         // when
         orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
