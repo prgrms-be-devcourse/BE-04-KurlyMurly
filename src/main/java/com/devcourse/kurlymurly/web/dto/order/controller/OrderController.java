@@ -3,10 +3,6 @@ package com.devcourse.kurlymurly.web.dto.order.controller;
 import com.devcourse.kurlymurly.module.order.domain.Order;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.web.dto.order.OrderCreate;
-import com.devcourse.kurlymurly.web.dto.order.PageParam;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,13 +31,6 @@ public class OrderController {
                 request.totalPrice(),
                 request.payment()
         );
-    }
-
-    @GetMapping
-    public Page<Order> findOrderAll(@RequestBody PageParam param) {
-        Pageable pageable = PageRequest.of(param.page(), param.size());
-
-        return orderService.findOrderAll(pageable);
     }
 
     @GetMapping("/{id}")
