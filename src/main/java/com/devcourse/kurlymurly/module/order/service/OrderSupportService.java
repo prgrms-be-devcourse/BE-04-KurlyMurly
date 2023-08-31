@@ -21,11 +21,11 @@ public class OrderSupportService {
     }
 
     @Transactional
-    public OrderSupport takeOrderSupport(Long userId, Long orderId, OrderSupport.Category category,
+    public OrderSupport takeOrderSupport(Long userId, Long orderId, OrderSupport.Type type,
                                          @Valid String title, String content) {
-        OrderSupport entity = new OrderSupport(userId, orderId, category, title, content);
+        OrderSupport orderSupport = new OrderSupport(userId, orderId, type, title, content);
 
-        return orderSupportRepository.save(entity);
+        return orderSupportRepository.save(orderSupport);
     }
 
     public Page<OrderSupport> findOrderSupport(Pageable pageable) {
@@ -37,52 +37,42 @@ public class OrderSupportService {
                 .orElseThrow(NotFoundOrderException::new);
     }
 
-    public OrderSupport findByOrderId(Long orderId) {
-        return orderSupportRepository.findByOrderId(orderId)
-                .orElseThrow(NotFoundOrderException::new);
+    public List<OrderSupport> findByOrderId(Long orderId) {
+        return orderSupportRepository.findByOrderId(orderId);
     }
 
     public List<OrderSupport> findAllByUserId(Long userId) {
-        return orderSupportRepository.findAllByUserId(userId)
-                .orElseThrow(NotFoundOrderException::new);
+        return orderSupportRepository.findAllByUserId(userId);
     }
 
     @Transactional
     public OrderSupport updateOrderSupport(Long id, String title, String content) {
-        OrderSupport entity = findById(id);
-        entity.updateOrderSupport(title, content);
+        OrderSupport orderSupport = findById(id);
+        orderSupport.updateOrderSupport(title, content);
 
-        return entity;
+        return orderSupport;
     }
 
     // 관리자 영역
     @Transactional
     public OrderSupport updateSupportToPrepare(Long id) {
-        OrderSupport entity = findById(id);
-        entity.prepareSupport();
+        OrderSupport orderSupport = findById(id);
+        orderSupport.toPreparedSupport();
 
-        return entity;
+        return orderSupport;
     }
 
     @Transactional
-    public OrderSupport updateSupportToStart(Long id) {
-        OrderSupport entity = findById(id);
-        entity.startSupport();
+    public OrderSupport updateSupportToAnswered(Long id) {
+        OrderSupport orderSupport = findById(id);
+        orderSupport.toAnsweredSupport();
 
-        return entity;
-    }
-
-    @Transactional
-    public OrderSupport updateSupportToDone(Long id) {
-        OrderSupport entity = findById(id);
-        entity.doneSupport();
-
-        return entity;
+        return orderSupport;
     }
 
     @Transactional
     public void deleteOrderSupport(Long id) {
-        OrderSupport entity = findById(id);
-        entity.deleteSupport();
+        OrderSupport orderSupport = findById(id);
+        orderSupport.deleteSupport();
     }
 }
