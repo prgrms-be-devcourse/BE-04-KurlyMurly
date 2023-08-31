@@ -39,7 +39,7 @@ public class ProductFacade {
         this.favoriteRepository = favoriteRepository;
     }
 
-    @Transactional
+    @Transactional // todo: 관리자 API
     public CreateProduct.Response createProduct(CreateProduct.Request request) {
         Category category = categoryRetrieve.findByIdOrThrow(request.categoryId());
         productCreate.create(request);
@@ -59,14 +59,20 @@ public class ProductFacade {
         productSupportCreate.create(userId, productId, request);
     }
 
-    @Transactional
+    @Transactional // todo: 관리자 API
     public void updateProductSupport(Long userId, Long supportId, SupportProduct.Request request) {
         ProductSupport support = productSupportRetrieve.findByIdOrThrow(supportId);
         support.validateAuthor(userId);
         support.update(request.title(), request.content(), request.isSecret());
     }
 
-    @Transactional
+    @Transactional // todo: 관리자 API
+    public void soldOutProduct(Long id) {
+        Product product = productRetrieve.findByIdOrThrow(id);
+        product.soldOut();
+    }
+
+    @Transactional // todo: 관리자 API
     public void delete(Long id) {
         Product product = productRetrieve.findByIdOrThrow(id);
         product.softDelete();
