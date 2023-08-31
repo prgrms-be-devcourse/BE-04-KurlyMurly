@@ -1,6 +1,8 @@
 package com.devcourse.kurlymurly.global.exception;
 
 public class KurlyBaseException extends RuntimeException {
+    private static final String ID_PREFIX = " ID: ";
+
     private final ErrorCode errorCode;
 
     public KurlyBaseException(ErrorCode errorCode) {
@@ -8,9 +10,13 @@ public class KurlyBaseException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public KurlyBaseException(ErrorCode errorCode, Throwable cause) {
-        super(errorCode.getMessage(), cause);
+    private KurlyBaseException(ErrorCode errorCode, Long id) {
+        super(errorCode.getMessage() + ID_PREFIX + id);
         this.errorCode = errorCode;
+    }
+
+    public static KurlyBaseException withId(ErrorCode errorCode, Long id) {
+        return new KurlyBaseException(errorCode, id);
     }
 
     ErrorCode getErrorCode() {

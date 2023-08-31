@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.module.product.domain;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -7,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.DELETED_PRODUCT;
 
 @Entity
 @Table(name = "products")
@@ -67,12 +70,17 @@ public class Product extends BaseEntity {
 
     public void validateSupportable() {
         if (this.status == Status.DELETED) {
-            throw new IllegalStateException("삭제된 상품입니다. ID : " + this.getId());
+            throw KurlyBaseException.withId(DELETED_PRODUCT, this.getId());
         }
     }
 
     public void softDelete() {
         this.status = Status.DELETED;
+    }
+
+    public void soldOut() {
+        validateSupportable();
+        this.status = Status.SOLD_OUT;
     }
 
     public String getName() {

@@ -1,10 +1,12 @@
 package com.devcourse.kurlymurly.module.product.service;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.PRODUCT_NOT_FOUND;
 
 @Component
 @Transactional(readOnly = true)
@@ -17,6 +19,6 @@ public class ProductRetrieve {
 
     public Product findByIdOrThrow(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> KurlyBaseException.withId(PRODUCT_NOT_FOUND, id));
     }
 }
