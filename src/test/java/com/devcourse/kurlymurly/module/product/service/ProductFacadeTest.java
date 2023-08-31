@@ -1,7 +1,10 @@
 package com.devcourse.kurlymurly.module.product.service;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.category.Category;
+import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
+import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.web.dto.CreateProduct;
 import com.devcourse.kurlymurly.web.dto.SupportProduct;
@@ -14,9 +17,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.devcourse.kurlymurly.module.product.ProductFixture.*;
-import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.*;
+import java.util.Optional;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NEVER_FAVORITE;
+import static com.devcourse.kurlymurly.module.product.FavoriteFixture.FAVORITE_FIXTURE;
+import static com.devcourse.kurlymurly.module.product.ProductFixture.LA_GOGI;
+import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SECRET_SUPPORT_FIXTURE;
+import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.domain.Product.Status;
+import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.DELETED;
+import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
@@ -44,6 +54,9 @@ class ProductFacadeTest {
 
     @Mock
     private ProductSupportRetrieve productSupportRetrieve;
+
+    @Mock
+    private FavoriteRepository favoriteRepository;
 
     @Nested
     class createTest {
@@ -184,6 +197,72 @@ class ProductFacadeTest {
                             support.getId(),
                             request)
                     );
+        }
+    }
+
+    @Nested
+    @DisplayName("상품 찜 테스트")
+    class favoriteTest {
+        @Test
+        @DisplayName("이미 생성된 찜이 있다면 해당 찜을 활성화 시킨다.")
+        void favoriteProduct_Success_WithSavedFavorite() {
+            // given
+            Favorite favorite = FAVORITE_FIXTURE.toEntity();
+            favorite.softDelete();
+
+            given(favoriteRepository.findByUserIdAndProductId(any(), any())).willReturn(Optional.of(favorite));
+
+            // when
+            productFacade.favoriteProduct(FAVORITE_FIXTURE.userId(), FAVORITE_FIXTURE.productId());
+
+            // then
+            then(favoriteRepository).should(times(1)).findByUserIdAndProductId(any(), any());
+            then(favoriteRepository).shouldHaveNoMoreInteractions();
+            assertThat(favorite.getStatus()).isEqualTo(NORMAL);
+        }
+
+        @Test
+        @DisplayName("저장된 찜이 없다면 새로운 찜을 만들어낸다.")
+        void favoriteProduct_Success_WithNewFavorite() {
+            // given
+            Favorite favorite = FAVORITE_FIXTURE.toEntity();
+
+            given(favoriteRepository.findByUserIdAndProductId(any(), any())).willReturn(Optional.empty());
+            given(favoriteRepository.save(any())).willReturn(favorite);
+
+            // when
+            productFacade.favoriteProduct(FAVORITE_FIXTURE.userId(), FAVORITE_FIXTURE.productId());
+
+            // then
+            then(favoriteRepository).should(times(1)).findByUserIdAndProductId(any(), any());
+            then(favoriteRepository).should(times(1)).save(any());
+        }
+
+        @Test
+        @DisplayName("삭제 요청이 들어오면 찜의 상태가 DELETED로 변경된다.")
+        void cancelFavorite_Success() {
+            // given
+            Favorite favorite = FAVORITE_FIXTURE.toEntity();
+            given(favoriteRepository.findByUserIdAndProductId(any(), any())).willReturn(Optional.of(favorite));
+
+            // when
+            productFacade.cancelFavorite(FAVORITE_FIXTURE.userId(), FAVORITE_FIXTURE.productId());
+
+            // then
+            then(favoriteRepository).should(times(1)).findByUserIdAndProductId(any(), any());
+            assertThat(favorite.getStatus()).isEqualTo(DELETED);
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 찜을 취소하려고 하면 예외가 발생한다.")
+        void cancelFavorite_Fail_ByNotExistFavorite() {
+            // given
+            given(favoriteRepository.findByUserIdAndProductId(any(), any())).willReturn(Optional.empty());
+
+            // when, then
+            assertThatExceptionOfType(KurlyBaseException.class)
+                    .isThrownBy(() -> productFacade.cancelFavorite(FAVORITE_FIXTURE.userId(), FAVORITE_FIXTURE.productId()))
+                    .withMessage(NEVER_FAVORITE.getMessage());
         }
     }
 }
