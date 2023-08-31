@@ -6,15 +6,25 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 
 @Entity
 @Table(name = "order_supports")
 public class OrderSupport extends BaseEntity {
-
     public enum Status {
         PREPARE,
         START,
-        DONE
+        DONE,
+        DELETED
+    }
+
+    public enum Category {
+        DELIVERY,
+        MISSING,
+        PRODUCT,
+        ORDER,
+        EVENT,
+        ETC
     }
 
     @Column(nullable = false)
@@ -22,6 +32,10 @@ public class OrderSupport extends BaseEntity {
 
     @Column(nullable = false)
     private Long orderId;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private Category category;
 
     @Column(nullable = false, length = 30)
     private String title;
@@ -36,11 +50,46 @@ public class OrderSupport extends BaseEntity {
     protected OrderSupport() {
     }
 
-    public OrderSupport(Long userId, Long orderId, String title, String content) {
+    public OrderSupport(Long userId, Long orderId, Category category,
+                        @Valid String title, String content) {
         this.userId = userId;
         this.orderId = orderId;
+        this.category = category;
         this.title = title;
         this.content = content;
         this.status = Status.PREPARE;
+    }
+
+    public void prepareSupport() {
+        this.status = Status.PREPARE;
+    }
+
+    public void startSupport() {
+        this.status = Status.START;
+    }
+
+    public void doneSupport() {
+        this.status = Status.DONE;
+    }
+
+    public void deleteSupport() {
+        this.status = Status.DELETED;
+    }
+
+    public void updateOrderSupport(@Valid String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
     }
 }
