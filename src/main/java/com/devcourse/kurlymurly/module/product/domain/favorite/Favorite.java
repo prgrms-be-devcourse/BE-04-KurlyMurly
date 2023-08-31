@@ -30,4 +30,16 @@ public class Favorite extends BaseEntity {
         this.productId = productId;
         this.status = Status.NORMAL;
     }
+
+    public void activate() {
+        this.status = Status.NORMAL;
+    }
+
+    public void softDelete() {
+        this.status = Status.DELETED;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
 }
