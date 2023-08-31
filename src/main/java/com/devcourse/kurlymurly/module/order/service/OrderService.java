@@ -44,8 +44,7 @@ public class OrderService {
     // 관리자 영역 (ADMIN 권한 필요)
     @Transactional
     public Order updateOrderToProcessing(Long id) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(NotFoundOrderException::new);
+        Order order = findById(id);
         order.processingOrder();
 
         return order;
@@ -53,8 +52,7 @@ public class OrderService {
 
     @Transactional
     public Order updateOrderToDelivering(Long id) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(NotFoundOrderException::new);
+        Order order = findById(id);
         order.deliveringOrder();
 
         return order;
@@ -62,8 +60,7 @@ public class OrderService {
 
     @Transactional
     public Order updateOrderToDeliveryDone(Long id) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(NotFoundOrderException::new);
+        Order order = findById(id);
         order.deliveryDoneOrder();
 
         return order;
@@ -71,8 +68,7 @@ public class OrderService {
 
     @Transactional
     public void cancelOrder(long id) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(NotFoundOrderException::new);
+        Order order = findById(id);
         order.cancelOrder();
     }
 }
