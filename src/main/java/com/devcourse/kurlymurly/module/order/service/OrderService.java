@@ -67,7 +67,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void cancelOrder(long id) {
+    public void cancelOrder(Long id) {
         Order order = findById(id);
         order.cancelOrder();
     }
