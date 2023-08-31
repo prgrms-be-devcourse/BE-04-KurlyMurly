@@ -25,6 +25,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ErrorResponse handleUnexpectedException(RuntimeException e) {
         log.warn("UnexpectedException Occurs : {}", e.getMessage());
-        return ErrorResponse.from(ErrorCode.INTERNAL_SERVER_ERROR);
+        return ErrorResponse.from(ErrorCode.KURLY_SERVER_ERROR);
     }
 }
