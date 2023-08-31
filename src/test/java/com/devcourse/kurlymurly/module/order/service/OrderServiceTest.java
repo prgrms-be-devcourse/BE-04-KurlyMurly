@@ -81,7 +81,7 @@ class OrderServiceTest {
 
         // mocking
         given(orderRepository.save(any())).willReturn(order);
-        given(orderRepository.findAllByUserId(any())).willReturn(Optional.of(List.of(order)));
+        given(orderRepository.findAllByUserId(any())).willReturn(List.of(order));
 
         // when
         orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
@@ -106,7 +106,7 @@ class OrderServiceTest {
         orderService.updateOrderToProcessing(entity.getId());
 
         // then
-        Assertions.assertEquals("PROCESSING", order.getStatus().toString());
+        Assertions.assertEquals("PROCESSING", order.getStatus().name());
     }
 
     @Test
@@ -124,7 +124,7 @@ class OrderServiceTest {
         orderService.updateOrderToDelivering(entity.getId());
 
         // then
-        Assertions.assertEquals("DELIVERING", order.getStatus().toString());
+        Assertions.assertEquals("DELIVERING", order.getStatus().name());
     }
 
     @Test
@@ -142,7 +142,7 @@ class OrderServiceTest {
         orderService.updateOrderToDeliveryDone(entity.getId());
 
         // then
-        Assertions.assertEquals("DELIVERED", order.getStatus().toString());
+        Assertions.assertEquals("DELIVERED", order.getStatus().name());
     }
 
     @Test
@@ -160,6 +160,6 @@ class OrderServiceTest {
         orderService.cancelOrder(entity.getId());
 
         // then
-        Assertions.assertEquals("CANCELED", order.getStatus().toString());
+        Assertions.assertEquals("CANCELED", order.getStatus().name());
     }
 }
