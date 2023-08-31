@@ -2,9 +2,9 @@ package com.devcourse.kurlymurly.web.product;
 
 import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.CreateProduct;
 import com.devcourse.kurlymurly.web.dto.SupportProduct;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/products")
@@ -24,45 +28,50 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateProduct.Response> createProduct(
+    @ResponseStatus(OK)
+    public KurlyResponse<CreateProduct.Response> createProduct(
             @RequestBody CreateProduct.Request request
     ) {
         CreateProduct.Response response = productFacade.createProduct(request);
-        return ResponseEntity.ok(response);
+        return KurlyResponse.ok(response);
     }
 
     @PostMapping("/{id}/support")
-    public ResponseEntity<Void> createProductSupport(
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> createProductSupport(
             @AuthenticationPrincipal User user,
             @PathVariable Long id,
             @RequestBody SupportProduct.Request request
     ) {
         productFacade.createProductSupport(user.getId(), id, request);
-        return ResponseEntity.ok(null);
+        return KurlyResponse.noData();
     }
 
     @PostMapping("/{id}/favorite")
-    public ResponseEntity<Void> favoriteProduct(
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> favoriteProduct(
             @AuthenticationPrincipal User user,
             @PathVariable Long id
     ) {
         productFacade.favoriteProduct(user.getId(), id);
-        return ResponseEntity.ok(null);
+        return KurlyResponse.noData();
     }
 
     @PutMapping("/supports/{supportId}")
-    public ResponseEntity<Void> updateProductSupport(
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> updateProductSupport(
             @AuthenticationPrincipal User user,
             @PathVariable("supportId") Long supportId,
             @RequestBody SupportProduct.Request request
     ) {
         productFacade.updateProductSupport(user.getId(), supportId, request);
-        return ResponseEntity.ok(null);
+        return KurlyResponse.noData();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> deleteProduct(@PathVariable Long id) {
         productFacade.delete(id);
-        return ResponseEntity.ok(null);
+        return KurlyResponse.noData();
     }
 }
