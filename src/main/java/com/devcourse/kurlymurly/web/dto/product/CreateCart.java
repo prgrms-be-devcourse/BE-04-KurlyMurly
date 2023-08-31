@@ -1,10 +1,10 @@
-package com.devcourse.kurlymurly.web.dto;
+package com.devcourse.kurlymurly.web.dto.product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-import static com.devcourse.kurlymurly.web.dto.CreateCart.Request;
+import static com.devcourse.kurlymurly.web.dto.product.CreateCart.Request;
 
 public sealed interface CreateCart permits Request {
     record Request(

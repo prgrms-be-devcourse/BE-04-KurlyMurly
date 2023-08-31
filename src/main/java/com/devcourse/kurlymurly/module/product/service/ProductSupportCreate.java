@@ -2,7 +2,7 @@ package com.devcourse.kurlymurly.module.product.service;
 
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupportRepository;
-import com.devcourse.kurlymurly.web.dto.SupportProduct;
+import com.devcourse.kurlymurly.web.dto.product.SupportProduct;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

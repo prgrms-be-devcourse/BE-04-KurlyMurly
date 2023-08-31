@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.web.dto;
+package com.devcourse.kurlymurly.web.dto.product;
 
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductDetail;
@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-import static com.devcourse.kurlymurly.web.dto.CreateProduct.Request;
-import static com.devcourse.kurlymurly.web.dto.CreateProduct.Response;
+import static com.devcourse.kurlymurly.web.dto.product.CreateProduct.Request;
+import static com.devcourse.kurlymurly.web.dto.product.CreateProduct.Response;
 
 public sealed interface CreateProduct permits Request, Response {
     record Request(
