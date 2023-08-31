@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.module.product.service;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.category.Category;
 import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
@@ -9,6 +10,8 @@ import com.devcourse.kurlymurly.web.dto.CreateProduct;
 import com.devcourse.kurlymurly.web.dto.SupportProduct;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NEVER_FAVORITE;
 
 @Service
 @Transactional(readOnly = true)
@@ -71,8 +74,22 @@ public class ProductFacade {
 
     @Transactional
     public void favoriteProduct(Long userId, Long productId) {
+        Favorite favorite = favoriteRepository.findByUserIdAndProductId(userId, productId)
+                .orElseGet(() -> createNewFavorite(userId, productId));
+
+        favorite.activate();
+    }
+
+    private Favorite createNewFavorite(Long userId, Long productId) {
         Favorite favorite = new Favorite(userId, productId);
-        favoriteRepository.save(favorite);
+        return favoriteRepository.save(favorite);
+    }
+
+    @Transactional
+    public void cancelFavorite(Long userId, Long productId) {
+        Favorite favorite = favoriteRepository.findByUserIdAndProductId(userId, productId)
+                .orElseThrow(() -> new KurlyBaseException(NEVER_FAVORITE));
+        favorite.softDelete();
     }
 
     private CreateProduct.Response toResponse(Category category, CreateProduct.Request request) {

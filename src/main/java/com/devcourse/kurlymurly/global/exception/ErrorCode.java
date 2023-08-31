@@ -6,6 +6,7 @@ public enum ErrorCode {
     // 400
 
     // 404
+    NEVER_FAVORITE(HttpStatus.NOT_FOUND, "찜 이력이 존재하지 않습니다."),
 
     // 409
 
@@ -25,7 +26,7 @@ public enum ErrorCode {
         return httpStatus;
     }
 
-    String getMessage() {
+    public String getMessage() {
         return message;
     }
 }
