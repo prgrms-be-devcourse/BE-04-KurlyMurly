@@ -135,7 +135,7 @@ class OrderSupportServiceTest {
 
     @Test
     @DisplayName("문의를 답변완료 상태로 변경한다")
-    void updateSupportToDonetest() {
+    void updateSupportToDone_test() {
         // given
         OrderSupport orderSupport = createOrderSupportEntity(request);
 
