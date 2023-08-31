@@ -1,8 +1,7 @@
-package com.devcourse.kurlymurly.module.product.service;
+package com.devcourse.kurlymurly.module.order.service;
 
 import com.devcourse.kurlymurly.module.order.domain.Order;
 import com.devcourse.kurlymurly.module.order.domain.OrderJpaRepository;
-import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.web.dto.order.OrderCreate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
