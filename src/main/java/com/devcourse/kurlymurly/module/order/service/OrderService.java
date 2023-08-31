@@ -37,8 +37,7 @@ public class OrderService {
     }
 
     public List<Order> findAllByUserId(Long userId) {
-        return orderRepository.findAllByUserId(userId)
-                .orElseThrow(NotFoundOrderException::new);
+        return orderRepository.findAllByUserId(userId);
     }
 
     // 관리자 영역 (ADMIN 권한 필요)
