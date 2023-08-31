@@ -2,7 +2,11 @@ package com.devcourse.kurlymurly.web.dto.order.controller;
 
 import com.devcourse.kurlymurly.module.order.domain.Order;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
+import com.devcourse.kurlymurly.web.common.PageParam;
 import com.devcourse.kurlymurly.web.dto.order.OrderCreate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -24,13 +28,20 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody OrderCreate.Request request) { // TODO
+    public Order createOrder(@RequestBody OrderCreate.Request request) {
         return orderService.createOrder(
                 request.userId(),
                 request.shippingId(),
                 request.totalPrice(),
                 request.payment()
         );
+    }
+
+    @GetMapping
+    public Page<Order> findOrderAll(@RequestBody PageParam param) {
+        Pageable pageable = PageRequest.of(param.page(), param.size());
+
+        return orderService.findOrderAll(pageable);
     }
 
     @GetMapping("/{id}")
@@ -43,17 +54,17 @@ public class OrderController {
         return orderService.findAllByUserId(userId);
     }
 
-    @PatchMapping("/processing/{id}")
+    @PatchMapping("/{id}/processing")
     public Order updateOrderToProcessing(@PathVariable Long id) {
         return orderService.updateOrderToProcessing(id);
     }
 
-    @PatchMapping("/delivering/{id}")
+    @PatchMapping("/{id}/delivering")
     public Order updateOrderToDelivering(@PathVariable Long id) {
         return orderService.updateOrderToDelivering(id);
     }
 
-    @PatchMapping("/done/{id}")
+    @PatchMapping("/{id}/done")
     public Order updateOrderToDeliveryDone(@PathVariable Long id) {
         return orderService.updateOrderToDeliveryDone(id);
     }
