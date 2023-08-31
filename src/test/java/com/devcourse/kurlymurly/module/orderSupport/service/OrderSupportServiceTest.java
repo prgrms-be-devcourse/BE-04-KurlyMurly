@@ -31,12 +31,19 @@ class OrderSupportServiceTest {
     private static OrderSupportCreate.Request request;
 
     private OrderSupport createOrderSupportEntity(OrderSupportCreate.Request request) {
-        return new OrderSupport(request.userId(), request.orderId(), request.category(), request.title(), request.content());
+        return new OrderSupport(request.userId(), request.orderId(), request.type(), request.title(), request.content());
+    }
+
+    private OrderSupport takeOrderSupportService(OrderSupport orderSupport) {
+        given(orderSupportRepository.save(any())).willReturn(orderSupport);
+
+        return orderSupportService.takeOrderSupport(request.userId(), request.orderId(), request.type(),
+                request.title(), request.content());
     }
 
     @BeforeEach
     void setUp() {
-        request = new OrderSupportCreate.Request(1L, 1L, OrderSupport.Category.ORDER, "support_title", "support_content");
+        request = new OrderSupportCreate.Request(1L, 1L, OrderSupport.Type.ORDER, "support_title", "support_content");
     }
 
     @Test
@@ -49,11 +56,10 @@ class OrderSupportServiceTest {
         given(orderSupportRepository.save(any())).willReturn(orderSupport);
 
         // when
-        OrderSupport entity = orderSupportService.takeOrderSupport(request.userId(), request.orderId(), request.category(),
-                request.title(), request.content());
+        OrderSupport orderSupportService = takeOrderSupportService(orderSupport);
 
         // then
-        assertThat(orderSupport).usingRecursiveComparison().isEqualTo(entity);
+        assertThat(orderSupport).usingRecursiveComparison().isEqualTo(orderSupportService);
     }
 
     @Test
@@ -63,17 +69,16 @@ class OrderSupportServiceTest {
         OrderSupport orderSupport = createOrderSupportEntity(request);
 
         // mocking
-        given(orderSupportRepository.save(any())).willReturn(orderSupport);
-        given(orderSupportRepository.findByOrderId(any())).willReturn(Optional.of(orderSupport));
+        given(orderSupportRepository.findByOrderId(any())).willReturn(List.of(orderSupport));
 
         // when
-        orderSupportService.takeOrderSupport(request.userId(), request.orderId(), request.category(),
-                request.title(), request.content());
-        OrderSupport entity = orderSupportService.findByOrderId(request.orderId());
+        takeOrderSupportService(orderSupport);
+        List<OrderSupport> entity = orderSupportService.findByOrderId(request.orderId());
 
         // then
-        assertThat(orderSupport).usingRecursiveComparison().isEqualTo(entity);
+        assertThat(orderSupport).usingRecursiveComparison().isEqualTo(entity.get(0));
     }
+
 
     @Test
     @DisplayName("유저 id에 해당하는 문의를 조회한다")
@@ -82,12 +87,10 @@ class OrderSupportServiceTest {
         OrderSupport orderSupport = createOrderSupportEntity(request);
 
         // mocking
-        given(orderSupportRepository.save(any())).willReturn(orderSupport);
-        given(orderSupportRepository.findAllByUserId(any())).willReturn(Optional.of(List.of(orderSupport)));
+        given(orderSupportRepository.findAllByUserId(any())).willReturn(List.of(orderSupport));
 
         // when
-        orderSupportService.takeOrderSupport(request.userId(), request.orderId(), request.category(),
-                request.title(), request.content());
+        takeOrderSupportService(orderSupport);
         List<OrderSupport> entity = orderSupportService.findAllByUserId(request.userId());
 
         // then
@@ -101,35 +104,14 @@ class OrderSupportServiceTest {
         OrderSupport orderSupport = createOrderSupportEntity(request);
 
         // mocking
-        given(orderSupportRepository.save(any())).willReturn(orderSupport);
         given(orderSupportRepository.findById(any())).willReturn(Optional.of(orderSupport));
 
         // when
-        OrderSupport entity = orderSupportService.takeOrderSupport(request.userId(), request.orderId(), request.category(),
-                request.title(), request.content());
+        OrderSupport entity = takeOrderSupportService(orderSupport);
         orderSupportService.updateSupportToPrepare(entity.getId());
 
         // then
-        Assertions.assertEquals("PREPARE", entity.getStatus().toString());
-    }
-
-    @Test
-    @DisplayName("문의를 작성중 상태로 변경한다")
-    void updateSupportToStart_test() {
-        // given
-        OrderSupport orderSupport = createOrderSupportEntity(request);
-
-        // mocking
-        given(orderSupportRepository.save(any())).willReturn(orderSupport);
-        given(orderSupportRepository.findById(any())).willReturn(Optional.of(orderSupport));
-
-        // when
-        OrderSupport entity = orderSupportService.takeOrderSupport(request.userId(), request.orderId(), request.category(),
-                request.title(), request.content());
-        orderSupportService.updateSupportToStart(entity.getId());
-
-        // then
-        Assertions.assertEquals("START", entity.getStatus().toString());
+        Assertions.assertEquals("PREPARE", entity.getStatus().name());
     }
 
     @Test
@@ -139,16 +121,14 @@ class OrderSupportServiceTest {
         OrderSupport orderSupport = createOrderSupportEntity(request);
 
         // mocking
-        given(orderSupportRepository.save(any())).willReturn(orderSupport);
         given(orderSupportRepository.findById(any())).willReturn(Optional.of(orderSupport));
 
         // when
-        OrderSupport entity = orderSupportService.takeOrderSupport(request.userId(), request.orderId(), request.category(),
-                request.title(), request.content());
-        orderSupportService.updateSupportToDone(entity.getId());
+        OrderSupport entity = takeOrderSupportService(orderSupport);
+        orderSupportService.updateSupportToAnswered(entity.getId());
 
         // then
-        Assertions.assertEquals("DONE", entity.getStatus().toString());
+        Assertions.assertEquals("ANSWERED", entity.getStatus().name());
     }
 
     @Test
@@ -158,16 +138,14 @@ class OrderSupportServiceTest {
         OrderSupport orderSupport = createOrderSupportEntity(request);
 
         // mocking
-        given(orderSupportRepository.save(any())).willReturn(orderSupport);
         given(orderSupportRepository.findById(any())).willReturn(Optional.of(orderSupport));
 
         // when
-        OrderSupport entity = orderSupportService.takeOrderSupport(request.userId(), request.orderId(), request.category(),
-                request.title(), request.content());
+        OrderSupport entity = takeOrderSupportService(orderSupport);
         orderSupportService.deleteOrderSupport(entity.getId());
 
         // then
-        Assertions.assertEquals("DELETED", entity.getStatus().toString());
+        Assertions.assertEquals("DELETED", entity.getStatus().name());
     }
 
     @Test
@@ -180,12 +158,10 @@ class OrderSupportServiceTest {
         OrderSupportCreate.UpdateRequest updateRequest = new OrderSupportCreate.UpdateRequest(title, content);
 
         // mocking
-        given(orderSupportRepository.save(any())).willReturn(orderSupport);
         given(orderSupportRepository.findById(any())).willReturn(Optional.of(orderSupport));
 
         // when
-        OrderSupport entity = orderSupportService.takeOrderSupport(request.userId(), request.orderId(), request.category(),
-                request.title(), request.content());
+        OrderSupport entity = takeOrderSupportService(orderSupport);
         orderSupportService.updateOrderSupport(entity.getId(), updateRequest.title(), updateRequest.content());
 
         // then
