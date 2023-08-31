@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.web.controller.user;
+package com.devcourse.kurlymurly.web.common;
 
 import org.springframework.http.HttpStatus;
 

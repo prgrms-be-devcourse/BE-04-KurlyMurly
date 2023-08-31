@@ -41,6 +41,15 @@ public class ProductController {
         return ResponseEntity.ok(null);
     }
 
+    @PostMapping("/{id}/favorite")
+    public ResponseEntity<Void> favoriteProduct(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long id
+    ) {
+        productFacade.favoriteProduct(user.getId(), id);
+        return ResponseEntity.ok(null);
+    }
+
     @PutMapping("/supports/{supportId}")
     public ResponseEntity<Void> updateProductSupport(
             @AuthenticationPrincipal User user,

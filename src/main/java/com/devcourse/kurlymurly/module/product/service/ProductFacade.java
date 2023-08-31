@@ -2,6 +2,8 @@ package com.devcourse.kurlymurly.module.product.service;
 
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.category.Category;
+import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
+import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.web.dto.CreateProduct;
 import com.devcourse.kurlymurly.web.dto.SupportProduct;
@@ -16,19 +18,22 @@ public class ProductFacade {
     private final CategoryRetrieve categoryRetrieve;
     private final ProductSupportCreate productSupportCreate;
     private final ProductSupportRetrieve productSupportRetrieve;
+    private final FavoriteRepository favoriteRepository;
 
     public ProductFacade(
             ProductCreate productCreate,
             ProductRetrieve productRetrieve,
             CategoryRetrieve categoryRetrieve,
             ProductSupportCreate productSupportCreate,
-            ProductSupportRetrieve productSupportRetrieve
+            ProductSupportRetrieve productSupportRetrieve,
+            FavoriteRepository favoriteRepository
     ) {
         this.productCreate = productCreate;
         this.productRetrieve = productRetrieve;
         this.categoryRetrieve = categoryRetrieve;
         this.productSupportCreate = productSupportCreate;
         this.productSupportRetrieve = productSupportRetrieve;
+        this.favoriteRepository = favoriteRepository;
     }
 
     @Transactional
@@ -62,6 +67,12 @@ public class ProductFacade {
     public void delete(Long id) {
         Product product = productRetrieve.findByIdOrThrow(id);
         product.softDelete();
+    }
+
+    @Transactional
+    public void favoriteProduct(Long userId, Long productId) {
+        Favorite favorite = new Favorite(userId, productId);
+        favoriteRepository.save(favorite);
     }
 
     private CreateProduct.Response toResponse(Category category, CreateProduct.Request request) {
