@@ -13,12 +13,11 @@ import jakarta.validation.Valid;
 public class OrderSupport extends BaseEntity {
     public enum Status {
         PREPARE,
-        START,
-        DONE,
+        ANSWERED,
         DELETED
     }
 
-    public enum Category {
+    public enum Type {
         DELIVERY,
         MISSING,
         PRODUCT,
@@ -35,7 +34,7 @@ public class OrderSupport extends BaseEntity {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private Category category;
+    private Type type;
 
     @Column(nullable = false, length = 30)
     private String title;
@@ -50,26 +49,22 @@ public class OrderSupport extends BaseEntity {
     protected OrderSupport() {
     }
 
-    public OrderSupport(Long userId, Long orderId, Category category,
+    public OrderSupport(Long userId, Long orderId, Type type,
                         @Valid String title, String content) {
         this.userId = userId;
         this.orderId = orderId;
-        this.category = category;
+        this.type = type;
         this.title = title;
         this.content = content;
         this.status = Status.PREPARE;
     }
 
-    public void prepareSupport() {
+    public void toPreparedSupport() {
         this.status = Status.PREPARE;
     }
 
-    public void startSupport() {
-        this.status = Status.START;
-    }
-
-    public void doneSupport() {
-        this.status = Status.DONE;
+    public void toAnsweredSupport() {
+        this.status = Status.ANSWERED;
     }
 
     public void deleteSupport() {
