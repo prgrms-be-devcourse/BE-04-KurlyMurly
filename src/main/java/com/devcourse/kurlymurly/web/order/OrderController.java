@@ -1,9 +1,9 @@
-package com.devcourse.kurlymurly.web.dto.order.controller;
+package com.devcourse.kurlymurly.web.order;
 
 import com.devcourse.kurlymurly.module.order.domain.Order;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.web.dto.order.OrderCreate;
-import com.devcourse.kurlymurly.web.dto.order.PageParam;
+import com.devcourse.kurlymurly.web.common.PageParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +28,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody OrderCreate.Request request) { // TODO
+    public Order createOrder(@RequestBody OrderCreate.Request request) {
         return orderService.createOrder(
                 request.userId(),
                 request.shippingId(),
@@ -54,17 +54,17 @@ public class OrderController {
         return orderService.findAllByUserId(userId);
     }
 
-    @PatchMapping("/processing/{id}")
+    @PatchMapping("/{id}/processing")
     public Order updateOrderToProcessing(@PathVariable Long id) {
         return orderService.updateOrderToProcessing(id);
     }
 
-    @PatchMapping("/delivering/{id}")
+    @PatchMapping("/{id}/delivering")
     public Order updateOrderToDelivering(@PathVariable Long id) {
         return orderService.updateOrderToDelivering(id);
     }
 
-    @PatchMapping("/done/{id}")
+    @PatchMapping("/{id}/done")
     public Order updateOrderToDeliveryDone(@PathVariable Long id) {
         return orderService.updateOrderToDeliveryDone(id);
     }

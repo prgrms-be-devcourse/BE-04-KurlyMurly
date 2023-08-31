@@ -1,9 +1,9 @@
-package com.devcourse.kurlymurly.web.dto.order.controller;
+package com.devcourse.kurlymurly.web.order;
 
 import com.devcourse.kurlymurly.module.order.domain.OrderSupport;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.web.dto.order.OrderSupportCreate;
-import com.devcourse.kurlymurly.web.dto.order.PageParam;
+import com.devcourse.kurlymurly.web.common.PageParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +32,7 @@ public class OrderSupportController {
         return orderSupportService.takeOrderSupport(
                 request.userId(),
                 request.orderId(),
-                request.category(),
+                request.type(),
                 request.title(),
                 request.content()
         );
@@ -61,19 +61,14 @@ public class OrderSupportController {
         return orderSupportService.updateOrderSupport(id, request.title(), request.content());
     }
 
-    @PatchMapping("/prepare/{id}")
+    @PatchMapping("/{id}/prepare")
     public OrderSupport changeSupportToPrepare(@PathVariable Long id) {
         return orderSupportService.updateSupportToPrepare(id);
     }
 
-    @PatchMapping("/start/{id}")
-    public OrderSupport changeSupportToStart(@PathVariable Long id) {
-        return orderSupportService.updateSupportToStart(id);
-    }
-
-    @PatchMapping("/done/{id}")
+    @PatchMapping("/{id}/answer")
     public OrderSupport changeSupportToDone(@PathVariable Long id) {
-        return orderSupportService.updateSupportToDone(id);
+        return orderSupportService.updateSupportToAnswered(id);
     }
 
     @DeleteMapping("/{id}")
