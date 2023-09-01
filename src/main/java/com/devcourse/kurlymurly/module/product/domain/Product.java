@@ -90,4 +90,8 @@ public class Product extends BaseEntity {
     public Status getStatus() {
         return status;
     }
+
+    public int getPrice() {
+        return price;
+    }
 }

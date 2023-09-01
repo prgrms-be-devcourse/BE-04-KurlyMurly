@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.order.service;
 
-import com.devcourse.kurlymurly.Exception.NotFoundOrderException;
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.order.domain.Order;
 import com.devcourse.kurlymurly.module.order.domain.OrderJpaRepository;
 import org.springframework.data.domain.Page;
@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_ORDER;
 
 
 @Service
@@ -33,7 +35,7 @@ public class OrderService {
 
     public Order findById(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(NotFoundOrderException::new);
+                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER));
     }
 
     public List<Order> findAllByUserId(Long userId) {

@@ -3,7 +3,7 @@ package com.devcourse.kurlymurly.web.user;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.service.UserService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
-import com.devcourse.kurlymurly.web.dto.CreateCart;
+import com.devcourse.kurlymurly.web.dto.product.CreateCart;
 import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
 import com.devcourse.kurlymurly.web.dto.user.CheckId;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;

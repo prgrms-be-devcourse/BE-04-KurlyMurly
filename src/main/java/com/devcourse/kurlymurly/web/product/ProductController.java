@@ -3,10 +3,13 @@ package com.devcourse.kurlymurly.web.product;
 import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
-import com.devcourse.kurlymurly.web.dto.CreateProduct;
-import com.devcourse.kurlymurly.web.dto.SupportProduct;
+import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
+import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
+import com.devcourse.kurlymurly.web.dto.product.GetFavorite;
+import com.devcourse.kurlymurly.web.dto.product.SupportProduct;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,11 +30,16 @@ public class ProductController {
         this.productFacade = productFacade;
     }
 
+    @GetMapping("/favorites")
+    @ResponseStatus(OK)
+    public KurlyResponse<ListPagingResponse> getFavorites(@AuthenticationPrincipal User user) {
+        ListPagingResponse<GetFavorite.Response> response = productFacade.getUserFavorites(user.getId());
+        return KurlyResponse.ok(response);
+    }
+
     @PostMapping
     @ResponseStatus(OK)
-    public KurlyResponse<CreateProduct.Response> createProduct(
-            @RequestBody CreateProduct.Request request
-    ) {
+    public KurlyResponse<CreateProduct.Response> createProduct(@RequestBody CreateProduct.Request request) {
         CreateProduct.Response response = productFacade.createProduct(request);
         return KurlyResponse.ok(response);
     }

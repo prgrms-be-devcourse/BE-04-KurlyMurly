@@ -1,10 +1,10 @@
-package com.devcourse.kurlymurly.web.dto;
+package com.devcourse.kurlymurly.web.dto.product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import static com.devcourse.kurlymurly.web.dto.SupportProduct.Request;
+import static com.devcourse.kurlymurly.web.dto.product.SupportProduct.Request;
 
 public sealed interface SupportProduct permits Request {
     record Request(

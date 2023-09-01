@@ -13,3 +13,9 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+
+jasypt:
+  encryptor:
+    password: thisistestthisistestthisistestthisistestthisistestthisistestthisistestthisistestthisistest
+
+secret-key: thisistestthisistestthisistestthisistestthisistestthisistestthisistestthisistestthisistest

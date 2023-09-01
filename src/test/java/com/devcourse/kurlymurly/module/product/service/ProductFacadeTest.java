@@ -6,9 +6,10 @@ import com.devcourse.kurlymurly.module.product.domain.category.Category;
 import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
 import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
-import com.devcourse.kurlymurly.web.dto.CreateProduct;
-import com.devcourse.kurlymurly.web.dto.SupportProduct;
+import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
+import com.devcourse.kurlymurly.web.dto.product.SupportProduct;
 import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NEVER_FAVORITE;
-import static com.devcourse.kurlymurly.module.product.FavoriteFixture.FAVORITE_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.ProductFixture.LA_GOGI;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SECRET_SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SUPPORT_FIXTURE;
@@ -239,17 +239,25 @@ class ProductFacadeTest {
     @Nested
     @DisplayName("상품 찜 테스트")
     class favoriteTest {
+        private Long userId = 1L;;
+        private Favorite favorite;
+        private Product product = LA_GOGI.toEntity();
+
+        @BeforeEach
+        void initFavorite() {
+            favorite = new Favorite(userId, product);
+        }
+
         @Test
         @DisplayName("이미 생성된 찜이 있다면 해당 찜을 활성화 시킨다.")
         void favoriteProduct_Success_WithSavedFavorite() {
             // given
-            Favorite favorite = FAVORITE_FIXTURE.toEntity();
             favorite.softDelete();
 
             given(favoriteRepository.findByUserIdAndProductId(any(), any())).willReturn(Optional.of(favorite));
 
             // when
-            productFacade.favoriteProduct(FAVORITE_FIXTURE.userId(), FAVORITE_FIXTURE.productId());
+            productFacade.favoriteProduct(userId, product.getId());
 
             // then
             then(favoriteRepository).should(times(1)).findByUserIdAndProductId(any(), any());
@@ -261,13 +269,11 @@ class ProductFacadeTest {
         @DisplayName("저장된 찜이 없다면 새로운 찜을 만들어낸다.")
         void favoriteProduct_Success_WithNewFavorite() {
             // given
-            Favorite favorite = FAVORITE_FIXTURE.toEntity();
-
             given(favoriteRepository.findByUserIdAndProductId(any(), any())).willReturn(Optional.empty());
             given(favoriteRepository.save(any())).willReturn(favorite);
 
             // when
-            productFacade.favoriteProduct(FAVORITE_FIXTURE.userId(), FAVORITE_FIXTURE.productId());
+            productFacade.favoriteProduct(userId, product.getId());
 
             // then
             then(favoriteRepository).should(times(1)).findByUserIdAndProductId(any(), any());
@@ -278,11 +284,10 @@ class ProductFacadeTest {
         @DisplayName("삭제 요청이 들어오면 찜의 상태가 DELETED로 변경된다.")
         void cancelFavorite_Success() {
             // given
-            Favorite favorite = FAVORITE_FIXTURE.toEntity();
             given(favoriteRepository.findByUserIdAndProductId(any(), any())).willReturn(Optional.of(favorite));
 
             // when
-            productFacade.cancelFavorite(FAVORITE_FIXTURE.userId(), FAVORITE_FIXTURE.productId());
+            productFacade.cancelFavorite(userId, product.getId());
 
             // then
             then(favoriteRepository).should(times(1)).findByUserIdAndProductId(any(), any());
@@ -297,7 +302,7 @@ class ProductFacadeTest {
 
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)
-                    .isThrownBy(() -> productFacade.cancelFavorite(FAVORITE_FIXTURE.userId(), FAVORITE_FIXTURE.productId()))
+                    .isThrownBy(() -> productFacade.cancelFavorite(userId, product.getId()))
                     .withMessage(NEVER_FAVORITE.getMessage());
         }
     }
