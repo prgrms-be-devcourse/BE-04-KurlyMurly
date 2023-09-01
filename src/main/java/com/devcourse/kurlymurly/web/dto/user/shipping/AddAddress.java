@@ -6,10 +6,6 @@ import jakarta.validation.constraints.NotNull;
 public sealed interface AddAddress permits AddAddress.Request {
     record Request(
             @NotNull(message = "빈 값이 들어올 수 없습니다.")
-            @Schema(name = "유저 id값")
-            Long userId,
-
-            @NotNull(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "도로명 주소")
             String roadAddress
     ) implements AddAddress {
