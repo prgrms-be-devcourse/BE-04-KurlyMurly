@@ -3,7 +3,10 @@ package com.devcourse.kurlymurly.module.user.service;
 import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
+import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
+import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
+import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,6 +38,9 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     @Mock
+    private ShippingRepository shippingRepository;
+
+    @Mock
     private PasswordEncoder passwordEncoder;
 
     @Mock
@@ -47,7 +54,7 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
         user = new JoinUser.Request("murly1234", "kurly111", "kurly111", "sehan", "kurly@murly.com", "01094828438"
-                , "male", null, "dd", "경기도 기흥구", "경기도 구성로");
+                , "male", null, "dd", "경기도 구성로");
     }
 
     @Test
@@ -66,7 +73,7 @@ class UserServiceTest {
     void join_fail_IllegalArgumentException() {
         // Given
         user = new JoinUser.Request("murly1234", "kurly111", "kurly1234", "sehan", "kurly@murly.com", "01094828438"
-                , "male", null, "dd", "경기도 기흥구", "경기도 구성로");
+                , "male", null, "dd","경기 구성로");
 
         // Then
         assertThrows(IllegalArgumentException.class, () -> userService.join(user));
@@ -90,6 +97,34 @@ class UserServiceTest {
 
         // Then
         assertThrows(ExistUserInfoException.class, () -> userService.join(user));
+    }
+
+    @Test
+    @DisplayName("샛별 배송 주소 추가 테스트_샛별 배송 지역")
+    void add_address_express_address() {
+        // Given
+        Shipping shipping = new Shipping(1L,"경기 구성 33번길",true);
+
+        //When
+        userService.addAddress(1L,"경기 구성로 33번길",false);
+
+        // Then
+        System.out.println(shipping.getAddress().isExpress());
+        assertThat(shipping.getAddress().isExpress()).isTrue();
+    }
+
+    @Test
+    @DisplayName("샛별 배송 주소 추가 테스트_샛별 배송 불가")
+    void add_address_non_express_address() {
+        // Given
+        Shipping shipping = new Shipping(1L,"불가 컬리번길",true);
+
+        //When
+        userService.addAddress(1L,"경기 구성로 33번길",false);
+
+        // Then
+        System.out.println(shipping.getAddress().isExpress());
+        assertThat(shipping.getAddress().isExpress()).isFalse();
     }
 
     @Nested

@@ -7,6 +7,8 @@ import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.cart.Cart;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
+import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
+import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
@@ -27,19 +29,22 @@ public class UserService {
     private final ProductFacade productFacade;
     private final CartRepository cartRepository;
     private final JwtTokenProvider tokenProvider;
+    private final ShippingRepository shippingRepository;
 
     public UserService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             ProductFacade productFacade,
             CartRepository cartRepository,
-            JwtTokenProvider tokenProvider
+            JwtTokenProvider tokenProvider,
+            ShippingRepository shippingRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.productFacade = productFacade;
         this.cartRepository = cartRepository;
         this.tokenProvider = tokenProvider;
+        this.shippingRepository = shippingRepository;
     }
 
     public LoginUser.Response logIn(LoginUser.Request request) {
@@ -49,7 +54,7 @@ public class UserService {
                 .filter(u -> u.isEqualPassword(encodedPassword))
                 .orElseThrow(() -> new IllegalArgumentException(FAIL_USER_LOGIN));
 
-        String token = tokenProvider.createToken(user.getId(),user.getRole().name());
+        String token = tokenProvider.createToken(user.getId(), user.getRole().name());
 
         return new LoginUser.Response(user.getRole().name(), token);
     }
@@ -68,7 +73,16 @@ public class UserService {
             throw new ExistUserInfoException(EXIST_SAME_EMAIL);
         }
 
-        userRepository.save(newUser);
+        Long savedId = userRepository.save(newUser).getId();
+
+        addAddress(savedId, request.roadAddress(), true);
+    }
+
+    @Transactional
+    public void addAddress(Long userId, String address, boolean isDefault) {
+        Shipping shipping = new Shipping(userId, address, isDefault);
+
+        shippingRepository.save(shipping);
     }
 
     @Transactional
