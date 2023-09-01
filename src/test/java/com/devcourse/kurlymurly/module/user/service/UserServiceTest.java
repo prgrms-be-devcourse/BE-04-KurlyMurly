@@ -113,7 +113,6 @@ class UserServiceTest {
         userService.addAddress(1L,"경기 구성로 33번길",false);
 
         // Then
-        System.out.println(shipping.getAddress().isExpress());
         assertThat(shipping.getAddress().isExpress()).isTrue();
     }
 
