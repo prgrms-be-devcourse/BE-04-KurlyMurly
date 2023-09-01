@@ -1,6 +1,7 @@
 package com.devcourse.kurlymurly.module.user.service;
 
 import com.devcourse.kurlymurly.module.product.service.ProductFacade;
+import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
@@ -61,7 +62,10 @@ class UserServiceTest {
     @DisplayName("회원가입 완료 테스트")
     void join() {
         // Given
-        doReturn(null).when(userRepository).save(any());
+        User newUser = new User("kurly","kurly1234","murly4321","kyrly@murly.com"
+                ,null,"01094828438");
+
+        doReturn(newUser).when(userRepository).save(any());
         doReturn("encryptedPassword").when(passwordEncoder).encode(any());
 
         // When
