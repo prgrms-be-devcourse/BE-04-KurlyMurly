@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.module.product;
 
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
-import com.devcourse.kurlymurly.web.dto.SupportProduct;
+import com.devcourse.kurlymurly.web.dto.product.SupportProduct;
 
 public enum ProductSupportFixture {
     SUPPORT_FIXTURE(99L, 1L, "고기 맛이 이상해요", "좀 그렇네요", false),

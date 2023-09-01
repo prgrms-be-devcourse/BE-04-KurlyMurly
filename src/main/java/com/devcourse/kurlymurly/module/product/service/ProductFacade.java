@@ -6,10 +6,14 @@ import com.devcourse.kurlymurly.module.product.domain.category.Category;
 import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
 import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
-import com.devcourse.kurlymurly.web.dto.CreateProduct;
-import com.devcourse.kurlymurly.web.dto.SupportProduct;
+import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
+import com.devcourse.kurlymurly.web.dto.product.GetFavorite;
+import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
+import com.devcourse.kurlymurly.web.dto.product.SupportProduct;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NEVER_FAVORITE;
 
@@ -22,6 +26,7 @@ public class ProductFacade {
     private final ProductSupportCreate productSupportCreate;
     private final ProductSupportRetrieve productSupportRetrieve;
     private final FavoriteRepository favoriteRepository;
+    private final ProductPaging productPaging;
 
     public ProductFacade(
             ProductCreate productCreate,
@@ -29,7 +34,8 @@ public class ProductFacade {
             CategoryRetrieve categoryRetrieve,
             ProductSupportCreate productSupportCreate,
             ProductSupportRetrieve productSupportRetrieve,
-            FavoriteRepository favoriteRepository
+            FavoriteRepository favoriteRepository,
+            ProductPaging productPaging
     ) {
         this.productCreate = productCreate;
         this.productRetrieve = productRetrieve;
@@ -37,6 +43,12 @@ public class ProductFacade {
         this.productSupportCreate = productSupportCreate;
         this.productSupportRetrieve = productSupportRetrieve;
         this.favoriteRepository = favoriteRepository;
+        this.productPaging = productPaging;
+    }
+
+    public ListPagingResponse<GetFavorite.Response> getUserFavorites(Long userId) {
+        List<GetFavorite.Response> responses = productPaging.getAllFavoritesByUserId(userId);
+        return new ListPagingResponse<>(responses);
     }
 
     @Transactional // todo: 관리자 API
@@ -87,7 +99,8 @@ public class ProductFacade {
     }
 
     private Favorite createNewFavorite(Long userId, Long productId) {
-        Favorite favorite = new Favorite(userId, productId);
+        Product product = productRetrieve.findByIdOrThrow(productId);
+        Favorite favorite = new Favorite(userId, product);
         return favoriteRepository.save(favorite);
     }
 

@@ -122,7 +122,7 @@ class OrderServiceTest {
         order.deliveringOrder();
 
         // then
-        Assertions.assertEquals("DELIVERY_ING", order.getStatus());
+        Assertions.assertEquals("DELIVERING", order.getStatus());
     }
 
     @Test
@@ -139,7 +139,7 @@ class OrderServiceTest {
         order.deliveryDoneOrder();
 
         // then
-        Assertions.assertEquals("DELIVERY_DONE", order.getStatus());
+        Assertions.assertEquals("DELIVERED", order.getStatus());
     }
 
     @Test

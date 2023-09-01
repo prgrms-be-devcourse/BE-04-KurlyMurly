@@ -1,10 +1,13 @@
 package com.devcourse.kurlymurly.module.product.domain.favorite;
 
 import com.devcourse.kurlymurly.module.BaseEntity;
+import com.devcourse.kurlymurly.module.product.domain.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -15,8 +18,8 @@ public class Favorite extends BaseEntity {
     @Column(nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
-    private Long productId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Product product;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -25,9 +28,9 @@ public class Favorite extends BaseEntity {
     protected Favorite() {
     }
 
-    public Favorite(Long userId, Long productId) {
+    public Favorite(Long userId, Product product) {
         this.userId = userId;
-        this.productId = productId;
+        this.product = product;
         this.status = Status.NORMAL;
     }
 
@@ -41,5 +44,13 @@ public class Favorite extends BaseEntity {
 
     public Status getStatus() {
         return status;
+    }
+
+    public String getProductName() {
+        return product.getName();
+    }
+
+    public int getProductPrice() {
+        return product.getPrice();
     }
 }

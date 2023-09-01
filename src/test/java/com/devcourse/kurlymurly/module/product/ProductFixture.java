@@ -2,7 +2,7 @@ package com.devcourse.kurlymurly.module.product;
 
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductDetail;
-import com.devcourse.kurlymurly.web.dto.CreateProduct;
+import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 
 import static com.devcourse.kurlymurly.module.product.domain.Product.Delivery;
 import static com.devcourse.kurlymurly.module.product.domain.ProductDetail.StorageType;

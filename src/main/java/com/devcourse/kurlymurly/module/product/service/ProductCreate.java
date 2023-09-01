@@ -3,7 +3,7 @@ package com.devcourse.kurlymurly.module.product.service;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductDetail;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
-import com.devcourse.kurlymurly.web.dto.CreateProduct;
+import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
