@@ -24,6 +24,8 @@ import java.util.Optional;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
 
+    private static final String BEARER_PREFIX = "Bearer ";
+
     public JwtAuthenticationFilter(JwtTokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
     }
@@ -44,8 +46,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String parseBearerToken(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
-                .filter(token -> token.startsWith("Bearer "))
-                .map(token -> token.substring(7))
+                .filter(token -> token.startsWith(BEARER_PREFIX))
+                .map(token -> token.substring(BEARER_PREFIX.length()))
                 .orElse(null);
     }
 
