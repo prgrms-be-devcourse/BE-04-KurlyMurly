@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 @Entity
 @Table(name = "shippings")
 public class Shipping extends BaseEntity {
-    private static final String EXPRESS_REGEX = "^[서울|경기|인천|충청|대구|부산|울산|양산|창원|김해].*";
+    private static final Pattern EXPRESS_REGEX = Pattern.compile("^[서울|경기|인천|충청|대구|부산|울산|양산|창원|김해].*");
 
     public Shipping(Long userId, String roadAddress, boolean isDefault) {
         Address address = checkExpress(roadAddress);
@@ -22,7 +22,7 @@ public class Shipping extends BaseEntity {
     }
 
     private static Address checkExpress(String roadAddress) {
-        boolean matches = Pattern.matches(EXPRESS_REGEX, roadAddress);
+        boolean matches = EXPRESS_REGEX.matcher(roadAddress).matches();
         Address address = new Address(roadAddress, matches);
         return address;
     }
