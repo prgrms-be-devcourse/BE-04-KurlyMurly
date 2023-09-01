@@ -39,6 +39,10 @@ public class User extends BaseEntity {
         FRIENDS;
     }
 
+    public boolean isEqualPassword(String password){
+        return this.password.equals(password);
+    }
+
     @Column(nullable = false, length = 10)
     private String name;
 
