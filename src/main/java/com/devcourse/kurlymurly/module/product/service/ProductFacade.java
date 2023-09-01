@@ -68,10 +68,10 @@ public class ProductFacade {
         Product product = productRetrieve.findByIdOrThrow(productId);
         product.validateSupportable();
 
-        productSupportCreate.create(userId, productId, request);
+        productSupportCreate.create(userId, productId, product.getName(), request);
     }
 
-    @Transactional // todo: 관리자 API
+    @Transactional
     public void updateProductSupport(Long userId, Long supportId, SupportProduct.Request request) {
         ProductSupport support = productSupportRetrieve.findByIdOrThrow(supportId);
         support.validateAuthor(userId);
