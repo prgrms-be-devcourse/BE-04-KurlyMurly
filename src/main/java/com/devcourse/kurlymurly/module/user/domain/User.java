@@ -8,9 +8,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
@@ -26,11 +23,11 @@ public class User extends BaseEntity {
         this.info = info;
         this.payPassword = null;
         this.phoneNumber = phoneNumber;
-        this.role = Role.ROLE_USER;
+        this.role = Role.USER;
         this.status = UserStatus.NORMAL;
     }
 
-    public enum Role { ROLE_USER, ROLE_ADMIN }
+    public enum Role {USER, ADMIN}
 
     public enum UserStatus { CANCEL, NORMAL }
 
@@ -40,6 +37,10 @@ public class User extends BaseEntity {
         LAVENDER,
         WHITE,
         FRIENDS;
+    }
+
+    public boolean isEqualPassword(String password){
+        return this.password.equals(password);
     }
 
     @Column(nullable = false, length = 10)
@@ -74,4 +75,12 @@ public class User extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
     private UserStatus status;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
 }
