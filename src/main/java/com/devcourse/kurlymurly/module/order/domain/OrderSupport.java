@@ -32,6 +32,9 @@ public class OrderSupport extends BaseEntity {
     @Column(nullable = false)
     private Long orderId;
 
+    @Column(nullable = false)
+    private String orderNumber;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private Type type;
@@ -49,10 +52,11 @@ public class OrderSupport extends BaseEntity {
     protected OrderSupport() {
     }
 
-    public OrderSupport(Long userId, Long orderId, Type type,
+    public OrderSupport(Long userId, Long orderId, String orderNumber, Type type,
                         @Valid String title, String content) {
         this.userId = userId;
         this.orderId = orderId;
+        this.orderNumber = orderNumber;
         this.type = type;
         this.title = title;
         this.content = content;

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface OrderSupportJpaRepository extends JpaRepository<OrderSupport, Long> {
     List<OrderSupport> findAllByUserId(Long userId);
-    List<OrderSupport> findByOrderId(Long orderId);
+    List<OrderSupport> findByOrderNumber(String orderNumber);
 }

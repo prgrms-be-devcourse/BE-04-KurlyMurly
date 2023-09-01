@@ -23,9 +23,9 @@ public class OrderSupportService {
     }
 
     @Transactional
-    public OrderSupport takeOrderSupport(Long userId, Long orderId, OrderSupport.Type type,
+    public OrderSupport takeOrderSupport(Long userId, Long orderId, String orderNumber, OrderSupport.Type type,
                                          @Valid String title, String content) {
-        OrderSupport orderSupport = new OrderSupport(userId, orderId, type, title, content);
+        OrderSupport orderSupport = new OrderSupport(userId, orderId, orderNumber, type, title, content);
 
         return orderSupportRepository.save(orderSupport);
     }
@@ -39,8 +39,8 @@ public class OrderSupportService {
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER_SUPPORT));
     }
 
-    public List<OrderSupport> findByOrderId(Long orderId) {
-        return orderSupportRepository.findByOrderId(orderId);
+    public List<OrderSupport> findByOrderNumber(String orderNumber) {
+        return orderSupportRepository.findByOrderNumber(orderNumber);
     }
 
     public List<OrderSupport> findAllByUserId(Long userId) {

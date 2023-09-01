@@ -31,19 +31,33 @@ class OrderSupportServiceTest {
     private static OrderSupportCreate.Request request;
 
     private OrderSupport createOrderSupportEntity(OrderSupportCreate.Request request) {
-        return new OrderSupport(request.userId(), request.orderId(), request.type(), request.title(), request.content());
+        return new OrderSupport(request.userId(), request.orderId(), request.orderNumber(),
+                    request.type(), request.title(), request.content());
     }
 
     private OrderSupport takeOrderSupportService(OrderSupport orderSupport) {
         given(orderSupportRepository.save(any())).willReturn(orderSupport);
 
-        return orderSupportService.takeOrderSupport(request.userId(), request.orderId(), request.type(),
-                request.title(), request.content());
+        return orderSupportService.takeOrderSupport(
+                request.userId(),
+                request.orderId(),
+                request.orderNumber(),
+                request.type(),
+                request.title(),
+                request.content()
+        );
     }
 
     @BeforeEach
     void setUp() {
-        request = new OrderSupportCreate.Request(1L, 1L, OrderSupport.Type.ORDER, "support_title", "support_content");
+        request = new OrderSupportCreate.Request(
+                1L,
+                1L,
+                "1234456789012",
+                OrderSupport.Type.ORDER,
+                "support_title",
+                "support_content"
+        );
     }
 
     @Test
@@ -63,17 +77,17 @@ class OrderSupportServiceTest {
     }
 
     @Test
-    @DisplayName("주문 id에 해당하는 문의를 조회한다")
+    @DisplayName("주문 번호에 해당하는 문의를 조회한다")
     void findByOrderId_test() {
         // given
         OrderSupport orderSupport = createOrderSupportEntity(request);
 
         // mocking
-        given(orderSupportRepository.findByOrderId(any())).willReturn(List.of(orderSupport));
+        given(orderSupportRepository.findByOrderNumber(any())).willReturn(List.of(orderSupport));
 
         // when
         takeOrderSupportService(orderSupport);
-        List<OrderSupport> entity = orderSupportService.findByOrderId(request.orderId());
+        List<OrderSupport> entity = orderSupportService.findByOrderNumber(request.orderNumber());
 
         // then
         assertThat(orderSupport).usingRecursiveComparison().isEqualTo(entity.get(0));

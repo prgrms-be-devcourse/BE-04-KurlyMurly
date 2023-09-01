@@ -32,6 +32,7 @@ public class OrderSupportController {
         return orderSupportService.takeOrderSupport(
                 request.userId(),
                 request.orderId(),
+                request.orderNumber(),
                 request.type(),
                 request.title(),
                 request.content()
