@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
-@PropertySource("classpath:application-jwt.yml")
 @Component
 public class JwtTokenProvider {
     private final String secretKey;
