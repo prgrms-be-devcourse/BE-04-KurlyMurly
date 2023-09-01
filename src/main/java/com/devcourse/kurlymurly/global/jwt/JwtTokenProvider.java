@@ -26,7 +26,9 @@ public class JwtTokenProvider {
         this.secretKey = secretKey;
     }
 
-    public String createToken(String userSpecification) {
+    public String createToken(Long userId,String userRole) {
+        String userSpecification = String.format("%s:%s", userId, userRole);
+
         return Jwts.builder()
                 .signWith(new SecretKeySpec(secretKey.getBytes(), SignatureAlgorithm.HS512.getJcaName()))
                 .setSubject(userSpecification)
