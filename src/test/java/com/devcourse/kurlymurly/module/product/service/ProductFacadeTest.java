@@ -25,6 +25,8 @@ import static com.devcourse.kurlymurly.module.product.ProductFixture.LA_GOGI;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SECRET_SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.domain.Product.Status;
+
+import static com.devcourse.kurlymurly.module.product.domain.Product.Status.SOLD_OUT;
 import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.DELETED;
 import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -114,14 +116,48 @@ class ProductFacadeTest {
         }
 
         @Test
-        @DisplayName("존재하지 않는 상품을 접근하면 EntityNotFoundException을 던진다.")
+        @DisplayName("존재하지 않는 상품을 접근하면 예외을 던진다.")
         void delete_Fail_ByNotExistProduct() {
             // given
-            given(productRetrieve.findByIdOrThrow(any())).willThrow(EntityNotFoundException.class);
+            given(productRetrieve.findByIdOrThrow(any())).willThrow(KurlyBaseException.class);
 
             // when, then
-            assertThatExceptionOfType(EntityNotFoundException.class)
+            assertThatExceptionOfType(KurlyBaseException.class)
                     .isThrownBy(() -> productFacade.delete(productId));
+        }
+    }
+
+    @Nested
+    @DisplayName("상품 품절 테스트")
+    class soldOutProductTest {
+        @Test
+        @DisplayName("관리자가 상품을 품절 처리하면 품절 상태로 바뀐다.")
+        void soldOutProduct_Success() {
+            // given
+            Product product = LA_GOGI.toEntity();
+            given(productRetrieve.findByIdOrThrow(any())).willReturn(product);
+
+            // when
+            productFacade.soldOutProduct(product.getId());
+
+            // then
+            then(productRetrieve).should(times(1)).findByIdOrThrow(any());
+            assertThat(product.getStatus()).isEqualTo(SOLD_OUT);
+        }
+
+        @Test
+        @DisplayName("삭제된 상품을 품절 상태로 변경하면 예외를 던진다.")
+        void soldOutProduct_Fail_ByDeletedProduct() {
+            // given
+            Product product = LA_GOGI.toEntity();
+            product.softDelete();
+
+            given(productRetrieve.findByIdOrThrow(any())).willReturn(product);
+
+            // when, then
+            assertThatExceptionOfType(KurlyBaseException.class)
+                    .isThrownBy(() -> productFacade.soldOutProduct(product.getId()));
+            then(productRetrieve).should(times(1)).findByIdOrThrow(any());
         }
     }
 
@@ -148,7 +184,7 @@ class ProductFacadeTest {
         }
 
         @Test
-        @DisplayName("삭제된 상품에 리뷰를 남기려고 하면 IllegalStateException을 던진다.")
+        @DisplayName("삭제된 상품에 리뷰를 남기려고 하면 예외를 던진다.")
         void createProductSupport_Fail_ByDeletedProduct() {
             // given
             Product product = LA_GOGI.toEntity();
@@ -157,7 +193,7 @@ class ProductFacadeTest {
             given(productRetrieve.findByIdOrThrow(any())).willReturn(product);
 
             // when, then
-            assertThatExceptionOfType(IllegalStateException.class)
+            assertThatExceptionOfType(KurlyBaseException.class)
                     .isThrownBy(() -> productFacade.createProductSupport(userId, productId, request));
             then(productSupportCreate).shouldHaveNoInteractions();
         }
