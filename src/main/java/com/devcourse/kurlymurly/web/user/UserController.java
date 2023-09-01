@@ -71,7 +71,7 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
-    @PostMapping("/payment")
+    @PostMapping("/register-credit")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> addCredit(@RequestHeader(value = "Authorization") String token, @RequestBody RegisterPayment.creditRequest request) {
         String decodedToken = jwtTokenProvider.validateToken(token);
@@ -81,7 +81,7 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
-    @PostMapping("/payment")
+    @PostMapping("/register-easy")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> addEasyPay(@RequestHeader(value = "Authorization") String token, @RequestBody RegisterPayment.easyPayRequest request) {
         String decodedToken = jwtTokenProvider.validateToken(token);
