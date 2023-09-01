@@ -17,3 +17,5 @@ spring:
 jasypt:
   encryptor:
     password: thisistestthisistestthisistestthisistestthisistestthisistestthisistestthisistestthisistest
+
+secret-key: thisistestthisistestthisistestthisistestthisistestthisistestthisistestthisistestthisistest
