@@ -25,6 +25,7 @@ import static com.devcourse.kurlymurly.module.product.ProductFixture.LA_GOGI;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SECRET_SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.domain.Product.Status;
+
 import static com.devcourse.kurlymurly.module.product.domain.Product.Status.SOLD_OUT;
 import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.DELETED;
 import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.NORMAL;

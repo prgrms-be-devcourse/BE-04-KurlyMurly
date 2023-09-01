@@ -81,7 +81,7 @@ class OrderServiceTest {
 
         // mocking
         given(orderRepository.save(any())).willReturn(order);
-        given(orderRepository.findAllByUserId(any())).willReturn(Optional.of(List.of(order)));
+        given(orderRepository.findAllByUserId(any())).willReturn(List.of(order));
 
         // when
         orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
@@ -99,13 +99,14 @@ class OrderServiceTest {
 
         // mocking
         given(orderRepository.save(any())).willReturn(order);
+        given(orderRepository.findById(any())).willReturn(Optional.of(order));
 
         // when
-        orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
-        order.processingOrder();
+        Order entity = orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
+        orderService.updateOrderToProcessing(entity.getId());
 
         // then
-        Assertions.assertEquals("PROCESSING", order.getStatus());
+        Assertions.assertEquals("PROCESSING", order.getStatus().name());
     }
 
     @Test
@@ -116,13 +117,14 @@ class OrderServiceTest {
 
         // mocking
         given(orderRepository.save(any())).willReturn(order);
+        given(orderRepository.findById(any())).willReturn(Optional.of(order));
 
         // when
-        orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
-        order.deliveringOrder();
+        Order entity = orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
+        orderService.updateOrderToDelivering(entity.getId());
 
         // then
-        Assertions.assertEquals("DELIVERING", order.getStatus());
+        Assertions.assertEquals("DELIVERING", order.getStatus().name());
     }
 
     @Test
@@ -133,13 +135,14 @@ class OrderServiceTest {
 
         // mocking
         given(orderRepository.save(any())).willReturn(order);
+        given(orderRepository.findById(any())).willReturn(Optional.of(order));
 
         // when
-        orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
-        order.deliveryDoneOrder();
+        Order entity = orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
+        orderService.updateOrderToDeliveryDone(entity.getId());
 
         // then
-        Assertions.assertEquals("DELIVERED", order.getStatus());
+        Assertions.assertEquals("DELIVERED", order.getStatus().name());
     }
 
     @Test
@@ -150,12 +153,13 @@ class OrderServiceTest {
 
         // mocking
         given(orderRepository.save(any())).willReturn(order);
+        given(orderRepository.findById(any())).willReturn(Optional.of(order));
 
         // when
-        orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
-        order.cancelOrder();
+        Order entity = orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
+        orderService.cancelOrder(entity.getId());
 
         // then
-        Assertions.assertEquals("CANCELED", order.getStatus());
+        Assertions.assertEquals("CANCELED", order.getStatus().name());
     }
 }
