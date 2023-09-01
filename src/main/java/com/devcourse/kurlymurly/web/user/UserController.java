@@ -8,6 +8,7 @@ import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
 import com.devcourse.kurlymurly.web.dto.user.CheckId;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
+import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,18 +44,25 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
-    @PostMapping("/checkId")
+    @PostMapping("/login-id")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> checkId(@RequestBody CheckId.Request request) {
         boolean result = userService.checkId(request.loginId());
         return KurlyResponse.ok(result);
     }
 
-    @PostMapping("/checkAddress")
+    @PostMapping("/email")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> checkEmail(@RequestBody CheckEmail.Request request) {
         boolean result = userService.checkEmail(request.email());
         return KurlyResponse.ok(result);
+    }
+
+    @PostMapping("/address")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> addAddress(@RequestBody AddAddress.Request request) {
+        userService.addAddress(request.userId(), request.roadAddress(), false);
+        return KurlyResponse.noData();
     }
 
     @PostMapping("/carts")
