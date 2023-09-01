@@ -1,6 +1,8 @@
 package com.devcourse.kurlymurly.global.configuration;
 
 import com.devcourse.kurlymurly.global.jwt.JwtAuthenticationFilter;
+import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -42,7 +44,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(requests ->
-                        requests.requestMatchers(restrictedUrls).hasRole("USER")
+                        requests.requestMatchers(restrictedUrls).hasRole(User.Role.USER.name())
                 )
                 .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
 
