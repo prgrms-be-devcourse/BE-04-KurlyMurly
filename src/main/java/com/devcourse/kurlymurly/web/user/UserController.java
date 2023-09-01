@@ -4,6 +4,7 @@ import com.devcourse.kurlymurly.global.jwt.JwtTokenProvider;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.service.UserService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
+import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.product.CreateCart;
 import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
 import com.devcourse.kurlymurly.web.dto.user.CheckId;
@@ -67,6 +68,26 @@ public class UserController {
         Long userId = extractToken(decodedToken);
 
         userService.addAddress(userId, request.roadAddress(), false);
+        return KurlyResponse.noData();
+    }
+
+    @PostMapping("/payment")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> addCredit(@RequestHeader(value = "Authorization") String token, @RequestBody RegisterPayment.creditRequest request) {
+        String decodedToken = jwtTokenProvider.validateToken(token);
+        Long userId = extractToken(decodedToken);
+
+        userService.addCredit(userId,request);
+        return KurlyResponse.noData();
+    }
+
+    @PostMapping("/payment")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> addEasyPay(@RequestHeader(value = "Authorization") String token, @RequestBody RegisterPayment.easyPayRequest request) {
+        String decodedToken = jwtTokenProvider.validateToken(token);
+        Long userId = extractToken(decodedToken);
+
+        userService.addEasyPay(userId,request);
         return KurlyResponse.noData();
     }
 
