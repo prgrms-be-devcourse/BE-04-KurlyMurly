@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseStatus(OK)
-    public KurlyResponse<LoginUser.Response> logIn(@RequestBody LoginUser.Request request) {
+    public KurlyResponse<LoginUser.Response> login(@RequestBody LoginUser.Request request) {
         LoginUser.Response response = userService.logIn(request);
         return KurlyResponse.ok(response);
     }
