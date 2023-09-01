@@ -51,7 +51,7 @@ public class UserController {
         return KurlyResponse.ok(result);
     }
 
-    @PostMapping("/email")
+    @PostMapping("/check-email")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> checkEmail(@RequestBody CheckEmail.Request request) {
         boolean result = userService.checkEmail(request.email());
