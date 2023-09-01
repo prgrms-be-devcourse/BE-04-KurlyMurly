@@ -47,7 +47,7 @@ public class UserService {
                 .filter(u -> u.getPassword().equals(request.password()))
                 .orElseThrow(() -> new IllegalArgumentException(FAIL_USER_LOGIN));
 
-        String token = tokenProvider.createToken(String.format("%s:%s", user.getId(), user.getRole()));    // 토큰 생성
+        String token = tokenProvider.createToken(String.format("%s:%s", user.getId(), user.getRole()));
 
         return new LoginUser.Response(user.getRole().name(), token);
     }
