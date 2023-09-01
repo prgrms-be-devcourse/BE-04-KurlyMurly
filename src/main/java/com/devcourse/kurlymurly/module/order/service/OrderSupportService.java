@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.order.service;
 
-import com.devcourse.kurlymurly.Exception.NotFoundOrderException;
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.order.domain.OrderSupport;
 import com.devcourse.kurlymurly.module.order.domain.OrderSupportJpaRepository;
 import jakarta.validation.Valid;
@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_ORDER_SUPPORT;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,7 +36,7 @@ public class OrderSupportService {
 
     public OrderSupport findById(Long id) {
         return orderSupportRepository.findById(id)
-                .orElseThrow(NotFoundOrderException::new);
+                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER_SUPPORT));
     }
 
     public List<OrderSupport> findByOrderId(Long orderId) {

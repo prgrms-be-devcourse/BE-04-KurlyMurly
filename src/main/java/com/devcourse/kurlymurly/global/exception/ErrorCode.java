@@ -11,8 +11,11 @@ public enum ErrorCode {
     DELETED_PRODUCT(BAD_REQUEST, "삭제된 상품입니다."),
 
     // 404
-    PRODUCT_NOT_FOUND(NOT_FOUND, "존재하지 않는 상품입니다."),
-    NEVER_FAVORITE(NOT_FOUND, "찜 이력이 존재하지 않습니다."),
+    NOT_FOUND_REVIEW(HttpStatus.NOT_FOUND, "존재하는 리뷰가 없습니다."),
+    NOT_FOUND_REVIEW_LIKE(HttpStatus.NOT_FOUND, "존재하는 리뷰 좋아요가 없습니다."),
+    NOT_FOUND_ORDER_SUPPORT(HttpStatus.NOT_FOUND, "존재하는 1:1 문의 내역이 없습니다."),
+    NOT_FOUND_ORDER(HttpStatus.NOT_FOUND, "존재하는 주문 내역이 없습니다."),
+    NEVER_FAVORITE(HttpStatus.NOT_FOUND, "찜 이력이 존재하지 않습니다."),
 
     // 409
 
