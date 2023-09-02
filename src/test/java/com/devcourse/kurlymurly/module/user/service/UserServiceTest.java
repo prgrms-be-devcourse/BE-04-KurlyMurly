@@ -219,14 +219,6 @@ class UserServiceTest {
         assertThrows(KurlyBaseException.class,() -> userService.update(1L,request));
     }
 
-    @Test
-    @DisplayName("개인정보 변경 테스트_이름")
-    void update_user_name() {
-        // Given
-        UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
-                , "sehan", "murly@kurly.com", "01012221212", "male", null);
-    }
-
     @Nested
     @DisplayName("카트 테스트")
     class cartTest {
