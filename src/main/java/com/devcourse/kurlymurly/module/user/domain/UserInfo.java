@@ -22,6 +22,11 @@ public class UserInfo {
         this.sex = sex;
     }
 
+    public void update(Date birth, String sex) {
+        this.birth = birth;
+        this.sex = sex;
+    }
+
     @Column(nullable = false)
     private Date birth;
 

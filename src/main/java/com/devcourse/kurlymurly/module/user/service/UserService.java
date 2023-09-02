@@ -89,40 +89,19 @@ public class UserService {
         addAddress(savedId, request.roadAddress(), true);
     }
 
-    public void update(Long userId, UpdateUser.Request request) {
+    public void findUpdateUser(Long userId, UpdateUser.Request request) {
         String encodedPassword = passwordEncoder.encode(request.currentPassword());
 
         User user = userRepository.findById(userId)
                 .filter(u -> u.isEqualPassword(encodedPassword))
                 .orElseThrow(() -> new KurlyBaseException(NOT_CORRECT_PASSWORD));
 
-        updateUser(request, user);
+        update(request, user);
     }
 
-    private void updateUser(UpdateUser.Request request, User user) {
-        if (request.password() != null) {
-            user.setPassword(passwordEncoder.encode(request.password()));
-        }
-
-        if (request.name() != null) {
-            user.setName(request.name());
-        }
-
-        if (request.email() != null) {
-            user.setEmail(request.email());
-        }
-
-        if (request.phoneNumber() != null) {
-            user.setPhoneNumber(request.phoneNumber());
-        }
-
-        if (request.sex() != null) {
-            user.getInfo().setSex(request.sex());
-        }
-
-        if (request.bitrh() != null) {
-            user.getInfo().setBirth(request.bitrh());
-        }
+    private void update(UpdateUser.Request request, User user) {
+        String editPassword = passwordEncoder.encode(request.password());
+        user.update(request.name(),editPassword, request.email(), request.sex(), request.bitrh(), request.phoneNumber());
     }
 
     @Transactional
