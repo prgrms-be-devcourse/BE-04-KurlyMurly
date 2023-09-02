@@ -1,5 +1,7 @@
 package com.devcourse.kurlymurly.web.user;
 
+import com.devcourse.kurlymurly.global.exception.ErrorCode;
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.global.jwt.JwtTokenProvider;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.service.UserService;
@@ -10,9 +12,11 @@ import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
 import com.devcourse.kurlymurly.web.dto.user.CheckId;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
+import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +51,23 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @PutMapping
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> update(@RequestHeader(value = "Authorization") String token, @RequestBody UpdateUser.Request request) {
+        String decodedToken = jwtTokenProvider.validateToken(token);
+        Long userId = extractToken(decodedToken);
+
+        boolean isPasswordNotEqual = request.password().equals(request.checkPassword());
+
+        if (isPasswordNotEqual) {
+            throw new KurlyBaseException(ErrorCode.NOT_EQUAL_PASSWORD);
+        }
+
+        userService.update(userId, request);
+
+        return KurlyResponse.noData();
+    }
+
     @PostMapping("/login-id")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> checkId(@RequestBody CheckId.Request request) {
@@ -77,7 +98,7 @@ public class UserController {
         String decodedToken = jwtTokenProvider.validateToken(token);
         Long userId = extractToken(decodedToken);
 
-        userService.addCredit(userId,request);
+        userService.addCredit(userId, request);
         return KurlyResponse.noData();
     }
 
@@ -87,7 +108,7 @@ public class UserController {
         String decodedToken = jwtTokenProvider.validateToken(token);
         Long userId = extractToken(decodedToken);
 
-        userService.addEasyPay(userId,request);
+        userService.addEasyPay(userId, request);
         return KurlyResponse.noData();
     }
 

@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.module.user.service;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.global.jwt.JwtTokenProvider;
 import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
@@ -15,10 +16,13 @@ import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
+import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PASSWORD;
 
 @Service
 @Transactional(readOnly = true)
@@ -85,6 +89,42 @@ public class UserService {
         addAddress(savedId, request.roadAddress(), true);
     }
 
+    public void update(Long userId, UpdateUser.Request request) {
+        String encodedPassword = passwordEncoder.encode(request.currentPassword());
+
+        User user = userRepository.findById(userId)
+                .filter(u -> u.isEqualPassword(encodedPassword))
+                .orElseThrow(() -> new KurlyBaseException(NOT_CORRECT_PASSWORD));
+
+        updateUser(request, user);
+    }
+
+    private void updateUser(UpdateUser.Request request, User user) {
+        if (request.password() != null) {
+            user.setPassword(passwordEncoder.encode(request.password()));
+        }
+
+        if (request.name() != null) {
+            user.setName(request.name());
+        }
+
+        if (request.email() != null) {
+            user.setEmail(request.email());
+        }
+
+        if (request.phoneNumber() != null) {
+            user.setPhoneNumber(request.phoneNumber());
+        }
+
+        if (request.sex() != null) {
+            user.getInfo().setSex(request.sex());
+        }
+
+        if (request.bitrh() != null) {
+            user.getInfo().setBirth(request.bitrh());
+        }
+    }
+
     @Transactional
     public void addAddress(Long userId, String address, boolean isDefault) {
         Shipping shipping = new Shipping(userId, address, isDefault);
@@ -94,15 +134,15 @@ public class UserService {
 
     @Transactional
     public void addCredit(Long userId, RegisterPayment.creditRequest request) {
-        CreditInfo creditInfo = new CreditInfo(request.expiredDate(),request.password());
-        Payment credit = new Payment(userId,request.payInfo(),creditInfo, Payment.Type.CREDIT, Payment.PaymentStatus.NORMAL);
+        CreditInfo creditInfo = new CreditInfo(request.expiredDate(), request.password());
+        Payment credit = new Payment(userId, request.payInfo(), creditInfo, Payment.Type.CREDIT, Payment.PaymentStatus.NORMAL);
 
         paymentRepository.save(credit);
     }
 
     @Transactional
     public void addEasyPay(Long userId, RegisterPayment.easyPayRequest request) {
-        Payment easyPay = new Payment(userId,request.payInfo(), Payment.Type.EASY, Payment.PaymentStatus.NORMAL);
+        Payment easyPay = new Payment(userId, request.payInfo(), Payment.Type.EASY, Payment.PaymentStatus.NORMAL);
 
         paymentRepository.save(easyPay);
     }

@@ -30,4 +30,12 @@ public class UserInfo {
 
     @Column(nullable = false, length = 10)
     private String sex;
+
+    public void setBirth(Date birth) {
+        this.birth = birth;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
 }
