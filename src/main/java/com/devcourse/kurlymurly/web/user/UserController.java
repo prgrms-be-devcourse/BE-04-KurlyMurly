@@ -63,7 +63,7 @@ public class UserController {
             throw new KurlyBaseException(ErrorCode.NOT_EQUAL_PASSWORD);
         }
 
-        userService.findUpdateUser(userId, request);
+        userService.update(userId, request);
 
         return KurlyResponse.noData();
     }

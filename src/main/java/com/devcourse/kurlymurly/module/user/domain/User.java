@@ -7,10 +7,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.Date;
 
 @Entity
+@DynamicUpdate
 @Table(name = "users")
 public class User extends BaseEntity {
     protected User() {
@@ -92,5 +94,25 @@ public class User extends BaseEntity {
 
     public Role getRole() {
         return role;
+    }
+
+    public UserInfo getInfo() {
+        return info;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
