@@ -16,6 +16,7 @@ public class Payment extends BaseEntity {
     public enum Type { CREDIT, EASY;}
 
     public enum PaymentStatus { DEFAULT,NORMAL,EXPIRED;}
+
     public Payment(Long userId, String payInfo, CreditInfo creditInfo, Type type, PaymentStatus status) {
         this.userId = userId;
         this.payInfo = payInfo;
