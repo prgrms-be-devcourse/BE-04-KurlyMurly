@@ -4,8 +4,12 @@ import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
+import com.devcourse.kurlymurly.module.user.domain.payment.CreditInfo;
+import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
+import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
+import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
@@ -37,6 +41,9 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PaymentRepository paymentRepository;
 
     @Mock
     private ShippingRepository shippingRepository;
@@ -126,8 +133,33 @@ class UserServiceTest {
         userService.addAddress(1L,"경기 구성로 33번길",false);
 
         // Then
-        System.out.println(shipping.getAddress().isExpress());
         assertThat(shipping.getAddress().isExpress()).isFalse();
+    }
+
+    @Test
+    @DisplayName("신용카드 결제 수단 추가 테스트")
+    void add_credit() {
+        // Given
+        RegisterPayment.creditRequest request = new RegisterPayment.creditRequest("12341234", "hana", null,53);
+
+        // When
+        userService.addCredit(1L,request);
+
+        // Then
+        then(paymentRepository).should(times(1)).save(any());
+    }
+
+    @Test
+    @DisplayName("간편결제 결제 수단 추가 테스트")
+    void add_easy_pay() {
+        // given
+        RegisterPayment.easyPayRequest request = new RegisterPayment.easyPayRequest("12341234", "hana");
+
+        // when
+        userService.addEasyPay(1L,request);
+
+        // then
+        then(paymentRepository).should(times(1)).save(any());
     }
 
     @Nested

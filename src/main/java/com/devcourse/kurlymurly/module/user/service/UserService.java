@@ -7,8 +7,12 @@ import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.cart.Cart;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
+import com.devcourse.kurlymurly.module.user.domain.payment.CreditInfo;
+import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
+import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
+import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
@@ -28,23 +32,26 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final ProductFacade productFacade;
     private final CartRepository cartRepository;
-    private final JwtTokenProvider tokenProvider;
     private final ShippingRepository shippingRepository;
+    private final PaymentRepository paymentRepository;
+    private final JwtTokenProvider tokenProvider;
 
     public UserService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             ProductFacade productFacade,
             CartRepository cartRepository,
-            JwtTokenProvider tokenProvider,
-            ShippingRepository shippingRepository
+            ShippingRepository shippingRepository,
+            PaymentRepository paymentRepository,
+            JwtTokenProvider tokenProvider
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.productFacade = productFacade;
         this.cartRepository = cartRepository;
-        this.tokenProvider = tokenProvider;
         this.shippingRepository = shippingRepository;
+        this.paymentRepository = paymentRepository;
+        this.tokenProvider = tokenProvider;
     }
 
     public LoginUser.Response logIn(LoginUser.Request request) {
@@ -83,6 +90,21 @@ public class UserService {
         Shipping shipping = new Shipping(userId, address, isDefault);
 
         shippingRepository.save(shipping);
+    }
+
+    @Transactional
+    public void addCredit(Long userId, RegisterPayment.creditRequest request) {
+        CreditInfo creditInfo = new CreditInfo(request.expiredDate(),request.password());
+        Payment credit = new Payment(userId,request.payInfo(),creditInfo, Payment.Type.CREDIT, Payment.PaymentStatus.NORMAL);
+
+        paymentRepository.save(credit);
+    }
+
+    @Transactional
+    public void addEasyPay(Long userId, RegisterPayment.easyPayRequest request) {
+        Payment easyPay = new Payment(userId,request.payInfo(), Payment.Type.EASY, Payment.PaymentStatus.NORMAL);
+
+        paymentRepository.save(easyPay);
     }
 
     @Transactional
