@@ -72,7 +72,7 @@ CREATE TABLE orders
     payment      VARCHAR(10)         NOT NULL,
     status       VARCHAR(15)         NOT NULL,
     created_at   DATETIME(6),
-    updated_at   DATETIME(6),
+    updated_at   DATETIME(6)
 );
 
 CREATE TABLE order_supports
@@ -107,7 +107,7 @@ CREATE TABLE review_likes
     review_like_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     like_user_id   BIGINT NOT NULL,
     review_id      BIGINT NOT NULL,
-    is_deleted     BIT(1) NOT NULL,
+    is_deleted     BOOLEAN NOT NULL,
     created_at     DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at     DATETIME DEFAULT CURRENT_TIMESTAMP
 );
