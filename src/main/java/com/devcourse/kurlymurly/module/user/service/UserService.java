@@ -147,8 +147,8 @@ public class UserService {
         return paymentList;
     }
 
-    public void deletePayment(Long paymentId) {
-        Payment payment = paymentRepository.findById(paymentId)
+    public void deletePayment(Long userId,Long paymentId) {
+        Payment payment = paymentRepository.findByUserIdAndId(userId,paymentId)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_PAYMENT));
 
         payment.deletePayment();

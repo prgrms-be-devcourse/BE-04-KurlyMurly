@@ -197,26 +197,25 @@ class UserServiceTest {
     @DisplayName("결제 수단 삭제 테스트")
     void delete_payment() {
         // Given
-        DeletePayment.Request request = new DeletePayment.Request(1L);
         Payment payment = new Payment(1L, null);
 
-        doReturn(List.of(payment)).when(paymentRepository).findAllById(Collections.singleton(1L));
+        doReturn(Optional.of(payment)).when(paymentRepository).findByUserIdAndId(1L, 1L);
 
         // When
-        userService.getPayments(1L);
+        userService.deletePayment(1L,1L);
 
         // Then
-        then(paymentRepository).should(times(1)).findAllById(any());
+        then(paymentRepository).should(times(1)).findByUserIdAndId(any(),any());
     }
 
     @Test
     @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
     void delete_payment_fail_ByNotFoundPayments() {
         // When
-        doReturn(Optional.empty()).when(paymentRepository).findById(any());
+        doReturn(Optional.empty()).when(paymentRepository).findByUserIdAndId(any(),any());
 
         // Then
-        assertThrows(KurlyBaseException.class, () -> userService.deletePayment(1L));
+        assertThrows(KurlyBaseException.class, () -> userService.deletePayment(1L, 1L));
     }
 
     @Test
