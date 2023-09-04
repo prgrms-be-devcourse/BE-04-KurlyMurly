@@ -18,6 +18,7 @@ import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -110,10 +111,10 @@ public class UserController {
         return KurlyResponse.ok(creditList);
     }
 
-    @PostMapping("/edit-credit")
+    @PostMapping("/edit-credit/{paymentId}")
     @ResponseStatus(OK)
-    public KurlyResponse<Void> deletePayment(@RequestBody DeletePayment.Request request) {
-        userService.deletePayment(request.paymentId());
+    public KurlyResponse<Void> deletePayment(@AuthenticationPrincipal User user, @PathVariable Long paymentId) {
+        userService.deletePayment(user.getId(),paymentId);
 
         return KurlyResponse.noData();
     }
