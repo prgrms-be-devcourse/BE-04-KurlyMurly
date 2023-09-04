@@ -13,27 +13,9 @@ import jakarta.persistence.Table;
 @Table(name = "payments")
 public class Payment extends BaseEntity {
 
-    public enum Type {CREDIT, EASY;}
+    public enum Type { CREDIT, EASY }
 
-    public enum PaymentStatus {DEFAULT, NORMAL, EXPIRED;}
-
-    public Payment(Long userId, String payInfo, CreditInfo creditInfo) {
-        this.userId = userId;
-        this.payInfo = payInfo;
-        this.creditInfo = creditInfo;
-        this.type = Payment.Type.CREDIT;
-        this.status = Payment.PaymentStatus.NORMAL;
-    }
-
-    public Payment(Long userId, String payInfo) {
-        this.userId = userId;
-        this.payInfo = payInfo;
-        this.type = Payment.Type.EASY;
-        this.status = Payment.PaymentStatus.NORMAL;
-    }
-
-    public Payment() {
-    }
+    public enum PaymentStatus { DEFAULT, NORMAL, EXPIRED, DELETED }
 
     @Column(nullable = false)
     private Long userId;
@@ -54,4 +36,26 @@ public class Payment extends BaseEntity {
 
     @Column(nullable = false, length = 10)
     private PaymentStatus status;
+
+    public Payment() {
+    }
+
+    public Payment(Long userId, String payInfo, CreditInfo creditInfo) {
+        this.userId = userId;
+        this.payInfo = payInfo;
+        this.creditInfo = creditInfo;
+        this.type = Payment.Type.CREDIT;
+        this.status = Payment.PaymentStatus.NORMAL;
+    }
+
+    public Payment(Long userId, String payInfo) {
+        this.userId = userId;
+        this.payInfo = payInfo;
+        this.type = Payment.Type.EASY;
+        this.status = Payment.PaymentStatus.NORMAL;
+    }
+
+    public void deletePayment() {
+        this.status = PaymentStatus.DELETED;
+    }
 }
