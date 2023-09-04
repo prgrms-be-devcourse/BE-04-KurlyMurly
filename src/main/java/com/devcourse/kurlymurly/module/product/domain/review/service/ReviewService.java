@@ -28,23 +28,6 @@ public class ReviewService {
         this.reviewLikeRepository = reviewLikeRepository;
     }
 
-    private ReviewLikeCreate.Response toReviewLikeResponse(ReviewLikes reviewLikes) {
-        return new ReviewLikeCreate.Response(
-                reviewLikes.getLikeUserId(),
-                reviewLikes.getReviewId()
-        );
-    }
-
-    private ReviewCreate.Response toReviewResponse(ReviewCreate.Request request) {
-        return new ReviewCreate.Response(
-                request.userId(),
-                request.productId(),
-                request.orderId(),
-                request.likes(),
-                request.content()
-        );
-    }
-
     @Transactional
     public ReviewCreate.Response registerReview(ReviewCreate.Request request) {
         Review review = new Review(
@@ -58,6 +41,16 @@ public class ReviewService {
         reviewRepository.save(review);
 
         return toReviewResponse(request);
+    }
+
+    private ReviewCreate.Response toReviewResponse(ReviewCreate.Request request) {
+        return new ReviewCreate.Response(
+                request.userId(),
+                request.productId(),
+                request.orderId(),
+                request.likes(),
+                request.content()
+        );
     }
 
     public Page<Review> findReviewAll(Pageable pageable) {
@@ -85,7 +78,6 @@ public class ReviewService {
         Review review = findReviewById(id);
         review.toNormalReview();
     }
-
     @Transactional
     public void updateToBanned(Long id) {
         Review review = findReviewById(id);
@@ -101,7 +93,7 @@ public class ReviewService {
     @Transactional
     public void deleteReview(Long id) {
         Review review = findReviewById(id);
-        review.deleteReview();
+        review.deleted();
     }
 
     /**
@@ -121,6 +113,13 @@ public class ReviewService {
         review.increaseLikes();
 
         return toReviewLikeResponse(reviewLikes);
+    }
+
+    private ReviewLikeCreate.Response toReviewLikeResponse(ReviewLikes reviewLikes) {
+        return new ReviewLikeCreate.Response(
+                reviewLikes.getLikeUserId(),
+                reviewLikes.getReviewId()
+        );
     }
 
     @Transactional
