@@ -22,8 +22,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.List;
+
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PASSWORD;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_EXISTS_USER;
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_PAYMENT;
 
 @Service
 @Transactional(readOnly = true)
@@ -124,6 +128,16 @@ public class UserService {
         Payment credit = new Payment(userId, request.payInfo(), creditInfo);
 
         paymentRepository.save(credit);
+    }
+
+    public List<Payment> getPayments(Long userId) {
+        List<Payment> paymentList = paymentRepository.findAllById(Collections.singleton(userId));
+
+        if (paymentList.isEmpty()) {
+            throw new KurlyBaseException(NOT_FOUND_PAYMENT);
+        }
+
+        return paymentList;
     }
 
     @Transactional

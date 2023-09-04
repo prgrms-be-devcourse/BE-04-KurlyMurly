@@ -19,6 +19,7 @@ public enum ErrorCode {
     NOT_CORRECT_PASSWORD(HttpStatus.NOT_FOUND, "현재 비밀번호를 확인해주세요"),
     NOT_EQUAL_PASSWORD(HttpStatus.NOT_FOUND, "동일한 비밀번호를 입력해주세요."),
     NOT_EXISTS_USER(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+    NOT_FOUND_PAYMENT(HttpStatus.NOT_FOUND, "존재하는 결제수단이 없습니다."),
 
 
     // 409
