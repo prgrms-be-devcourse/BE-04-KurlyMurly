@@ -120,14 +120,14 @@ public class UserService {
     @Transactional
     public void addCredit(Long userId, RegisterPayment.creditRequest request) {
         CreditInfo creditInfo = new CreditInfo(request.expiredDate(), request.password());
-        Payment credit = new Payment(userId, request.payInfo(), creditInfo, Payment.Type.CREDIT, Payment.PaymentStatus.NORMAL);
+        Payment credit = new Payment(userId, request.payInfo(), creditInfo);
 
         paymentRepository.save(credit);
     }
 
     @Transactional
     public void addEasyPay(Long userId, RegisterPayment.easyPayRequest request) {
-        Payment easyPay = new Payment(userId, request.payInfo(), Payment.Type.EASY, Payment.PaymentStatus.NORMAL);
+        Payment easyPay = new Payment(userId, request.payInfo());
 
         paymentRepository.save(easyPay);
     }
