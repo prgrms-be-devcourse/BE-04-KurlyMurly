@@ -4,7 +4,6 @@ import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewJpaRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeJpaRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikes;
-import com.devcourse.kurlymurly.module.product.domain.review.service.ReviewLikeService;
 import com.devcourse.kurlymurly.module.product.domain.review.service.ReviewService;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewCreate;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewLikeCreate;
@@ -28,9 +27,6 @@ import static org.mockito.BDDMockito.given;
 class ReviewServiceTest {
     @InjectMocks
     private ReviewService reviewService;
-
-    @InjectMocks
-    private ReviewLikeService reviewLikeService;
 
     @Mock
     private ReviewJpaRepository reviewRepository;
@@ -95,7 +91,7 @@ class ReviewServiceTest {
 
         // when
         reviewService.registerReview(reviewRequest);
-        Review reviewEntity = reviewService.findById(review.getId());
+        Review reviewEntity = reviewService.findReviewById(review.getId());
 
         // then
         assertThat(review).usingRecursiveComparison().isEqualTo(reviewEntity);
@@ -215,32 +211,65 @@ class ReviewServiceTest {
     @Test
     @DisplayName("해당 리뷰에 좋아요를 최초 등록한다")
     void createReviewLikes_test() {
-//        // given
-//        Review review = createReviewEntity(reviewRequest);
-//        ReviewLikes reviewLikes = createReviewLikeEntity(reviewLikeRequest);
-//
-//        // mocking
-//        given(reviewRepository.save(any())).willReturn(review);
-//        ReviewCreate.Response response = reviewService.registerReview(reviewRequest);
-//
-//        given(reviewService.findById(any())).willReturn(review);
-//        given(reviewRepository.findById(any())).willReturn(Optional.of(review));
-//        given(reviewLikeRepository.save(any())).willReturn(reviewLikes);
-//
-//        // when
-//        reviewLikeService.createReviewLikes(reviewLikes.getLikeUserId(), reviewLikes.getReviewId());
-//
-//        // then
-//        Assertions.assertEquals(1, review.getLikes());
+        // given
+        Review review = createReviewEntity(reviewRequest);
+        ReviewLikes reviewLikes = createReviewLikeEntity(reviewLikeRequest);
+
+        // mocking
+        given(reviewRepository.save(any())).willReturn(review);
+        given(reviewLikeRepository.save(any())).willReturn(reviewLikes);
+        given(reviewRepository.findById(any())).willReturn(Optional.of(review));
+
+        // when
+        reviewService.registerReview(reviewRequest);
+        reviewService.createReviewLikes(reviewLikes.getLikeUserId(), reviewLikes.getReviewId());
+
+        // then
+        Assertions.assertEquals(11, review.getLikes());
     }
 
     @Test
     @DisplayName("취소한 좋아요를 다시 활성화 한다")
     void activeReviewLike_test() {
+        // given
+        Review review = createReviewEntity(reviewRequest);
+        ReviewLikes reviewLikes = createReviewLikeEntity(reviewLikeRequest);
+
+        // mocking
+        given(reviewRepository.save(any())).willReturn(review);
+        given(reviewLikeRepository.save(any())).willReturn(reviewLikes);
+        given(reviewLikeRepository.findById(any())).willReturn(Optional.of(reviewLikes));
+        given(reviewRepository.findById(any())).willReturn(Optional.of(review));
+
+        // when
+        reviewService.registerReview(reviewRequest);
+        reviewService.createReviewLikes(reviewLikes.getLikeUserId(), reviewLikes.getReviewId());
+        reviewService.cancelReviewLike(reviewLikes.getId());
+        reviewService.activeReviewLike(review.getId());
+
+        // then
+        Assertions.assertEquals(11, review.getLikes());
     }
 
     @Test
     @DisplayName("등록한 리뷰 좋아요를 취소한다")
     void cancelReviewLike_test() {
+        // given
+        Review review = createReviewEntity(reviewRequest);
+        ReviewLikes reviewLikes = createReviewLikeEntity(reviewLikeRequest);
+
+        // mocking
+        given(reviewRepository.save(any())).willReturn(review);
+        given(reviewLikeRepository.save(any())).willReturn(reviewLikes);
+        given(reviewLikeRepository.findById(any())).willReturn(Optional.of(reviewLikes));
+        given(reviewRepository.findById(any())).willReturn(Optional.of(review));
+
+        // when
+        reviewService.registerReview(reviewRequest);
+        reviewService.createReviewLikes(reviewLikes.getLikeUserId(), reviewLikes.getReviewId());
+        reviewService.cancelReviewLike(reviewLikes.getId());
+
+        // then
+        Assertions.assertEquals(10, review.getLikes());
     }
 }
