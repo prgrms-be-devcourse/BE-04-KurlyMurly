@@ -35,11 +35,9 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
-    private final JwtTokenProvider jwtTokenProvider;
 
-    public UserController(UserService userService, JwtTokenProvider jwtTokenProvider) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/login")
