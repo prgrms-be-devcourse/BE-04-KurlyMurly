@@ -59,10 +59,10 @@ public class UserService {
     }
 
     public LoginUser.Response logIn(LoginUser.Request request) {
-        String encodedPassword = passwordEncoder.encode(request.password());
+        String inputPassword = passwordEncoder.encode(request.password());
 
         User user = userRepository.findByLoginId(request.loginId())
-                .filter(u -> u.isEqualPassword(encodedPassword))
+                .filter(u -> passwordEncoder.matches(u.getPassword(),inputPassword))
                 .orElseThrow(() -> new IllegalArgumentException(FAIL_USER_LOGIN));
 
         String token = tokenProvider.createToken(user.getId(), user.getRole().name());
