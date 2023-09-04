@@ -111,7 +111,7 @@ public class UserController {
         return KurlyResponse.ok(creditList);
     }
 
-    @PostMapping("/edit-credit/{paymentId}")
+    @PutMapping("/delete-credit/{paymentId}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> deletePayment(@AuthenticationPrincipal User user, @PathVariable Long paymentId) {
         userService.deletePayment(user.getId(),paymentId);
