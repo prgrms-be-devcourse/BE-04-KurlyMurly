@@ -10,6 +10,7 @@ import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 import com.devcourse.kurlymurly.web.dto.product.GetFavorite;
 import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
 import com.devcourse.kurlymurly.web.dto.product.SupportProduct;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +52,11 @@ public class ProductFacade {
         return new ListPagingResponse<>(responses);
     }
 
+    // todo : user api
+    public Slice<SupportProduct.Response> getAllMySupports(Long userId, Long lastId) {
+        return productPaging.getTenSupportsOfUserPageFromLastId(userId, lastId);
+    }
+
     @Transactional // todo: 관리자 API
     public CreateProduct.Response createProduct(CreateProduct.Request request) {
         Category category = categoryRetrieve.findByIdOrThrow(request.categoryId());
@@ -68,10 +74,10 @@ public class ProductFacade {
         Product product = productRetrieve.findByIdOrThrow(productId);
         product.validateSupportable();
 
-        productSupportCreate.create(userId, productId, request);
+        productSupportCreate.create(userId, productId, product.getName(), request);
     }
 
-    @Transactional // todo: 관리자 API
+    @Transactional
     public void updateProductSupport(Long userId, Long supportId, SupportProduct.Request request) {
         ProductSupport support = productSupportRetrieve.findByIdOrThrow(supportId);
         support.validateAuthor(userId);

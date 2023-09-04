@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     Optional<Favorite> findByUserIdAndProductId(Long userId, Long productId);
 
-    @Query("SELECT f FROM Favorite f JOIN FETCH f.product WHERE f.userId = :userId ORDER BY f.createAt")
+    @Query("SELECT f FROM Favorite f JOIN FETCH f.product WHERE f.userId = :userId AND f.status != 'DELETED' ORDER BY f.createAt")
     List<Favorite> findAllByUserId(@Param(value = "userId") Long userId);
 }

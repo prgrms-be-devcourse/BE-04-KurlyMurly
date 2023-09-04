@@ -7,29 +7,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
-    protected User() {
-    }
-
-    public User(String name, String loginId, String password, String email, UserInfo info, String phoneNumber) {
-        this.name = name;
-        this.loginId = loginId;
-        this.password = password;
-        this.tier = Tier.THE_PURPLE;
-        this.email = email;
-        this.info = info;
-        this.payPassword = null;
-        this.phoneNumber = phoneNumber;
-        this.role = Role.USER;
-        this.status = UserStatus.NORMAL;
-    }
 
     public enum Role {USER, ADMIN}
 
-    public enum UserStatus { CANCEL, NORMAL }
+    public enum UserStatus {CANCEL, NORMAL}
 
     public enum Tier {
         THE_PURPLE,
@@ -37,10 +25,6 @@ public class User extends BaseEntity {
         LAVENDER,
         WHITE,
         FRIENDS;
-    }
-
-    public boolean isEqualPassword(String password){
-        return this.password.equals(password);
     }
 
     @Column(nullable = false, length = 10)
@@ -82,5 +66,33 @@ public class User extends BaseEntity {
 
     public Role getRole() {
         return role;
+    }
+
+    protected User() {
+    }
+
+    public User(String name, String loginId, String password, String email, UserInfo info, String phoneNumber) {
+        this.name = name;
+        this.loginId = loginId;
+        this.password = password;
+        this.tier = Tier.THE_PURPLE;
+        this.email = email;
+        this.info = info;
+        this.payPassword = null;
+        this.phoneNumber = phoneNumber;
+        this.role = Role.USER;
+        this.status = UserStatus.NORMAL;
+    }
+
+    public void update(String name, String password, String email, String sex, Date birth, String phoneNumber) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        info.update(birth, sex);
+    }
+
+    public boolean isEqualPassword(String password) {
+        return this.password.equals(password);
     }
 }

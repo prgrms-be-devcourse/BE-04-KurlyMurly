@@ -174,13 +174,13 @@ class ProductFacadeTest {
             Product product = LA_GOGI.toEntity();
 
             given(productRetrieve.findByIdOrThrow(any())).willReturn(product);
-            willDoNothing().given(productSupportCreate).create(any(), any(), any());
+            willDoNothing().given(productSupportCreate).create(any(), any(), any(), any());
 
             // when
             productFacade.createProductSupport(userId, productId, request);
 
             // then
-            then(productSupportCreate).should(times(1)).create(any(), any(), any());
+            then(productSupportCreate).should(times(1)).create(any(), any(), any(), any());
         }
 
         @Test

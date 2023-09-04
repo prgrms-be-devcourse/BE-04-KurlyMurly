@@ -15,8 +15,8 @@ public class ProductSupportCreate {
         this.productSupportRepository = productSupportRepository;
     }
 
-    public void create(Long userId, Long productId, SupportProduct.Request request) {
-        ProductSupport support = new ProductSupport(userId, productId, request.title(), request.content(), request.isSecret());
+    public void create(Long userId, Long productId, String productName, SupportProduct.Request request) {
+        ProductSupport support = new ProductSupport(userId, productId, productName, request.title(), request.content(), request.isSecret());
         productSupportRepository.save(support);
     }
 }

@@ -13,6 +13,15 @@ import java.util.Formatter;
 
 @Embeddable
 public class UserInfo {
+    @Column(nullable = false)
+    private Date birth;
+
+    @Column(length = 50)
+    private String recommender;
+
+    @Column(nullable = false, length = 10)
+    private String sex;
+
     protected UserInfo() {
     }
 
@@ -22,12 +31,8 @@ public class UserInfo {
         this.sex = sex;
     }
 
-    @Column(nullable = false)
-    private Date birth;
-
-    @Column(length = 50)
-    private String recommender;
-
-    @Column(nullable = false, length = 10)
-    private String sex;
+    public void update(Date birth, String sex) {
+        this.birth = birth;
+        this.sex = sex;
+    }
 }
