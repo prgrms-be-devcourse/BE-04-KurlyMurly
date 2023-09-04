@@ -130,6 +130,13 @@ public class UserService {
         paymentRepository.save(credit);
     }
 
+    @Transactional
+    public void addEasyPay(Long userId, RegisterPayment.easyPayRequest request) {
+        Payment easyPay = new Payment(userId, request.payInfo());
+
+        paymentRepository.save(easyPay);
+    }
+
     public List<Payment> getPayments(Long userId) {
         List<Payment> paymentList = paymentRepository.findAllById(Collections.singleton(userId));
 
@@ -140,11 +147,11 @@ public class UserService {
         return paymentList;
     }
 
-    @Transactional
-    public void addEasyPay(Long userId, RegisterPayment.easyPayRequest request) {
-        Payment easyPay = new Payment(userId, request.payInfo());
+    public void deletePayment(Long paymentId) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_PAYMENT));
 
-        paymentRepository.save(easyPay);
+        payment.deletePayment();
     }
 
     @Transactional

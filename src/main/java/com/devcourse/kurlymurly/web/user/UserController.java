@@ -7,6 +7,7 @@ import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
 import com.devcourse.kurlymurly.module.user.service.UserService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
+import com.devcourse.kurlymurly.web.dto.payment.DeletePayment;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.product.CreateCart;
 import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
@@ -109,6 +110,14 @@ public class UserController {
     public KurlyResponse<List<Payment>> getPayment(@AuthenticationPrincipal User user) {
         List<Payment> creditList = userService.getPayments(user.getId());
         return KurlyResponse.ok(creditList);
+    }
+
+    @PostMapping("/edit-credit")
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> deletePayment(@RequestBody DeletePayment.Request request) {
+        userService.deletePayment(request.paymentId());
+
+        return KurlyResponse.noData();
     }
 
     @PostMapping("/carts")
