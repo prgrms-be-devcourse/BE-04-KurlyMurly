@@ -3,17 +3,15 @@ package com.devcourse.kurlymurly.module.user.service;
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
-import com.devcourse.kurlymurly.module.user.domain.payment.CreditInfo;
-import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
 import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
-import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Date;
 import java.util.Optional;
 
 import static com.devcourse.kurlymurly.module.user.domain.User.Role.USER;
@@ -33,7 +32,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
@@ -173,17 +171,19 @@ class UserServiceTest {
     void update_user_password() {
         // Given
         UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
-                , null, null, null, null, null);
+                , "sehan", "kurly@murly.com", "01094828438", "male", null);
+
+        UserInfo info = new UserInfo(null,"sehan","male");
 
         User newUser = new User("kurly", "kurly4321", "encodePassword", "kyrly@murly.com"
-                , null, "01094828438");
+                , info, "01094828438");
 
         doReturn("encodePassword").when(passwordEncoder).encode("kurly1234");
         doReturn("editEncodePassword").when(passwordEncoder).encode("murly1234");
         doReturn(Optional.of(newUser)).when(userRepository).findById(any());
 
         // When
-        userService.update(1L, request);
+        userService.findUpdateUser(1L, request);
 
         // Then
         assertThat(newUser.isEqualPassword("editEncodePassword")).isTrue();
@@ -191,16 +191,16 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 유저를 조회할 경우 예외를 던짐")
-    void update_user_ByNotExistUser() {
+    @DisplayName("해당 회원이 조회되지 않으면 예외를 던짐")
+    void update_fail_notExistsUser() {
         // Given
         UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
-                , "sehan", "murly@kurly.com", "01012221212", "male", null);
+                , "sehan", "kurly@murly.com", "01094828438", "male", null);
 
         doReturn(Optional.empty()).when(userRepository).findById(any());
 
-        // When,Then
-        assertThrows(KurlyBaseException.class,() -> userService.update(1L,request));
+        // Then
+        assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L,request));
     }
 
     @Test
@@ -216,15 +216,7 @@ class UserServiceTest {
         doReturn(Optional.of(newUser)).when(userRepository).findById(any());
 
         // When,Then
-        assertThrows(KurlyBaseException.class,() -> userService.update(1L,request));
-    }
-
-    @Test
-    @DisplayName("개인정보 변경 테스트_이름")
-    void update_user_name() {
-        // Given
-        UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
-                , "sehan", "murly@kurly.com", "01012221212", "male", null);
+        assertThrows(KurlyBaseException.class,() -> userService.findUpdateUser(1L,request));
     }
 
     @Nested

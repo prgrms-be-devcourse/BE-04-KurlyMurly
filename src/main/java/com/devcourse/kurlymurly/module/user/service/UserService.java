@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PASSWORD;
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_EXISTS_USER;
 
 @Service
 @Transactional(readOnly = true)
@@ -62,7 +63,7 @@ public class UserService {
         String inputPassword = passwordEncoder.encode(request.password());
 
         User user = userRepository.findByLoginId(request.loginId())
-                .filter(u -> passwordEncoder.matches(u.getPassword(),inputPassword))
+                .filter(u -> passwordEncoder.matches(u.getPassword(), inputPassword))
                 .orElseThrow(() -> new IllegalArgumentException(FAIL_USER_LOGIN));
 
         String token = tokenProvider.createToken(user.getId(), user.getRole().name());
@@ -89,40 +90,24 @@ public class UserService {
         addAddress(savedId, request.roadAddress(), true);
     }
 
-    public void update(Long userId, UpdateUser.Request request) {
-        String encodedPassword = passwordEncoder.encode(request.currentPassword());
+    public void findUpdateUser(Long userId, UpdateUser.Request request) {
+        String inputPassword = passwordEncoder.encode(request.password());
 
         User user = userRepository.findById(userId)
-                .filter(u -> u.isEqualPassword(encodedPassword))
-                .orElseThrow(() -> new KurlyBaseException(NOT_CORRECT_PASSWORD));
+                .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
 
-        updateUser(request, user);
+        boolean notCorrectPassword = passwordEncoder.matches(user.getPassword(), inputPassword);
+
+        if (notCorrectPassword) {
+            throw new KurlyBaseException(NOT_CORRECT_PASSWORD);
+        }
+
+        update(request, user);
     }
 
-    private void updateUser(UpdateUser.Request request, User user) {
-        if (request.password() != null) {
-            user.setPassword(passwordEncoder.encode(request.password()));
-        }
-
-        if (request.name() != null) {
-            user.setName(request.name());
-        }
-
-        if (request.email() != null) {
-            user.setEmail(request.email());
-        }
-
-        if (request.phoneNumber() != null) {
-            user.setPhoneNumber(request.phoneNumber());
-        }
-
-        if (request.sex() != null) {
-            user.getInfo().setSex(request.sex());
-        }
-
-        if (request.bitrh() != null) {
-            user.getInfo().setBirth(request.bitrh());
-        }
+    private void update(UpdateUser.Request request, User user) {
+        String editPassword = passwordEncoder.encode(request.password());
+        user.update(request.name(), editPassword, request.email(), request.sex(), request.bitrh(), request.phoneNumber());
     }
 
     @Transactional
