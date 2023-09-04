@@ -4,6 +4,8 @@ DROP TABLE IF EXISTS product_supports;
 DROP TABLE IF EXISTS favorites;
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS review_likes;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS order_supports;
 
 CREATE TABLE categories
 (
@@ -57,6 +59,34 @@ CREATE TABLE favorites
     created_at  TIMESTAMP(6),
     updated_at  TIMESTAMP(6),
     FOREIGN KEY (product_id) REFERENCES products (product_id)
+);
+
+CREATE TABLE orders
+(
+    order_id     BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id      BIGINT              NOT NULL,
+    shipping_id  BIGINT              NOT NULL,
+    order_number VARCHAR(255) UNIQUE NOT NULL,
+    delivery_fee INT                 NOT NULL,
+    total_price  INT                 NOT NULL,
+    payment      VARCHAR(10)         NOT NULL,
+    status       VARCHAR(15)         NOT NULL,
+    created_at   DATETIME(6),
+    updated_at   DATETIME(6),
+);
+
+CREATE TABLE order_supports
+(
+    order_supports_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    type              VARCHAR(15)         NOT NULL,
+    user_id           BIGINT              NOT NULL,
+    order_id          BIGINT              NOT NULL,
+    order_number      VARCHAR(255) UNIQUE NOT NULL,
+    title             VARCHAR(30)         NOT NULL,
+    content           TEXT                NOT NULL,
+    status            VARCHAR(15)         NOT NULL,
+    created_at        DATETIME(6),
+    updated_at        DATETIME(6)
 );
 
 CREATE TABLE reviews

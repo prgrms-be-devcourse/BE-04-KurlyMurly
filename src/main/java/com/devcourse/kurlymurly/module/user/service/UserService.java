@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.module.user.service;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.global.jwt.JwtTokenProvider;
 import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
@@ -15,10 +16,14 @@ import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
+import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PASSWORD;
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_EXISTS_USER;
 
 @Service
 @Transactional(readOnly = true)
@@ -55,10 +60,10 @@ public class UserService {
     }
 
     public LoginUser.Response logIn(LoginUser.Request request) {
-        String encodedPassword = passwordEncoder.encode(request.password());
+        String inputPassword = passwordEncoder.encode(request.password());
 
         User user = userRepository.findByLoginId(request.loginId())
-                .filter(u -> u.isEqualPassword(encodedPassword))
+                .filter(u -> passwordEncoder.matches(u.getPassword(), inputPassword))
                 .orElseThrow(() -> new IllegalArgumentException(FAIL_USER_LOGIN));
 
         String token = tokenProvider.createToken(user.getId(), user.getRole().name());
@@ -85,6 +90,27 @@ public class UserService {
         addAddress(savedId, request.roadAddress(), true);
     }
 
+    public void findUpdateUser(Long userId, UpdateUser.Request request) {
+        String inputPassword = passwordEncoder.encode(request.password());
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
+
+        boolean notCorrectPassword = !passwordEncoder.matches(user.getPassword(), inputPassword);
+
+        if (notCorrectPassword) {
+            throw new KurlyBaseException(NOT_CORRECT_PASSWORD);
+        }
+
+        updateUserInfo(request, user);
+    }
+
+    private void updateUserInfo(UpdateUser.Request request, User user) {
+        String editPassword = passwordEncoder.encode(request.password());
+        System.out.println(editPassword);
+        user.update(request.name(), editPassword, request.email(), request.sex(), request.bitrh(), request.phoneNumber());
+    }
+
     @Transactional
     public void addAddress(Long userId, String address, boolean isDefault) {
         Shipping shipping = new Shipping(userId, address, isDefault);
@@ -94,15 +120,15 @@ public class UserService {
 
     @Transactional
     public void addCredit(Long userId, RegisterPayment.creditRequest request) {
-        CreditInfo creditInfo = new CreditInfo(request.expiredDate(),request.password());
-        Payment credit = new Payment(userId,request.payInfo(),creditInfo, Payment.Type.CREDIT, Payment.PaymentStatus.NORMAL);
+        CreditInfo creditInfo = new CreditInfo(request.expiredDate(), request.password());
+        Payment credit = new Payment(userId, request.payInfo(), creditInfo);
 
         paymentRepository.save(credit);
     }
 
     @Transactional
     public void addEasyPay(Long userId, RegisterPayment.easyPayRequest request) {
-        Payment easyPay = new Payment(userId,request.payInfo(), Payment.Type.EASY, Payment.PaymentStatus.NORMAL);
+        Payment easyPay = new Payment(userId, request.payInfo());
 
         paymentRepository.save(easyPay);
     }
