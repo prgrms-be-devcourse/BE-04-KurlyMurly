@@ -13,23 +13,23 @@ import jakarta.persistence.Table;
 @Table(name = "payments")
 public class Payment extends BaseEntity {
 
-    public enum Type { CREDIT, EASY;}
+    public enum Type {CREDIT, EASY;}
 
-    public enum PaymentStatus { DEFAULT,NORMAL,EXPIRED;}
+    public enum PaymentStatus {DEFAULT, NORMAL, EXPIRED;}
 
-    public Payment(Long userId, String payInfo, CreditInfo creditInfo, Type type, PaymentStatus status) {
+    public Payment(Long userId, String payInfo, CreditInfo creditInfo) {
         this.userId = userId;
         this.payInfo = payInfo;
         this.creditInfo = creditInfo;
-        this.type = type;
-        this.status = status;
+        this.type = Payment.Type.CREDIT;
+        this.status = Payment.PaymentStatus.NORMAL;
     }
 
-    public Payment(Long userId, String payInfo, Type type, PaymentStatus status) {
+    public Payment(Long userId, String payInfo) {
         this.userId = userId;
         this.payInfo = payInfo;
-        this.type = type;
-        this.status = status;
+        this.type = Payment.Type.EASY;
+        this.status = Payment.PaymentStatus.NORMAL;
     }
 
     public Payment() {

@@ -1,5 +1,7 @@
 package com.devcourse.kurlymurly.web.user;
 
+import com.devcourse.kurlymurly.global.exception.ErrorCode;
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.global.jwt.JwtTokenProvider;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.service.UserService;
@@ -10,9 +12,11 @@ import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
 import com.devcourse.kurlymurly.web.dto.user.CheckId;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
+import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +51,20 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @PutMapping
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> update(@AuthenticationPrincipal User user, @RequestBody UpdateUser.Request request) {
+        boolean isPasswordNotEqual = request.password().equals(request.checkPassword());
+
+        if (isPasswordNotEqual) {
+            throw new KurlyBaseException(ErrorCode.NOT_EQUAL_PASSWORD);
+        }
+
+        userService.findUpdateUser(user.getId(), request);
+
+        return KurlyResponse.noData();
+    }
+
     @PostMapping("/login-id")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> checkId(@RequestBody CheckId.Request request) {
@@ -63,37 +81,23 @@ public class UserController {
 
     @PostMapping("/address")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> addAddress(@RequestHeader(value = "Authorization") String token, @RequestBody AddAddress.Request request) {
-        String decodedToken = jwtTokenProvider.validateToken(token);
-        Long userId = extractToken(decodedToken);
-
-        userService.addAddress(userId, request.roadAddress(), false);
+    public KurlyResponse<Void> addAddress(@AuthenticationPrincipal User user, @RequestBody AddAddress.Request request) {
+        userService.addAddress(user.getId(), request.roadAddress(), false);
         return KurlyResponse.noData();
     }
 
     @PostMapping("/register-credit")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> addCredit(@RequestHeader(value = "Authorization") String token, @RequestBody RegisterPayment.creditRequest request) {
-        String decodedToken = jwtTokenProvider.validateToken(token);
-        Long userId = extractToken(decodedToken);
-
-        userService.addCredit(userId,request);
+    public KurlyResponse<Void> addCredit(@AuthenticationPrincipal User user, @RequestBody RegisterPayment.creditRequest request) {
+        userService.addCredit(user.getId(), request);
         return KurlyResponse.noData();
     }
 
     @PostMapping("/register-easy")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> addEasyPay(@RequestHeader(value = "Authorization") String token, @RequestBody RegisterPayment.easyPayRequest request) {
-        String decodedToken = jwtTokenProvider.validateToken(token);
-        Long userId = extractToken(decodedToken);
-
-        userService.addEasyPay(userId,request);
+    public KurlyResponse<Void> addEasyPay(@AuthenticationPrincipal User user, @RequestBody RegisterPayment.easyPayRequest request) {
+        userService.addEasyPay(user.getId(), request);
         return KurlyResponse.noData();
-    }
-
-    private Long extractToken(String decodedToken) {
-        String[] splitToken = decodedToken.split(":");
-        return Long.parseLong(splitToken[0]);
     }
 
     @PostMapping("/carts")
