@@ -96,7 +96,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
 
-        boolean notCorrectPassword = passwordEncoder.matches(user.getPassword(), inputPassword);
+        boolean notCorrectPassword = !passwordEncoder.matches(user.getPassword(), inputPassword);
 
         if (notCorrectPassword) {
             throw new KurlyBaseException(NOT_CORRECT_PASSWORD);
@@ -107,6 +107,7 @@ public class UserService {
 
     private void update(UpdateUser.Request request, User user) {
         String editPassword = passwordEncoder.encode(request.password());
+        System.out.println(editPassword);
         user.update(request.name(), editPassword, request.email(), request.sex(), request.bitrh(), request.phoneNumber());
     }
 

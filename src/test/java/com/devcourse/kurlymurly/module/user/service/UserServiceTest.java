@@ -178,8 +178,8 @@ class UserServiceTest {
         User newUser = new User("kurly", "kurly4321", "encodePassword", "kyrly@murly.com"
                 , info, "01094828438");
 
-        doReturn("encodePassword").when(passwordEncoder).encode("kurly1234");
-        doReturn("editEncodePassword").when(passwordEncoder).encode("murly1234");
+        doReturn("editEncodePassword").when(passwordEncoder).encode(any());
+        doReturn(true).when(passwordEncoder).matches(any(),any());
         doReturn(Optional.of(newUser)).when(userRepository).findById(any());
 
         // When
