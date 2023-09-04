@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 public enum ErrorCode {
     // 400
@@ -16,6 +15,7 @@ public enum ErrorCode {
     NOT_FOUND_ORDER_SUPPORT(HttpStatus.NOT_FOUND, "존재하는 1:1 문의 내역이 없습니다."),
     NOT_FOUND_ORDER(HttpStatus.NOT_FOUND, "존재하는 주문 내역이 없습니다."),
     NEVER_FAVORITE(HttpStatus.NOT_FOUND, "찜 이력이 존재하지 않습니다."),
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하는 상품이 없습니다"),
 
     // 409
 
