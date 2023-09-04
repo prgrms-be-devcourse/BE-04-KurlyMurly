@@ -53,17 +53,14 @@ public class UserController {
 
     @PutMapping
     @ResponseStatus(OK)
-    public KurlyResponse<Void> update(@RequestHeader(value = "Authorization") String token, @RequestBody UpdateUser.Request request) {
-        String decodedToken = jwtTokenProvider.validateToken(token);
-        Long userId = extractToken(decodedToken);
-
+    public KurlyResponse<Void> update(@AuthenticationPrincipal User user, @RequestBody UpdateUser.Request request) {
         boolean isPasswordNotEqual = request.password().equals(request.checkPassword());
 
         if (isPasswordNotEqual) {
             throw new KurlyBaseException(ErrorCode.NOT_EQUAL_PASSWORD);
         }
 
-        userService.update(userId, request);
+        userService.findUpdateUser(user.getId(), request);
 
         return KurlyResponse.noData();
     }
@@ -84,37 +81,23 @@ public class UserController {
 
     @PostMapping("/address")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> addAddress(@RequestHeader(value = "Authorization") String token, @RequestBody AddAddress.Request request) {
-        String decodedToken = jwtTokenProvider.validateToken(token);
-        Long userId = extractToken(decodedToken);
-
-        userService.addAddress(userId, request.roadAddress(), false);
+    public KurlyResponse<Void> addAddress(@AuthenticationPrincipal User user, @RequestBody AddAddress.Request request) {
+        userService.addAddress(user.getId(), request.roadAddress(), false);
         return KurlyResponse.noData();
     }
 
     @PostMapping("/register-credit")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> addCredit(@RequestHeader(value = "Authorization") String token, @RequestBody RegisterPayment.creditRequest request) {
-        String decodedToken = jwtTokenProvider.validateToken(token);
-        Long userId = extractToken(decodedToken);
-
-        userService.addCredit(userId, request);
+    public KurlyResponse<Void> addCredit(@AuthenticationPrincipal User user, @RequestBody RegisterPayment.creditRequest request) {
+        userService.addCredit(user.getId(), request);
         return KurlyResponse.noData();
     }
 
     @PostMapping("/register-easy")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> addEasyPay(@RequestHeader(value = "Authorization") String token, @RequestBody RegisterPayment.easyPayRequest request) {
-        String decodedToken = jwtTokenProvider.validateToken(token);
-        Long userId = extractToken(decodedToken);
-
-        userService.addEasyPay(userId, request);
+    public KurlyResponse<Void> addEasyPay(@AuthenticationPrincipal User user, @RequestBody RegisterPayment.easyPayRequest request) {
+        userService.addEasyPay(user.getId(), request);
         return KurlyResponse.noData();
-    }
-
-    private Long extractToken(String decodedToken) {
-        String[] splitToken = decodedToken.split(":");
-        return Long.parseLong(splitToken[0]);
     }
 
     @PostMapping("/carts")
