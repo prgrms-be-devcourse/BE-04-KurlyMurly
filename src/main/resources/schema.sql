@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS product_supports;
 DROP TABLE IF EXISTS favorites;
 DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS review_likes;
 
 CREATE TABLE categories
 (
@@ -67,6 +68,16 @@ CREATE TABLE reviews
     likes      INT         NOT NULL DEFAULT 0,
     content    TEXT        NOT NULL,
     status     VARCHAR(15) NOT NULL,
-    created_at DATETIME(6),
-    updated_at DATETIME(6)
+    created_at DATETIME             DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME             DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE review_likes
+(
+    review_like_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    like_user_id   BIGINT NOT NULL,
+    review_id      BIGINT NOT NULL,
+    is_deleted     BIT(1) NOT NULL,
+    created_at     DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at     DATETIME DEFAULT CURRENT_TIMESTAMP
 );
