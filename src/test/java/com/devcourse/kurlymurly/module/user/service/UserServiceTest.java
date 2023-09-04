@@ -6,6 +6,7 @@ import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
+import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
 import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
@@ -24,7 +25,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static com.devcourse.kurlymurly.module.user.domain.User.Role.USER;
@@ -167,19 +170,42 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("결제 수단 조회 테스트")
+    void get_payment() {
+        // Given
+        Payment payment = new Payment(1L, null);
+
+        doReturn(List.of(payment)).when(paymentRepository).findAllById(Collections.singleton(1L));
+        userService.getPayments(1L);
+
+        // then
+        then(paymentRepository).should(times(1)).findAllById(any());
+    }
+
+    @Test
+    @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
+    void get_payment_fail_ByNotFoundPayments() {
+        // When
+        doReturn(Collections.emptyList()).when(paymentRepository).findAllById(Collections.singleton(1L));
+
+        // Then
+        assertThrows(KurlyBaseException.class, () -> userService.getPayments(1L));
+    }
+
+    @Test
     @DisplayName("개인정보 변경 테스트_비밀번호")
     void update_user_password() {
         // Given
         UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
                 , "sehan", "kurly@murly.com", "01094828438", "male", null);
 
-        UserInfo info = new UserInfo(null,"sehan","male");
+        UserInfo info = new UserInfo(null, "sehan", "male");
 
         User newUser = new User("kurly", "kurly4321", "encodePassword", "kyrly@murly.com"
                 , info, "01094828438");
 
         doReturn("editEncodePassword").when(passwordEncoder).encode(any());
-        doReturn(true).when(passwordEncoder).matches(any(),any());
+        doReturn(true).when(passwordEncoder).matches(any(), any());
         doReturn(Optional.of(newUser)).when(userRepository).findById(any());
 
         // When
@@ -200,7 +226,7 @@ class UserServiceTest {
         doReturn(Optional.empty()).when(userRepository).findById(any());
 
         // Then
-        assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L,request));
+        assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
     }
 
     @Test
@@ -216,7 +242,7 @@ class UserServiceTest {
         doReturn(Optional.of(newUser)).when(userRepository).findById(any());
 
         // When,Then
-        assertThrows(KurlyBaseException.class,() -> userService.findUpdateUser(1L,request));
+        assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
     }
 
     @Nested
