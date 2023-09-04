@@ -102,10 +102,10 @@ public class UserService {
             throw new KurlyBaseException(NOT_CORRECT_PASSWORD);
         }
 
-        update(request, user);
+        updateUserInfo(request, user);
     }
 
-    private void update(UpdateUser.Request request, User user) {
+    private void updateUserInfo(UpdateUser.Request request, User user) {
         String editPassword = passwordEncoder.encode(request.password());
         System.out.println(editPassword);
         user.update(request.name(), editPassword, request.email(), request.sex(), request.bitrh(), request.phoneNumber());
