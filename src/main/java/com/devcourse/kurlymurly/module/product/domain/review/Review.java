@@ -74,7 +74,7 @@ public class Review extends BaseEntity {
         this.status = Status.BEST;
     }
 
-    public void deleteReview() {
+    public void deleted() {
         this.status = Status.DELETED;
     }
 
