@@ -10,6 +10,7 @@ import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 import com.devcourse.kurlymurly.web.dto.product.GetFavorite;
 import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
 import com.devcourse.kurlymurly.web.dto.product.SupportProduct;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +50,11 @@ public class ProductFacade {
     public ListPagingResponse<GetFavorite.Response> getUserFavorites(Long userId) {
         List<GetFavorite.Response> responses = productPaging.getAllFavoritesByUserId(userId);
         return new ListPagingResponse<>(responses);
+    }
+
+    // todo : user api
+    public Slice<SupportProduct.Response> getAllMySupports(Long userId, Long lastId) {
+        return productPaging.getTenSupportsOfUserPageFromLastId(userId, lastId);
     }
 
     @Transactional // todo: 관리자 API

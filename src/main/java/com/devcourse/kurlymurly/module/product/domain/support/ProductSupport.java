@@ -64,4 +64,24 @@ public class ProductSupport extends BaseEntity {
     public boolean isSecret() {
         return isSecret;
     }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
 }

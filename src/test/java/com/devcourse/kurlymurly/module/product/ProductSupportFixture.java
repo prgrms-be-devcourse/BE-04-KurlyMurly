@@ -4,8 +4,8 @@ import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.web.dto.product.SupportProduct;
 
 public enum ProductSupportFixture {
-    SUPPORT_FIXTURE(99L, 1L, "LA갈비", "고기 맛이 이상해요", "좀 그렇네요", false),
-    SECRET_SUPPORT_FIXTURE(100L, 1L, "LA갈비", "아 좀 그런데요?", "진짜 좀 그렇네요", true),
+    SUPPORT_FIXTURE(1L, 1L, "LA갈비", "고기 맛이 이상해요", "좀 그렇네요", false),
+    SECRET_SUPPORT_FIXTURE(2L, 1L, "LA갈비", "아 좀 그런데요?", "진짜 좀 그렇네요", true),
     ;
 
     private final Long userId;
