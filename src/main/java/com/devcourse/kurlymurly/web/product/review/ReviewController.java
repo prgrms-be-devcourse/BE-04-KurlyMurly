@@ -86,7 +86,7 @@ public class ReviewController {
             @PathVariable Long id,
             @RequestBody ReviewCreate.UpdateRequest request
     ) {
-        reviewService.updateReviewContent(id, request.content());
+        reviewService.updateReviewContent(id, request.content(), request.isSecreted());
         return KurlyResponse.noData();
     }
 

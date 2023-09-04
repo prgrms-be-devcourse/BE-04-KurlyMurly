@@ -15,6 +15,7 @@ public class Review extends BaseEntity {
         NORMAL,
         BANNED,
         BEST,
+        SECRET,
         DELETED
     }
 
@@ -58,19 +59,27 @@ public class Review extends BaseEntity {
         return this.likes;
     }
 
-    public void updateReviewContent(String content) {
+    public void updateReview(String content, boolean isSecreted) {
         this.content = content;
+
+        if(isSecreted) {
+            toSecret();
+        }
     }
 
-    public void toNormalReview() {
+    public void toNormal() {
         this.status = Status.NORMAL;
     }
 
-    public void toBannedReview() {
+    public void toBanned() {
         this.status = Status.BANNED;
     }
 
-    public void toBestReview() {
+    public void toSecret() {
+        this.status = Status.SECRET;
+    }
+
+    public void toBest() {
         this.status = Status.BEST;
     }
 

@@ -32,7 +32,11 @@ public sealed interface ReviewCreate permits Request, UpdateRequest, Response {
     record UpdateRequest(
             @NotNull(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "수정한 리뷰 내용")
-            String content
+            String content,
+
+            @NotNull(message = "빈 값이 들어올 수 없습니다.")
+            @Schema(name = "리뷰 비공개 유무")
+            boolean isSecreted
     ) implements ReviewCreate {
     }
 

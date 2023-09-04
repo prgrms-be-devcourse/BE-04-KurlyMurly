@@ -129,7 +129,7 @@ class ReviewServiceTest {
         // when
         reviewService.registerReview(reviewRequest);
         System.out.println("수정 전 content: " + review.getContent());
-        reviewService.updateReviewContent(review.getId(), updatedContent);
+        reviewService.updateReviewContent(review.getId(), updatedContent, false);
 
         // then
         Assertions.assertEquals(updatedContent, review.getContent());

@@ -67,27 +67,33 @@ public class ReviewService {
     }
 
     @Transactional
-    public void updateReviewContent(Long id, String content) {
+    public void updateReviewContent(Long id, String content, boolean isSecreted) {
         Review review = findReviewById(id);
-        review.updateReviewContent(content);
+        review.updateReview(content, isSecreted);
     }
 
     // TODO: 관리자 영역
     @Transactional
     public void updateToNormal(Long id) {
         Review review = findReviewById(id);
-        review.toNormalReview();
+        review.toNormal();
     }
     @Transactional
     public void updateToBanned(Long id) {
         Review review = findReviewById(id);
-        review.toBannedReview();
+        review.toBanned();
+    }
+
+    @Transactional
+    public void updateToSecret(Long id) {
+        Review review = findReviewById(id);
+        review.toSecret();
     }
 
     @Transactional
     public void updateToBest(Long id) {
         Review review = findReviewById(id);
-        review.toBestReview();
+        review.toBest();
     }
 
     @Transactional
