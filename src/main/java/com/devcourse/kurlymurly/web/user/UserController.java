@@ -103,7 +103,7 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
-    @GetMapping("/credit")
+    @GetMapping("/credits")
     @ResponseStatus(OK)
     public KurlyResponse<List<Payment>> getPayment(@AuthenticationPrincipal User user) {
         List<Payment> creditList = userService.getPayments(user.getId());
