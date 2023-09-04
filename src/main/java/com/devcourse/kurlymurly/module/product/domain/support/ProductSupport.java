@@ -20,6 +20,9 @@ public class ProductSupport extends BaseEntity {
     @Column(nullable = false)
     private Long productId;
 
+    @Column(length = 50, nullable = false)
+    private String productName;
+
     @Column(length = 100, nullable = false)
     private String title;
 
@@ -36,9 +39,10 @@ public class ProductSupport extends BaseEntity {
     protected ProductSupport() {
     }
 
-    public ProductSupport(Long userId, Long productId, String title, String content, boolean isSecret) {
+    public ProductSupport(Long userId, Long productId, String productName, String title, String content, boolean isSecret) {
         this.userId = userId;
         this.productId = productId;
+        this.productName = productName;
         this.title = title;
         this.content = content;
         this.isSecret = isSecret;
@@ -59,5 +63,25 @@ public class ProductSupport extends BaseEntity {
 
     public boolean isSecret() {
         return isSecret;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }
