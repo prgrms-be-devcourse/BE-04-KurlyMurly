@@ -18,6 +18,9 @@ import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +39,6 @@ public class UserService {
     private static final String EXIST_SAME_ID = "사용 불가능한 아이디 입니다.";
     private static final String EXIST_SAME_EMAIL = "사용 불가능한 이메일 입니다.";
     private static final String NOT_SAME_PASSWORD = "동일한 비밀번호를 입력";
-    private static final String FAIL_USER_LOGIN = "아이디, 비밀번호를 확인해주세요";
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -45,6 +47,7 @@ public class UserService {
     private final ShippingRepository shippingRepository;
     private final PaymentRepository paymentRepository;
     private final JwtTokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     public UserService(
             UserRepository userRepository,
@@ -53,7 +56,8 @@ public class UserService {
             CartRepository cartRepository,
             ShippingRepository shippingRepository,
             PaymentRepository paymentRepository,
-            JwtTokenProvider tokenProvider
+            JwtTokenProvider tokenProvider,
+            AuthenticationManagerBuilder authenticationManagerBuilder
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -62,18 +66,16 @@ public class UserService {
         this.shippingRepository = shippingRepository;
         this.paymentRepository = paymentRepository;
         this.tokenProvider = tokenProvider;
+        this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
-    public LoginUser.Response logIn(LoginUser.Request request) {
-        String inputPassword = passwordEncoder.encode(request.password());
+    public LoginUser.Response login(String loginId, String password) {
+        UsernamePasswordAuthenticationToken authenticationToken
+                = new UsernamePasswordAuthenticationToken(loginId, password);
 
-        User user = userRepository.findByLoginId(request.loginId())
-                .filter(u -> passwordEncoder.matches(u.getPassword(), inputPassword))
-                .orElseThrow(() -> new IllegalArgumentException(FAIL_USER_LOGIN));
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        String token = tokenProvider.createToken(user.getId(), user.getRole().name());
-
-        return new LoginUser.Response(user.getRole().name(), token);
+        return tokenProvider.createToken(authentication);
     }
 
     @Transactional
