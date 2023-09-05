@@ -14,7 +14,6 @@ import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
-import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
@@ -164,19 +163,17 @@ public class UserService {
     }
 
     @Transactional
-    public void removeProduct(Long productId, Long userId) {
-        Cart cart = cartRepository.findByProductIdAndUserId(productId, userId)
+    public void removeCartItem(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new KurlyBaseException(CART_NOT_FOUND));
 
-        productFacade.validateOrderable(cart.getProductId());
         cartRepository.delete(cart);
     }
 
     @Transactional
-    public void removeProductList(RemoveCart.Request removeProductList, Long userId) {
-        for (Long productId : removeProductList.products()) {
-            removeProduct(productId, userId);
-        }
+    public void removeCartItemList(List<Long> cartIds) {
+        List<Cart> carts = cartRepository.findAllById(cartIds);
+        cartRepository.deleteAllInBatch(carts);
     }
 
     private void checkPassword(String password, String checkPassword) {
