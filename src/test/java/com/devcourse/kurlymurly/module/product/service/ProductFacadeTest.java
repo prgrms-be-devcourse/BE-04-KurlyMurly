@@ -25,7 +25,6 @@ import static com.devcourse.kurlymurly.module.product.ProductFixture.LA_GOGI;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SECRET_SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.domain.Product.Status;
-
 import static com.devcourse.kurlymurly.module.product.domain.Product.Status.SOLD_OUT;
 import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.DELETED;
 import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.NORMAL;
@@ -220,14 +219,14 @@ class ProductFacadeTest {
         }
 
         @Test
-        @DisplayName("다른 사람이 상품 문의를 수정하려고 하면 IllegalArgumentException을 던진다.")
+        @DisplayName("다른 사람이 상품 문의를 수정하려고 하면 예외을 던진다.")
         void updateProductSupport_Fail_ByNotMatchAuthor() {
             // given
             ProductSupport support = SUPPORT_FIXTURE.toEntity();
             given(productSupportRetrieve.findByIdOrThrow(any())).willReturn(support);
 
             // when, then
-            assertThatExceptionOfType(IllegalArgumentException.class)
+            assertThatExceptionOfType(KurlyBaseException.class)
                     .isThrownBy(() -> productFacade.updateProductSupport(
                             SECRET_SUPPORT_FIXTURE.getUserId(),
                             support.getId(),
