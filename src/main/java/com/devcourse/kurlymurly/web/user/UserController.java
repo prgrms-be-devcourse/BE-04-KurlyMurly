@@ -119,14 +119,6 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
-    @PostMapping("/edit-credit")
-    @ResponseStatus(OK)
-    public KurlyResponse<Void> deletePayment(@RequestBody DeletePayment.Request request) {
-        userService.deletePayment(request.paymentId());
-
-        return KurlyResponse.noData();
-    }
-
     @PostMapping("/carts")
     @ResponseStatus(OK)
     public KurlyResponse<Void> addCart(

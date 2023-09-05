@@ -147,23 +147,6 @@ public class UserService {
         return paymentList;
     }
 
-    public void deletePayment(Long paymentId) {
-        Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_PAYMENT));
-
-        payment.deletePayment();
-    }
-
-    public List<Payment> getPayments(Long userId) {
-        List<Payment> paymentList = paymentRepository.findAllById(Collections.singleton(userId));
-
-        if (paymentList.isEmpty()) {
-            throw new KurlyBaseException(NOT_FOUND_PAYMENT);
-        }
-
-        return paymentList;
-    }
-
     public void deletePayment(Long userId,Long paymentId) {
         Payment payment = paymentRepository.findByUserIdAndId(userId,paymentId)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_PAYMENT));
