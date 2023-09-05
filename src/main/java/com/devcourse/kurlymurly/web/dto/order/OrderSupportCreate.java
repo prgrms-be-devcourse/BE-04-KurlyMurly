@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.web.dto.order;
 
-import com.devcourse.kurlymurly.module.order.domain.OrderSupport;
+import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 
 import static com.devcourse.kurlymurly.web.dto.order.OrderSupportCreate.*;
 

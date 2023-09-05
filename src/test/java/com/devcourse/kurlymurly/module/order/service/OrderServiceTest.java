@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.module.order.service;
 
 import com.devcourse.kurlymurly.module.order.domain.Order;
-import com.devcourse.kurlymurly.module.order.domain.OrderJpaRepository;
+import com.devcourse.kurlymurly.module.order.domain.OrderRepository;
 import com.devcourse.kurlymurly.web.dto.order.OrderCreate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +25,7 @@ class OrderServiceTest {
     private OrderService orderService;
 
     @Mock
-    private OrderJpaRepository orderRepository;
+    private OrderRepository orderRepository;
 
     private static OrderCreate.Request request;
 

@@ -2,7 +2,7 @@ package com.devcourse.kurlymurly.module.order.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.order.domain.Order;
-import com.devcourse.kurlymurly.module.order.domain.OrderJpaRepository;
+import com.devcourse.kurlymurly.module.order.domain.OrderRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,9 +16,9 @@ import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_ORDE
 @Service
 @Transactional(readOnly = true)
 public class OrderService {
-    private final OrderJpaRepository orderRepository;
+    private final OrderRepository orderRepository;
 
-    public OrderService(OrderJpaRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
