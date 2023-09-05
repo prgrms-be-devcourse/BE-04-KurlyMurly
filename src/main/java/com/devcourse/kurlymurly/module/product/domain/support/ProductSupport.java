@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.module.product.domain.support;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +9,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
 import java.util.Objects;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_AUTHOR;
 
 @Entity
 @Table(name = "product_supports")
@@ -57,7 +60,7 @@ public class ProductSupport extends BaseEntity {
 
     public void validateAuthor(Long userId) {
         if (!Objects.equals(this.userId, userId)) {
-            throw new IllegalArgumentException("작성자가 아닙니다. ID : " + userId);
+            throw KurlyBaseException.withId(NOT_AUTHOR, userId);
         }
     }
 
