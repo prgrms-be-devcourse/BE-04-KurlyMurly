@@ -7,7 +7,7 @@ import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
 import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
-import com.devcourse.kurlymurly.web.dto.product.SupportProduct;
+import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
