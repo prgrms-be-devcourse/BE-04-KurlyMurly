@@ -2,9 +2,10 @@ package com.devcourse.kurlymurly.global.exception;
 
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 public enum ErrorCode {
     // 400
@@ -17,6 +18,7 @@ public enum ErrorCode {
     NOT_FOUND_ORDER(NOT_FOUND, "존재하는 주문 내역이 없습니다."),
     NEVER_FAVORITE(NOT_FOUND, "찜 이력이 존재하지 않습니다."),
     PRODUCT_NOT_FOUND(NOT_FOUND, "존재하는 상품이 없습니다"),
+    NEVER_WRITE_PRODUCT_SUPPORT(NOT_FOUND, "작성한 상품 문의가 없습니다"),
     NOT_CORRECT_PASSWORD(NOT_FOUND, "현재 비밀번호를 확인해주세요"),
     NOT_EQUAL_PASSWORD(NOT_FOUND, "동일한 비밀번호를 입력해주세요."),
     NOT_EXISTS_USER(NOT_FOUND, "존재하지 않는 회원입니다."),
