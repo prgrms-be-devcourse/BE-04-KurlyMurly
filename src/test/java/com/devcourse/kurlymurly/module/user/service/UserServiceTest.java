@@ -5,17 +5,19 @@ import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
+import com.devcourse.kurlymurly.module.user.domain.cart.Cart;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
 import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
 import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
-import com.devcourse.kurlymurly.web.dto.payment.DeletePayment;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
+import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -27,7 +29,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.will;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doReturn;
@@ -289,6 +292,53 @@ class UserServiceTest {
 
             // then
             then(cartRepository).should(times(1)).save(any());
+        }
+
+        @Test
+        @DisplayName("장바구니에서 상품을 선택 삭제 할 수 있다.")
+        void removeProduct_Success() {
+            // given
+            Cart cart = new Cart(userId, productId, quantity);
+
+            // mocking
+            willDoNothing().given(productFacade).validateOrderable(any());
+            given(cartRepository.findByProductIdAndUserId(any(), any())).willReturn(Optional.of(cart));
+
+            // when
+            userService.addCart(userId, productId, quantity);
+            userService.removeProduct(productId, userId);
+
+            // then
+            then(cartRepository).should(times(1)).save(any());
+        }
+
+        @Test
+        @DisplayName("장바구니에서 상품을 리스트로 선택 삭제 할 수 있다.")
+        void removeProductList_Success() {
+            // given
+            Cart cart1 = new Cart(userId, productId, quantity);
+            Cart cart2 = new Cart(userId, productId + 1, quantity);
+            Cart cart3 = new Cart(userId, productId + 2, quantity);
+            List<Long> products = List.of(cart1.getProductId(), cart2.getProductId());
+            RemoveCart.Request request = new RemoveCart.Request(products);
+
+            // mocking
+            willDoNothing().given(productFacade).validateOrderable(any());
+            given(cartRepository.findByProductIdAndUserId(any(), any())).willReturn(Optional.of(cart1));
+            given(cartRepository.findByProductIdAndUserId(any(), any())).willReturn(Optional.of(cart2));
+            given(cartRepository.findByProductIdAndUserId(any(), any())).willReturn(Optional.of(cart3));
+            willDoNothing().given(cartRepository).delete(any());
+            given(cartRepository.findAllByUserId(any())).willReturn(List.of(cart3));
+
+            // when
+            userService.addCart(userId, productId, quantity);
+            userService.addCart(userId, productId + 1, quantity);
+            userService.addCart(userId, productId + 2, quantity);
+            userService.removeProductList(request, userId);
+            List<Cart> carts = cartRepository.findAllByUserId(userId);
+
+            // then
+            Assertions.assertEquals(1, carts.size());
         }
 
         @Test

@@ -25,4 +25,16 @@ public class Cart extends BaseEntity {
         this.productId = productId;
         this.quantity = quantity;
     }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void increaseQuantity() {
+        this.quantity += 1;
+    }
+
+    public void decreaseQuantity() {
+        this.quantity -= 1;
+    }
 }

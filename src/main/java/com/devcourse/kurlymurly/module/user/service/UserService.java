@@ -14,6 +14,7 @@ import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
+import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.CART_NOT_FOUND;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PASSWORD;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_EXISTS_USER;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_PAYMENT;
@@ -147,8 +149,8 @@ public class UserService {
         return paymentList;
     }
 
-    public void deletePayment(Long userId,Long paymentId) {
-        Payment payment = paymentRepository.findByUserIdAndId(userId,paymentId)
+    public void deletePayment(Long userId, Long paymentId) {
+        Payment payment = paymentRepository.findByUserIdAndId(userId, paymentId)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_PAYMENT));
 
         payment.deletePayment();
@@ -159,6 +161,22 @@ public class UserService {
         productFacade.validateOrderable(productId);
         Cart cart = new Cart(id, productId, quantity);
         cartRepository.save(cart);
+    }
+
+    @Transactional
+    public void removeProduct(Long productId, Long userId) {
+        Cart cart = cartRepository.findByProductIdAndUserId(productId, userId)
+                .orElseThrow(() -> new KurlyBaseException(CART_NOT_FOUND));
+
+        productFacade.validateOrderable(cart.getProductId());
+        cartRepository.delete(cart);
+    }
+
+    @Transactional
+    public void removeProductList(RemoveCart.Request removeProductList, Long userId) {
+        for (Long productId : removeProductList.products()) {
+            removeProduct(productId, userId);
+        }
     }
 
     private void checkPassword(String password, String checkPassword) {

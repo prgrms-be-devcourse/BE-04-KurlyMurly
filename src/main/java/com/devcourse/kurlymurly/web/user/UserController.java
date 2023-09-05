@@ -10,6 +10,7 @@ import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.payment.DeletePayment;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.product.CreateCart;
+import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
 import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
 import com.devcourse.kurlymurly.web.dto.user.CheckId;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
@@ -17,6 +18,7 @@ import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -126,6 +128,26 @@ public class UserController {
             @RequestBody CreateCart.Request request
     ) {
         userService.addCart(user.getId(), request.productId(), request.quantity());
+        return KurlyResponse.noData();
+    }
+
+    @DeleteMapping("/carts/{productId}")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> removeProduct(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long productId
+    ) {
+        userService.removeProduct(productId, user.getId());
+        return KurlyResponse.noData();
+    }
+
+    @DeleteMapping("/carts")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> removeProduct(
+            @AuthenticationPrincipal User user,
+            @RequestBody RemoveCart.Request removeProductList
+    ) {
+        userService.removeProductList(removeProductList, user.getId());
         return KurlyResponse.noData();
     }
 }
