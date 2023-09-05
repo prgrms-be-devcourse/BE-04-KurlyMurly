@@ -176,6 +176,14 @@ public class UserService {
         cartRepository.deleteAllInBatch(carts);
     }
 
+    @Transactional
+    public void changeItemQuantity(Long cartId, boolean isIncrease) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new KurlyBaseException(CART_NOT_FOUND));
+
+        cart.updateQuantity(isIncrease);
+    }
+
     private void checkPassword(String password, String checkPassword) {
         boolean isPasswordNotSame = !password.equals(checkPassword);
 

@@ -30,11 +30,11 @@ public class Cart extends BaseEntity {
         return productId;
     }
 
-    public void increaseQuantity() {
-        this.quantity += 1;
-    }
-
-    public void decreaseQuantity() {
-        this.quantity -= 1;
+    public void updateQuantity(boolean isIncrease) {
+        if (isIncrease) {
+            this.quantity += 1;
+        } else {
+            this.quantity -= 1;
+        }
     }
 }
