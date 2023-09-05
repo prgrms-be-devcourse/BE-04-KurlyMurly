@@ -7,9 +7,9 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "review_likes")
-public class ReviewLikes extends BaseEntity {
+public class ReviewLike extends BaseEntity {
     @Column(nullable = false)
-    private Long likeUserId;
+    private Long userId;
 
     @Column(nullable = false)
     private Long reviewId;
@@ -17,11 +17,11 @@ public class ReviewLikes extends BaseEntity {
     @Column(nullable = false)
     private boolean isDeleted;
 
-    protected ReviewLikes() {
+    protected ReviewLike() {
     }
 
-    public ReviewLikes(Long likeUserId, Long reviewId) {
-        this.likeUserId = likeUserId;
+    public ReviewLike(Long userId, Long reviewId) {
+        this.userId = userId;
         this.reviewId = reviewId;
         this.isDeleted = false;
     }
@@ -38,7 +38,7 @@ public class ReviewLikes extends BaseEntity {
         return reviewId;
     }
 
-    public Long getLikeUserId() {
-        return likeUserId;
+    public Long getUserId() {
+        return userId;
     }
 }

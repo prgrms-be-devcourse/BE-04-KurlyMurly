@@ -2,16 +2,17 @@ package com.devcourse.kurlymurly.web.product.review;
 
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.review.service.ReviewService;
+import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.common.PageParam;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewCreate;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewLikeCreate;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -136,23 +137,15 @@ public class ReviewController {
 
     @Tag(name = "review")
     @Operation(description = "리뷰 좋아요 API")
-    @ApiResponse(responseCode = "200", description = "리뷰에 대한")
+    @ApiResponse(responseCode = "200", description = "성공적으로 리뷰 좋아요를 활성화한 경우")
     @ApiResponse(responseCode = "400", description = "활성화를 위한 id가 넘어오지 않은 경우")
-    @PostMapping("/likes")
-    @ResponseStatus(OK)
-    public KurlyResponse<ReviewLikeCreate.Response> createReviewLikes(@RequestBody ReviewLikeCreate.Request request) {
-        ReviewLikeCreate.Response response = reviewService.createReviewLikes(request.likeUserId(), request.reviewId());
-        return KurlyResponse.ok(response);
-    }
-
-    @Tag(name = "review")
-    @Operation(description = "리뷰 좋아요 재활성화 API")
-    @ApiResponse(responseCode = "200", description = "성공적으로 리뷰 좋아요를 재활성화한 경우")
-    @ApiResponse(responseCode = "400", description = "활성화를 위한 id가 넘어오지 않은 경우")
-    @PatchMapping("/likes/{id}")
+    @PatchMapping("/{reviewId}/likes")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> activeReviewLike(@PathVariable Long id) {
-        reviewService.activeReviewLike(id);
+    public KurlyResponse<Void> activeReviewLike(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long reviewId
+    ) {
+        reviewService.activeReviewLike(user.getId(), reviewId);
         return KurlyResponse.noData();
     }
 
@@ -160,10 +153,10 @@ public class ReviewController {
     @Operation(description = "리뷰 좋아요 취소 API")
     @ApiResponse(responseCode = "200", description = "성공적으로 리뷰 좋아요를 취소한 경우")
     @ApiResponse(responseCode = "400", description = "취소를 위한 id가 넘어오지 않은 경우")
-    @DeleteMapping("/likes/{id}")
+    @DeleteMapping("/{reviewId}/likes")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> cancelReviewLike(@PathVariable Long id) {
-        reviewService.cancelReviewLike(id);
+    public KurlyResponse<Void> cancelReviewLike(@PathVariable Long reviewId) {
+        reviewService.cancelReviewLike(reviewId);
         return KurlyResponse.noData();
     }
 }

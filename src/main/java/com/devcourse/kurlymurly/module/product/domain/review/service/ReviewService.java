@@ -4,9 +4,8 @@ import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewJpaRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeJpaRepository;
-import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikes;
+import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewCreate;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewLikeCreate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -78,6 +77,7 @@ public class ReviewService {
         Review review = findReviewById(id);
         review.toNormal();
     }
+
     @Transactional
     public void updateToBanned(Long id) {
         Review review = findReviewById(id);
@@ -105,46 +105,39 @@ public class ReviewService {
     /**
      * ReviewLike Service
      */
-    public ReviewLikes findReviewLikesById(Long id) {
-        return reviewLikeRepository.findById(id)
-                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_REVIEW_LIKE));
+    @Transactional
+    public void activeReviewLike(Long userId, Long reviewId) {
+        ReviewLike reviewLike = reviewLikeRepository.findByUserIdAndReviewId(userId, reviewId)
+                .orElseGet(() -> createReviewLikes(userId, reviewId));
+
+        Review review = findReviewById(reviewLike.getReviewId());
+
+        reviewLike.activeLike();
+        review.increaseLikes();
     }
 
-    @Transactional
-    public ReviewLikeCreate.Response createReviewLikes(Long likeUserId, Long reviewId) {
-        ReviewLikes reviewLikes = new ReviewLikes(likeUserId, reviewId);
-        reviewLikeRepository.save(reviewLikes);
+    private ReviewLike createReviewLikes(Long userId, Long reviewId) {
+        ReviewLike reviewLike = new ReviewLike(userId, reviewId);
+        reviewLikeRepository.save(reviewLike);
 
         Review review = findReviewById(reviewId);
         review.increaseLikes();
 
-        return toReviewLikeResponse(reviewLikes);
-    }
-
-    private ReviewLikeCreate.Response toReviewLikeResponse(ReviewLikes reviewLikes) {
-        return new ReviewLikeCreate.Response(
-                reviewLikes.getLikeUserId(),
-                reviewLikes.getReviewId()
-        );
-    }
-
-    @Transactional
-    public void activeReviewLike(Long id) {
-        ReviewLikes reviewLikes = findReviewLikesById(id);
-
-        Review review = findReviewById(reviewLikes.getReviewId());
-
-        reviewLikes.activeLike();
-        review.increaseLikes();
+        return reviewLike;
     }
 
     @Transactional
     public void cancelReviewLike(Long id) {
-        ReviewLikes reviewLikes = findReviewLikesById(id);
+        ReviewLike reviewLike = findReviewLikesById(id);
 
-        Review review = findReviewById(reviewLikes.getReviewId());
+        Review review = findReviewById(reviewLike.getReviewId());
 
-        reviewLikes.cancelLike();
+        reviewLike.cancelLike();
         review.decreaseLikes();
+    }
+
+    private ReviewLike findReviewLikesById(Long id) {
+        return reviewLikeRepository.findById(id)
+                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_REVIEW_LIKE));
     }
 }
