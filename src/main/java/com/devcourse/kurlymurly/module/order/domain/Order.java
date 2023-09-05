@@ -1,21 +1,29 @@
 package com.devcourse.kurlymurly.module.order.domain;
 
 import com.devcourse.kurlymurly.module.BaseEntity;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Entity
 @Table(name = "orders")
 public class Order extends BaseEntity {
+    private static final int RANDOM_BOUND = 10000;
 
     public enum Status {
+        ORDERED,
         PROCESSING,
         DELIVERING,
         DELIVERED,
@@ -25,36 +33,33 @@ public class Order extends BaseEntity {
     @Column(nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
-    private Long shippingId;
-
     @Column(nullable = false, unique = true)
     private String orderNumber;
 
-    @Column(nullable = false)
-    private int deliveryFee;
+    @ElementCollection
+    @CollectionTable(joinColumns = @JoinColumn(name = "order_id"))
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-    @Column(nullable = false)
-    private int totalPrice;
+    @Embedded
+    private PaymentInfo paymentInfo;
 
-    @Column(nullable = false, length = 10)
-    private String payment;
+    @Embedded
+    private ShippingInfo shippingInfo;
 
-    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
     protected Order() {
     }
 
-    public Order(Long userId, Long shippingId, int totalPrice, String payment) {
+    public Order(Long userId, List<OrderItem> orderItems, PaymentInfo paymentInfo, ShippingInfo shippingInfo) {
         this.userId = userId;
-        this.shippingId = shippingId;
         this.orderNumber = generateOrderNumber();
-        this.deliveryFee = checkDeliveryFee();
-        this.totalPrice = totalPrice;
-        this.payment = payment;
-        this.status = Status.PROCESSING;
+        this.orderItems = orderItems;
+        this.paymentInfo = paymentInfo;
+        this.shippingInfo = shippingInfo;
+        this.status = Status.ORDERED;
     }
 
     public void processingOrder() {
@@ -73,28 +78,24 @@ public class Order extends BaseEntity {
         this.status = Status.CANCELED;
     }
 
-    private int checkDeliveryFee() {
-        if(totalPrice > 40000) {
-            return 0;
-        }
-
-        return 4000;
-    }
-
     private String generateOrderNumber() {
         LocalDateTime localDateTime = LocalDateTime.now();
         String currentDate = localDateTime.format(DateTimeFormatter.ofPattern("yyMMddss"));
 
-        int randomDigits = new Random().nextInt(10000);
+        int randomDigits = new Random().nextInt(RANDOM_BOUND);
 
         return currentDate + randomDigits;
     }
 
-    public int getTotalPrice() {
-        return totalPrice;
-    }
-
     public Status getStatus() {
         return status;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public int getActualPayAmount() {
+        return paymentInfo.getActualPayAmount();
     }
 }

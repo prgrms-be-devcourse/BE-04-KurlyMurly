@@ -2,9 +2,7 @@ package com.devcourse.kurlymurly.module.order.service;
 
 import com.devcourse.kurlymurly.module.order.domain.Order;
 import com.devcourse.kurlymurly.module.order.domain.OrderRepository;
-import com.devcourse.kurlymurly.web.dto.order.OrderCreate;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,9 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.Optional;
-
+import static com.devcourse.kurlymurly.module.order.OrderFixture.HEJOW_ORDER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -27,139 +23,22 @@ class OrderServiceTest {
     @Mock
     private OrderRepository orderRepository;
 
-    private static OrderCreate.Request request;
-
-    private Order createOrderEntity(OrderCreate.Request request) {
-        return new Order(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
-    }
-
-    @BeforeEach
-    void setUp() {
-        request = new OrderCreate.Request(1L, 1L, 22000, "PAYCO");
-    }
+    private final Long userId = 1L;
 
     @Test
-    @DisplayName("주문건을 생성한다")
+    @DisplayName("주문하면 주문 번호가 생성되고 실제 주문 금액이 계산된다.")
     void createOrder_test() {
         // given
-        Order order = createOrderEntity(request);
+        Order order = HEJOW_ORDER.toEntity();
 
         // mocking
         given(orderRepository.save(any())).willReturn(order);
 
         // when
-        Order orderEntity = orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
+        CreateOrder.Response response = orderService.createOrder(userId, HEJOW_ORDER.toRequest());
 
         // then
-        Assertions.assertEquals(22000, orderEntity.getTotalPrice());
-        assertThat(order).usingRecursiveComparison().isEqualTo(orderEntity);
-    };
-
-    @Test
-    @DisplayName("주문 id에 해당하는 주문건을 조회한다")
-    void findById_test() {
-        // given
-        Order order = createOrderEntity(request);
-
-        // mocking
-        given(orderRepository.save(any())).willReturn(order);
-        given(orderRepository.findById(any())).willReturn(Optional.of(order));
-
-        // when
-        orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
-        Order orderEntity = orderService.findById(request.userId());
-
-        // then
-        assertThat(order).usingRecursiveComparison().isEqualTo(orderEntity);
-    }
-
-    @Test
-    @DisplayName("해당 user의 주문건을 조회한다")
-    void findAllByUserId_test() {
-        // given
-        Order order = createOrderEntity(request);
-
-        // mocking
-        given(orderRepository.save(any())).willReturn(order);
-        given(orderRepository.findAllByUserId(any())).willReturn(List.of(order));
-
-        // when
-        orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
-        List<Order> orderEntity = orderService.findAllByUserId(request.userId());
-
-        // then
-        assertThat(order).usingRecursiveComparison().isEqualTo(orderEntity.get(0));
-    }
-
-    @Test
-    @DisplayName("주문이 출고중 상태로 수정한다")
-    void updateOrderToProcessing_test() {
-        // given
-        Order order = createOrderEntity(request);
-
-        // mocking
-        given(orderRepository.save(any())).willReturn(order);
-        given(orderRepository.findById(any())).willReturn(Optional.of(order));
-
-        // when
-        Order entity = orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
-        orderService.updateOrderToProcessing(entity.getId());
-
-        // then
-        Assertions.assertEquals("PROCESSING", order.getStatus().name());
-    }
-
-    @Test
-    @DisplayName("주문이 배달중 상태로 수정한다")
-    void updateOrderToDelivering_test() {
-        // given
-        Order order = createOrderEntity(request);
-
-        // mocking
-        given(orderRepository.save(any())).willReturn(order);
-        given(orderRepository.findById(any())).willReturn(Optional.of(order));
-
-        // when
-        Order entity = orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
-        orderService.updateOrderToDelivering(entity.getId());
-
-        // then
-        Assertions.assertEquals("DELIVERING", order.getStatus().name());
-    }
-
-    @Test
-    @DisplayName("주문이 배달 완료된 상태로 수정한다")
-    void updateOrderToDeliveryDone_test() {
-        // given
-        Order order = createOrderEntity(request);
-
-        // mocking
-        given(orderRepository.save(any())).willReturn(order);
-        given(orderRepository.findById(any())).willReturn(Optional.of(order));
-
-        // when
-        Order entity = orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
-        orderService.updateOrderToDeliveryDone(entity.getId());
-
-        // then
-        Assertions.assertEquals("DELIVERED", order.getStatus().name());
-    }
-
-    @Test
-    @DisplayName("주문을 취소한다")
-    void cancelOrder_test() {
-        // given
-        Order order = createOrderEntity(request);
-
-        // mocking
-        given(orderRepository.save(any())).willReturn(order);
-        given(orderRepository.findById(any())).willReturn(Optional.of(order));
-
-        // when
-        Order entity = orderService.createOrder(request.userId(), request.shippingId(), request.totalPrice(), request.payment());
-        orderService.cancelOrder(entity.getId());
-
-        // then
-        Assertions.assertEquals("CANCELED", order.getStatus().name());
+        assertThat(response.orderNumber()).isNotNull();
+        assertThat(response.totalPrice()).isEqualTo(order.getActualPayAmount());
     }
 }

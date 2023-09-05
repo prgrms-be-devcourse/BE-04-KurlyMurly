@@ -2,21 +2,27 @@ package com.devcourse.kurlymurly.web.order;
 
 import com.devcourse.kurlymurly.module.order.domain.Order;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
+import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.common.PageParam;
-import com.devcourse.kurlymurly.web.dto.order.OrderCreate;
+import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/orders")
@@ -28,13 +34,13 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody OrderCreate.Request request) {
-        return orderService.createOrder(
-                request.userId(),
-                request.shippingId(),
-                request.totalPrice(),
-                request.payment()
-        );
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> order(
+            @AuthenticationPrincipal User user,
+            @RequestBody CreateOrder.Request request
+    ) {
+        orderService.createOrder(user.getId(), request);
+        return KurlyResponse.noData();
     }
 
     @GetMapping
