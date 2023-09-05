@@ -4,6 +4,8 @@ public sealed interface LoginUser permits LoginUser.Request, LoginUser.Response 
     record Request(String loginId, String password) implements LoginUser {
     }
 
-    record Response(String loginId, String token) implements LoginUser {
+    record Response(
+            String accessToken
+    ) implements LoginUser {
     }
 }

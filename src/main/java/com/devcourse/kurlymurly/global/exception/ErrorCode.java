@@ -26,6 +26,11 @@ public enum ErrorCode {
 
     // 409
     NOT_AUTHOR(CONFLICT, "작성자가 아닙니다."),
+    FAIL_USER_LOGIN(NOT_FOUND, "존재하지 않는 계정입니다."),
+    NOT_CORRECT_JWT_SIGN(BAD_REQUEST,"잘못된 JWT SIGN값입니다."),
+    NOT_CORRECT_JWT(BAD_REQUEST,"잘못된 JWT 토큰입니다."),
+    EXPIRED_JWT_TOKEN(BAD_REQUEST,"만료된 토큰입니다."),
+    NOT_SUPPORTED_JWT_TOKEN(BAD_REQUEST,"지원하지 않는 토근입니다."),
 
     // 500
     KURLY_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 문제입니다. 관리자에게 문의바랍니다."),

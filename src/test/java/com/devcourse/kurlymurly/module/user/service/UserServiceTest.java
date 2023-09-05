@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.devcourse.kurlymurly.module.user.domain.User.Role.USER;
+import static com.devcourse.kurlymurly.module.user.domain.User.Role.ROLE_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.*;
@@ -239,7 +239,7 @@ class UserServiceTest {
 
         // Then
         assertThat(newUser.isEqualPassword("editEncodePassword")).isTrue();
-        assertThat(newUser.getRole()).isEqualTo(USER);
+        assertThat(newUser.getRole()).isEqualTo(ROLE_USER);
     }
 
     @Test
