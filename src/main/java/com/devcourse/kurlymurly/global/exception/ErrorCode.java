@@ -23,6 +23,7 @@ public enum ErrorCode {
     NOT_EQUAL_PASSWORD(NOT_FOUND, "동일한 비밀번호를 입력해주세요."),
     NOT_EXISTS_USER(NOT_FOUND, "존재하지 않는 회원입니다."),
     NOT_FOUND_PAYMENT(NOT_FOUND, "존재하는 결제수단이 없습니다."),
+    CART_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하는 장바구니 상품이 없습니다"),
 
     // 409
     NOT_AUTHOR(CONFLICT, "작성자가 아닙니다."),

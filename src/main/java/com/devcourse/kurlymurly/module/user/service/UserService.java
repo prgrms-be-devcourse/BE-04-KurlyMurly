@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.CART_NOT_FOUND;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PASSWORD;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_EXISTS_USER;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_PAYMENT;
@@ -147,8 +148,8 @@ public class UserService {
         return paymentList;
     }
 
-    public void deletePayment(Long userId,Long paymentId) {
-        Payment payment = paymentRepository.findByUserIdAndId(userId,paymentId)
+    public void deletePayment(Long userId, Long paymentId) {
+        Payment payment = paymentRepository.findByUserIdAndId(userId, paymentId)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_PAYMENT));
 
         payment.deletePayment();
@@ -159,6 +160,20 @@ public class UserService {
         productFacade.validateOrderable(productId);
         Cart cart = new Cart(id, productId, quantity);
         cartRepository.save(cart);
+    }
+
+    @Transactional
+    public void removeCartItem(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new KurlyBaseException(CART_NOT_FOUND));
+
+        cartRepository.delete(cart);
+    }
+
+    @Transactional
+    public void removeCartItemList(List<Long> cartIds) {
+        List<Cart> carts = cartRepository.findAllById(cartIds);
+        cartRepository.deleteAllInBatch(carts);
     }
 
     private void checkPassword(String password, String checkPassword) {
