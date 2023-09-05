@@ -83,7 +83,7 @@ public class Review extends BaseEntity {
         this.status = Status.BEST;
     }
 
-    public void deleted() {
+    public void softDeleted() {
         this.status = Status.DELETED;
     }
 

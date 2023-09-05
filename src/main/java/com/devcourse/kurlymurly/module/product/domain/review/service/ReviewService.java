@@ -99,7 +99,7 @@ public class ReviewService {
     @Transactional
     public void deleteReview(Long id) {
         Review review = findReviewById(id);
-        review.deleted();
+        review.softDeleted();
     }
 
     /**
