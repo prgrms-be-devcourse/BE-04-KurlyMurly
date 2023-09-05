@@ -39,7 +39,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.will;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.doReturn;
@@ -296,17 +295,17 @@ class UserServiceTest {
 
         @Test
         @DisplayName("장바구니에서 상품을 선택 삭제 할 수 있다.")
-        void removeProduct_Success() {
+        void removeCartItem_Success() {
             // given
             Cart cart = new Cart(userId, productId, quantity);
 
             // mocking
             willDoNothing().given(productFacade).validateOrderable(any());
-            given(cartRepository.findByProductIdAndUserId(any(), any())).willReturn(Optional.of(cart));
+            given(cartRepository.findById(any())).willReturn(Optional.of(cart));
 
             // when
             userService.addCart(userId, productId, quantity);
-            userService.removeProduct(productId, userId);
+            userService.removeCartItem(1L);
 
             // then
             then(cartRepository).should(times(1)).save(any());
@@ -314,27 +313,24 @@ class UserServiceTest {
 
         @Test
         @DisplayName("장바구니에서 상품을 리스트로 선택 삭제 할 수 있다.")
-        void removeProductList_Success() {
+        void removeCartItemList_Success() {
             // given
             Cart cart1 = new Cart(userId, productId, quantity);
             Cart cart2 = new Cart(userId, productId + 1, quantity);
             Cart cart3 = new Cart(userId, productId + 2, quantity);
-            List<Long> products = List.of(cart1.getProductId(), cart2.getProductId());
+            List<Long> products = List.of(1L, 2L);
             RemoveCart.Request request = new RemoveCart.Request(products);
 
             // mocking
-            willDoNothing().given(productFacade).validateOrderable(any());
-            given(cartRepository.findByProductIdAndUserId(any(), any())).willReturn(Optional.of(cart1));
-            given(cartRepository.findByProductIdAndUserId(any(), any())).willReturn(Optional.of(cart2));
-            given(cartRepository.findByProductIdAndUserId(any(), any())).willReturn(Optional.of(cart3));
-            willDoNothing().given(cartRepository).delete(any());
+            given(cartRepository.findAllById(any())).willReturn(List.of(cart1, cart2));
+            willDoNothing().given(cartRepository).deleteAllInBatch(any());
             given(cartRepository.findAllByUserId(any())).willReturn(List.of(cart3));
 
             // when
             userService.addCart(userId, productId, quantity);
             userService.addCart(userId, productId + 1, quantity);
             userService.addCart(userId, productId + 2, quantity);
-            userService.removeProductList(request, userId);
+            userService.removeCartItemList(request.cartIds());
             List<Cart> carts = cartRepository.findAllByUserId(userId);
 
             // then

@@ -2,12 +2,10 @@ package com.devcourse.kurlymurly.web.user;
 
 import com.devcourse.kurlymurly.global.exception.ErrorCode;
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
-import com.devcourse.kurlymurly.global.jwt.JwtTokenProvider;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
 import com.devcourse.kurlymurly.module.user.service.UserService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
-import com.devcourse.kurlymurly.web.dto.payment.DeletePayment;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.product.CreateCart;
 import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -137,7 +134,7 @@ public class UserController {
             @AuthenticationPrincipal User user,
             @PathVariable Long productId
     ) {
-        userService.removeProduct(productId, user.getId());
+        userService.removeCartItem(productId);
         return KurlyResponse.noData();
     }
 
@@ -147,7 +144,7 @@ public class UserController {
             @AuthenticationPrincipal User user,
             @RequestBody RemoveCart.Request removeProductList
     ) {
-        userService.removeProductList(removeProductList, user.getId());
+        userService.removeCartItemList(removeProductList.cartIds());
         return KurlyResponse.noData();
     }
 }
