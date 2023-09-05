@@ -338,6 +338,42 @@ class UserServiceTest {
         }
 
         @Test
+        @DisplayName("장바구니 상품 수량을 증가 시킬 수 있다.")
+        void increaseItemQuantity_Success() {
+            // given
+            Cart cart = new Cart(userId, productId, quantity);
+
+            // mocking
+            willDoNothing().given(productFacade).validateOrderable(any());
+            given(cartRepository.findById(any())).willReturn(Optional.of(cart));
+
+            // when
+            userService.addCart(userId, productId, quantity);
+            userService.changeItemQuantity(1L, true);
+
+            // then
+            then(cartRepository).should(times(1)).save(any());
+        }
+
+        @Test
+        @DisplayName("장바구니 상품 수량을 감소 시킬 수 있다.")
+        void decreaseItemQuantity_Success() {
+            // given
+            Cart cart = new Cart(userId, productId, quantity);
+
+            // mocking
+            willDoNothing().given(productFacade).validateOrderable(any());
+            given(cartRepository.findById(any())).willReturn(Optional.of(cart));
+
+            // when
+            userService.addCart(userId, productId, quantity);
+            userService.changeItemQuantity(1L, false);
+
+            // then
+            then(cartRepository).should(times(1)).save(any());
+        }
+
+        @Test
         @DisplayName("삭제되었거나 품절인 상품을 장바구니에 담으려고 하면 IllegalStateException을 던진다.")
         void addCart_Fail_ByInvalidStatus() {
             // given
