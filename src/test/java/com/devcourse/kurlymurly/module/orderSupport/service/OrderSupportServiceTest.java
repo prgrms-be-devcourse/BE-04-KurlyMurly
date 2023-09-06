@@ -30,8 +30,10 @@ class OrderSupportServiceTest {
 
     private static OrderSupportCreate.Request request;
 
+    private final Long userId = 1L;
+
     private OrderSupport createOrderSupportEntity(OrderSupportCreate.Request request) {
-        return new OrderSupport(request.userId(), request.orderId(), request.orderNumber(),
+        return new OrderSupport(userId, request.orderId(), request.orderNumber(),
                     request.type(), request.title(), request.content());
     }
 
@@ -39,7 +41,7 @@ class OrderSupportServiceTest {
         given(orderSupportRepository.save(any())).willReturn(orderSupport);
 
         return orderSupportService.takeOrderSupport(
-                request.userId(),
+                userId,
                 request.orderId(),
                 request.orderNumber(),
                 request.type(),
@@ -51,7 +53,6 @@ class OrderSupportServiceTest {
     @BeforeEach
     void setUp() {
         request = new OrderSupportCreate.Request(
-                1L,
                 1L,
                 "1234456789012",
                 OrderSupport.Type.ORDER,
@@ -105,7 +106,7 @@ class OrderSupportServiceTest {
 
         // when
         takeOrderSupportService(orderSupport);
-        List<OrderSupport> entity = orderSupportService.findAllByUserId(request.userId());
+        List<OrderSupport> entity = orderSupportService.findAllByUserId(userId);
 
         // then
         assertThat(orderSupport).usingRecursiveComparison().isEqualTo(entity.get(0));
