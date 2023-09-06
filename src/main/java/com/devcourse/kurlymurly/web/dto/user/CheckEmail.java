@@ -1,8 +1,13 @@
 package com.devcourse.kurlymurly.web.dto.user;
 
-import java.util.Date;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 
 public sealed interface CheckEmail permits CheckEmail.Request {
-    record Request(String email) implements CheckEmail {
+    record Request(
+            @NotBlank(message = "빈 값이 들어올 수 없습니다.")
+            @Schema(name = "중복 검사할 이메일")
+            String email
+    ) implements CheckEmail {
     }
 }
