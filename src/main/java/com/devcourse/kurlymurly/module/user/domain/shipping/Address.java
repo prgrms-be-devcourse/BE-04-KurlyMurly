@@ -27,6 +27,6 @@ public class Address {
     }
 
     public String getDescribedAddress() {
-        return this.roadAddress + " " + this.description;
+        return this.description == null ? this.roadAddress : this.roadAddress + " " + this.description;
     }
 }
