@@ -15,6 +15,7 @@ import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
+import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 
 import org.junit.jupiter.api.Assertions;
@@ -144,6 +145,22 @@ class UserServiceTest {
 
         // Then
         assertThat(shipping.getAddress().isExpress()).isFalse();
+    }
+
+    @Test
+    @DisplayName("회원에게 등록된 배송주소들을 가져온다.")
+    void get_addresses() {
+        // Given
+        Shipping shipping1 = new Shipping(1L, "컬리단길", true);
+        Shipping shipping2 = new Shipping(1L, "컬리단길", true);
+
+        doReturn(List.of(shipping1, shipping2)).when(shippingRepository).findAllById(any());
+
+        // When
+        List<GetAddress.Response> addressList = userService.getAddress(1L);
+
+        // Then
+        assertThat(addressList.size()).isEqualTo(2);
     }
 
     @Test

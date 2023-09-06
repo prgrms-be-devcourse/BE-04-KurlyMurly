@@ -19,6 +19,7 @@ import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
+import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -60,7 +61,7 @@ public class UserService {
             ShippingRepository shippingRepository,
             PaymentRepository paymentRepository,
             JwtTokenProvider tokenProvider,
-            OrderService orderService
+            OrderService orderService,
             AuthenticationManagerBuilder authenticationManagerBuilder
     ) {
         this.userRepository = userRepository;
@@ -70,7 +71,7 @@ public class UserService {
         this.shippingRepository = shippingRepository;
         this.paymentRepository = paymentRepository;
         this.tokenProvider = tokenProvider;
-        this.orderService = orderService; 
+        this.orderService = orderService;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
@@ -132,6 +133,17 @@ public class UserService {
         Shipping shipping = new Shipping(userId, address, isDefault);
 
         shippingRepository.save(shipping);
+    }
+
+    public List<GetAddress.Response> getAddress(Long userId) {
+        List<Shipping> shippingList = shippingRepository.findAllById(Collections.singleton(userId));
+        return shippingList.stream().map(this::convertToAddressDto).toList();
+    }
+
+    private GetAddress.Response convertToAddressDto(Shipping shipping) {
+        return new GetAddress.Response(shipping.isDefault(), shipping.getAddress().isExpress()
+                , shipping.getAddress().getDescribedAddress(), shipping.getInfo().getReceiver()
+                , shipping.getInfo().getContact());
     }
 
     @Transactional

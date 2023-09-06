@@ -19,4 +19,20 @@ public class Info {
 
     @Column(length = 10)
     private String messageAlertTime;
+
+    public Info() {
+        this.receiver = "none";
+        this.contact = "none";
+        this.receiveArea = "none";
+        this.entrancePassword = "none";
+        this.messageAlertTime = "none";
+    }
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public String getContact() {
+        return contact;
+    }
 }
