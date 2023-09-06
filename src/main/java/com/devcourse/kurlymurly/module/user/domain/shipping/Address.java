@@ -23,15 +23,15 @@ public class Address {
     }
 
     public boolean isExpress() {
-        return isExpress;
+        return this.isExpress;
     }
 
     public String getRoadAddress() {
-        return roadAddress;
+        return this.roadAddress;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public String getDescribedAddress() {

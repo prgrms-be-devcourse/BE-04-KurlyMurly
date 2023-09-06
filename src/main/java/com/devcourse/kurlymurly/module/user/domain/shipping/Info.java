@@ -29,10 +29,10 @@ public class Info {
     }
 
     public String getReceiver() {
-        return receiver;
+        return this.receiver;
     }
 
     public String getContact() {
-        return contact;
+        return this.contact;
     }
 }

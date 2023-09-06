@@ -44,14 +44,14 @@ public class Shipping extends BaseEntity {
     }
 
     public Address getAddress() {
-        return address;
+        return this.address;
     }
 
     public Info getInfo() {
-        return info;
+        return this.info;
     }
 
     public boolean isDefault() {
-        return isDefault;
+        return this.isDefault;
     }
 }
