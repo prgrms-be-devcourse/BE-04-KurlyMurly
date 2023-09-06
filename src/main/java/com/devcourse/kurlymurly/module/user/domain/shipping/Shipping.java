@@ -1,6 +1,7 @@
 package com.devcourse.kurlymurly.module.user.domain.shipping;
 
 import com.devcourse.kurlymurly.module.BaseEntity;
+import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -46,11 +47,13 @@ public class Shipping extends BaseEntity {
         return this.address;
     }
 
-    public Info getInfo() {
-        return this.info;
-    }
-
-    public boolean isDefault() {
-        return this.isDefault;
+    public GetAddress.Response getAddressDto() {
+        return new GetAddress.Response(
+                this.isDefault,
+                this.address.isExpress(),
+                this.address.getDescribedAddress(),
+                this.info.getReceiver(),
+                this.info.getContact()
+        );
     }
 }

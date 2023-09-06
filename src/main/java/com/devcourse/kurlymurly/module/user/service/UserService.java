@@ -141,9 +141,7 @@ public class UserService {
     }
 
     private GetAddress.Response to(Shipping shipping) {
-        return new GetAddress.Response(shipping.isDefault(), shipping.getAddress().isExpress()
-                , shipping.getAddress().getDescribedAddress(), shipping.getInfo().getReceiver()
-                , shipping.getInfo().getContact());
+        return shipping.getAddressDto();
     }
 
     @Transactional

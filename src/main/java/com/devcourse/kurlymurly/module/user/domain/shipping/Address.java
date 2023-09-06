@@ -26,14 +26,6 @@ public class Address {
         return this.isExpress;
     }
 
-    public String getRoadAddress() {
-        return this.roadAddress;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
     public String getDescribedAddress() {
         return this.roadAddress + " " + this.description;
     }
