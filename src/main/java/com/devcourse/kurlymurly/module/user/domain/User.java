@@ -7,17 +7,23 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
 
-    public enum Role {USER, ADMIN}
+    public enum Role { ROLE_USER, ROLE_ADMIN }
 
-    public enum UserStatus {CANCEL, NORMAL}
+    public enum UserStatus { CANCEL, NORMAL }
 
     public enum Tier {
         THE_PURPLE,
@@ -60,14 +66,6 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 10)
     private UserStatus status;
 
-    public String getPassword() {
-        return password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
     protected User() {
     }
 
@@ -80,7 +78,7 @@ public class User extends BaseEntity {
         this.info = info;
         this.payPassword = null;
         this.phoneNumber = phoneNumber;
-        this.role = Role.USER;
+        this.role = Role.ROLE_USER;
         this.status = UserStatus.NORMAL;
     }
 
@@ -92,7 +90,49 @@ public class User extends BaseEntity {
         info.update(birth, sex);
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(Role.ROLE_USER.name()));
+
+        return authorities;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return loginId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
     public boolean isEqualPassword(String password) {
         return this.password.equals(password);
     }
 }
+

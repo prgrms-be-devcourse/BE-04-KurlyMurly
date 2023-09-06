@@ -10,6 +10,7 @@ import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.product.CreateCart;
 import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
 import com.devcourse.kurlymurly.web.dto.product.UpdateCart;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
 import com.devcourse.kurlymurly.web.dto.user.CheckId;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
@@ -41,10 +42,17 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/reviews")
+    @ResponseStatus(OK)
+    public KurlyResponse<List<ReviewResponse.Reviewable>> getReviewableOrdersOnMyPage(@AuthenticationPrincipal User user) {
+        List<ReviewResponse.Reviewable> responses = userService.getAllReviewableOrdersByUserId(user.getId());
+        return KurlyResponse.ok(responses);
+    }
+
     @PostMapping("/login")
     @ResponseStatus(OK)
-    public KurlyResponse<LoginUser.Response> login(@RequestBody LoginUser.Request request) {
-        LoginUser.Response response = userService.logIn(request);
+    public KurlyResponse<String> login(@RequestBody LoginUser.Request request) {
+        String response = userService.login(request.loginId(), request.password());
         return KurlyResponse.ok(response);
     }
 

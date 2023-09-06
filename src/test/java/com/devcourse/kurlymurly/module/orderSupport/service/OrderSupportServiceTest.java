@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.module.orderSupport.service;
 
-import com.devcourse.kurlymurly.module.order.domain.OrderSupport;
-import com.devcourse.kurlymurly.module.order.domain.OrderSupportJpaRepository;
+import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
+import com.devcourse.kurlymurly.module.order.domain.support.OrderSupportRepository;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.web.dto.order.OrderSupportCreate;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +26,7 @@ class OrderSupportServiceTest {
     private OrderSupportService orderSupportService;
 
     @Mock
-    private OrderSupportJpaRepository orderSupportRepository;
+    private OrderSupportRepository orderSupportRepository;
 
     private static OrderSupportCreate.Request request;
 

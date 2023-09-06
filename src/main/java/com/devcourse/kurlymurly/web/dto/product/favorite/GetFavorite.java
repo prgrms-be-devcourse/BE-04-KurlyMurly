@@ -1,6 +1,6 @@
-package com.devcourse.kurlymurly.web.dto.product;
+package com.devcourse.kurlymurly.web.dto.product.favorite;
 
-import static com.devcourse.kurlymurly.web.dto.product.GetFavorite.*;
+import static com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite.*;
 
 public sealed interface GetFavorite permits Response {
     record Response(Long id, String name, int price) implements GetFavorite{
