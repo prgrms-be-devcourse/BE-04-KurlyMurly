@@ -26,6 +26,9 @@ public class Shipping extends BaseEntity {
     @Column(nullable = false)
     private boolean isDefault;
 
+    @Column(nullable = false)
+    private boolean status;
+
     protected Shipping() {
     }
 
@@ -35,6 +38,7 @@ public class Shipping extends BaseEntity {
         this.userId = userId;
         this.address = address;
         this.isDefault = isDefault;
+        this.status = true;
         this.info = new Info();
     }
 
@@ -60,5 +64,9 @@ public class Shipping extends BaseEntity {
     public void update(String description, String receiver, String contact) {
         this.address.update(description);
         this.info.update(receiver, contact);
+    }
+
+    public void softDelete() {
+        this.status = false;
     }
 }

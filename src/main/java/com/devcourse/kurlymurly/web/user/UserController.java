@@ -121,6 +121,13 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @DeleteMapping("/addresses/{addressId}")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> deleteAddress(@AuthenticationPrincipal User user, @PathVariable Long addressId) {
+        userService.deleteAddress(user.getId(), addressId);
+        return KurlyResponse.noData();
+    }
+
     @PostMapping("/register-credit")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> addCredit(

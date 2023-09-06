@@ -189,6 +189,21 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("주소 삭제 테스트")
+    void delete_address() {
+        // Given
+        Shipping shipping = new Shipping(1L, "컬리단길", true);
+
+        doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
+
+        // When
+        userService.deleteAddress(1L, 1L);
+
+        // Then
+        then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
+    }
+
+    @Test
     @DisplayName("신용카드 결제 수단 추가 테스트")
     void add_credit() {
         // Given
@@ -246,17 +261,17 @@ class UserServiceTest {
         doReturn(Optional.of(payment)).when(paymentRepository).findByUserIdAndId(1L, 1L);
 
         // When
-        userService.deletePayment(1L,1L);
+        userService.deletePayment(1L, 1L);
 
         // Then
-        then(paymentRepository).should(times(1)).findByUserIdAndId(any(),any());
+        then(paymentRepository).should(times(1)).findByUserIdAndId(any(), any());
     }
 
     @Test
     @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
     void delete_payment_fail_ByNotFoundPayments() {
         // When
-        doReturn(Optional.empty()).when(paymentRepository).findByUserIdAndId(any(),any());
+        doReturn(Optional.empty()).when(paymentRepository).findByUserIdAndId(any(), any());
 
         // Then
         assertThrows(KurlyBaseException.class, () -> userService.deletePayment(1L, 1L));

@@ -146,10 +146,20 @@ public class UserService {
     }
 
     public void updateAddress(Long userId, Long addressId, String description, String receiver, String contact) {
-        Shipping shipping = shippingRepository.findByIdAndUserId(userId, addressId)
-                .orElseThrow(() -> new KurlyBaseException(SHIPPING_NOT_FOUND));
+        Shipping shipping = findAddress(userId, addressId);
 
         shipping.update(description, receiver, contact);
+    }
+
+    public void deleteAddress(Long userId, Long addressId) {
+        Shipping shipping = findAddress(userId, addressId);
+
+        shipping.softDelete();
+    }
+
+    private Shipping findAddress(Long userId, Long addressId) {
+        return shippingRepository.findByIdAndUserId(userId, addressId)
+                .orElseThrow(() -> new KurlyBaseException(SHIPPING_NOT_FOUND));
     }
 
     @Transactional
