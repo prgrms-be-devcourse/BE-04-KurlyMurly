@@ -1,6 +1,7 @@
 package com.devcourse.kurlymurly.web.dto.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -12,7 +13,7 @@ public sealed interface CreateOrderItem permits Request {
             @Schema(name = "상품 아이디")
             Long productId,
 
-            @NotNull(message = "빈 값이 들어올 수 없습니다.")
+            @NotBlank(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "상품 이름")
             String name,
 

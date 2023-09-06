@@ -9,6 +9,7 @@ import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +44,7 @@ public class ReviewController {
     @ResponseStatus(OK)
     public KurlyResponse<Void> registerReview(
             @AuthenticationPrincipal User user,
-            @RequestBody CreateReview.Request request
+            @RequestBody @Valid CreateReview.Request request
     ) {
         reviewService.registerReview(user.getId(), request);
         return KurlyResponse.noData();
@@ -75,23 +76,26 @@ public class ReviewController {
     }
 
     @Tag(name = "review")
-    @Operation(description = "리뷰 수정 API")
-    @ApiResponse(responseCode = "200", description = "성공적으로 review를 수정한 경우")
-    @ApiResponse(responseCode = "400", description = "수정할 리뷰 id와 수정할 내용이 명시되지 않은 경우")
+    @Operation(description = "[토큰 필요] 리뷰 수정 API")
+    @ApiResponse(responseCode = "200", description = "성공적으로 상품 후기를 수정한 경우")
+    @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    @ApiResponse(responseCode = "404", description = "존재하지 않은 상품 후기")
     @PatchMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> updateReviewContent(
+            @AuthenticationPrincipal User user,
             @PathVariable Long id,
-            @RequestBody CreateReview.UpdateRequest request
+            @RequestBody @Valid CreateReview.UpdateRequest request
     ) {
         reviewService.updateReviewContent(id, request.content(), request.isSecret());
         return KurlyResponse.noData();
     }
 
     @Tag(name = "review")
-    @Operation(description = "BANNED 리뷰로 변환 API")
+    @Operation(description = "[관리자] BANNED 리뷰로 변환 API")
     @ApiResponse(responseCode = "200", description = "review 상태를 BANNED로 변경한 경우")
     @ApiResponse(responseCode = "400", description = "리뷰 id가 명시되지 않은 경우")
+    @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     @PatchMapping("/{id}/banned")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> updateToBanned(@PathVariable Long id) {
@@ -100,9 +104,10 @@ public class ReviewController {
     }
 
     @Tag(name = "review")
-    @Operation(description = "BEST 리뷰로 변환 API")
+    @Operation(description = "[관리자] BEST 리뷰로 변환 API")
     @ApiResponse(responseCode = "200", description = "review 상태를 BEST로 변경한 경우")
     @ApiResponse(responseCode = "400", description = "리뷰 id가 명시되지 않은 경우")
+    @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     @PatchMapping("/{id}/best")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> updateToBest(@PathVariable Long id) {
@@ -111,20 +116,25 @@ public class ReviewController {
     }
 
     @Tag(name = "review")
-    @Operation(description = "작성한 리뷰 삭제 API")
+    @Operation(description = "[토큰 필요] 작성한 리뷰 삭제 API")
     @ApiResponse(responseCode = "200", description = "작성한 review를 삭제한 경우")
     @ApiResponse(responseCode = "400", description = "삭제할 리뷰 id가 명시되지 않은 경우")
+    @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> deleteReview(@PathVariable Long id) {
+    public KurlyResponse<Void> deleteReview(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long id
+    ) {
         reviewService.deleteReview(id);
         return KurlyResponse.noData();
     }
 
     @Tag(name = "review")
-    @Operation(description = "리뷰 좋아요 API")
+    @Operation(description = "[토큰 필요] 리뷰 좋아요 API")
     @ApiResponse(responseCode = "200", description = "성공적으로 리뷰 좋아요를 활성화한 경우")
     @ApiResponse(responseCode = "400", description = "활성화를 위한 id가 넘어오지 않은 경우")
+    @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     @PatchMapping("/{reviewId}/likes")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> activeReviewLike(
@@ -136,12 +146,16 @@ public class ReviewController {
     }
 
     @Tag(name = "review")
-    @Operation(description = "리뷰 좋아요 취소 API")
+    @Operation(description = "[토큰 필요] 리뷰 좋아요 취소 API")
     @ApiResponse(responseCode = "200", description = "성공적으로 리뷰 좋아요를 취소한 경우")
     @ApiResponse(responseCode = "400", description = "취소를 위한 id가 넘어오지 않은 경우")
+    @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     @DeleteMapping("/{reviewId}/likes")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> cancelReviewLike(@PathVariable Long reviewId) {
+    public KurlyResponse<Void> cancelReviewLike(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long reviewId
+    ) {
         reviewService.cancelReviewLike(reviewId);
         return KurlyResponse.noData();
     }

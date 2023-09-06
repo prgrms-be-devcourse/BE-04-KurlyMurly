@@ -6,6 +6,7 @@ import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.common.PageParam;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,17 +38,10 @@ public class OrderController {
     @ResponseStatus(OK)
     public KurlyResponse<CreateOrder.Response> order(
             @AuthenticationPrincipal User user,
-            @RequestBody CreateOrder.Request request
+            @RequestBody @Valid CreateOrder.Request request
     ) {
         CreateOrder.Response response = orderService.createOrder(user.getId(), request);
         return KurlyResponse.ok(response);
-    }
-
-    @GetMapping
-    public Page<Order> findOrderAll(@RequestBody PageParam param) {
-        Pageable pageable = PageRequest.of(param.page(), param.size());
-
-        return orderService.findOrderAll(pageable);
     }
 
     @GetMapping("/{id}")

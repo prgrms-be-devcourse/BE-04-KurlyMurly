@@ -10,6 +10,7 @@ import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,7 +54,7 @@ public class ProductController {
     @ResponseStatus(OK)
     public KurlyResponse<CreateProduct.Response> createProduct(
             @AuthenticationPrincipal User admin,
-            @RequestBody CreateProduct.Request request
+            @RequestBody @Valid CreateProduct.Request request
     ) {
         CreateProduct.Response response = productFacade.createProduct(request);
         return KurlyResponse.ok(response);
@@ -101,7 +102,7 @@ public class ProductController {
     public KurlyResponse<Void> updateProductSupport(
             @AuthenticationPrincipal User user,
             @PathVariable Long supportId,
-            @RequestBody SupportProduct.Request request
+            @RequestBody @Valid SupportProduct.Request request
     ) {
         productFacade.updateProductSupport(user.getId(), supportId, request);
         return KurlyResponse.noData();

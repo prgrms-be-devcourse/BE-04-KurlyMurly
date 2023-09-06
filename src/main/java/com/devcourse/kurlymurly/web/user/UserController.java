@@ -18,6 +18,7 @@ import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,21 +53,24 @@ public class UserController {
 
     @PostMapping("/login")
     @ResponseStatus(OK)
-    public KurlyResponse<String> login(@RequestBody LoginUser.Request request) {
+    public KurlyResponse<String> login(@RequestBody @Valid LoginUser.Request request) {
         String response = userService.login(request.loginId(), request.password());
         return KurlyResponse.ok(response);
     }
 
     @PostMapping
     @ResponseStatus(OK)
-    public KurlyResponse<Void> join(@RequestBody JoinUser.Request request) {
+    public KurlyResponse<Void> join(@RequestBody @Valid JoinUser.Request request) {
         userService.join(request);
         return KurlyResponse.noData();
     }
 
     @PutMapping
     @ResponseStatus(OK)
-    public KurlyResponse<Void> update(@AuthenticationPrincipal User user, @RequestBody UpdateUser.Request request) {
+    public KurlyResponse<Void> update(
+            @AuthenticationPrincipal User user,
+            @RequestBody @Valid UpdateUser.Request request
+    ) {
         boolean isPasswordNotEqual = request.password().equals(request.checkPassword());
 
         if (isPasswordNotEqual) {
@@ -80,21 +84,24 @@ public class UserController {
 
     @PostMapping("/login-id")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> checkId(@RequestBody CheckId.Request request) {
+    public KurlyResponse<Void> checkId(@RequestBody @Valid CheckId.Request request) {
         boolean result = userService.checkId(request.loginId());
         return KurlyResponse.ok(result);
     }
 
     @PostMapping("/check-email")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> checkEmail(@RequestBody CheckEmail.Request request) {
+    public KurlyResponse<Void> checkEmail(@RequestBody @Valid CheckEmail.Request request) {
         boolean result = userService.checkEmail(request.email());
         return KurlyResponse.ok(result);
     }
 
     @PostMapping("/address")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> addAddress(@AuthenticationPrincipal User user, @RequestBody AddAddress.Request request) {
+    public KurlyResponse<Void> addAddress(
+            @AuthenticationPrincipal User user,
+            @RequestBody @Valid AddAddress.Request request
+    ) {
         userService.addAddress(user.getId(), request.roadAddress(), false);
         return KurlyResponse.noData();
     }
@@ -108,14 +115,20 @@ public class UserController {
 
     @PostMapping("/register-credit")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> addCredit(@AuthenticationPrincipal User user, @RequestBody RegisterPayment.creditRequest request) {
+    public KurlyResponse<Void> addCredit(
+            @AuthenticationPrincipal User user,
+            @RequestBody @Valid RegisterPayment.creditRequest request
+    ) {
         userService.addCredit(user.getId(), request);
         return KurlyResponse.noData();
     }
 
     @PostMapping("/register-easy")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> addEasyPay(@AuthenticationPrincipal User user, @RequestBody RegisterPayment.easyPayRequest request) {
+    public KurlyResponse<Void> addEasyPay(
+            @AuthenticationPrincipal User user,
+            @RequestBody @Valid RegisterPayment.easyPayRequest request
+    ) {
         userService.addEasyPay(user.getId(), request);
         return KurlyResponse.noData();
     }
@@ -139,7 +152,7 @@ public class UserController {
     @ResponseStatus(OK)
     public KurlyResponse<Void> addCart(
             @AuthenticationPrincipal User user,
-            @RequestBody CreateCart.Request request
+            @RequestBody @Valid CreateCart.Request request
     ) {
         userService.addCart(user.getId(), request.productId(), request.quantity());
         return KurlyResponse.noData();
@@ -159,7 +172,7 @@ public class UserController {
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> removeCartItemList(
             @AuthenticationPrincipal User user,
-            @RequestBody RemoveCart.Request removeProductList
+            @RequestBody @Valid RemoveCart.Request removeProductList
     ) {
         userService.removeCartItemList(removeProductList.cartIds());
         return KurlyResponse.noData();
@@ -169,7 +182,7 @@ public class UserController {
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> changeItemQuantity(
             @AuthenticationPrincipal User user,
-            @RequestBody UpdateCart.Request updateCart
+            @RequestBody @Valid UpdateCart.Request updateCart
     ) {
         userService.changeItemQuantity(updateCart.cartId(), updateCart.isIncrease());
         return KurlyResponse.noData();

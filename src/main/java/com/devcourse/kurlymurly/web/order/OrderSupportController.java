@@ -2,11 +2,14 @@ package com.devcourse.kurlymurly.web.order;
 
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
+import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.dto.order.OrderSupportCreate;
 import com.devcourse.kurlymurly.web.common.PageParam;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,27 +31,18 @@ public class OrderSupportController {
     }
 
     @PostMapping
-    public OrderSupport takeOrderSupport(@RequestBody OrderSupportCreate.Request request) {
+    public OrderSupport takeOrderSupport(
+            @AuthenticationPrincipal User user,
+            @RequestBody @Valid OrderSupportCreate.Request request
+    ) {
         return orderSupportService.takeOrderSupport(
-                request.userId(),
+                user.getId(),
                 request.orderId(),
                 request.orderNumber(),
                 request.type(),
                 request.title(),
                 request.content()
         );
-    }
-
-    @GetMapping
-    public Page<OrderSupport> findOrderAll(@RequestBody PageParam param) {
-        Pageable pageable = PageRequest.of(param.page(), param.size());
-
-        return orderSupportService.findOrderSupport(pageable);
-    }
-
-    @GetMapping("/{id}")
-    public OrderSupport findById(@PathVariable Long id) {
-        return orderSupportService.findById(id);
     }
 
     @GetMapping("/{userId}")
@@ -58,7 +52,7 @@ public class OrderSupportController {
 
     @PatchMapping("/{id}")
     public OrderSupport updateOrderSupport(@PathVariable Long id,
-                                           @RequestBody OrderSupportCreate.UpdateRequest request) {
+                                           @RequestBody @Valid OrderSupportCreate.UpdateRequest request) {
         return orderSupportService.updateOrderSupport(id, request.title(), request.content());
     }
 
