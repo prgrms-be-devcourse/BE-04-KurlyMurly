@@ -39,8 +39,7 @@ public class Shipping extends BaseEntity {
 
     private Address checkExpress(String roadAddress) {
         boolean matches = EXPRESS_REGEX.matcher(roadAddress).matches();
-        Address address = new Address(roadAddress, matches);
-        return address;
+        return new Address(roadAddress, matches);
     }
 
     public Address getAddress() {
