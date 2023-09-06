@@ -39,4 +39,8 @@ public abstract class BaseEntity {
     public LocalDateTime getCreateAt() {
         return createAt;
     }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
 }

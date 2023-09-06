@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.module.order.domain;
+package com.devcourse.kurlymurly.module.order.domain.support;
 
 import com.devcourse.kurlymurly.module.BaseEntity;
 import jakarta.persistence.Column;

@@ -1,8 +1,8 @@
 package com.devcourse.kurlymurly.module.order.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
-import com.devcourse.kurlymurly.module.order.domain.OrderSupport;
-import com.devcourse.kurlymurly.module.order.domain.OrderSupportJpaRepository;
+import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
+import com.devcourse.kurlymurly.module.order.domain.support.OrderSupportRepository;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +16,9 @@ import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_ORDE
 @Service
 @Transactional(readOnly = true)
 public class OrderSupportService {
-    private final OrderSupportJpaRepository orderSupportRepository;
+    private final OrderSupportRepository orderSupportRepository;
 
-    public OrderSupportService(OrderSupportJpaRepository orderSupportRepository) {
+    public OrderSupportService(OrderSupportRepository orderSupportRepository) {
         this.orderSupportRepository = orderSupportRepository;
     }
 

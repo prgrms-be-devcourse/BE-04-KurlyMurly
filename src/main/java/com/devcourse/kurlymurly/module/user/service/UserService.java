@@ -2,6 +2,7 @@ package com.devcourse.kurlymurly.module.user.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.global.jwt.JwtTokenProvider;
+import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
@@ -14,6 +15,7 @@ import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
@@ -47,6 +49,7 @@ public class UserService {
     private final ShippingRepository shippingRepository;
     private final PaymentRepository paymentRepository;
     private final JwtTokenProvider tokenProvider;
+    private final OrderService orderService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     public UserService(
@@ -57,6 +60,7 @@ public class UserService {
             ShippingRepository shippingRepository,
             PaymentRepository paymentRepository,
             JwtTokenProvider tokenProvider,
+            OrderService orderService
             AuthenticationManagerBuilder authenticationManagerBuilder
     ) {
         this.userRepository = userRepository;
@@ -66,7 +70,12 @@ public class UserService {
         this.shippingRepository = shippingRepository;
         this.paymentRepository = paymentRepository;
         this.tokenProvider = tokenProvider;
+        this.orderService = orderService; 
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+    }
+
+    public List<ReviewResponse.Reviewable> getAllReviewableOrdersByUserId(Long userId) {
+        return orderService.getAllReviewableOrdersByUserId(userId);
     }
 
     public String login(String loginId, String password) {

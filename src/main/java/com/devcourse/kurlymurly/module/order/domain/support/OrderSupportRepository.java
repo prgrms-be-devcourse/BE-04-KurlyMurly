@@ -1,10 +1,10 @@
-package com.devcourse.kurlymurly.module.order.domain;
+package com.devcourse.kurlymurly.module.order.domain.support;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OrderSupportJpaRepository extends JpaRepository<OrderSupport, Long> {
+public interface OrderSupportRepository extends JpaRepository<OrderSupport, Long> {
     List<OrderSupport> findAllByUserId(Long userId);
     List<OrderSupport> findByOrderNumber(String orderNumber);
 }
