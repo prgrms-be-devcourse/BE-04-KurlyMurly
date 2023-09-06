@@ -4,7 +4,6 @@ import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
-import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;
 import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,20 +42,6 @@ public class ProductController {
     @ResponseStatus(OK)
     public KurlyResponse<ListPagingResponse> getFavorites(@AuthenticationPrincipal User user) {
         ListPagingResponse<GetFavorite.Response> response = productFacade.getUserFavorites(user.getId());
-        return KurlyResponse.ok(response);
-    }
-
-    @Tag(name = "product")
-    @Operation(description = "[토큰 필요] 새로운 상품을 등록한다.")
-    @ApiResponse(responseCode = "200", description = "성공적으로 상품을 등록했습니다.")
-    @ApiResponse(responseCode = "401", description = "권한이 없는 토큰이거나 토큰을 보내지 않은 경우")
-    @PostMapping
-    @ResponseStatus(OK)
-    public KurlyResponse<CreateProduct.Response> createProduct(
-            @AuthenticationPrincipal User admin,
-            @RequestBody @Valid CreateProduct.Request request
-    ) {
-        CreateProduct.Response response = productFacade.createProduct(request);
         return KurlyResponse.ok(response);
     }
 
@@ -105,21 +90,6 @@ public class ProductController {
             @RequestBody @Valid SupportProduct.Request request
     ) {
         productFacade.updateProductSupport(user.getId(), supportId, request);
-        return KurlyResponse.noData();
-    }
-
-    @Tag(name = "product")
-    @Operation(description = "[토큰 필요] 상품을 삭제한다.")
-    @ApiResponse(responseCode = "200", description = "성공적으로 상품을 삭제했습니다.")
-    @ApiResponse(responseCode = "401", description = "권한이 없는 토큰이거나 토큰을 보내지 않은 경우")
-    @ApiResponse(responseCode = "404", description = "존재하지 않는 상품입니다.")
-    @DeleteMapping("/{id}")
-    @ResponseStatus(OK)
-    public KurlyResponse<Void> deleteProduct(
-            @AuthenticationPrincipal User admin,
-            @PathVariable Long id
-    ) {
-        productFacade.delete(id);
         return KurlyResponse.noData();
     }
 
