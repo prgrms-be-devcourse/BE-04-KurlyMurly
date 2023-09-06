@@ -6,10 +6,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.regex.Pattern;
 
 @Entity
+@DynamicUpdate
 @Table(name = "shippings")
 public class Shipping extends BaseEntity {
     private static final Pattern EXPRESS_REGEX = Pattern.compile("^[서울|경기|인천|충청|대구|부산|울산|양산|창원|김해].*");
