@@ -7,7 +7,7 @@ public sealed interface GetAddress permits GetAddress.Response {
             @Schema(name = "기본 배송지 여부")
             boolean isDefault,
 
-            @Schema(name = "기본 배송지 여부")
+            @Schema(name = "샛별 배송지 여부")
             boolean isExpress,
 
             @Schema(name = "도로명 주소 + 상세 주소")
