@@ -1,11 +1,11 @@
 package com.devcourse.kurlymurly.module.product.review.service;
 
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
-import com.devcourse.kurlymurly.module.product.domain.review.ReviewJpaRepository;
-import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeJpaRepository;
+import com.devcourse.kurlymurly.module.product.domain.review.ReviewRepository;
+import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
 import com.devcourse.kurlymurly.module.product.domain.review.service.ReviewService;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewCreate;
+import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewLikeCreate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,21 +29,19 @@ class ReviewServiceTest {
     private ReviewService reviewService;
 
     @Mock
-    private ReviewJpaRepository reviewRepository;
+    private ReviewRepository reviewRepository;
 
     @Mock
-    private ReviewLikeJpaRepository reviewLikeRepository;
+    private ReviewLikeRepository reviewLikeRepository;
 
-    private static ReviewCreate.Request reviewRequest;
+    private static CreateReview.Request reviewRequest;
 
     private static ReviewLikeCreate.Request reviewLikeRequest;
 
-    private Review createReviewEntity(ReviewCreate.Request request) {
+    private Review createReviewEntity(CreateReview.Request request) {
         return new Review(
                 request.userId(),
                 request.productId(),
-                request.orderId(),
-                request.likes(),
                 request.content()
         );
     }
@@ -57,26 +55,8 @@ class ReviewServiceTest {
 
     @BeforeEach
     void setUp() {
-        reviewRequest = new ReviewCreate.Request(1L, 1L, 1L, 10, "해당 상품은 단맛이 너무 강해요!");
+        reviewRequest = new CreateReview.Request(1L, 1L, "해당 상품은 단맛이 너무 강해요!");
         reviewLikeRequest = new ReviewLikeCreate.Request(1L, 1L);
-    }
-
-    @Test
-    @DisplayName("리뷰를 등록한다")
-    void registerReview_test() {
-        // given
-        Review review = createReviewEntity(reviewRequest);
-
-        // mocking
-        given(reviewRepository.save(any())).willReturn(review);
-
-        // when
-        ReviewCreate.Response response = reviewService.registerReview(reviewRequest);
-
-        // then
-        Assertions.assertEquals(reviewRequest.orderId(), response.orderId());
-        Assertions.assertEquals(reviewRequest.userId(), response.userId());
-        Assertions.assertEquals(reviewRequest.content(), response.content());
     }
 
     @Test
@@ -109,7 +89,7 @@ class ReviewServiceTest {
 
         // when
         reviewService.registerReview(reviewRequest);
-        List<Review> reviewEntity = reviewService.findAllByUserId(review.getUserId());
+        List<Review> reviewEntity = reviewService.getAllReviewsOfUser(review.getUserId());
 
         // then
         assertThat(review).usingRecursiveComparison().isEqualTo(reviewEntity.get(0));

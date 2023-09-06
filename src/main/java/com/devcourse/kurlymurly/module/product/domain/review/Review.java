@@ -25,27 +25,24 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private Long productId;
 
-    @Column(nullable = false)
-    private Long orderId;
+    @Column(nullable = false, columnDefinition = "text")
+    private String content;
 
     @Column(nullable = false)
     private Integer likes;
-
-    @Column(nullable = false, columnDefinition = "text")
-    private String content;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
-    protected Review() {}
+    protected Review() {
+    }
 
-    public Review(Long userId, Long productId, Long orderId, Integer likes, String content) {
+    public Review(Long userId, Long productId, String content) {
         this.userId = userId;
         this.productId = productId;
-        this.orderId = orderId;
-        this.likes = likes;
         this.content = content;
+        this.likes = 0;
         this.status = Status.NORMAL;
     }
 
@@ -93,10 +90,6 @@ public class Review extends BaseEntity {
 
     public Long getProductId() {
         return productId;
-    }
-
-    public Long getOrderId() {
-        return orderId;
     }
 
     public Integer getLikes() {

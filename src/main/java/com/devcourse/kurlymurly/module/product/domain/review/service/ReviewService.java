@@ -2,12 +2,10 @@ package com.devcourse.kurlymurly.module.product.domain.review.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
-import com.devcourse.kurlymurly.module.product.domain.review.ReviewJpaRepository;
-import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeJpaRepository;
+import com.devcourse.kurlymurly.module.product.domain.review.ReviewRepository;
+import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewCreate;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,50 +17,32 @@ import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_REVI
 @Service
 @Transactional(readOnly = true)
 public class ReviewService {
-    private final ReviewJpaRepository reviewRepository;
-    private final ReviewLikeJpaRepository reviewLikeRepository;
+    private final ReviewRepository reviewRepository;
+    private final ReviewLikeRepository reviewLikeRepository;
 
-    public ReviewService(ReviewJpaRepository reviewRepository, ReviewLikeJpaRepository reviewLikeRepository) {
+    public ReviewService(ReviewRepository reviewRepository, ReviewLikeRepository reviewLikeRepository) {
         this.reviewRepository = reviewRepository;
         this.reviewLikeRepository = reviewLikeRepository;
     }
 
+    public List<Review> getAllReviewsOfUser(Long userId) {
+        return reviewRepository.findAllByUserId(userId);
+    }
+
     @Transactional
-    public ReviewCreate.Response registerReview(ReviewCreate.Request request) {
+    public void registerReview(CreateReview.Request request) {
         Review review = new Review(
                 request.userId(),
                 request.productId(),
-                request.orderId(),
-                request.likes(),
                 request.content()
         );
 
         reviewRepository.save(review);
-
-        return toReviewResponse(request);
-    }
-
-    private ReviewCreate.Response toReviewResponse(ReviewCreate.Request request) {
-        return new ReviewCreate.Response(
-                request.userId(),
-                request.productId(),
-                request.orderId(),
-                request.likes(),
-                request.content()
-        );
-    }
-
-    public Page<Review> findReviewAll(Pageable pageable) {
-        return reviewRepository.findAll(pageable);
     }
 
     public Review findReviewById(Long id) {
         return reviewRepository.findById(id)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_REVIEW));
-    }
-
-    public List<Review> findAllByUserId(Long userId) {
-        return reviewRepository.findAllByUserId(userId);
     }
 
     @Transactional

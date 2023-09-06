@@ -4,14 +4,10 @@ import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.review.service.ReviewService;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
-import com.devcourse.kurlymurly.web.common.PageParam;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewCreate;
+import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
+import static org.springframework.http.HttpStatus.OK;
 
 @Tag(name = "review", description = "리뷰 API")
 @RestController
@@ -43,15 +40,9 @@ public class ReviewController {
     @ApiResponse(responseCode = "400", description = "review를 생성하기 위한 request가 올바르지 않게 넘어온 경우")
     @PostMapping
     @ResponseStatus(OK)
-    public KurlyResponse<ReviewCreate.Response> registerReview(@RequestBody ReviewCreate.Request request) {
-        ReviewCreate.Response response = reviewService.registerReview(request);
-        return KurlyResponse.ok(response);
-    }
-
-    @GetMapping
-    public Page<Review> findReviewAll(@RequestBody PageParam param) {
-        Pageable pageable = PageRequest.of(param.page(), param.size());
-        return reviewService.findReviewAll(pageable);
+    public KurlyResponse<Void> registerReview(@RequestBody CreateReview.Request request) {
+        reviewService.registerReview(request);
+        return KurlyResponse.noData();
     }
 
     @Tag(name = "review")
@@ -74,7 +65,7 @@ public class ReviewController {
     @GetMapping("/{userId}")
     @ResponseStatus(OK)
     public List<Review> findAllByUserId(@PathVariable Long userId) {
-        return reviewService.findAllByUserId(userId);
+        return reviewService.getAllReviewsOfUser(userId);
     }
 
     @Tag(name = "review")
@@ -85,7 +76,7 @@ public class ReviewController {
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> updateReviewContent(
             @PathVariable Long id,
-            @RequestBody ReviewCreate.UpdateRequest request
+            @RequestBody CreateReview.UpdateRequest request
     ) {
         reviewService.updateReviewContent(id, request.content(), request.isSecreted());
         return KurlyResponse.noData();

@@ -60,7 +60,7 @@ public class UserService {
             ShippingRepository shippingRepository,
             PaymentRepository paymentRepository,
             JwtTokenProvider tokenProvider,
-            OrderService orderService
+            OrderService orderService,
             AuthenticationManagerBuilder authenticationManagerBuilder
     ) {
         this.userRepository = userRepository;
