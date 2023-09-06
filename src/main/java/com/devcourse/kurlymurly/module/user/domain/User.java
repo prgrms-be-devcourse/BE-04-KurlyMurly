@@ -107,6 +107,10 @@ public class User extends BaseEntity implements UserDetails {
         return loginId;
     }
 
+    public Tier getTier() {
+        return this.tier;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -133,6 +137,10 @@ public class User extends BaseEntity implements UserDetails {
 
     public boolean isEqualPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public String getMaskedUserName() {
+        return this.name.replaceAll("(?<=.{1})", "*");
     }
 }
 
