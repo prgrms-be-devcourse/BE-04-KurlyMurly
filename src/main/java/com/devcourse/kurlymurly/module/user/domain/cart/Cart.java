@@ -1,9 +1,12 @@
 package com.devcourse.kurlymurly.module.user.domain.cart;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_QUANTITY;
 
 @Entity
 @Table(name = "carts")
@@ -30,11 +33,18 @@ public class Cart extends BaseEntity {
         return productId;
     }
 
-    public void increaseQuantity() {
-        this.quantity += 1;
+    public void updateQuantity(boolean isIncrease) {
+        if (isIncrease) {
+            this.quantity += 1;
+        } else {
+            validQuantity();
+            this.quantity -= 1;
+        }
     }
 
-    public void decreaseQuantity() {
-        this.quantity -= 1;
+    private void validQuantity() {
+        if(1 >= this.quantity) {
+            throw new KurlyBaseException(NOT_CORRECT_QUANTITY);
+        }
     }
 }

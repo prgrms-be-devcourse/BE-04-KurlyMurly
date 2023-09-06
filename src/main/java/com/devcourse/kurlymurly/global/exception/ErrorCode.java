@@ -10,6 +10,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public enum ErrorCode {
     // 400
     DELETED_PRODUCT(BAD_REQUEST, "삭제된 상품입니다."),
+    NOT_CORRECT_QUANTITY(BAD_REQUEST, "상품의 최소 수량은 1개입니다."),
     FAIL_USER_LOGIN(NOT_FOUND, "존재하지 않는 계정입니다."),
     NOT_CORRECT_JWT_SIGN(BAD_REQUEST, "잘못된 JWT SIGN값입니다."),
     NOT_CORRECT_JWT(BAD_REQUEST, "잘못된 JWT 토큰입니다."),

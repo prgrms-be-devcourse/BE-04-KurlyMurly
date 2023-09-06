@@ -9,6 +9,7 @@ import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.product.CreateCart;
 import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
+import com.devcourse.kurlymurly.web.dto.product.UpdateCart;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
 import com.devcourse.kurlymurly.web.dto.user.CheckId;
@@ -136,23 +137,33 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
-    @DeleteMapping("/carts/{productId}")
+    @DeleteMapping("/carts/{cartId}")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> removeProduct(
             @AuthenticationPrincipal User user,
-            @PathVariable Long productId
+            @PathVariable Long cartId
     ) {
-        userService.removeCartItem(productId);
+        userService.removeCartItem(cartId);
         return KurlyResponse.noData();
     }
 
     @DeleteMapping("/carts")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> removeProduct(
+    public KurlyResponse<Void> removeCartItemList(
             @AuthenticationPrincipal User user,
             @RequestBody RemoveCart.Request removeProductList
     ) {
         userService.removeCartItemList(removeProductList.cartIds());
+        return KurlyResponse.noData();
+    }
+
+    @PutMapping("/carts")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> changeItemQuantity(
+            @AuthenticationPrincipal User user,
+            @RequestBody UpdateCart.Request updateCart
+    ) {
+        userService.changeItemQuantity(updateCart.cartId(), updateCart.isIncrease());
         return KurlyResponse.noData();
     }
 }
