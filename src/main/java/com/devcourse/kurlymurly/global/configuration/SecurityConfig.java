@@ -13,14 +13,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final String[] restrictedUrls = {"/"};
+    private final String[] restrictedUserUrls = {"/"};
+    private final String[] restrictedAdminUrls = {"/"};
 
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
@@ -44,9 +45,11 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(requests ->
-                        requests.requestMatchers(restrictedUrls).hasRole(User.Role.USER.name())
+                        requests.requestMatchers(restrictedUserUrls).hasAuthority(User.Role.ROLE_USER.name())
+                                .requestMatchers(restrictedAdminUrls).hasAuthority((User.Role.ROLE_ADMIN.name()))
+                                .anyRequest().permitAll()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
