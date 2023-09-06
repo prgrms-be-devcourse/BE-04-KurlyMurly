@@ -17,8 +17,8 @@ import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
-import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
+import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -70,7 +70,7 @@ public class UserService {
         this.shippingRepository = shippingRepository;
         this.paymentRepository = paymentRepository;
         this.tokenProvider = tokenProvider;
-        this.orderService = orderService; 
+        this.orderService = orderService;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
@@ -89,7 +89,7 @@ public class UserService {
 
     @Transactional
     public void join(JoinUser.Request request) {
-        User newUser = convertToUser(request);
+        User newUser = to(request);
 
         checkPassword(request.password(), request.checkPassword());
 
@@ -132,6 +132,16 @@ public class UserService {
         Shipping shipping = new Shipping(userId, address, isDefault);
 
         shippingRepository.save(shipping);
+    }
+
+    public List<GetAddress.Response> getAddress(Long userId) {
+        return shippingRepository.findAllByUserId(userId).stream()
+                .map(this::to)
+                .toList();
+    }
+
+    private GetAddress.Response to(Shipping shipping) {
+        return shipping.getAddressDto();
     }
 
     @Transactional
@@ -211,7 +221,7 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    private User convertToUser(JoinUser.Request request) {
+    private User to(JoinUser.Request request) {
         UserInfo userInfo = new UserInfo(request.birth(), request.recommender(), request.sex());
 
         return new User(request.name(), request.loginId(), passwordEncoder.encode(request.password()), request.email(), userInfo, request.phoneNumber());
