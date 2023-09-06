@@ -10,14 +10,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "reviews")
 public class Review extends BaseEntity {
-
-    public enum Status {
-        NORMAL,
-        BANNED,
-        BEST,
-        SECRET,
-        DELETED
-    }
+    public enum Status { NORMAL, BANNED, BEST, DELETED,}
 
     @Column(nullable = false)
     private Long userId;
@@ -25,58 +18,56 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private Long productId;
 
-    @Column(nullable = false)
-    private Long orderId;
-
-    @Column(nullable = false)
-    private Integer likes;
+    @Column(length = 50, nullable = false)
+    private String productName;
 
     @Column(nullable = false, columnDefinition = "text")
     private String content;
 
     @Column(nullable = false)
+    private Integer likes;
+
+    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
-    protected Review() {}
+    @Column(nullable = false)
+    private boolean isSecret;
 
-    public Review(Long userId, Long productId, Long orderId, Integer likes, String content) {
-        this.userId = userId;
-        this.productId = productId;
-        this.orderId = orderId;
-        this.likes = likes;
-        this.content = content;
-        this.status = Status.NORMAL;
+    protected Review() {
     }
 
-    public Integer increaseLikes() {
+    public Review(Long userId, Long productId, String productName, String content, boolean isSecret) {
+        this.userId = userId;
+        this.productId = productId;
+        this.productName = productName;
+        this.content = content;
+        this.likes = 0;
+        this.status = Status.NORMAL;
+        this.isSecret = isSecret;
+    }
+
+    public Integer liked() {
         this.likes += 1;
         return this.likes;
     }
 
-    public Integer decreaseLikes() {
+    public Integer disliked() {
         this.likes -= 1;
         return this.likes;
     }
 
-    public void updateReview(String content, boolean isSecreted) {
+    public void updateReview(String content, boolean isSecret) {
         this.content = content;
-
-        if(isSecreted) {
-            toSecret();
-        }
-    }
-
-    public void toNormal() {
-        this.status = Status.NORMAL;
+        this.isSecret = isSecret;
     }
 
     public void toBanned() {
         this.status = Status.BANNED;
     }
 
-    public void toSecret() {
-        this.status = Status.SECRET;
+    public void secret() {
+        this.isSecret = true;
     }
 
     public void toBest() {
@@ -87,27 +78,19 @@ public class Review extends BaseEntity {
         this.status = Status.DELETED;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
     public Long getProductId() {
         return productId;
     }
 
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public Integer getLikes() {
-        return likes;
+    public String getProductName() {
+        return productName;
     }
 
     public String getContent() {
         return content;
     }
 
-    public Status getStatus() {
-        return status;
+    public boolean isSecret() {
+        return isSecret;
     }
 }
