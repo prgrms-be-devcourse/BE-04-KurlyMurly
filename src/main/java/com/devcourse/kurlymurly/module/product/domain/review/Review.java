@@ -38,7 +38,8 @@ public class Review extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
-    protected Review() {}
+    protected Review() {
+    }
 
     public Review(Long userId, Long productId, Long orderId, Integer likes, String content) {
         this.userId = userId;
@@ -47,6 +48,30 @@ public class Review extends BaseEntity {
         this.likes = likes;
         this.content = content;
         this.status = Status.NORMAL;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public Integer getLikes() {
+        return likes;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public boolean isSecreted() {
+        if (this.status == Status.SECRET) {
+            return true;
+        }
+
+        return false;
     }
 
     public Integer increaseLikes() {
@@ -62,7 +87,7 @@ public class Review extends BaseEntity {
     public void updateReview(String content, boolean isSecreted) {
         this.content = content;
 
-        if(isSecreted) {
+        if (isSecreted) {
             toSecret();
         }
     }
@@ -93,21 +118,5 @@ public class Review extends BaseEntity {
 
     public Long getProductId() {
         return productId;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public Integer getLikes() {
-        return likes;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public Status getStatus() {
-        return status;
     }
 }

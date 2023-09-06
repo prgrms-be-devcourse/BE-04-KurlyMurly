@@ -1,11 +1,16 @@
 package com.devcourse.kurlymurly.module.product.domain.review.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
-import com.devcourse.kurlymurly.module.product.domain.review.ReviewJpaRepository;
+import com.devcourse.kurlymurly.module.product.domain.review.ReviewRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeJpaRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
+import com.devcourse.kurlymurly.module.product.service.ProductRetrieve;
+import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewCreate;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,18 +18,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_EXISTS_USER;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_REVIEW;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_REVIEW_LIKE;
 
 @Service
 @Transactional(readOnly = true)
 public class ReviewService {
-    private final ReviewJpaRepository reviewRepository;
+    private final ReviewRepository reviewRepository;
     private final ReviewLikeJpaRepository reviewLikeRepository;
+    private final ProductRetrieve productRetrieve;
+    private final UserRepository userRepository;
 
-    public ReviewService(ReviewJpaRepository reviewRepository, ReviewLikeJpaRepository reviewLikeRepository) {
+    public ReviewService(ReviewRepository reviewRepository, ReviewLikeJpaRepository reviewLikeRepository,
+                         ProductRetrieve productRetrieve, UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
         this.reviewLikeRepository = reviewLikeRepository;
+        this.productRetrieve = productRetrieve;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -50,6 +61,35 @@ public class ReviewService {
                 request.likes(),
                 request.content()
         );
+    }
+
+    public List<ReviewResponse.ReviewOfProduct> getReviewsOfProduct(Long productId) {
+        return reviewRepository.findAllByProductIdOrderByCreateAt(productId).stream()
+                .map(this::toReviewOfProductResponse)
+                .toList();
+    }
+
+    private ReviewResponse.ReviewOfProduct toReviewOfProductResponse(Review review) {
+        Product product = productRetrieve.findByIdOrThrow(review.getProductId());
+
+        User user = userRepository.findById(review.getUserId())
+                .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
+
+        return new ReviewResponse.ReviewOfProduct
+                (
+                        product.getId(),
+                        product.getName(),
+                        getMaskedUserName(user.getName()),
+                        user.getTier().name(),
+                        review.getContent(),
+                        review.getLikes(),
+                        review.getCreateAt(),
+                        review.isSecreted()
+                );
+    }
+
+    private String getMaskedUserName(String name) {
+        return name.replaceAll("(?<=.{1})", "*");
     }
 
     public Page<Review> findReviewAll(Pageable pageable) {

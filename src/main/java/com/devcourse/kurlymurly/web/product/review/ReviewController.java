@@ -6,6 +6,7 @@ import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.common.PageParam;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewCreate;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -64,6 +65,18 @@ public class ReviewController {
     public KurlyResponse<Review> findById(@PathVariable Long id) {
         Review review = reviewService.findReviewById(id);
         return KurlyResponse.ok(review);
+    }
+
+    @Tag(name = "review")
+    @Operation(description = "해당 상품에 대한 리뷰 조회 API")
+    @ApiResponse(responseCode = "200", description = "성공적으로 상품의 review를 조회한 경우")
+    @ApiResponse(responseCode = "400", description = "review를 조회하기 위한 상품 id를 명시하지 않은 경우")
+    @ApiResponse(responseCode = "404", description = "조회 할 review 데이터가 없는 경우")
+    @GetMapping("/{productId}")
+    @ResponseStatus(OK)
+    public KurlyResponse<List<ReviewResponse.ReviewOfProduct>> getReviewsOfProduct(@PathVariable Long productId) {
+        List<ReviewResponse.ReviewOfProduct> reviewsOfProduct = reviewService.getReviewsOfProduct(productId);
+        return KurlyResponse.ok(reviewsOfProduct);
     }
 
     // TODO: userId 노출 삭제

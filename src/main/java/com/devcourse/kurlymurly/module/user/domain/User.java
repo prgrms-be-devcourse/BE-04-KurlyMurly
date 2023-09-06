@@ -107,6 +107,14 @@ public class User extends BaseEntity implements UserDetails {
         return loginId;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public Tier getTier() {
+        return this.tier;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
