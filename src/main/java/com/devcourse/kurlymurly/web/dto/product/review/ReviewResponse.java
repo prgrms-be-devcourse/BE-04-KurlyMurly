@@ -8,7 +8,7 @@ import static com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse.Rev
 public sealed interface ReviewResponse permits Reviewable, Reviewed {
     record Reviewable(
         Long productId,
-        String name,
+        String productName,
         LocalDateTime deliveredAt,
         LocalDateTime reviewDeadLine
     ) implements ReviewResponse {
@@ -16,10 +16,11 @@ public sealed interface ReviewResponse permits Reviewable, Reviewed {
 
     record Reviewed(
             Long productId,
-            String name,
+            String productName,
             String content,
+            boolean isSecret,
             LocalDateTime createdAt,
-            boolean isSecret
+            LocalDateTime updatedAt
     ) implements ReviewResponse {
     }
 }

@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.module.product.domain.review.service;
+package com.devcourse.kurlymurly.module.product.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
@@ -6,6 +6,7 @@ import com.devcourse.kurlymurly.module.product.domain.review.ReviewRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
 import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_REVIEW;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_REVIEW_LIKE;
+import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,18 +27,26 @@ public class ReviewService {
         this.reviewLikeRepository = reviewLikeRepository;
     }
 
-    public List<Review> getAllReviewsOfUser(Long userId) {
-        return reviewRepository.findAllByUserId(userId);
+    public List<ReviewResponse.Reviewed> getAllReviewsOfUser(Long userId) {
+        return reviewRepository.findAllByUserIdAndStatusIsNotOrderByIdDesc(userId, DELETED).stream()
+                .map(this::toReviewedResponse)
+                .toList();
+    }
+
+    private ReviewResponse.Reviewed toReviewedResponse(Review review) {
+        return new ReviewResponse.Reviewed(
+                review.getProductId(),
+                review.getProductName(),
+                review.getContent(),
+                review.isSecret(),
+                review.getCreateAt(),
+                review.getUpdatedAt()
+        );
     }
 
     @Transactional
-    public void registerReview(CreateReview.Request request) {
-        Review review = new Review(
-                request.userId(),
-                request.productId(),
-                request.content()
-        );
-
+    public void registerReview(Long userId, CreateReview.Request request) {
+        Review review = new Review(userId, request.productId(), request.productName(), request.content(), request.isSecret());
         reviewRepository.save(review);
     }
 
@@ -46,28 +56,16 @@ public class ReviewService {
     }
 
     @Transactional
-    public void updateReviewContent(Long id, String content, boolean isSecreted) {
+    public void updateReviewContent(Long id, String content, boolean isSecret) {
         Review review = findReviewById(id);
-        review.updateReview(content, isSecreted);
+        review.updateReview(content, isSecret);
     }
 
     // TODO: 관리자 영역
     @Transactional
-    public void updateToNormal(Long id) {
-        Review review = findReviewById(id);
-        review.toNormal();
-    }
-
-    @Transactional
     public void updateToBanned(Long id) {
         Review review = findReviewById(id);
         review.toBanned();
-    }
-
-    @Transactional
-    public void updateToSecret(Long id) {
-        Review review = findReviewById(id);
-        review.toSecret();
     }
 
     @Transactional
@@ -93,7 +91,7 @@ public class ReviewService {
         Review review = findReviewById(reviewLike.getReviewId());
 
         reviewLike.activeLike();
-        review.increaseLikes();
+        review.liked();
     }
 
     private ReviewLike createReviewLikes(Long userId, Long reviewId) {
@@ -101,7 +99,7 @@ public class ReviewService {
         reviewLikeRepository.save(reviewLike);
 
         Review review = findReviewById(reviewId);
-        review.increaseLikes();
+        review.liked();
 
         return reviewLike;
     }
@@ -113,7 +111,7 @@ public class ReviewService {
         Review review = findReviewById(reviewLike.getReviewId());
 
         reviewLike.cancelLike();
-        review.decreaseLikes();
+        review.disliked();
     }
 
     private ReviewLike findReviewLikesById(Long id) {
