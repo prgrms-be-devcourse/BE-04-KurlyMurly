@@ -1,12 +1,17 @@
 package com.devcourse.kurlymurly.module.product.review.service;
 
+import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
-import com.devcourse.kurlymurly.module.product.domain.review.ReviewJpaRepository;
+import com.devcourse.kurlymurly.module.product.domain.review.ReviewRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeJpaRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
 import com.devcourse.kurlymurly.module.product.domain.review.service.ReviewService;
+import com.devcourse.kurlymurly.module.product.service.ProductRetrieve;
+import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewCreate;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewLikeCreate;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.devcourse.kurlymurly.module.product.ProductFixture.LA_GOGI;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -29,10 +35,16 @@ class ReviewServiceTest {
     private ReviewService reviewService;
 
     @Mock
-    private ReviewJpaRepository reviewRepository;
+    private ReviewRepository reviewRepository;
 
     @Mock
     private ReviewLikeJpaRepository reviewLikeRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private ProductRetrieve productRetrieve;
 
     private static ReviewCreate.Request reviewRequest;
 
@@ -95,6 +107,45 @@ class ReviewServiceTest {
 
         // then
         assertThat(review).usingRecursiveComparison().isEqualTo(reviewEntity);
+    }
+
+    @Test
+    @DisplayName("해당 상품의 리뷰 리스트를 조회한다")
+    void getReviewsOfProduct_test() {
+        // given
+        ReviewCreate.Request request1 = new ReviewCreate.Request (1L, 1L, 1L, 2, "좋아요.~");
+        ReviewCreate.Request request2 = new ReviewCreate.Request (2L, 1L, 4L, 7, "별루에영.~");
+        ReviewCreate.Request request3 = new ReviewCreate.Request (3L, 1L, 8L, 0, "시이원하네염.~");
+
+        Review review1 = createReviewEntity(request1);
+        Review review2 = createReviewEntity(request2);
+        Review review3 = createReviewEntity(request3);
+
+        User user1 = new User("수연장", "abd1234", "11", "aaaa@gmail.com", null, "1234-4567");
+        User user2 = new User("장수연", "abd1234", "11", "aaaa@gmail.com", null, "1234-4567");
+        User user3 = new User("연장수", "abd1234", "11", "aaaa@gmail.com", null, "1234-4567");
+
+        Product product = LA_GOGI.toEntity();
+        List<Review> reviewList = List.of(review1, review2, review3);
+
+        // mocking
+        given(reviewRepository.save(any())).willReturn(review1);
+        given(reviewRepository.save(any())).willReturn(review2);
+        given(reviewRepository.save(any())).willReturn(review3);
+        given(reviewRepository.findAllByProductIdOrderByCreateAt(any())).willReturn(reviewList);
+        given(userRepository.findById(any())).willReturn(Optional.of(user1));
+        given(productRetrieve.findByIdOrThrow(any())).willReturn(product);
+        given(userRepository.findById(any())).willReturn(Optional.of(user2));
+        given(userRepository.findById(any())).willReturn(Optional.of(user3));
+
+        // when
+        reviewService.registerReview(request1);
+        reviewService.registerReview(request2);
+        reviewService.registerReview(request3);
+        List<ReviewResponse.ReviewOfProduct> reviewOfProductList = reviewService.getReviewsOfProduct(1L);
+
+        // given
+        Assertions.assertEquals(3, reviewOfProductList.size());
     }
 
     @Test
