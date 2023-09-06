@@ -11,10 +11,11 @@ public enum ErrorCode {
     // 400
     DELETED_PRODUCT(BAD_REQUEST, "삭제된 상품입니다."),
     FAIL_USER_LOGIN(NOT_FOUND, "존재하지 않는 계정입니다."),
-    NOT_CORRECT_JWT_SIGN(BAD_REQUEST,"잘못된 JWT SIGN값입니다."),
-    NOT_CORRECT_JWT(BAD_REQUEST,"잘못된 JWT 토큰입니다."),
-    EXPIRED_JWT_TOKEN(BAD_REQUEST,"만료된 토큰입니다."),
-    NOT_SUPPORTED_JWT_TOKEN(BAD_REQUEST,"지원하지 않는 토근입니다."),
+    NOT_CORRECT_JWT_SIGN(BAD_REQUEST, "잘못된 JWT SIGN값입니다."),
+    NOT_CORRECT_JWT(BAD_REQUEST, "잘못된 JWT 토큰입니다."),
+    EXPIRED_JWT_TOKEN(BAD_REQUEST, "만료된 토큰입니다."),
+    NOT_SUPPORTED_JWT_TOKEN(BAD_REQUEST, "지원하지 않는 토근입니다."),
+    NOT_AUTHORIZED_TOKEN(BAD_REQUEST, "권한 정보가 없는 토큰입니다."),
 
     // 404
     NOT_FOUND_REVIEW(NOT_FOUND, "존재하는 리뷰가 없습니다."),

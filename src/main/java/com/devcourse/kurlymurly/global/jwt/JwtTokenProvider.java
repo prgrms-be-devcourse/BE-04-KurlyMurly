@@ -51,7 +51,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim("auth", authorities)
+                .claim("authority", authorities)
                 .setExpiration(new Date(System.currentTimeMillis() + expirationHours))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
@@ -59,18 +59,24 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaims(accessToken);
+        String[] authority = getAuthority(claims);
 
-        if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
-        }
-
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get("auth").toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        Collection<? extends GrantedAuthority> authorities = Arrays.stream(authority)
+                .map(SimpleGrantedAuthority::new)
+                .toList();
 
         UserDetails principal = new User(claims.getSubject(), "", authorities);
+
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+    }
+
+    private String[] getAuthority(Claims claims) {
+        try {
+            String[] authority = claims.get("authority").toString().split(",");
+            return authority;
+        } catch (KurlyBaseException e) {
+            throw new KurlyBaseException(ErrorCode.NOT_AUTHORIZED_TOKEN);
+        }
     }
 
     public boolean validateToken(String token) {
