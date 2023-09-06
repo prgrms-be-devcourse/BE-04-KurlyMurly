@@ -136,8 +136,9 @@ public class UserService {
     }
 
     public List<GetAddress.Response> getAddress(Long userId) {
-        List<Shipping> shippingList = shippingRepository.findAllByUserId(userId);
-        return shippingList.stream().map(this::convertToAddressDto).toList();
+        return shippingRepository.findAllByUserId(userId).stream()
+                .map(this::convertToAddressDto)
+                .toList();
     }
 
     private GetAddress.Response convertToAddressDto(Shipping shipping) {
