@@ -44,19 +44,17 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(secretByteKey);
     }
 
-    public LoginUser.Response createToken(Authentication authentication) {
+    public String createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        String accessToken = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
                 .setExpiration(new Date(System.currentTimeMillis() + expirationHours))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-
-        return new LoginUser.Response(accessToken);
     }
 
     public Authentication getAuthentication(String accessToken) {

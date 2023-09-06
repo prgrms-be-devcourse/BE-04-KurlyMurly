@@ -69,7 +69,7 @@ public class UserService {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
-    public LoginUser.Response login(String loginId, String password) {
+    public String login(String loginId, String password) {
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(loginId, password);
 
