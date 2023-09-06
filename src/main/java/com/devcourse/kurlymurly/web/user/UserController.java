@@ -17,6 +17,7 @@ import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
+import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -98,6 +99,13 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @GetMapping("/addresses")
+    @ResponseStatus(OK)
+    public KurlyResponse<List<GetAddress.Response>> getAddress(@AuthenticationPrincipal User user) {
+        List<GetAddress.Response> addressList = userService.getAddress(user.getId());
+        return KurlyResponse.ok(addressList);
+    }
+
     @PostMapping("/register-credit")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> addCredit(@AuthenticationPrincipal User user, @RequestBody RegisterPayment.creditRequest request) {
@@ -122,7 +130,7 @@ public class UserController {
     @PutMapping("/delete-credit/{paymentId}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> deletePayment(@AuthenticationPrincipal User user, @PathVariable Long paymentId) {
-        userService.deletePayment(user.getId(),paymentId);
+        userService.deletePayment(user.getId(), paymentId);
 
         return KurlyResponse.noData();
     }
