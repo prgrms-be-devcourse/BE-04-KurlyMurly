@@ -56,4 +56,9 @@ public class Shipping extends BaseEntity {
                 this.info.getContact()
         );
     }
+
+    public void update(String description, String receiver, String contact) {
+        this.address.update(description);
+        this.info.update(receiver, contact);
+    }
 }

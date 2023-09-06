@@ -18,6 +18,7 @@ import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
+import com.devcourse.kurlymurly.web.dto.user.shipping.UpdateAddress;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -111,6 +112,13 @@ public class UserController {
     public KurlyResponse<List<GetAddress.Response>> getAddress(@AuthenticationPrincipal User user) {
         List<GetAddress.Response> addressList = userService.getAddress(user.getId());
         return KurlyResponse.ok(addressList);
+    }
+
+    @PutMapping("/addresses")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> updateAddress(@AuthenticationPrincipal User user, @RequestBody UpdateAddress.Request request) {
+        userService.updateAddress(user.getId(), request.addressId(), request.description(), request.receiver(), request.contact());
+        return KurlyResponse.noData();
     }
 
     @PostMapping("/register-credit")

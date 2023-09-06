@@ -35,4 +35,9 @@ public class Info {
     public String getContact() {
         return this.contact;
     }
+
+    public void update(String receiver, String contact) {
+        this.receiver = receiver;
+        this.contact = contact;
+    }
 }

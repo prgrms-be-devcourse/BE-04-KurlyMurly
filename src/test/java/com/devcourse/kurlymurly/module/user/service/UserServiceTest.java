@@ -164,6 +164,31 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("주소 정보 변경 테스트")
+    void update_address() {
+        // Given
+        Shipping shipping = new Shipping(1L, "컬리단길", true);
+
+        doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
+
+        // When
+        userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000");
+
+        // Then
+        then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 주소를 변경할 경우 예외를 던짐")
+    void update_address_byAddressNotFound() {
+        // Given
+        doReturn(Optional.empty()).when(shippingRepository).findByIdAndUserId(any(), any());
+
+        // When , Then
+        assertThrows(KurlyBaseException.class, () -> userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000"));
+    }
+
+    @Test
     @DisplayName("신용카드 결제 수단 추가 테스트")
     void add_credit() {
         // Given
