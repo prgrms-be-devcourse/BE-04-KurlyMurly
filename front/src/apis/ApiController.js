@@ -1,13 +1,10 @@
-import axios from "axios";
-import { useState } from "react";
+import axios from 'axios';
 
+axios.defaults.withCredentials = true;
+const BASE_END_POINT = process.env;
 
-axios.defaults.withCredentials= true;
-const BASE_END_POINT = process.env
+const instance = axios.create({
+  baseURL: BASE_END_POINT,
+});
 
-const JwtInterceptor = () => {
-    const [token, setToken] = useState("")
-    const instance = axios.create({
-        baseURL: BASE_END_POINT,
-    });
-}
+export default instance;
