@@ -26,4 +26,12 @@ public class OrderItem {
         this.totalPrice = totalPrice;
         this.quantity = quantity;
     }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

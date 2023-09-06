@@ -34,7 +34,6 @@ public class ProductPaging {
                 .toList();
     }
 
-
     public Slice<SupportProduct.Response> getTenSupportsOfUserPageFromLastId(Long userId, Long lastId) {
         return productSupportRepository.findTenByUserIdFromStartId(userId, lastId + DEFAULT_PAGE_SIZE)
                 .map(this::toSupportResponse);

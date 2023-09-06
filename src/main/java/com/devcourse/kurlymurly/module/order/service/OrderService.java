@@ -6,13 +6,15 @@ import com.devcourse.kurlymurly.module.order.domain.OrderItem;
 import com.devcourse.kurlymurly.module.order.domain.OrderRepository;
 import com.devcourse.kurlymurly.module.order.domain.PaymentInfo;
 import com.devcourse.kurlymurly.module.order.domain.ShippingInfo;
-import com.devcourse.kurlymurly.web.dto.order.CreateOrderItem;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
+import com.devcourse.kurlymurly.web.dto.order.CreateOrderItem;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_ORDER;
@@ -20,6 +22,8 @@ import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_ORDE
 @Service
 @Transactional(readOnly = true)
 public class OrderService {
+    private static final int REVIEWABLE_DEADLINE = 30;
+
     private final OrderRepository orderRepository;
 
     public OrderService(OrderRepository orderRepository) {
@@ -55,6 +59,25 @@ public class OrderService {
         return orderRepository.findAllByUserId(userId);
     }
 
+    public List<ReviewResponse.Reviewable> getAllReviewableOrdersByUserId(Long userId) {
+        LocalDateTime allowedPeriod = LocalDateTime.now().minusDays(REVIEWABLE_DEADLINE);
+
+        return orderRepository.findAllReviewableOrdersByUserIdWithinThirtyDays(userId, allowedPeriod).stream()
+                .flatMap(order -> order.getOrderItems().stream()
+                        .map(orderItem -> toReviewableResponse(order, orderItem)))
+                .toList();
+    }
+
+    private ReviewResponse.Reviewable toReviewableResponse(Order order, OrderItem orderItem) {
+        LocalDateTime delivered = order.getUpdatedAt();
+        return new ReviewResponse.Reviewable(
+                orderItem.getProductId(),
+                orderItem.getName(),
+                delivered,
+                delivered.plusDays(REVIEWABLE_DEADLINE)
+        );
+    }
+
     // 관리자 영역 (ADMIN 권한 필요)
     @Transactional
     public Order updateOrderToProcessing(Long id) {
@@ -75,7 +98,7 @@ public class OrderService {
     @Transactional
     public Order updateOrderToDeliveryDone(Long id) {
         Order order = findById(id);
-        order.deliveryDoneOrder();
+        order.delivered();
 
         return order;
     }

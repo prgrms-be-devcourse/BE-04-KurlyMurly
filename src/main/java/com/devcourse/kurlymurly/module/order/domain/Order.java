@@ -37,7 +37,7 @@ public class Order extends BaseEntity {
     private String orderNumber;
 
     @ElementCollection
-    @CollectionTable(joinColumns = @JoinColumn(name = "order_id"))
+    @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @Embedded
@@ -70,7 +70,7 @@ public class Order extends BaseEntity {
         this.status = Status.DELIVERING;
     }
 
-    public void deliveryDoneOrder() {
+    public void delivered() {
         this.status = Status.DELIVERED;
     }
 
@@ -85,6 +85,10 @@ public class Order extends BaseEntity {
         int randomDigits = new Random().nextInt(RANDOM_BOUND);
 
         return currentDate + randomDigits;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
     public Status getStatus() {

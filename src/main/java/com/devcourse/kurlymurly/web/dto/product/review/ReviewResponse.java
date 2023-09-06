@@ -2,11 +2,11 @@ package com.devcourse.kurlymurly.web.dto.product.review;
 
 import java.time.LocalDateTime;
 
-import static com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse.Writable;
-import static com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse.Wrote;
+import static com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse.Reviewable;
+import static com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse.Reviewed;
 
-public sealed interface ReviewResponse permits Writable, Wrote {
-    record Writable(
+public sealed interface ReviewResponse permits Reviewable, Reviewed {
+    record Reviewable(
         Long productId,
         String name,
         LocalDateTime deliveredAt,
@@ -14,7 +14,7 @@ public sealed interface ReviewResponse permits Writable, Wrote {
     ) implements ReviewResponse {
     }
 
-    record Wrote(
+    record Reviewed(
             Long productId,
             String name,
             String content,

@@ -30,8 +30,6 @@ class OrderServiceTest {
     void createOrder_test() {
         // given
         Order order = HEJOW_ORDER.toEntity();
-
-        // mocking
         given(orderRepository.save(any())).willReturn(order);
 
         // when

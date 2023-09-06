@@ -78,48 +78,4 @@ public enum OrderFixture {
                 .map(request -> new OrderItem(request.productId(), request.name(), request.totalPrice(), request.quantity()))
                 .toList();
     }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public List<CreateOrderItem.Request> getOrderItemRequests() {
-        return orderItemRequests;
-    }
-
-    public int getTotalPrice() {
-        return totalPrice;
-    }
-
-    public int getTotalDiscount() {
-        return totalDiscount;
-    }
-
-    public String getPayment() {
-        return payment;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getReceiveArea() {
-        return receiveArea;
-    }
-
-    public String getEntranceInfo() {
-        return entranceInfo;
-    }
-
-    public String getPackaging() {
-        return packaging;
-    }
 }
