@@ -154,7 +154,7 @@ class UserServiceTest {
         Shipping shipping1 = new Shipping(1L, "컬리단길", true);
         Shipping shipping2 = new Shipping(1L, "컬리단길", true);
 
-        doReturn(List.of(shipping1, shipping2)).when(shippingRepository).findAllById(any());
+        doReturn(List.of(shipping1, shipping2)).when(shippingRepository).findAllByUserId(any());
 
         // When
         List<GetAddress.Response> addressList = userService.getAddress(1L);
