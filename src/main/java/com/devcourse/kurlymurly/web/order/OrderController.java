@@ -35,12 +35,12 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(OK)
-    public KurlyResponse<Void> order(
+    public KurlyResponse<CreateOrder.Response> order(
             @AuthenticationPrincipal User user,
             @RequestBody CreateOrder.Request request
     ) {
-        orderService.createOrder(user.getId(), request);
-        return KurlyResponse.noData();
+        CreateOrder.Response response = orderService.createOrder(user.getId(), request);
+        return KurlyResponse.ok(response);
     }
 
     @GetMapping
