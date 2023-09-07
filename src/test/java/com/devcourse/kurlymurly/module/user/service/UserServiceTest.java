@@ -201,6 +201,7 @@ class UserServiceTest {
 
         // Then
         then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
+        then(shippingRepository).should(times(1)).delete(any());
     }
 
     @Test

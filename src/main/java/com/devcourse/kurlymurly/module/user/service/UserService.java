@@ -154,7 +154,7 @@ public class UserService {
     public void deleteAddress(Long userId, Long addressId) {
         Shipping shipping = findAddress(userId, addressId);
 
-        shipping.softDelete();
+        shippingRepository.delete(shipping);
     }
 
     private Shipping findAddress(Long userId, Long addressId) {
