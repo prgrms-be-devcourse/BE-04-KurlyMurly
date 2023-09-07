@@ -57,7 +57,7 @@ public class ProductFacade {
         return productPaging.getTenSupportsOfUserPageFromLastId(userId, lastId);
     }
 
-    @Transactional // todo: 관리자 API
+    @Transactional
     public CreateProduct.Response createProduct(CreateProduct.Request request) {
         Category category = categoryRetrieve.findByIdOrThrow(request.categoryId());
         productCreate.create(request);
@@ -84,13 +84,13 @@ public class ProductFacade {
         support.update(request.title(), request.content(), request.isSecret());
     }
 
-    @Transactional // todo: 관리자 API
+    @Transactional
     public void soldOutProduct(Long id) {
         Product product = productRetrieve.findByIdOrThrow(id);
         product.soldOut();
     }
 
-    @Transactional // todo: 관리자 API
+    @Transactional
     public void delete(Long id) {
         Product product = productRetrieve.findByIdOrThrow(id);
         product.softDelete();
