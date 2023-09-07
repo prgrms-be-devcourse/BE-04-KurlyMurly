@@ -10,7 +10,6 @@ import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -105,6 +104,10 @@ public class User extends BaseEntity implements UserDetails {
     @Override
     public String getUsername() {
         return loginId;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public Tier getTier() {

@@ -67,7 +67,7 @@ public class Review extends BaseEntity {
         this.status = Status.BANNED;
     }
 
-    public void secret() {
+    public void toSecret() {
         this.isSecret = true;
     }
 

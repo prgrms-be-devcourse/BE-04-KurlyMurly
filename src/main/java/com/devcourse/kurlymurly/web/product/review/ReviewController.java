@@ -46,7 +46,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user,
             @RequestBody @Valid CreateReview.Request request
     ) {
-        reviewService.registerReview(user.getId(), request);
+        reviewService.registerReview(user, request);
         return KurlyResponse.noData();
     }
 
