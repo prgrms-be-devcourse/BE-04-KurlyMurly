@@ -34,6 +34,7 @@ import static com.devcourse.kurlymurly.global.exception.ErrorCode.CART_NOT_FOUND
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PASSWORD;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_EXISTS_USER;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_PAYMENT;
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.SHIPPING_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
@@ -142,6 +143,23 @@ public class UserService {
 
     private GetAddress.Response to(Shipping shipping) {
         return shipping.getAddressDto();
+    }
+
+    public void updateAddress(Long userId, Long addressId, String description, String receiver, String contact) {
+        Shipping shipping = findAddress(userId, addressId);
+
+        shipping.update(description, receiver, contact);
+    }
+
+    public void deleteAddress(Long userId, Long addressId) {
+        Shipping shipping = findAddress(userId, addressId);
+
+        shippingRepository.delete(shipping);
+    }
+
+    private Shipping findAddress(Long userId, Long shippingId) {
+        return shippingRepository.findByIdAndUserId(shippingId, userId)
+                .orElseThrow(() -> new KurlyBaseException(SHIPPING_NOT_FOUND));
     }
 
     @Transactional

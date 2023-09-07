@@ -31,6 +31,7 @@ public enum ErrorCode {
     NOT_EXISTS_USER(NOT_FOUND, "존재하지 않는 회원입니다."),
     NOT_FOUND_PAYMENT(NOT_FOUND, "존재하는 결제수단이 없습니다."),
     CART_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하는 장바구니 상품이 없습니다"),
+    SHIPPING_NOT_FOUND(HttpStatus.NOT_FOUND, "주소가 존재하지 않습니다."),
 
     // 409
     NOT_AUTHOR(CONFLICT, "작성자가 아닙니다."),

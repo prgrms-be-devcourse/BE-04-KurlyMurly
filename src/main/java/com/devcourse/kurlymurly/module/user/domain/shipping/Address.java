@@ -29,4 +29,8 @@ public class Address {
     public String getDescribedAddress() {
         return this.description == null ? this.roadAddress : this.roadAddress + " " + this.description;
     }
+
+    public void update(String description) {
+        this.description = description;
+    }
 }
