@@ -7,7 +7,7 @@ import java.util.Date;
 
 public enum UserFixture {
     USER_FIXTURE("수연장", "abd1234", "11", "aaaa@gmail.com",
-            new UserInfo(new Date(System.currentTimeMillis()), "문희조", "MAN"), "1234-4567");정
+            new UserInfo(new Date(System.currentTimeMillis()), "문희조", "MAN"), "1234-4567");
 
     private final String name;
     private final String loginId;
