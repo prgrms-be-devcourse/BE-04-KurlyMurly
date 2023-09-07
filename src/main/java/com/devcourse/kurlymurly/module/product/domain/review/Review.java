@@ -1,10 +1,15 @@
 package com.devcourse.kurlymurly.module.product.domain.review;
 
 import com.devcourse.kurlymurly.module.BaseEntity;
+import com.devcourse.kurlymurly.module.product.domain.Product;
+import com.devcourse.kurlymurly.module.user.domain.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -12,14 +17,11 @@ import jakarta.persistence.Table;
 public class Review extends BaseEntity {
     public enum Status { NORMAL, BANNED, BEST, DELETED,}
 
-    @Column(nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private User user;
 
-    @Column(nullable = false)
-    private Long productId;
-
-    @Column(length = 50, nullable = false)
-    private String productName;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Product product;
 
     @Column(nullable = false, columnDefinition = "text")
     private String content;
@@ -37,10 +39,9 @@ public class Review extends BaseEntity {
     protected Review() {
     }
 
-    public Review(Long userId, Long productId, String productName, String content, boolean isSecret) {
-        this.userId = userId;
-        this.productId = productId;
-        this.productName = productName;
+    public Review(User user, Product product, String content, boolean isSecret) {
+        this.user = user;
+        this.product = product;
         this.content = content;
         this.likes = 0;
         this.status = Status.NORMAL;
@@ -66,7 +67,7 @@ public class Review extends BaseEntity {
         this.status = Status.BANNED;
     }
 
-    public void secret() {
+    public void toSecret() {
         this.isSecret = true;
     }
 
@@ -79,18 +80,30 @@ public class Review extends BaseEntity {
     }
 
     public Long getProductId() {
-        return productId;
+        return product.getId();
     }
 
     public String getProductName() {
-        return productName;
+        return product.getName();
     }
 
     public String getContent() {
         return content;
     }
 
+    public Integer getLikes() {
+        return this.likes;
+    }
+
     public boolean isSecret() {
         return isSecret;
+    }
+
+    public String getMaskedUserName() {
+        return user.getMaskedUserName();
+    }
+
+    public String getUserTier() {
+        return user.getTier().name();
     }
 }

@@ -1,12 +1,15 @@
 package com.devcourse.kurlymurly.module.product.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
+import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +24,12 @@ import static com.devcourse.kurlymurly.module.product.domain.review.Review.Statu
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewLikeRepository reviewLikeRepository;
+    private final ProductRetrieve productRetrieve;
 
-    public ReviewService(ReviewRepository reviewRepository, ReviewLikeRepository reviewLikeRepository) {
+    public ReviewService(ReviewRepository reviewRepository, ReviewLikeRepository reviewLikeRepository, ProductRetrieve productRetrieve) {
         this.reviewRepository = reviewRepository;
         this.reviewLikeRepository = reviewLikeRepository;
+        this.productRetrieve = productRetrieve;
     }
 
     public List<ReviewResponse.Reviewed> getAllReviewsOfUser(Long userId) {
@@ -45,14 +50,34 @@ public class ReviewService {
     }
 
     @Transactional
-    public void registerReview(Long userId, CreateReview.Request request) {
-        Review review = new Review(userId, request.productId(), request.productName(), request.content(), request.isSecret());
+    public void registerReview(User user, CreateReview.Request request) {
+        Product product = productRetrieve.findByIdOrThrow(request.productId());
+        Review review = new Review(user, product, request.content(), request.isSecret());
         reviewRepository.save(review);
     }
 
     public Review findReviewById(Long id) {
         return reviewRepository.findById(id)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_REVIEW));
+    }
+
+    public Slice<ReviewResponse.ReviewOfProduct> getReviewsOfProduct(Long productId, Long start) {
+        return reviewRepository.getTenReviewsOfProductFromStart(productId, start)
+                .map(this::toReviewOfProductResponse);
+    }
+
+    private ReviewResponse.ReviewOfProduct toReviewOfProductResponse(Review review) {
+        return new ReviewResponse.ReviewOfProduct
+                (
+                        review.getProductId(),
+                        review.getProductName(),
+                        review.getMaskedUserName(),
+                        review.getUserTier(),
+                        review.getContent(),
+                        review.getLikes(),
+                        review.getCreateAt(),
+                        review.isSecret()
+                );
     }
 
     @Transactional

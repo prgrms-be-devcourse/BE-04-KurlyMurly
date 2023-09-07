@@ -10,7 +10,6 @@ import jakarta.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -107,6 +106,14 @@ public class User extends BaseEntity implements UserDetails {
         return loginId;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
+    public Tier getTier() {
+        return this.tier;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -133,6 +140,10 @@ public class User extends BaseEntity implements UserDetails {
 
     public boolean isEqualPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public String getMaskedUserName() {
+        return this.name.replaceAll("(?<=.{1})", "*");
     }
 }
 

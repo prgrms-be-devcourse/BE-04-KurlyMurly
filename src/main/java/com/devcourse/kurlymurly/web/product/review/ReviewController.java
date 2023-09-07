@@ -5,11 +5,13 @@ import com.devcourse.kurlymurly.module.product.service.ReviewService;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,7 +48,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user,
             @RequestBody @Valid CreateReview.Request request
     ) {
-        reviewService.registerReview(user.getId(), request);
+        reviewService.registerReview(user, request);
         return KurlyResponse.noData();
     }
 
@@ -61,6 +63,21 @@ public class ReviewController {
         Review review = reviewService.findReviewById(id);
         return KurlyResponse.ok(review);
     }
+
+    @Tag(name = "review")
+    @Operation(description = "해당 상품에 대한 리뷰 조회 API")
+    @ApiResponse(responseCode = "200", description = "성공적으로 상품의 review를 조회한 경우")
+    @ApiResponse(responseCode = "400", description = "review를 조회하기 위한 상품 id를 명시하지 않은 경우")
+    @ApiResponse(responseCode = "404", description = "조회 할 review 데이터가 없는 경우")
+    @GetMapping("/{productId}")
+    @ResponseStatus(OK)
+    public KurlyResponse<Slice<ReviewResponse.ReviewOfProduct>> getReviewsOfProduct(
+            @PathVariable Long productId,
+            @RequestBody @Valid ReviewRequest.OfProduct request) {
+        Slice<ReviewResponse.ReviewOfProduct> reviewsOfProduct = reviewService.getReviewsOfProduct(productId, request.start());
+        return KurlyResponse.ok(reviewsOfProduct);
+    }
+
 
     @Tag(name = "review")
     @Operation(description = "[토큰 필요] 사용자가 작성한 리뷰 조회 API")
