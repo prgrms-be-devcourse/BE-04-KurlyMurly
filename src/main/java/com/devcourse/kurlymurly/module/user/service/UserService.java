@@ -157,8 +157,8 @@ public class UserService {
         shippingRepository.delete(shipping);
     }
 
-    private Shipping findAddress(Long userId, Long addressId) {
-        return shippingRepository.findByIdAndUserId(userId, addressId)
+    private Shipping findAddress(Long userId, Long shippingId) {
+        return shippingRepository.findByIdAndUserId(shippingId, userId)
                 .orElseThrow(() -> new KurlyBaseException(SHIPPING_NOT_FOUND));
     }
 

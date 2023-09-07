@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface ShippingRepository extends JpaRepository<Shipping, Long> {
     List<Shipping> findAllByUserId(Long userId);
 
-    Optional<Shipping> findByIdAndUserId(Long addressId, Long userId);
+    Optional<Shipping> findByIdAndUserId(Long shippingId, Long userId);
 }
