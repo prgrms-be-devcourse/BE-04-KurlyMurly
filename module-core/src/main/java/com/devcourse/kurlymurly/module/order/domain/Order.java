@@ -62,19 +62,19 @@ public class Order extends BaseEntity {
         this.status = Status.ORDERED;
     }
 
-    public void processingOrder() {
+    public void toProcessing() {
         this.status = Status.PROCESSING;
     }
 
-    public void deliveringOrder() {
+    public void toDelivering() {
         this.status = Status.DELIVERING;
     }
 
-    public void delivered() {
+    public void toDelivered() {
         this.status = Status.DELIVERED;
     }
 
-    public void cancelOrder() {
+    public void toCancel() {
         this.status = Status.CANCELED;
     }
 

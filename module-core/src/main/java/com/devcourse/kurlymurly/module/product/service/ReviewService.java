@@ -86,7 +86,6 @@ public class ReviewService {
         review.updateReview(content, isSecret);
     }
 
-    // TODO: 관리자 영역
     @Transactional
     public void updateToBanned(Long id) {
         Review review = findReviewById(id);
@@ -105,9 +104,7 @@ public class ReviewService {
         review.softDeleted();
     }
 
-    /**
-     * ReviewLike Service
-     */
+    /** ReviewLike Service */
     @Transactional
     public void activeReviewLike(Long userId, Long reviewId) {
         ReviewLike reviewLike = reviewLikeRepository.findByUserIdAndReviewId(userId, reviewId)
