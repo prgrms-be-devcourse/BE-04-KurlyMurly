@@ -133,13 +133,13 @@ public class AdminController {
             @ApiResponse(responseCode = "400", description = "주문 id가 명시되지 않은 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
-    @PatchMapping("/{id}/processing")
+    @PatchMapping("/orders/{orderId}/processing")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> updateOrderToProcessing(
+    public KurlyResponse<Void> changeToProcessing(
             @AuthenticationPrincipal User admin,
-            @PathVariable Long id
+            @PathVariable Long orderId
     ) {
-        orderService.toProcessing(id);
+        orderService.toProcessing(orderId);
         return KurlyResponse.noData();
     }
 
@@ -150,13 +150,13 @@ public class AdminController {
             @ApiResponse(responseCode = "400", description = "주문 id가 명시되지 않은 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
-    @PatchMapping("/{id}/delivering")
+    @PostMapping("/orders/{orderId}/start-delivery")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> updateOrderToDelivering(
+    public KurlyResponse<Void> changeToDelivering(
             @AuthenticationPrincipal User admin,
-            @PathVariable Long id
+            @PathVariable Long orderId
     ) {
-        orderService.toDelivering(id);
+        orderService.toDelivering(orderId);
         return KurlyResponse.noData();
     }
 
@@ -167,13 +167,13 @@ public class AdminController {
             @ApiResponse(responseCode = "400", description = "주문 id가 명시되지 않은 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
-    @PatchMapping("/{id}/done")
+    @PostMapping("/orders/{orderId}/done")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> updateOrderToDeliveryDone(
+    public KurlyResponse<Void> changeToDelivered(
             @AuthenticationPrincipal User admin,
-            @PathVariable Long id
+            @PathVariable Long orderId
     ) {
-        orderService.toDelivered(id);
+        orderService.toDelivered(orderId);
         return KurlyResponse.noData();
     }
 
@@ -184,33 +184,18 @@ public class AdminController {
             @ApiResponse(responseCode = "400", description = "주문 id가 명시되지 않은 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
-    @PatchMapping("/{id}/done")
+    @PostMapping("/orders/{orderId}/cancel")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> updateOrderToCanceled(
+    public KurlyResponse<Void> changeToDone(
             @AuthenticationPrincipal User admin,
-            @PathVariable Long id
+            @PathVariable Long orderId
     ) {
-        orderService.toCancel(id);
+        orderService.toCancel(orderId);
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "admin")
-    @Operation(description = "[관리자 토큰 필요] 1:1 문의 상태를 답변 준비중으로 변환 API")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "orderSupport 상태를 PREPARE로 변경한 경우"),
-            @ApiResponse(responseCode = "400", description = "1:1 문의 id가 명시되지 않은 경우"),
-            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
-    })
-    @PatchMapping("/{id}/prepare")
-    @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> changeSupportToPrepare(
-            @AuthenticationPrincipal User admin,
-            @PathVariable Long id
-    ) {
-        orderSupportService.updateSupportToPrepare(id);
-        return KurlyResponse.noData();
-    }
 
+    // TODO: 답변 달아주는 API와 합치기
     @Tag(name = "admin")
     @Operation(description = "[관리자 토큰 필요] 1:1 문의 상태를 답변 완료로 변환 API")
     @ApiResponses({
@@ -218,13 +203,13 @@ public class AdminController {
             @ApiResponse(responseCode = "400", description = "1:1 문의 id가 명시되지 않은 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
-    @PatchMapping("/{id}/answer")
+    @PostMapping("/orderSupports/{orderSupportId}/answer")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> changeSupportToAnswered(
+    public KurlyResponse<Void> changeToAnswered(
             @AuthenticationPrincipal User admin,
-            @PathVariable Long id
+            @PathVariable Long orderSupportId
     ) {
-        orderSupportService.updateSupportToAnswered(id);
+        orderSupportService.updateSupportToAnswered(orderSupportId);
         return KurlyResponse.noData();
     }
 }

@@ -62,6 +62,7 @@ public class Order extends BaseEntity {
         this.status = Status.ORDERED;
     }
 
+    // TODO: 이름 간결하게 바꾸기
     public void toProcessing() {
         this.status = Status.PROCESSING;
     }
