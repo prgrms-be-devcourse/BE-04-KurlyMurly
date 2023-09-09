@@ -3,7 +3,7 @@ package com.devcourse.kurlymurly.module.orderSupport.service;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupportRepository;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
-import com.devcourse.kurlymurly.web.dto.order.OrderSupportCreate;
+import com.devcourse.kurlymurly.web.dto.order.support.OrderSupportCreate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
