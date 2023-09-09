@@ -62,19 +62,20 @@ public class Order extends BaseEntity {
         this.status = Status.ORDERED;
     }
 
-    public void processingOrder() {
+    // TODO: 이름 간결하게 바꾸기
+    public void toProcessing() {
         this.status = Status.PROCESSING;
     }
 
-    public void deliveringOrder() {
+    public void toDelivering() {
         this.status = Status.DELIVERING;
     }
 
-    public void delivered() {
+    public void toDelivered() {
         this.status = Status.DELIVERED;
     }
 
-    public void cancelOrder() {
+    public void toCancel() {
         this.status = Status.CANCELED;
     }
 

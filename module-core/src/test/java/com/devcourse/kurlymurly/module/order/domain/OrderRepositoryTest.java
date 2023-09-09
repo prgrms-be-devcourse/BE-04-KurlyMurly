@@ -24,7 +24,7 @@ class OrderRepositoryTest {
         LocalDateTime allowed = LocalDateTime.now().minusDays(30);
 
         Order order = HEJOW_ORDER.toEntity();
-        order.delivered();
+        order.toDelivered();
         orderRepository.save(order);
 
         // when

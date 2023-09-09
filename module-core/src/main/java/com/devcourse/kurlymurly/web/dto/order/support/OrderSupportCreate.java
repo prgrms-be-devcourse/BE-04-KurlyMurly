@@ -1,12 +1,12 @@
-package com.devcourse.kurlymurly.web.dto.order;
+package com.devcourse.kurlymurly.web.dto.order.support;
 
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import static com.devcourse.kurlymurly.web.dto.order.OrderSupportCreate.Request;
-import static com.devcourse.kurlymurly.web.dto.order.OrderSupportCreate.UpdateRequest;
+import static com.devcourse.kurlymurly.web.dto.order.support.OrderSupportCreate.Request;
+import static com.devcourse.kurlymurly.web.dto.order.support.OrderSupportCreate.UpdateRequest;
 
 public sealed interface OrderSupportCreate permits Request, UpdateRequest {
     record Request(
@@ -32,6 +32,9 @@ public sealed interface OrderSupportCreate permits Request, UpdateRequest {
     ) implements OrderSupportCreate {
     }
 
-    record UpdateRequest(String title, String content) implements OrderSupportCreate {
+    record UpdateRequest(
+            String title,
+            String content
+    ) implements OrderSupportCreate {
     }
 }

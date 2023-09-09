@@ -54,21 +54,16 @@ public class OrderSupportService {
         return orderSupport;
     }
 
-    // 관리자 영역
     @Transactional
-    public OrderSupport updateSupportToPrepare(Long id) {
+    public void updateSupportToPrepare(Long id) {
         OrderSupport orderSupport = findById(id);
         orderSupport.toPreparedSupport();
-
-        return orderSupport;
     }
 
     @Transactional
-    public OrderSupport updateSupportToAnswered(Long id) {
+    public void updateSupportToAnswered(Long id) {
         OrderSupport orderSupport = findById(id);
         orderSupport.toAnsweredSupport();
-
-        return orderSupport;
     }
 
     @Transactional

@@ -1,5 +1,7 @@
 package com.devcourse.kurlymurly.admin;
 
+import com.devcourse.kurlymurly.module.order.service.OrderService;
+import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.product.service.ReviewService;
 import com.devcourse.kurlymurly.module.user.domain.User;
@@ -30,10 +32,14 @@ import static org.springframework.http.HttpStatus.OK;
 public class AdminController {
     private final ProductFacade productFacade;
     private final ReviewService reviewService;
+    private final OrderService orderService;
+    private final OrderSupportService orderSupportService;
 
-    public AdminController(ProductFacade productFacade, ReviewService reviewService) {
+    public AdminController(ProductFacade productFacade, ReviewService reviewService, OrderService orderService, OrderSupportService orderSupportService) {
         this.productFacade = productFacade;
         this.reviewService = reviewService;
+        this.orderService = orderService;
+        this.orderSupportService = orderSupportService;
     }
 
     @Tag(name = "admin")
@@ -117,6 +123,93 @@ public class AdminController {
             @PathVariable Long reviewId
     ) {
         reviewService.updateToBest(reviewId);
+        return KurlyResponse.noData();
+    }
+
+    @Tag(name = "admin")
+    @Operation(description = "[관리자 토큰 필요] Processing 주문으로 변환 API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "order 상태를 PRODCESSING로 변경한 경우"),
+            @ApiResponse(responseCode = "400", description = "주문 id가 명시되지 않은 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    })
+    @PatchMapping("/orders/{orderId}/processing")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> changeToProcessing(
+            @AuthenticationPrincipal User admin,
+            @PathVariable Long orderId
+    ) {
+        orderService.toProcessing(orderId);
+        return KurlyResponse.noData();
+    }
+
+    @Tag(name = "admin")
+    @Operation(description = "[관리자 토큰 필요] Delivering 주문으로 변환 API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "order 상태를 DELIVERING로 변경한 경우"),
+            @ApiResponse(responseCode = "400", description = "주문 id가 명시되지 않은 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    })
+    @PostMapping("/orders/{orderId}/start-delivery")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> changeToDelivering(
+            @AuthenticationPrincipal User admin,
+            @PathVariable Long orderId
+    ) {
+        orderService.toDelivering(orderId);
+        return KurlyResponse.noData();
+    }
+
+    @Tag(name = "admin")
+    @Operation(description = "[관리자 토큰 필요] Delivered 주문으로 변환 API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "order 상태를 DELIVERED로 변경한 경우"),
+            @ApiResponse(responseCode = "400", description = "주문 id가 명시되지 않은 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    })
+    @PostMapping("/orders/{orderId}/done")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> changeToDelivered(
+            @AuthenticationPrincipal User admin,
+            @PathVariable Long orderId
+    ) {
+        orderService.toDelivered(orderId);
+        return KurlyResponse.noData();
+    }
+
+    @Tag(name = "admin")
+    @Operation(description = "[관리자 토큰 필요] Canceled 주문으로 변환 API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "order 상태를 CANCLED로 변경한 경우"),
+            @ApiResponse(responseCode = "400", description = "주문 id가 명시되지 않은 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    })
+    @PostMapping("/orders/{orderId}/cancel")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> changeToDone(
+            @AuthenticationPrincipal User admin,
+            @PathVariable Long orderId
+    ) {
+        orderService.toCancel(orderId);
+        return KurlyResponse.noData();
+    }
+
+
+    // TODO: 답변 달아주는 API와 합치기
+    @Tag(name = "admin")
+    @Operation(description = "[관리자 토큰 필요] 1:1 문의 상태를 답변 완료로 변환 API")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "orderSupport 상태를 ANSWERED로 변경한 경우"),
+            @ApiResponse(responseCode = "400", description = "1:1 문의 id가 명시되지 않은 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    })
+    @PostMapping("/orderSupports/{orderSupportId}/answer")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> changeToAnswered(
+            @AuthenticationPrincipal User admin,
+            @PathVariable Long orderSupportId
+    ) {
+        orderSupportService.updateSupportToAnswered(orderSupportId);
         return KurlyResponse.noData();
     }
 }

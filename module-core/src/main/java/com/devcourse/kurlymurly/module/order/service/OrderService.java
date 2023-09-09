@@ -78,35 +78,28 @@ public class OrderService {
         );
     }
 
-    // 관리자 영역 (ADMIN 권한 필요)
     @Transactional
-    public Order updateOrderToProcessing(Long id) {
+    public void toProcessing(Long id) {
         Order order = findById(id);
-        order.processingOrder();
-
-        return order;
+        order.toProcessing();
     }
 
     @Transactional
-    public Order updateOrderToDelivering(Long id) {
+    public void toDelivering(Long id) {
         Order order = findById(id);
-        order.deliveringOrder();
-
-        return order;
+        order.toDelivering();
     }
 
     @Transactional
-    public Order updateOrderToDeliveryDone(Long id) {
+    public void toDelivered(Long id) {
         Order order = findById(id);
-        order.delivered();
-
-        return order;
+        order.toDelivered();
     }
 
     @Transactional
-    public void cancelOrder(Long id) {
+    public void toCancel(Long id) {
         Order order = findById(id);
-        order.cancelOrder();
+        order.toCancel();
     }
 
     private List<OrderItem> toOrderItems(List<CreateOrderItem.Request> requests) {
