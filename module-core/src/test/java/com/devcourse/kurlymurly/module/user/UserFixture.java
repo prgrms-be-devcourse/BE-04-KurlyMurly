@@ -3,11 +3,11 @@ package com.devcourse.kurlymurly.module.user;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public enum UserFixture {
     USER_FIXTURE("수연장", "abd1234", "11", "aaaa@gmail.com",
-            new UserInfo(new Date(System.currentTimeMillis()), "문희조", "MAN"), "1234-4567");
+            new UserInfo(LocalDate.now(), "문희조", "MAN"), "1234-4567");
 
     private final String name;
     private final String loginId;

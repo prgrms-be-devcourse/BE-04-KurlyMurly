@@ -7,10 +7,6 @@ plugins {
 allprojects {
     group = 'com.devcourse'
     version = '0.0.1-SNAPSHOT'
-
-    repositories {
-        mavenCentral()
-    }
 }
 
 subprojects {
@@ -20,8 +16,11 @@ subprojects {
 
     sourceCompatibility = 20
 
+    repositories {
+        mavenCentral()
+    }
+
     dependencies {
-        // web
         implementation 'org.springframework.boot:spring-boot-starter-web'
     }
 
@@ -29,3 +28,6 @@ subprojects {
         useJUnitPlatform()
     }
 }
+
+bootJar.enabled=false
+jar.enabled=false

@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public sealed interface JoinUser permits JoinUser.Request {
     record Request(
@@ -38,9 +38,9 @@ public sealed interface JoinUser permits JoinUser.Request {
 
             @NotNull(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "고객 생년월일")
-            Date birth,
+            LocalDate birth,
 
-            @NotBlank(message = "빈 값이 들어올 수 없습니다.")
+            @NotNull(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "추천인")
             String recommender,
 
