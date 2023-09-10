@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    include:
+      - db
+      - jwt
+      - jasypt
+
+logging:
+  level:
+    org:
+      springframework:
+        core:
+          LocalVariableTableParameterNameDiscoverer: error
+
+server:
+  port: 8080

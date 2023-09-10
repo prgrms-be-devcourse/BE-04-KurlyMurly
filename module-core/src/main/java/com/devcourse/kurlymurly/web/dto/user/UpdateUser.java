@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public sealed interface UpdateUser permits UpdateUser.Request {
     record Request(
@@ -35,7 +35,7 @@ public sealed interface UpdateUser permits UpdateUser.Request {
             String sex,
 
             @Schema(name = "변경할 생년월일")
-            Date bitrh
+            LocalDate bitrh
     ) implements UpdateUser {
     }
 }

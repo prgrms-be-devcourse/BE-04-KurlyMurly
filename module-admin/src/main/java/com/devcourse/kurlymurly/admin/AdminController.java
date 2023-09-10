@@ -43,8 +43,7 @@ public class AdminController {
     }
 
     @Tag(name = "admin")
-    @Operation(description = "[관리자 토큰 필요] 새로운 상품을 등록한다.")
-    @ApiResponses({
+    @Operation(description = "[관리자 토큰 필요] 새로운 상품을 등록한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 상품을 등록했습니다."),
             @ApiResponse(responseCode = "401", description = "권한이 없는 토큰이거나 토큰을 보내지 않은 경우")
     })

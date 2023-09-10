@@ -11,9 +11,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -81,7 +81,7 @@ public class User extends BaseEntity implements UserDetails {
         this.status = UserStatus.NORMAL;
     }
 
-    public void update(String name, String password, String email, String sex, Date birth, String phoneNumber) {
+    public void update(String name, String password, String email, String sex, LocalDate birth, String phoneNumber) {
         this.name = name;
         this.password = password;
         this.email = email;

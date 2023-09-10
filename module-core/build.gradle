@@ -11,8 +11,7 @@ dependencies {
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 
     // swagger
-    api 'io.springfox:springfox-boot-starter:3.0.0'
-    api 'io.springfox:springfox-swagger-ui:3.0.0'
+    api 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
     // jwt
     implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
@@ -25,4 +24,4 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.24.2'
 }
 
-bootJar.enabled=false
+jar.enabled=false
