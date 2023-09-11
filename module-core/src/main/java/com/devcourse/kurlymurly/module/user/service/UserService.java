@@ -19,7 +19,6 @@ import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
-import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -31,18 +30,17 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.CART_NOT_FOUND;
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.EXIST_SAME_EMAIL;
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.EXIST_SAME_ID;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PASSWORD;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_EXISTS_USER;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_PAYMENT;
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_SAME_PASSWORD;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.SHIPPING_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
 public class UserService {
-    private static final String EXIST_SAME_ID = "사용 불가능한 아이디 입니다.";
-    private static final String EXIST_SAME_EMAIL = "사용 불가능한 이메일 입니다.";
-    private static final String NOT_SAME_PASSWORD = "동일한 비밀번호를 입력";
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ProductFacade productFacade;
@@ -95,11 +93,11 @@ public class UserService {
         checkPassword(request.password(), request.checkPassword());
 
         if (checkId(request.loginId())) {
-            throw new ExistUserInfoException(EXIST_SAME_ID);
+            throw new KurlyBaseException(EXIST_SAME_ID);
         }
 
         if (checkEmail(request.email())) {
-            throw new ExistUserInfoException(EXIST_SAME_EMAIL);
+            throw new KurlyBaseException(EXIST_SAME_EMAIL);
         }
 
         Long savedId = userRepository.save(newUser).getId();
@@ -227,7 +225,7 @@ public class UserService {
         boolean isPasswordNotSame = !password.equals(checkPassword);
 
         if (isPasswordNotSame) {
-            throw new IllegalArgumentException(NOT_SAME_PASSWORD);
+            throw new KurlyBaseException(NOT_SAME_PASSWORD);
         }
     }
 

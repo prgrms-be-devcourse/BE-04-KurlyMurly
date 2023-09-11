@@ -16,7 +16,6 @@ import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
-import com.devcourse.kurlymurly.web.exception.ExistUserInfoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -107,7 +106,7 @@ class UserServiceTest {
         doReturn(true).when(userRepository).existsByLoginId(any());
 
         // Then
-        assertThrows(ExistUserInfoException.class, () -> userService.join(user));
+        assertThrows(KurlyBaseException.class, () -> userService.join(user));
     }
 
     @Test
@@ -117,7 +116,7 @@ class UserServiceTest {
         doReturn(true).when(userRepository).existsByEmail(any());
 
         // Then
-        assertThrows(ExistUserInfoException.class, () -> userService.join(user));
+        assertThrows(KurlyBaseException.class, () -> userService.join(user));
     }
 
     @Test

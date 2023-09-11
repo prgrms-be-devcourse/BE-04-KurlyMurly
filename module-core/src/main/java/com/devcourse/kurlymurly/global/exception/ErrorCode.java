@@ -17,6 +17,7 @@ public enum ErrorCode {
     EXPIRED_JWT_TOKEN(BAD_REQUEST, "만료된 토큰입니다."),
     NOT_SUPPORTED_JWT_TOKEN(BAD_REQUEST, "지원하지 않는 토근입니다."),
     NOT_AUTHORIZED_TOKEN(BAD_REQUEST, "권한 정보가 없는 토큰입니다."),
+    NOT_SAME_PASSWORD(BAD_REQUEST,"동일한 비밀번호를 입력"),
 
     // 404
     NOT_FOUND_REVIEW(NOT_FOUND, "존재하는 리뷰가 없습니다."),
@@ -27,7 +28,6 @@ public enum ErrorCode {
     PRODUCT_NOT_FOUND(NOT_FOUND, "존재하는 상품이 없습니다"),
     NEVER_WRITE_PRODUCT_SUPPORT(NOT_FOUND, "작성한 상품 문의가 없습니다"),
     NOT_CORRECT_PASSWORD(NOT_FOUND, "현재 비밀번호를 확인해주세요"),
-    NOT_EQUAL_PASSWORD(NOT_FOUND, "동일한 비밀번호를 입력해주세요."),
     NOT_EXISTS_USER(NOT_FOUND, "존재하지 않는 회원입니다."),
     NOT_FOUND_PAYMENT(NOT_FOUND, "존재하는 결제수단이 없습니다."),
     CART_NOT_FOUND(NOT_FOUND, "존재하는 장바구니 상품이 없습니다"),
@@ -35,6 +35,8 @@ public enum ErrorCode {
 
     // 409
     NOT_AUTHOR(CONFLICT, "작성자가 아닙니다."),
+    EXIST_SAME_ID(CONFLICT,"사용 불가능한 아이디 입니다."),
+    EXIST_SAME_EMAIL(CONFLICT,"사용 불가능한 이메일 입니다."),
 
     // 500
     KURLY_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 문제입니다. 관리자에게 문의바랍니다."),
