@@ -59,8 +59,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "로그인 API")
-    @ApiResponses(value = {
+    @Operation(description = "로그인 API", responses = {
             @ApiResponse(responseCode = "200", description = "로그인에 성공한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 로그인 정보를 입력한 경우"),
     })
@@ -72,8 +71,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "회원 가입 API")
-    @ApiResponses(value = {
+    @Operation(description = "회원 가입 API", responses = {
             @ApiResponse(responseCode = "200", description = "회원 가입에 성공한 경우"),
             @ApiResponse(responseCode = "400", description = "동일한 비밀번호를 입력하지 않은 경우"),
             @ApiResponse(responseCode = "409", description = "이미 가입된 아이디를 입력한 경우"),
@@ -87,8 +85,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 개인정보 수정 API")
-    @ApiResponses(value = {
+    @Operation(description = "[토큰 필요] 개인정보 수정 API", responses = {
             @ApiResponse(responseCode = "200", description = "개인정보를 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "400", description = "동일한 비밀번호를 입력하지 않는 경우"),
@@ -114,8 +111,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "id 중복 체크 API")
-    @ApiResponses(value = {
+    @Operation(description = "id 중복 체크 API", responses = {
             @ApiResponse(responseCode = "200", description = "해당 id의 중복검사를 진행"),
     })
     @PostMapping("/login-id")
@@ -126,8 +122,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "이메일 중복 체크 API")
-    @ApiResponses(value = {
+    @Operation(description = "이메일 중복 체크 API", responses = {
             @ApiResponse(responseCode = "200", description = "해당 이메일에 대한 중복검사를 진행")
     })
     @PostMapping("/check-email")
@@ -138,8 +133,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 주소 등록 API")
-    @ApiResponses(value = {
+    @Operation(description = "[토큰 필요] 주소 등록 API", responses = {
             @ApiResponse(responseCode = "200", description = "주소를 추가한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
@@ -155,8 +149,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 주소 조회 API")
-    @ApiResponses(value = {
+    @Operation(description = "[토큰 필요] 주소 조회 API", responses = {
             @ApiResponse(responseCode = "200", description = "유저가 등록한 주소들을 조회"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
@@ -169,8 +162,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 주소 수정 API")
-    @ApiResponses(value = {
+    @Operation(description = "[토큰 필요] 주소 수정 API", responses = {
             @ApiResponse(responseCode = "200", description = "주소를 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
@@ -184,8 +176,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 주소 삭제 API")
-    @ApiResponses(value = {
+    @Operation(description = "[토큰 필요] 주소 삭제 API", responses = {
             @ApiResponse(responseCode = "200", description = "해당 주소를 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
@@ -199,8 +190,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 신용카드 등록 API")
-    @ApiResponses(value = {
+    @Operation(description = "[토큰 필요] 신용카드 등록 API", responses = {
             @ApiResponse(responseCode = "200", description = "신용카드를 등록한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
@@ -216,8 +206,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 간편결제 등록 API")
-    @ApiResponses(value = {
+    @Operation(description = "[토큰 필요] 간편결제 등록 API", responses = {
             @ApiResponse(responseCode = "200", description = "간편 결제수단을 등록한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
@@ -233,8 +222,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 결제수단 조회 API")
-    @ApiResponses(value = {
+    @Operation(description = "[토큰 필요] 결제수단 조회 API", responses = {
             @ApiResponse(responseCode = "200", description = "결제수단 정보들을 조회한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
@@ -248,8 +236,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 결제 수단 삭제 API")
-    @ApiResponses(value = {
+    @Operation(description = "[토큰 필요] 결제 수단 삭제 API", responses = {
             @ApiResponse(responseCode = "200", description = "결제수단을 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
