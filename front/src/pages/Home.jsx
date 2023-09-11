@@ -63,6 +63,13 @@ const Home = () => {
                 >
                     주문서
                 </button>
+                <button
+                    onClick={() => {
+                        navigate(`/support`);
+                    }}
+                >
+                    1:1문의 작성
+                </button>
             </div>
         </div>
     );
