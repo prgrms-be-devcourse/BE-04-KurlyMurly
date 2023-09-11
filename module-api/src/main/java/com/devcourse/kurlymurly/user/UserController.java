@@ -89,7 +89,7 @@ public class UserController {
     @Tag(name = "user")
     @Operation(description = "[토큰 필요] 개인정보 수정 API")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "작성한 review를 삭제한 경우"),
+            @ApiResponse(responseCode = "200", description = "개인정보를 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "400", description = "동일한 비밀번호를 입력하지 않는 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
