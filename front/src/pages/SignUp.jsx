@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import instance from '../apis/ApiController';
 
 const SignUp = () => {
   const [inputs, setInputs] = useState({
