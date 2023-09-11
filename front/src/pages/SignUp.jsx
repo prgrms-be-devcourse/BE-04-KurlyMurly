@@ -6,7 +6,7 @@ const SignUp = () => {
   const [inputs, setInputs] = useState({
     loginId: '',
     password: '',
-    rePassword: '',
+    checkPassword: '',
     name: '',
     email: '',
     phoneNumber: '',
@@ -16,15 +16,13 @@ const SignUp = () => {
     roadAddress: '',
   });
 
-  const [isValidated, setIsValidated] = useState({
-    isLoginIdChecked: false,
-    isEmailChecked: false,
-  });
+  const [isLoginIdValidated, setIsLoginIdValidated] = useState(false);
+  const [isEmailValidated, setIsEmailValidated] = useState(false);
 
   const {
     loginId,
     password,
-    rePassword,
+    checkPassword,
     name,
     email,
     phoneNumber,
@@ -32,8 +30,6 @@ const SignUp = () => {
     recommender,
     roadAddress,
   } = inputs;
-
-  const { isLoginIdChecked, isEmailChecked } = isValidated;
 
   const onInputChange = (e) => {
     const { name, value } = e.target;
@@ -43,32 +39,22 @@ const SignUp = () => {
     }));
   };
 
-  const onValidation = (input) => {
-    setIsValidated((isValidated) => ({
-      ...isValidated,
-      [input]: true,
-    }))
-  }
-
   const validateLoginIdDuplication = (loginId) => {
     checkValidateLoginId(loginId);
-    onValidation(loginId);
-    console.log(loginId + 'clicked');
+    setIsLoginIdValidated(true);
   };
 
   const validateEmailDuplication = (email) => {
     checkValidateEmail(email);
-    onValidation(email);
-    console.log(email + 'clicked');
+    setIsEmailValidated(true);
   };
 
-  const isValidationAllPassed = () => {
-    return isLoginIdChecked && isEmailChecked;
+  const isValidationPassed = () => {
+    return isLoginIdValidated && isEmailValidated;
   };
 
   const onSignUp = () => {
-    isValidationAllPassed() ? signUp(inputs) : alert("중복 검사가 모두 완료되지 않았습니다.");
-    console.log(inputs);
+    isValidationPassed() ? signUp(inputs) : alert("중복 검사가 모두 완료되지 않았습니다.");
   };
 
   return (
@@ -86,7 +72,7 @@ const SignUp = () => {
             maxLength="20"
           />
           <button type="button" onClick={() => validateLoginIdDuplication(loginId)}>
-            중복확인
+            { isLoginIdValidated ? '확인완료' : '중복확인' }
           </button>
         </div>
         <div>
@@ -102,8 +88,8 @@ const SignUp = () => {
         <div>
           <h4>비밀번호 확인</h4>
           <input
-            name="rePassword"
-            value={rePassword}
+            name="checkPassword"
+            value={checkPassword}
             onChange={onInputChange}
             type="password"
             placeholder="비밀번호를 한번 더 입력해주세요"
@@ -130,7 +116,7 @@ const SignUp = () => {
             maxLength="30"
           />
           <button type="button" onClick={() => validateEmailDuplication(email)}>
-            중복확인
+            { isEmailValidated ? '확인완료' : '중복확인' }
           </button>
         </div>
         <div>

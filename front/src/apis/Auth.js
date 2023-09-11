@@ -8,23 +8,38 @@ const Auth = () => {
 
     const checkValidateLoginId = (loginId) => {
         handlingAxiosError(async () => {
-            const res = await instance.post('/users/login-id', loginId);
+            const res = await instance.post('/users/login-id', {
+                loginId: loginId,
+            });
             res.data.success ? alert("중복된 아이디입니다!") : alert("사용 가능합니다.");
         });
     };
 
     const checkValidateEmail = (email) => {
         handlingAxiosError(async () => {
-            const res = await instance.post('/users/login-id', email);
+            const res = await instance.post('/users/check-email', {
+                email: email,
+            });
             res.data.success ? alert("중복된 이메일입니다!") : alert("사용 가능합니다.");
         });
     };
 
     const signUp = (joinData) => {
         handlingAxiosError(async () => {
-            const res = await instance.post('/users', joinData);
+            const res = await instance.post('/users', {
+                loginId: joinData.loginId,
+                password: joinData.password,
+                checkPassword: joinData.checkPassword,
+                name: joinData.name,
+                email: joinData.email,
+                phoneNumber: joinData.phoneNumber,
+                sex: joinData.sex,
+                birth: joinData.birth,
+                recommender: joinData.recommender,
+                roadAddress: joinData.roadAddress,
+            });
 
-            if (res.data.success) {
+            if (res.status === 200) {
                 navigate("/login", {state: joinData.loginId})
             }
         });
@@ -32,7 +47,10 @@ const Auth = () => {
 
     const login = (loginData) => {
         handlingAxiosError(async () => {
-            const res = await instance.post('/login', loginData);
+            const res = await instance.post('/login', {
+                loginId: loginData.loginId,
+                password: loginData.password,
+            });
             setStorage("JWT", res.data);
             navigate("/");
         });
@@ -50,7 +68,7 @@ const handlingAxiosError = (callBack) => {
     try {
         return callBack();
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
