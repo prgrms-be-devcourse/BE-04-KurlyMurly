@@ -49,6 +49,13 @@ const Home = () => {
                 >
                     장바구니
                 </button>
+                <button
+                    onClick={() => {
+                        navigate(`/favorites`);
+                    }}
+                >
+                    찜목록
+                </button>
             </div>
         </div>
     );
