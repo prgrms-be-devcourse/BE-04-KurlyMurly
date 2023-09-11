@@ -56,6 +56,20 @@ const Home = () => {
                 >
                     찜목록
                 </button>
+                <button
+                    onClick={() => {
+                        navigate(`/receipt`);
+                    }}
+                >
+                    주문서
+                </button>
+                <button
+                    onClick={() => {
+                        navigate(`/support`);
+                    }}
+                >
+                    1:1문의 작성
+                </button>
             </div>
         </div>
     );
