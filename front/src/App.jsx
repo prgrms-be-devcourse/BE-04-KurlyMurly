@@ -10,7 +10,11 @@ const App = () => {
                 <Route path="/" element={<Home/>}/>
                 <Route path="/sign-up" element={<SignUp/>}/>
                 <Route path="/cart" element={<Cart/>}/>
+<<<<<<< HEAD
                 <Route path="/favorites" element={<Favorites/>}/>
+=======
+                <Route path="/receipt" element={<Receipt/>}/>
+>>>>>>> cf8e9c5 ([KM-183] 추가:주문서 페이지 구현)
             </Routes>
         </BrowserRouter>
     );
