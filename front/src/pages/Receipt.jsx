@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function Receipt() {
+const Receipt = () => {
 
     const [orders, setOrders] = useState([
         {cartId: 1, productId: 1, name: '상품 1', price: 10000, quantity: 1, receiver: "오세한", phoneNumber: "01094828438", email:"kurly@murly.com", address:"서울특별시" },
