@@ -91,7 +91,7 @@ function Receipt() {
                 </thead>
                 <tbody>
                 <tr>
-                    <td>{orders[0].name} 외 {orders.length - 1}개 상품을 주문하였습니다.</td>
+                    <td>{orders[0].address}</td>
                 </tr>
                 </tbody>
             </table>
