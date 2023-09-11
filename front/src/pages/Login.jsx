@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { Auth } from "../apis";
 
 const Login = () => {
+    const { login } = Auth();
     const navigate = useNavigate();
     const [loginInputs, setLoginInputs] = useState({
         loginId: "",
@@ -17,6 +19,10 @@ const Login = () => {
             [name]: value,
         }));
     };
+
+    const attemptLogin = () => {
+        login(loginInputs);
+    }
 
     return (
         <div>
@@ -40,7 +46,7 @@ const Login = () => {
                     type="password"
                 />
             </div>
-            <button onClick={() => console.log("hello")}>로그인</button>
+            <button onClick={() => attemptLogin}>로그인</button>
             <button onClick={() => {
                 navigate(`/sign-up`);
             }}>

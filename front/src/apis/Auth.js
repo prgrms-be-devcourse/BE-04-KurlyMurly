@@ -40,14 +40,15 @@ const Auth = () => {
             });
 
             if (res.status === 200) {
-                navigate("/login", {state: joinData.loginId})
+                alert("회원가입에 성공했습니다! \n로그인 페이지로 이동합니다.");
+                navigate("/login");
             }
         });
     };
 
     const login = (loginData) => {
         handlingAxiosError(async () => {
-            const res = await instance.post('/login', {
+            const res = await instance.post('/users/login', {
                 loginId: loginData.loginId,
                 password: loginData.password,
             });
