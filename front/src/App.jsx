@@ -1,5 +1,5 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import {Home, SignUp, Login, Cart, Favorites, Receipt} from './pages';
+import {Home, SignUp, Login, Cart, Favorite, Receipt, Support, Products, Category} from './pages';
 
 const App = () => {
     return (
@@ -10,10 +10,11 @@ const App = () => {
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/cart" element={<Cart/>}/>
                 <Route path="/favorites" element={<Favorite/>}/>
-                <Route path="/new-products" element={<NewProduct/>}/>
-                <Route path="/best-products" element={<BestProduct/>}/>
-                <Route path="/favorites" element={<Favorites/>}/>
+                <Route path="/new-products" element={<Products/>}/>
+                <Route path="/best-products" element={<Products/>}/>
+                <Route path="/favorites" element={<Favorite/>}/>
                 <Route path="/receipt" element={<Receipt/>}/>
+                <Route path="/categories" element={<Category/>}/>
                 <Route path="/support" element={<Support/>}/>
             </Routes>
         </BrowserRouter>

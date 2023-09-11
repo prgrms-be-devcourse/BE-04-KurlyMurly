@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-function NewProduct() {
+function Products() {
     const [product, setProduct] = useState({
         id: '',
         name: '',
@@ -11,16 +11,16 @@ function NewProduct() {
     });
 
     const [items, setItems] = useState([
-        {id: 1, name: '[KF365] 다다기오이 3입', deliveryType: '샛별배송', description: '믿고 먹을 수 있는 상품을 합리적인 가격에, KF365', price: 4490, likes: 9999},
-        {id: 2, name: '깐대파 500g', deliveryType: '샛별배송', description: '시원한 국물 맛의 비밀', price: 2990, likes: 9999},
-        {id: 3, name: '양파 1.5kg', deliveryType: '샛별배송', description: '"최대혜택가 : 3,432원"', price: 4290, likes: 9999},
-        {id: 4, name: '흙당근 1kg', deliveryType: '샛별배송', description: '"최대 혜택가 : 3,912원"', price: 4890, likes: 9999},
+        {id: 1, name: '제수용 배 2kg (3입)', deliveryType: '샛별배송', description: '큼직하고 탐스러운 배', price: 15900, likes: 211},
+        {id: 2, name: '[타쿠미야] 고급생식빵 하프', deliveryType: '샛별배송', description: '변함없는 부드러움', price: 7000, likes: 0},
+        {id: 3, name: '[슈퍼키친] 유니짜장', deliveryType: '샛별배송', description: '온 가족 인기 메뉴', price: 5900, likes: 0},
+        {id: 4, name: '[솔가원] 한돈 떡갈비', deliveryType: '샛별배송', description: '가정에서 즐기는 맛집 떡갈비', price: 7900, likes: 17},
     ]);
 
 
     return (
         <div>
-            <h1>채소</h1>
+            <h1>신상품</h1>
             {items.map((product) => (
                 <div key = {product.id}>
                   <p><img src='' alt='상품 사진'/></p>
@@ -36,4 +36,4 @@ function NewProduct() {
     );
 }
 
-export default NewProduct;
+export default Products;
