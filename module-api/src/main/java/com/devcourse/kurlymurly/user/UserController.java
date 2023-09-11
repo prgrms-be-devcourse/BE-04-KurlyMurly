@@ -75,6 +75,7 @@ public class UserController {
     @Operation(description = "회원 가입 API")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "회원 가입에 성공한 경우"),
+            @ApiResponse(responseCode = "400", description = "동일한 비밀번호를 입력하지 않은 경우"),
             @ApiResponse(responseCode = "409", description = "이미 가입된 아이디를 입력한 경우"),
             @ApiResponse(responseCode = "409", description = "이미 가입된 이메일을 입력한 경우")
     })
@@ -90,8 +91,8 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "작성한 review를 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "400", description = "동일한 비밀번호를 입력하지 않는 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
-            @ApiResponse(responseCode = "404", description = "동일한 비밀번호를 입력하지 않는 경우"),
             @ApiResponse(responseCode = "404", description = "해당 id값을 가진 유저가 조회되지 않는 경우"),
             @ApiResponse(responseCode = "404", description = "현재 비밀번호가 일치하지 않는 경우")
     })
@@ -104,7 +105,7 @@ public class UserController {
         boolean isPasswordNotEqual = request.password().equals(request.checkPassword());
 
         if (isPasswordNotEqual) {
-            throw new KurlyBaseException(ErrorCode.NOT_EQUAL_PASSWORD);
+            throw new KurlyBaseException(ErrorCode.NOT_SAME_PASSWORD);
         }
 
         userService.findUpdateUser(user.getId(), request);
