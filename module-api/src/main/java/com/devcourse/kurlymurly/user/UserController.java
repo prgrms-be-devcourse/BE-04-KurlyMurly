@@ -19,6 +19,10 @@ import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import com.devcourse.kurlymurly.web.dto.user.shipping.UpdateAddress;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,6 +40,7 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
+@Tag(name = "user", description = "유저 API")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -45,6 +50,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Tag(name = "user")
     @GetMapping("/reviews")
     @ResponseStatus(OK)
     public KurlyResponse<List<ReviewResponse.Reviewable>> getReviewableOrdersOnMyPage(@AuthenticationPrincipal User user) {
@@ -52,6 +58,12 @@ public class UserController {
         return KurlyResponse.ok(responses);
     }
 
+    @Tag(name = "user")
+    @Operation(description = "로그인 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인에 성공한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 로그인 정보를 입력한 경우"),
+    })
     @PostMapping("/login")
     @ResponseStatus(OK)
     public KurlyResponse<String> login(@RequestBody @Valid LoginUser.Request request) {
@@ -59,6 +71,13 @@ public class UserController {
         return KurlyResponse.ok(response);
     }
 
+    @Tag(name = "user")
+    @Operation(description = "회원 가입 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 가입에 성공한 경우"),
+            @ApiResponse(responseCode = "409", description = "이미 가입된 아이디를 입력한 경우"),
+            @ApiResponse(responseCode = "409", description = "이미 가입된 이메일을 입력한 경우")
+    })
     @PostMapping
     @ResponseStatus(OK)
     public KurlyResponse<Void> join(@RequestBody @Valid JoinUser.Request request) {
@@ -66,6 +85,16 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 개인정보 수정 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "작성한 review를 삭제한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "동일한 비밀번호를 입력하지 않는 경우"),
+            @ApiResponse(responseCode = "404", description = "해당 id값을 가진 유저가 조회되지 않는 경우"),
+            @ApiResponse(responseCode = "404", description = "현재 비밀번호가 일치하지 않는 경우")
+    })
     @PutMapping
     @ResponseStatus(OK)
     public KurlyResponse<Void> update(
@@ -83,6 +112,11 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @Tag(name = "user")
+    @Operation(description = "id 중복 체크 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "해당 id의 중복검사를 진행"),
+    })
     @PostMapping("/login-id")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> checkId(@RequestBody @Valid CheckId.Request request) {
@@ -90,6 +124,11 @@ public class UserController {
         return KurlyResponse.ok(result);
     }
 
+    @Tag(name = "user")
+    @Operation(description = "이메일 중복 체크 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "해당 이메일에 대한 중복검사를 진행")
+    })
     @PostMapping("/check-email")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> checkEmail(@RequestBody @Valid CheckEmail.Request request) {
@@ -97,6 +136,13 @@ public class UserController {
         return KurlyResponse.ok(result);
     }
 
+    @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 주소 등록 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "주소를 추가한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    })
     @PostMapping("/address")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> addAddress(
@@ -107,6 +153,13 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 주소 조회 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "유저가 등록한 주소들을 조회"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    })
     @GetMapping("/addresses")
     @ResponseStatus(OK)
     public KurlyResponse<List<GetAddress.Response>> getAddress(@AuthenticationPrincipal User user) {
@@ -114,6 +167,14 @@ public class UserController {
         return KurlyResponse.ok(addressList);
     }
 
+    @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 주소 수정 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "주소를 수정한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
+    })
     @PutMapping("/addresses")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> updateAddress(@AuthenticationPrincipal User user, @RequestBody UpdateAddress.Request request) {
@@ -121,6 +182,14 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 주소 삭제 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "해당 주소를 삭제한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
+    })
     @DeleteMapping("/addresses/{addressId}")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> deleteAddress(@AuthenticationPrincipal User user, @PathVariable Long addressId) {
@@ -128,6 +197,13 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 신용카드 등록 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "신용카드를 등록한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    })
     @PostMapping("/register-credit")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> addCredit(
@@ -138,6 +214,13 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 간편결제 등록 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "간편 결제수단을 등록한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    })
     @PostMapping("/register-easy")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> addEasyPay(
@@ -148,6 +231,14 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 결제수단 조회 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "결제수단 정보들을 조회한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "결제수단 정보들이 조회되지 않은 경우")
+    })
     @GetMapping("/credits")
     @ResponseStatus(OK)
     public KurlyResponse<List<Payment>> getPayment(@AuthenticationPrincipal User user) {
@@ -155,6 +246,14 @@ public class UserController {
         return KurlyResponse.ok(creditList);
     }
 
+    @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 결제 수단 삭제 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "결제수단을 삭제한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "결제수단 정보들이 조회되지 않은 경우")
+    })
     @PutMapping("/delete-credit/{paymentId}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> deletePayment(@AuthenticationPrincipal User user, @PathVariable Long paymentId) {
@@ -163,6 +262,7 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @Tag(name = "user")
     @PostMapping("/carts")
     @ResponseStatus(OK)
     public KurlyResponse<Void> addCart(
@@ -173,6 +273,7 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @Tag(name = "user")
     @DeleteMapping("/carts/{cartId}")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> removeProduct(
@@ -183,6 +284,7 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @Tag(name = "user")
     @DeleteMapping("/carts")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> removeCartItemList(
@@ -193,6 +295,7 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
+    @Tag(name = "user")
     @PutMapping("/carts")
     @ResponseStatus(NO_CONTENT)
     public KurlyResponse<Void> changeItemQuantity(

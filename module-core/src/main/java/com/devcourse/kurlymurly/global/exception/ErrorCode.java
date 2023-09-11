@@ -36,6 +36,7 @@ public enum ErrorCode {
     // 409
     NOT_AUTHOR(CONFLICT, "작성자가 아닙니다."),
 
+
     // 500
     KURLY_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 문제입니다. 관리자에게 문의바랍니다."),
     ;
