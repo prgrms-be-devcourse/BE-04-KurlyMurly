@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { Auth } from '../apis';
 
 const SignUp = () => {
+  const { checkValidateLoginId, checkValidateEmail, signUp } = Auth();
   const [inputs, setInputs] = useState({
     loginId: '',
     password: '',
@@ -31,6 +33,8 @@ const SignUp = () => {
     roadAddress,
   } = inputs;
 
+  const { isLoginIdChecked, isEmailChecked } = isValidated;
+
   const onInputChange = (e) => {
     const { name, value } = e.target;
     setInputs((inputs) => ({
@@ -39,15 +43,31 @@ const SignUp = () => {
     }));
   };
 
+  const onValidation = (input) => {
+    setIsValidated((isValidated) => ({
+      ...isValidated,
+      [input]: true,
+    }))
+  }
+
   const validateLoginIdDuplication = (loginId) => {
+    checkValidateLoginId(loginId);
+    onValidation(loginId);
     console.log(loginId + 'clicked');
   };
 
   const validateEmailDuplication = (email) => {
+    checkValidateEmail(email);
+    onValidation(email);
     console.log(email + 'clicked');
   };
 
+  const isValidationAllPassed = () => {
+    return isLoginIdChecked && isEmailChecked;
+  };
+
   const onSignUp = () => {
+    isValidationAllPassed() ? signUp(inputs) : alert("중복 검사가 모두 완료되지 않았습니다.");
     console.log(inputs);
   };
 

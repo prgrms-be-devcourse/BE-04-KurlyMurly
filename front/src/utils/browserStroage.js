@@ -1,13 +1,5 @@
 const storage = localStorage;
 
-const withHandlingError = (func) => {
-    try {
-        return func();
-    } catch (error) {
-        console.error(error);
-    }
-}
-
 export const isLoginedStorage = () => {
     const state = localStorage.login;
     return !!state;
@@ -30,4 +22,12 @@ export const removeFromStorage = (key) => {
     withHandlingError((key) => {
         storage.removeItem(key);
     })
+}
+
+const withHandlingError = (callBack) => {
+    try {
+        return callBack();
+    } catch (error) {
+        console.error(error);
+    }
 }

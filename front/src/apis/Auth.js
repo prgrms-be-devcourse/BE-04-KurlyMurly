@@ -1,6 +1,6 @@
-import JwtInterceptor from "./ApiController";
 import { useNavigate } from "react-router-dom";
 import { setStorage } from "../utils/browserStroage";
+import JwtInterceptor from "./ApiController";
 
 const Auth = () => {
     const { instance } = JwtInterceptor();
@@ -9,32 +9,22 @@ const Auth = () => {
     const checkValidateLoginId = (loginId) => {
         handlingAxiosError(async () => {
             const res = await instance.post('/users/login-id', loginId);
-            res.success ? alert("중복된 아이디입니다!") : alert("사용 가능합니다.");
+            res.data.success ? alert("중복된 아이디입니다!") : alert("사용 가능합니다.");
         });
     };
 
     const checkValidateEmail = (email) => {
         handlingAxiosError(async () => {
             const res = await instance.post('/users/login-id', email);
-            res.success ? alert("중복된 이메일입니다!") : alert("사용 가능합니다.");
+            res.data.success ? alert("중복된 이메일입니다!") : alert("사용 가능합니다.");
         });
     };
 
     const signUp = (joinData) => {
         handlingAxiosError(async () => {
-            const res = await instance.post('/users', {
-                loginId: joinData.loginId,
-                password: joinData.password,
-                name: joinData.name,
-                email: joinData.email,
-                phoneNumber: joinData.phoneNumber,
-                sex: joinData.sex,
-                birth: joinData.birth,
-                recommender: joinData.recommender,
-                roadAddress: joinData.roadAddress,
-            });
+            const res = await instance.post('/users', joinData);
 
-            if (res.success) {
+            if (res.data.success) {
                 navigate("/login", {state: joinData.loginId})
             }
         });
@@ -42,15 +32,18 @@ const Auth = () => {
 
     const login = (loginData) => {
         handlingAxiosError(async () => {
-            const res = await instance.post('/login', {
-                loginId: loginData.loginId,
-                password: loginData.password,
-            });
-
+            const res = await instance.post('/login', loginData);
             setStorage("JWT", res.data);
             navigate("/");
         });
     };
+
+    return {
+        checkValidateLoginId,
+        checkValidateEmail,
+        signUp,
+        login
+    }
 }
 
 const handlingAxiosError = (callBack) => {
