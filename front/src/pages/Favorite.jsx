@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-function Favorites() {
+function Favorite() {
   const [favorite, setFavorite] = useState({
     productId : '',
     productName : '',
@@ -52,4 +52,4 @@ function Favorites() {
   );
 }
 
-export default Favorites;
+export default Favorite;
