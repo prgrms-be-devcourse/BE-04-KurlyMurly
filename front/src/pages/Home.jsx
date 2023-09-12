@@ -70,6 +70,28 @@ const Home = () => {
                 >
                     1:1문의 작성
                 </button>
+                <br></br>
+                <button
+                    onClick={() => {
+                        navigate(`/create-review`);
+                    }}
+                >
+                    리뷰 작성
+                </button>
+                <button
+                    onClick={() => {
+                        navigate(`/review-list`);
+                    }}
+                >
+                    작성 작성한 리뷰 보기
+                </button>
+                <button
+                    onClick={() => {
+                        navigate(`/product-review`);
+                    }}
+                >
+                    상품에 대한 리뷰 보기
+                </button>
             </div>
         </div>
     );

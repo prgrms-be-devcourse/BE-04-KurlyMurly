@@ -3,7 +3,7 @@ package com.devcourse.kurlymurly.order;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.web.dto.order.OrderSupportCreate;
+import com.devcourse.kurlymurly.web.dto.order.support.OrderSupportCreate;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
