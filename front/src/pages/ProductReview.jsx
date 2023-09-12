@@ -50,6 +50,7 @@ function ProductReview() {
             <ul>
                 {reviews.map((review) => (
                     <li key={review.id}>
+                        <h3>작성자: {review.userName}</h3>
                         <h3>상품이름: {review.productName}</h3>
                         <p>내용: {review.content}</p>
                         <table border="1" width ="500" height="100">
