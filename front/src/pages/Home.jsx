@@ -77,6 +77,13 @@ const Home = () => {
                 >
                     리뷰 작성
                 </button>
+                <button
+                    onClick={() => {
+                        navigate(`/review-list`);
+                    }}
+                >
+                    작성 작성한 리뷰 보기
+                </button>
             </div>
         </div>
     );
