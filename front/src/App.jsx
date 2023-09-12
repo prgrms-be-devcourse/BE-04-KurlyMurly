@@ -1,5 +1,6 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {Home, SignUp, Login, Cart, Favorite, Receipt, Support, Products, Category} from './pages';
+import CreateReview from "./pages/CreateReview";
 
 const App = () => {
     return (
@@ -16,6 +17,7 @@ const App = () => {
                 <Route path="/receipt" element={<Receipt/>}/>
                 <Route path="/categories" element={<Category/>}/>
                 <Route path="/support" element={<Support/>}/>
+                <Route path="/create-review" element={<CreateReview/>}/>
             </Routes>
         </BrowserRouter>
     );

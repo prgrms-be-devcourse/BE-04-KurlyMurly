@@ -70,6 +70,13 @@ const Home = () => {
                 >
                     1:1문의 작성
                 </button>
+                <button
+                    onClick={() => {
+                        navigate(`/create-review`);
+                    }}
+                >
+                    리뷰 작성
+                </button>
             </div>
         </div>
     );
