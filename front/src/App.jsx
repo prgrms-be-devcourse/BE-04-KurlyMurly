@@ -2,6 +2,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {Home, SignUp, Login, Cart, Favorite, Receipt, Support, Products, Category} from './pages';
 import CreateReview from "./pages/CreateReview";
 import ReviewList from "./pages/UserReview";
+import ProductReview from "./pages/ProductReview";
 
 const App = () => {
     return (
@@ -20,6 +21,7 @@ const App = () => {
                 <Route path="/support" element={<Support/>}/>
                 <Route path="/create-review" element={<CreateReview/>}/>
                 <Route path="/review-list" element={<ReviewList/>}/>
+                <Route path="/product-review" element={<ProductReview/>}/>
             </Routes>
         </BrowserRouter>
     );
