@@ -1,5 +1,5 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import {Home, SignUp, Login, Cart, Favorite, Receipt, Support, Products, Category} from './pages';
+import {Home, SignUp, Login, Cart, Favorite, Receipt, Support, Products, Category, Detail} from './pages';
 import CreateReview from "./pages/CreateReview";
 import ReviewList from "./pages/UserReview";
 import ProductReview from "./pages/ProductReview";
@@ -22,6 +22,7 @@ const App = () => {
                 <Route path="/create-review" element={<CreateReview/>}/>
                 <Route path="/review-list" element={<ReviewList/>}/>
                 <Route path="/product-review" element={<ProductReview/>}/>
+                <Route path="/detail" element={<Detail/>}/>
             </Routes>
         </BrowserRouter>
     );
