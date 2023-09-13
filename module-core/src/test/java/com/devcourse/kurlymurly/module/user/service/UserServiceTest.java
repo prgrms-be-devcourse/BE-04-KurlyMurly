@@ -96,7 +96,7 @@ class UserServiceTest {
                 , "male", null, "dd", "경기 구성로");
 
         // Then
-        assertThrows(IllegalArgumentException.class, () -> userService.join(user));
+        assertThrows(KurlyBaseException.class, () -> userService.join(user));
     }
 
     @Test
