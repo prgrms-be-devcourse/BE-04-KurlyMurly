@@ -3,7 +3,7 @@ package com.devcourse.kurlymurly.order;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.web.dto.order.support.OrderSupportCreate;
+import com.devcourse.kurlymurly.web.dto.order.support.CreateOrderSupport;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +29,7 @@ public class OrderSupportController {
     @PostMapping
     public OrderSupport takeOrderSupport(
             @AuthenticationPrincipal User user,
-            @RequestBody @Valid OrderSupportCreate.Request request
+            @RequestBody @Valid CreateOrderSupport.Request request
     ) {
         return orderSupportService.takeOrderSupport(
                 user.getId(),
@@ -48,7 +48,7 @@ public class OrderSupportController {
 
     @PatchMapping("/{id}")
     public OrderSupport updateOrderSupport(@PathVariable Long id,
-                                           @RequestBody @Valid OrderSupportCreate.UpdateRequest request) {
+                                           @RequestBody @Valid CreateOrderSupport.UpdateRequest request) {
         return orderSupportService.updateOrderSupport(id, request.title(), request.content());
     }
 
