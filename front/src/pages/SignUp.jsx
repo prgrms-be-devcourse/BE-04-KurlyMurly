@@ -54,7 +54,7 @@ const SignUp = () => {
   };
 
   const onSignUp = () => {
-    isValidationPassed() ? signUp(inputs) : alert("중복 검사가 모두 완료되지 않았습니다.");
+    isValidationPassed() ? signUp(inputs) : alert('중복 검사가 모두 완료되지 않았습니다.');
   };
 
   return (
@@ -72,7 +72,7 @@ const SignUp = () => {
             maxLength="20"
           />
           <button type="button" onClick={() => validateLoginIdDuplication(loginId)}>
-            { isLoginIdValidated ? '확인완료' : '중복확인' }
+            {isLoginIdValidated ? '확인완료' : '중복확인'}
           </button>
         </div>
         <div>
@@ -116,7 +116,7 @@ const SignUp = () => {
             maxLength="30"
           />
           <button type="button" onClick={() => validateEmailDuplication(email)}>
-            { isEmailValidated ? '확인완료' : '중복확인' }
+            {isEmailValidated ? '확인완료' : '중복확인'}
           </button>
         </div>
         <div>
