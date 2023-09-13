@@ -192,6 +192,14 @@ public class UserService {
         payment.deletePayment();
     }
 
+    public void updatePaymentPassword(Long userId, String payPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
+
+        String encodedPassword = passwordEncoder.encode(payPassword);
+        user.updatePayPassword(encodedPassword);
+    }
+
     @Transactional
     public void addCart(Long id, Long productId, int quantity) {
         productFacade.validateOrderable(productId);

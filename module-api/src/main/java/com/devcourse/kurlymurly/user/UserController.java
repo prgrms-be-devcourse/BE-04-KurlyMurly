@@ -7,6 +7,7 @@ import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
 import com.devcourse.kurlymurly.module.user.service.UserService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
+import com.devcourse.kurlymurly.web.dto.payment.UpdatePayPassword;
 import com.devcourse.kurlymurly.web.dto.product.CreateCart;
 import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
 import com.devcourse.kurlymurly.web.dto.product.UpdateCart;
@@ -245,6 +246,23 @@ public class UserController {
     public KurlyResponse<Void> deletePayment(@AuthenticationPrincipal User user, @PathVariable Long paymentId) {
         userService.deletePayment(user.getId(), paymentId);
 
+        return KurlyResponse.noData();
+    }
+
+    @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 결제 비밀번호 설정 API", responses = {
+            @ApiResponse(responseCode = "200", description = "결제수단을 삭제한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 회원 id값을 조회한 경우")
+    })
+    @PutMapping("/payments/set-password")
+    @ResponseStatus(NO_CONTENT)
+    public KurlyResponse<Void> updatePaymentPassword(
+            @AuthenticationPrincipal User user,
+            @RequestBody @Valid UpdatePayPassword.Request request
+    ) {
+        userService.updatePaymentPassword(user.getId(), request.payPassword());
         return KurlyResponse.noData();
     }
 
