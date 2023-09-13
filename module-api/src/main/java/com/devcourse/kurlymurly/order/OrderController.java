@@ -50,25 +50,9 @@ public class OrderController {
         return orderService.findAllByUserId(userId);
     }
 
-    @PatchMapping("/{id}/processing")
-    public Order updateOrderToProcessing(@PathVariable Long id) {
-        return orderService.updateOrderToProcessing(id);
-    }
-
-    @PatchMapping("/{id}/delivering")
-    public Order updateOrderToDelivering(@PathVariable Long id) {
-        return orderService.updateOrderToDelivering(id);
-    }
-
-    @PatchMapping("/{id}/done")
-    public Order updateOrderToDeliveryDone(@PathVariable Long id) {
-        return orderService.updateOrderToDeliveryDone(id);
-    }
-
     @PatchMapping("/{id}")
     public HttpStatus cancelOrder(@PathVariable Long id) {
-        orderService.cancelOrder(id);
+        orderService.toCancel(id);
         return HttpStatus.OK;
     }
-
 }

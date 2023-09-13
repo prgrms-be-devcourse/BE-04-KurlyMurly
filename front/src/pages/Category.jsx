@@ -19,9 +19,11 @@ function Category() {
     {categoryId: 9, name: '와인/위스키/전통주'},
   ]);
 
-  const goToProducts = (categoryId) => {
+  const navigate =  useNavigate();
 
-  }
+  const goToProducts = (categoryId) => {
+    navigate("/products");
+  };
 
   return (
       <div>
@@ -35,7 +37,7 @@ function Category() {
           {items.map((categories) => (
               <tr key={categories.categoryId} align = "center">
                 <td>{categories.name}</td>
-                <td><button onClick = {goToProducts(categories.categoryId)}>이동</button></td>
+                <td><button onClick = {goToProducts}>이동</button></td>
               </tr>
           ))}
           </tbody>

@@ -83,7 +83,7 @@ const Home = () => {
                         navigate(`/review-list`);
                     }}
                 >
-                    작성 작성한 리뷰 보기
+                    작성한 리뷰 보기
                 </button>
                 <button
                     onClick={() => {
