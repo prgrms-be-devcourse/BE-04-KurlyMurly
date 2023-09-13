@@ -79,6 +79,7 @@ public class OrderController {
     @Operation(description = "유저가 직접 주문을 취소한다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공적으로 주문을 취소한 경우"),
+            @ApiResponse(responseCode = "400", description = "주문 id를 명시하지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 주문일 경우")
     })
     @PatchMapping("/{id}")
