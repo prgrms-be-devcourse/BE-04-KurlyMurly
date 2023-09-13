@@ -52,16 +52,6 @@ public class OrderSupportController {
         return orderSupportService.updateOrderSupport(id, request.title(), request.content());
     }
 
-    @PatchMapping("/{id}/prepare")
-    public OrderSupport changeSupportToPrepare(@PathVariable Long id) {
-        return orderSupportService.updateSupportToPrepare(id);
-    }
-
-    @PatchMapping("/{id}/answer")
-    public OrderSupport changeSupportToDone(@PathVariable Long id) {
-        return orderSupportService.updateSupportToAnswered(id);
-    }
-
     @DeleteMapping("/{id}")
     public void deleteOrderSupport(@PathVariable Long id) {
         orderSupportService.deleteOrderSupport(id);
