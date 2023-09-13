@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @Tag(name = "review", description = "리뷰 API")
@@ -83,7 +82,7 @@ public class ReviewController {
     @Operation(description = "[토큰 필요] 사용자가 작성한 리뷰 조회 API")
     @ApiResponse(responseCode = "200", description = "성공적으로 review를 조회한 경우")
     @ApiResponse(responseCode = "400", description = "review를 조회하기 위한 user_id를 명시하지 않은 경우")
-    @GetMapping("/{userId}")
+    @GetMapping
     @ResponseStatus(OK)
     public KurlyResponse<List<ReviewResponse.Reviewed>> getAllReviewsOnMyPage(
             @AuthenticationPrincipal User user
@@ -98,7 +97,7 @@ public class ReviewController {
     @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     @ApiResponse(responseCode = "404", description = "존재하지 않은 상품 후기")
     @PatchMapping("/{id}")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> updateReviewContent(
             @AuthenticationPrincipal User user,
             @PathVariable Long id,
@@ -114,7 +113,7 @@ public class ReviewController {
     @ApiResponse(responseCode = "400", description = "삭제할 리뷰 id가 명시되지 않은 경우")
     @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     @DeleteMapping("/{id}")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> deleteReview(
             @AuthenticationPrincipal User user,
             @PathVariable Long id
@@ -129,7 +128,7 @@ public class ReviewController {
     @ApiResponse(responseCode = "400", description = "활성화를 위한 id가 넘어오지 않은 경우")
     @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     @PatchMapping("/{reviewId}/likes")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> activeReviewLike(
             @AuthenticationPrincipal User user,
             @PathVariable Long reviewId
@@ -144,7 +143,7 @@ public class ReviewController {
     @ApiResponse(responseCode = "400", description = "취소를 위한 id가 넘어오지 않은 경우")
     @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     @DeleteMapping("/{reviewId}/likes")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> cancelReviewLike(
             @AuthenticationPrincipal User user,
             @PathVariable Long reviewId

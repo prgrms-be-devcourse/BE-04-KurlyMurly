@@ -1,76 +1,85 @@
-import { useNavigate } from "react-router-dom";
-import { setStorage } from "../utils/browserStroage";
-import JwtInterceptor from "./ApiController";
+import { useNavigate } from 'react-router-dom';
+import { setToken } from '../utils/browserStroage';
+import JwtInterceptor from './ApiController';
 
 const Auth = () => {
-    const { instance } = JwtInterceptor();
-    const navigate = useNavigate();
+  const { instance } = JwtInterceptor();
+  const navigate = useNavigate();
 
-    const checkValidateLoginId = (loginId) => {
-        handlingAxiosError(async () => {
-            const res = await instance.post('/users/login-id', {
-                loginId: loginId,
-            });
-            res.data.success ? alert("중복된 아이디입니다!") : alert("사용 가능합니다.");
-        });
-    };
-
-    const checkValidateEmail = (email) => {
-        handlingAxiosError(async () => {
-            const res = await instance.post('/users/check-email', {
-                email: email,
-            });
-            res.data.success ? alert("중복된 이메일입니다!") : alert("사용 가능합니다.");
-        });
-    };
-
-    const signUp = (joinData) => {
-        handlingAxiosError(async () => {
-            const res = await instance.post('/users', {
-                loginId: joinData.loginId,
-                password: joinData.password,
-                checkPassword: joinData.checkPassword,
-                name: joinData.name,
-                email: joinData.email,
-                phoneNumber: joinData.phoneNumber,
-                sex: joinData.sex,
-                birth: joinData.birth,
-                recommender: joinData.recommender,
-                roadAddress: joinData.roadAddress,
-            });
-
-            if (res.status === 200) {
-                alert("회원가입에 성공했습니다! \n로그인 페이지로 이동합니다.");
-                navigate("/login");
-            }
-        });
-    };
-
-    const login = (loginData) => {
-        handlingAxiosError(async () => {
-            const res = await instance.post('/users/login', {
-                loginId: loginData.loginId,
-                password: loginData.password,
-            });
-            setStorage("JWT", res.data);
-            navigate("/");
-        });
-    };
-
-    return {
-        checkValidateLoginId,
-        checkValidateEmail,
-        signUp,
-        login
-    }
-}
-
-const handlingAxiosError = (callBack) => {
+  const checkDuplicationId = async (loginId, setIsIdValidated) => {
     try {
-        return callBack();
+      const res = await instance.post(`/users/login-id`, {
+        loginId: loginId,
+      });
+      setIsIdValidated(!res.data.success);
+      if (!res.data.success) alert('사용가능한 아이디입니다.');
+      else alert('이미 사용 중인 아이디입니다.');
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
-}
+  };
+
+  const checkDuplicationEmail = async (email, setIsEmailValidated) => {
+    try {
+      const res = await instance.post('/users/check-email', {
+        email: email,
+      });
+      setIsEmailValidated(!res.data.success);
+      if (!res.data.success) alert('사용가능한 이메일입니다.');
+      else alert('이미 사용 중인 이메일입니다.');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const signUp = async (joinData) => {
+    try {
+      const res = await instance.post(`/users`, {
+        loginId: joinData.loginId,
+        password: joinData.password,
+        checkPassword: joinData.checkPassword,
+        name: joinData.name,
+        email: joinData.email,
+        phoneNumber: joinData.phoneNumber,
+        sex: joinData.sex,
+        birth: joinData.birth,
+        recommender: joinData.recommender,
+        roadAddress: joinData.roadAddress,
+      });
+
+      if (res.status === 200) {
+        alert('회원가입에 성공했습니다! \n로그인 페이지로 이동합니다.');
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const login = async (loginData) => {
+    try {
+      const res = await instance.post(`/users/login`, {
+        loginId: loginData.loginId,
+        password: loginData.password,
+      });
+
+      if (res.status === 200) {
+        setToken(res.data.data);
+        alert('로그인에 성공했습니다!\n홈으로 이동합니다.');
+        navigate('/');
+      }
+    } catch (error) {
+      alert('로그인에 실패했습니다!\n다시 시도해주세요.');
+      console.error(error);
+    }
+  };
+
+  return {
+    checkDuplicationId,
+    checkDuplicationEmail,
+    signUp,
+    login,
+  };
+};
 
 export default Auth;

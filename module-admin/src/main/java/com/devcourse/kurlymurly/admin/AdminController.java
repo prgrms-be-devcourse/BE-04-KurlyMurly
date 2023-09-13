@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @Tag(name = "admin", description = "관리자 API")
@@ -99,7 +98,7 @@ public class AdminController {
         @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PatchMapping("/reviews/{reviewId}/ban")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> updateToBanned(
             @AuthenticationPrincipal User admin,
             @PathVariable Long reviewId
@@ -116,7 +115,7 @@ public class AdminController {
         @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PatchMapping("/reviews/{reviewId}/best")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> updateToBest(
             @AuthenticationPrincipal User admin,
             @PathVariable Long reviewId
@@ -133,7 +132,7 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PatchMapping("/orders/{orderId}/processing")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> changeToProcessing(
             @AuthenticationPrincipal User admin,
             @PathVariable Long orderId
@@ -150,7 +149,7 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PostMapping("/orders/{orderId}/start-delivery")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> changeToDelivering(
             @AuthenticationPrincipal User admin,
             @PathVariable Long orderId
@@ -167,7 +166,7 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PostMapping("/orders/{orderId}/done")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> changeToDelivered(
             @AuthenticationPrincipal User admin,
             @PathVariable Long orderId
@@ -184,7 +183,7 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PostMapping("/orders/{orderId}/cancel")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> changeToDone(
             @AuthenticationPrincipal User admin,
             @PathVariable Long orderId
@@ -203,7 +202,7 @@ public class AdminController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PostMapping("/orderSupports/{orderSupportId}/answer")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> changeToAnswered(
             @AuthenticationPrincipal User admin,
             @PathVariable Long orderSupportId

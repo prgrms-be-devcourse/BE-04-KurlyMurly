@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Auth } from '../apis';
 
 const SignUp = () => {
-  const { checkValidateLoginId, checkValidateEmail, signUp } = Auth();
+  const { checkDuplicationId, checkDuplicationEmail, signUp } = Auth();
   const [inputs, setInputs] = useState({
     loginId: '',
     password: '',
@@ -16,7 +16,7 @@ const SignUp = () => {
     roadAddress: '',
   });
 
-  const [isLoginIdValidated, setIsLoginIdValidated] = useState(false);
+  const [isIdValidated, setIsIdValidated] = useState(false);
   const [isEmailValidated, setIsEmailValidated] = useState(false);
 
   const {
@@ -39,22 +39,12 @@ const SignUp = () => {
     }));
   };
 
-  const validateLoginIdDuplication = (loginId) => {
-    checkValidateLoginId(loginId);
-    setIsLoginIdValidated(true);
-  };
-
-  const validateEmailDuplication = (email) => {
-    checkValidateEmail(email);
-    setIsEmailValidated(true);
-  };
-
   const isValidationPassed = () => {
-    return isLoginIdValidated && isEmailValidated;
+    return isIdValidated && isEmailValidated;
   };
 
   const onSignUp = () => {
-    isValidationPassed() ? signUp(inputs) : alert("중복 검사가 모두 완료되지 않았습니다.");
+    isValidationPassed() ? signUp(inputs) : alert('중복 검사가 모두 완료되지 않았습니다.');
   };
 
   return (
@@ -71,8 +61,8 @@ const SignUp = () => {
             placeholder="아이디를 입력해주세요"
             maxLength="20"
           />
-          <button type="button" onClick={() => validateLoginIdDuplication(loginId)}>
-            { isLoginIdValidated ? '확인완료' : '중복확인' }
+          <button type="button" onClick={() => checkDuplicationId(loginId, setIsIdValidated)}>
+            {isIdValidated ? '확인완료' : '중복확인'}
           </button>
         </div>
         <div>
@@ -115,8 +105,8 @@ const SignUp = () => {
             placeholder="예: marketkurly@kurly.com"
             maxLength="30"
           />
-          <button type="button" onClick={() => validateEmailDuplication(email)}>
-            { isEmailValidated ? '확인완료' : '중복확인' }
+          <button type="button" onClick={() => checkDuplicationEmail(email, setIsEmailValidated)}>
+            {isEmailValidated ? '확인완료' : '중복확인'}
           </button>
         </div>
         <div>

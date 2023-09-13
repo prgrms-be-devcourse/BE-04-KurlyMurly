@@ -24,5 +24,6 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.24.2'
 }
 
-jar.enabled=false
-bootJar.enabled = false
+bootJar.enabled=false
+jar.enabled=true
+

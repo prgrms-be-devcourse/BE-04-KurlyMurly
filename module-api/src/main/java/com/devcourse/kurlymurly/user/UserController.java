@@ -21,7 +21,6 @@ import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import com.devcourse.kurlymurly.web.dto.user.shipping.UpdateAddress;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,7 +36,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @Tag(name = "user", description = "유저 API")
@@ -115,7 +113,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "해당 id의 중복검사를 진행"),
     })
     @PostMapping("/login-id")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> checkId(@RequestBody @Valid CheckId.Request request) {
         boolean result = userService.checkId(request.loginId());
         return KurlyResponse.ok(result);
@@ -126,7 +124,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "해당 이메일에 대한 중복검사를 진행")
     })
     @PostMapping("/check-email")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> checkEmail(@RequestBody @Valid CheckEmail.Request request) {
         boolean result = userService.checkEmail(request.email());
         return KurlyResponse.ok(result);
@@ -139,7 +137,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PostMapping("/address")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> addAddress(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid AddAddress.Request request
@@ -169,7 +167,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
     })
     @PutMapping("/addresses")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> updateAddress(@AuthenticationPrincipal User user, @RequestBody UpdateAddress.Request request) {
         userService.updateAddress(user.getId(), request.addressId(), request.description(), request.receiver(), request.contact());
         return KurlyResponse.noData();
@@ -183,7 +181,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
     })
     @DeleteMapping("/addresses/{addressId}")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> deleteAddress(@AuthenticationPrincipal User user, @PathVariable Long addressId) {
         userService.deleteAddress(user.getId(), addressId);
         return KurlyResponse.noData();
@@ -196,7 +194,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PostMapping("/register-credit")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> addCredit(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid RegisterPayment.creditRequest request
@@ -212,7 +210,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PostMapping("/register-easy")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> addEasyPay(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid RegisterPayment.easyPayRequest request
@@ -263,7 +261,7 @@ public class UserController {
 
     @Tag(name = "user")
     @DeleteMapping("/carts/{cartId}")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> removeProduct(
             @AuthenticationPrincipal User user,
             @PathVariable Long cartId
@@ -274,7 +272,7 @@ public class UserController {
 
     @Tag(name = "user")
     @DeleteMapping("/carts")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> removeCartItemList(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid RemoveCart.Request removeProductList
@@ -285,7 +283,7 @@ public class UserController {
 
     @Tag(name = "user")
     @PutMapping("/carts")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> changeItemQuantity(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid UpdateCart.Request updateCart

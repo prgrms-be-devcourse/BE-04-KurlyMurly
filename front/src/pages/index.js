@@ -1,10 +1,12 @@
 export { default as Home } from './Home';
 export { default as SignUp } from './SignUp';
 export { default as Login } from './Login';
+export { default as MyPage } from './MyPage';
 export { default as Cart } from './Cart';
 export { default as Favorite } from './Favorite';
 export { default as Receipt } from './Receipt';
 export { default as Support } from './Support';
 export { default as Products } from './Products';
 export { default as Category } from './Category';
+export { default as MyReview } from './MyReview';
 export { default as Detail } from './Detail';

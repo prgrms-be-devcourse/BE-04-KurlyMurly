@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 function Category() {
+  const navigate =  useNavigate();
   const [categories, setCategories] = useState({
     categoryId : '',
     name : '',
@@ -18,8 +19,6 @@ function Category() {
     {categoryId: 8, name: '생수/음료/우유/커피'},
     {categoryId: 9, name: '와인/위스키/전통주'},
   ]);
-
-  const navigate =  useNavigate();
 
   const goToProducts = (categoryId) => {
     navigate("/products");
