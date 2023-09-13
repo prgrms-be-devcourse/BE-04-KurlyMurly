@@ -149,6 +149,13 @@ public class UserService {
         shipping.update(description, receiver, contact);
     }
 
+    public void updateAddressInfo(Long userId, Long addressId, String receiver, String contact, String receiveArea,
+                                  String entrancePassword, String alertTime) {
+        Shipping shipping = findAddress(userId, addressId);
+
+        shipping.updateInfo(receiver, contact, receiveArea, entrancePassword, alertTime);
+    }
+
     public void deleteAddress(Long userId, Long addressId) {
         Shipping shipping = findAddress(userId, addressId);
 

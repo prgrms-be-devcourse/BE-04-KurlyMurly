@@ -178,6 +178,21 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("배송 요청사항 변경 테스트")
+    void update_address_info() {
+        // Given
+        Shipping shipping = new Shipping(1L, "컬리단길", true);
+
+        doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
+
+        // When
+        userService.updateAddressInfo(1L, 1L, "세한", "01000000000","DOOR","1234","ALWAYS");
+
+        // Then
+        then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
+    }
+
+    @Test
     @DisplayName("존재하지 않는 주소를 변경할 경우 예외를 던짐")
     void update_address_byAddressNotFound() {
         // Given
