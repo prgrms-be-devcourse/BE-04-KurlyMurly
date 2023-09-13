@@ -15,6 +15,7 @@ const App = () => {
                 <Route path="/favorites" element={<Favorite/>}/>
                 <Route path="/new-products" element={<Products/>}/>
                 <Route path="/best-products" element={<Products/>}/>
+                <Route path="/products" element={<Products/>}/>
                 <Route path="/favorites" element={<Favorite/>}/>
                 <Route path="/receipt" element={<Receipt/>}/>
                 <Route path="/categories" element={<Category/>}/>

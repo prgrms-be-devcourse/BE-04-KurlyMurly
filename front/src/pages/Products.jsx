@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {useNavigate} from "react-router-dom";
 
 function Products() {
     const [product, setProduct] = useState({
@@ -17,6 +18,11 @@ function Products() {
         {id: 4, name: '[솔가원] 한돈 떡갈비', deliveryType: '샛별배송', description: '가정에서 즐기는 맛집 떡갈비', price: 7900, likes: 17},
     ]);
 
+    const navigate =  useNavigate();
+
+    const goToDetail = (categoryId) => {
+        navigate("/detail");
+    };
 
     return (
         <div>
@@ -24,11 +30,12 @@ function Products() {
             {items.map((product) => (
                 <div key = {product.id}>
                   <p><img src='' alt='상품 사진'/></p>
-                  <p><button>장바구니 담기</button></p>
                   <p>{product.name}</p>
                   <p>{product.description}</p>
                   <p>{product.price}원</p>
                   <p>reviews: {product.likes}</p>
+                  <p><button>장바구니 담기</button></p>
+                  <p><button onClick={goToDetail}>상품 보러가기</button></p>
                   <p><hr/></p>
         </div>
         ))}
