@@ -23,7 +23,7 @@ const CreateReview = () => {
 
   return (
     <div>
-      <h1>리뷰 작성</h1>
+      <h3>리뷰 작성</h3>
       <hr></hr>
       <br></br>
       <form onSubmit={handleSubmit}>

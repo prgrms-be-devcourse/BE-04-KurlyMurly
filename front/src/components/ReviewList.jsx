@@ -1,5 +1,15 @@
+import { useEffect, useState } from 'react';
+import { MyPage } from '../apis';
+
 const ReviewList = () => {
-  const reviews = [
+  const [reviews, setReviews] = useState([]);
+  const { loadAllMyReviews } = MyPage();
+
+  useEffect(() => {
+    loadAllMyReviews(setReviews);
+  }, []);
+
+  const dummies = [
     {
       productId: 1,
       productName: '[숭의가든] 소불고기',
@@ -28,7 +38,7 @@ const ReviewList = () => {
 
   return (
     <div>
-      <h1>작성한 후기</h1>
+      <h3>작성한 후기</h3>
       <ul>
         {reviews.map((review) => (
           <li key={review.id}>

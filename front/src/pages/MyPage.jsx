@@ -9,7 +9,7 @@ const MyPage = () => {
       <h1>My Page</h1>
       <button
         onClick={() => {
-          navigate(`/my-review`);
+          navigate(`/my-page/review`);
         }}
       >
         리뷰 페이지

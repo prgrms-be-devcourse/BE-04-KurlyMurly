@@ -7,6 +7,7 @@ import {
   MyPage,
   Favorite,
   Receipt,
+  MyReview,
   Support,
   Products,
   Category,
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/my-page" element={<MyPage />} />
+        <Route path="/my-page/review" element={<MyReview />} />
         <Route path="/favorites" element={<Favorite />} />
         <Route path="/new-products" element={<Products />} />
         <Route path="/best-products" element={<Products />} />
