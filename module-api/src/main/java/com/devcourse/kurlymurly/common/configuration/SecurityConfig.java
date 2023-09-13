@@ -18,9 +18,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import static com.devcourse.kurlymurly.module.user.domain.User.Role.ROLE_ADMIN;
-import static com.devcourse.kurlymurly.module.user.domain.User.Role.ROLE_USER;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -65,9 +62,9 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(requests ->
-                        requests.requestMatchers(restrictedUserUrls).hasAuthority(ROLE_USER.name())
-                                .requestMatchers(restrictedAdminUrls).hasAuthority((ROLE_ADMIN.name()))
-                                .anyRequest().permitAll()
+//                        requests.requestMatchers(restrictedUserUrls).hasAuthority(ROLE_USER.name())
+//                                .requestMatchers(restrictedAdminUrls).hasAuthority((ROLE_ADMIN.name()))
+                        requests.anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

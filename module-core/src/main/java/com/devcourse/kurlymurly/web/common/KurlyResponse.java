@@ -6,15 +6,15 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({"success", "data"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class KurlyResponse<T> {
-    private final boolean success;
+    private final Boolean success;
     private final T data;
 
-    KurlyResponse(boolean success, T data) {
+    KurlyResponse(Boolean success, T data) {
         this.success = success;
         this.data = data;
     }
 
-    public static KurlyResponse<Void> ok(boolean success) {
+    public static KurlyResponse<Void> ok(Boolean success) {
         return new KurlyResponse<>(success, null);
     }
 
@@ -24,5 +24,13 @@ public class KurlyResponse<T> {
 
     public static KurlyResponse<Void> noData() {
         return new KurlyResponse<>(true, null);
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public T getData() {
+        return data;
     }
 }

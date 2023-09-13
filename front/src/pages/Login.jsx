@@ -35,7 +35,7 @@ const Login = () => {
         <h4>비밀번호</h4>
         <input name="password" value={password} onChange={onInputChange} type="password" />
       </div>
-      <button onClick={() => attemptLogin}>로그인</button>
+      <button onClick={attemptLogin}>로그인</button>
       <button
         onClick={() => {
           navigate(`/sign-up`);

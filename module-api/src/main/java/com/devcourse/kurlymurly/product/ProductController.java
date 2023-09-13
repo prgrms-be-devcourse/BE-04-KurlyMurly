@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @Tag(name = "product", description = "상품 API")
@@ -67,7 +66,7 @@ public class ProductController {
     @ApiResponse(responseCode = "204", description = "성공적으로 찜 목록에 등록했습니다.")
     @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     @PostMapping("/{id}/favorite")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> favoriteProduct(
             @AuthenticationPrincipal User user,
             @PathVariable Long id
@@ -99,7 +98,7 @@ public class ProductController {
     @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     @ApiResponse(responseCode = "404", description = "좋아요를 한 적이 없습니다.")
     @DeleteMapping("/{id}/favorite")
-    @ResponseStatus(NO_CONTENT)
+    @ResponseStatus(OK)
     public KurlyResponse<Void> cancelFavorite(
             @AuthenticationPrincipal User user,
             @PathVariable Long id
