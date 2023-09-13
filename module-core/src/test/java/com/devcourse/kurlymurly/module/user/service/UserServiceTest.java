@@ -12,6 +12,7 @@ import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
+import com.devcourse.kurlymurly.web.dto.payment.UpdatePayPassword;
 import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
@@ -274,6 +275,36 @@ class UserServiceTest {
 
         // Then
         assertThrows(KurlyBaseException.class, () -> userService.deletePayment(1L, 1L));
+    }
+
+    @Test
+    @DisplayName("결제 비밀번호 설정")
+    void update_pay_password() {
+        // Given
+        User user = new User("kurly", "kurly1234", "murly4321", "kyrly@murly.com"
+                , null, "01094828438");
+
+        UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
+
+        doReturn(Optional.of(user)).when(userRepository).findById(any());
+
+        // When
+        userService.updatePaymentPassword(1L, request.payPassword());
+
+        // Then
+        then(userRepository).should(times(1)).findById(any());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 유저를 조회할 경우 예외를 던짐")
+    void update_pay_password_notFoundUser() {
+        // Given
+        UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
+
+        doReturn(Optional.empty()).when(userRepository).findById(any());
+
+        // When , Then
+        assertThrows(KurlyBaseException.class, () -> userService.updatePaymentPassword(1L, request.payPassword()));
     }
 
     @Test
