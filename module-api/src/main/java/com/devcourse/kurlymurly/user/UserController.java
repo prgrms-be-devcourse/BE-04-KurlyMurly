@@ -183,7 +183,7 @@ public class UserController {
     })
     @PutMapping("/addresses/info")
     @ResponseStatus(NO_CONTENT)
-    public KurlyResponse<Void> updateAddressInfo(@AuthenticationPrincipal User user, @RequestBody UpdateAddress.InfoRequest request) {
+    public KurlyResponse<Void> updateAddressInfo(@AuthenticationPrincipal User user, @RequestBody @Valid UpdateAddress.InfoRequest request) {
         userService.updateAddressInfo(user.getId(), request.addressId(), request.receiver(), request.contact(), request.receiveArea().name(), request.entrancePassword(), request.messageAlertTime().name());
         return KurlyResponse.noData();
     }
