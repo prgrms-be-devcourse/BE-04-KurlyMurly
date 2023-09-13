@@ -3,6 +3,7 @@ import {Home, SignUp, Login, Cart, Favorite, Receipt, Support, Products, Categor
 import CreateReview from "./pages/CreateReview";
 import ReviewList from "./pages/UserReview";
 import ProductReview from "./pages/ProductReview";
+import products from "./pages/Products";
 
 const App = () => {
     return (
@@ -24,7 +25,10 @@ const App = () => {
                 <Route path="/review-list" element={<ReviewList/>}/>
                 <Route path="/product-review" element={<ProductReview/>}/>
                 <Route path="/detail" element={<Detail/>}/>
+
+                <Route path="/detail/:id" element={products}/>
             </Routes>
+
         </BrowserRouter>
     );
 };

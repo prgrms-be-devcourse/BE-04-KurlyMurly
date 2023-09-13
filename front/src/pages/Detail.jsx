@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function Detail() {
     const [detail, setDetail] = useState({
@@ -133,8 +134,27 @@ function Detail() {
         setReviews(updateReview);
     };
 
+    const location = useLocation();
+
+    const productId = location.state.id;
+    const deliveryType = location.state.deliveryType;
+    const productName = location.state.name;
+    const productDescription = location.state.description;
+    const price = location.state.price;
+    const likes = location.state.likes;
+
     return (
         <div>
+            <div>
+                <p>상품아이디: {productId}</p>
+                <p>배송타입: {deliveryType}</p>
+                <p>상품이름: {productName}</p>
+                <p>상품설명: {productDescription}</p>
+                <p>상품가격: {price}</p>
+                <p>상품후기갯수: {likes}</p>
+            </div>
+
+
             <h1>Kurly-Murly</h1>
             {items.map((detail) => (
                 <div key = {detail.id}>

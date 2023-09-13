@@ -20,8 +20,17 @@ function Products() {
 
     const navigate =  useNavigate();
 
-    const goToDetail = (categoryId) => {
-        navigate("/detail");
+    const goToDetail = () => {
+        navigate("/detail",
+            {state: {
+                id: 1,
+                deliveryType: '샛별배송',
+                name: '제수용 배 2kg (3입)',
+                description: '큼직하고 탐스러운 배',
+                price: 15900,
+                likes: 211
+            }
+            });
     };
 
     return (
