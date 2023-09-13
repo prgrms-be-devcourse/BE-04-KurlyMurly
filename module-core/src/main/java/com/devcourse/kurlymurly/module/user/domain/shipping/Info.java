@@ -7,9 +7,9 @@ import jakarta.persistence.Enumerated;
 
 @Embeddable
 public class Info {
-    enum Area { DOOR, OFFICE, LOCKER, ETC }
+    public enum Area { DOOR, OFFICE, LOCKER, ETC }
 
-    enum AlertTime { ALWAYS, AFTER_7_AM }
+    public enum AlertTime { ALWAYS, AFTER_7_AM }
 
     @Column(nullable = false, length = 30)
     private String receiver;
