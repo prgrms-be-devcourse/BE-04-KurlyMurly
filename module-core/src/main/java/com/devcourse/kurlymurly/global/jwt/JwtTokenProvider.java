@@ -2,6 +2,7 @@ package com.devcourse.kurlymurly.global.jwt;
 
 import com.devcourse.kurlymurly.global.exception.ErrorCode;
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.global.service.CustomUserDetailService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -15,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -27,14 +27,17 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
+    private static final long expirationHours = 30 * 60 * 1000L;
+
     private final Key key;
-    private final long expirationHours = 30 * 60 * 1000L;
+    private final CustomUserDetailService userDetailService;
 
     public JwtTokenProvider(
-            @Value("${secret-key}") String secretKey
-    ) {
+            @Value("${secret-key}") String secretKey,
+            CustomUserDetailService userDetailService) {
         byte[] secretByteKey = DatatypeConverter.parseBase64Binary(secretKey);
         this.key = Keys.hmacShaKeyFor(secretByteKey);
+        this.userDetailService = userDetailService;
     }
 
     public String createToken(Authentication authentication) {
@@ -52,21 +55,23 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaims(accessToken);
-        String[] authority = getAuthority(claims);
+        String username = extractUsername(claims);
+        Collection<? extends GrantedAuthority> authorities = getAuthority(claims);
 
-        Collection<? extends GrantedAuthority> authorities = Arrays.stream(authority)
-                .map(SimpleGrantedAuthority::new)
-                .toList();
-
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        UserDetails user = userDetailService.loadUserByUsername(username);
+        return new UsernamePasswordAuthenticationToken(user, null, authorities);
     }
 
-    private String[] getAuthority(Claims claims) {
+    private String extractUsername(Claims claims) {
+        return claims.getSubject();
+    }
+
+    private Collection<? extends GrantedAuthority> getAuthority(Claims claims) {
         try {
-            String[] authority = claims.get("authority").toString().split(",");
-            return authority;
+            String[] authorities = claims.get("authority").toString().split(",");
+            return Arrays.stream(authorities)
+                    .map(SimpleGrantedAuthority::new)
+                    .toList();
         } catch (KurlyBaseException e) {
             throw new KurlyBaseException(ErrorCode.NOT_AUTHORIZED_TOKEN);
         }
