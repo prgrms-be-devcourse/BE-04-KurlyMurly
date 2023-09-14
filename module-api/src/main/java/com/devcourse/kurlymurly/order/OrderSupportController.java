@@ -35,8 +35,7 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "[토큰 필요] 1:1 문의를 생성한다.")
-    @ApiResponses({
+    @Operation(description = "[토큰 필요] 1:1 문의를 생성한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 생성한 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
@@ -44,7 +43,7 @@ public class OrderSupportController {
     @ResponseStatus(OK)
     public OrderSupport takeOrderSupport(
             @AuthenticationPrincipal User user,
-            @RequestBody @Valid OrderSupportCreate.Request request
+            @RequestBody @Valid CreateOrderSupport.Request request
     ) {
         return orderSupportService.takeOrderSupport(
                 user.getId(),
@@ -57,8 +56,7 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "[토큰 필요] 해당 유저의 1:1 문의 내역을 조회한다.")
-    @ApiResponses({
+    @Operation(description = "[토큰 필요] 해당 유저의 1:1 문의 내역을 조회한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의 내역을 조회한 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
@@ -69,8 +67,8 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "작성한 1:1 문의를 수정한다.")
-    @ApiResponses({
+
+    @Operation(description = "작성한 1:1 문의를 수정한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "1:1문의 id를 명시하지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우")
@@ -85,8 +83,7 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "작성한 1:1 문의를 삭제한다.")
-    @ApiResponses({
+    @Operation(description = "작성한 1:1 문의를 삭제한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "1:1문의 id를 명시하지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우")
