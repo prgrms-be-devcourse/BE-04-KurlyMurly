@@ -3,7 +3,8 @@ package com.devcourse.kurlymurly.module.orderSupport.service;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupportRepository;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
-import com.devcourse.kurlymurly.web.dto.order.support.OrderSupportCreate;
+import com.devcourse.kurlymurly.web.dto.order.support.AnswerOrderSupport;
+import com.devcourse.kurlymurly.web.dto.order.support.CreateOrderSupport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,13 +29,13 @@ class OrderSupportServiceTest {
     @Mock
     private OrderSupportRepository orderSupportRepository;
 
-    private static OrderSupportCreate.Request request;
+    private static CreateOrderSupport.Request request;
 
     private final Long userId = 1L;
 
-    private OrderSupport createOrderSupportEntity(OrderSupportCreate.Request request) {
+    private OrderSupport createOrderSupportEntity(CreateOrderSupport.Request request) {
         return new OrderSupport(userId, request.orderId(), request.orderNumber(),
-                    request.type(), request.title(), request.content());
+                request.type(), request.title(), request.content());
     }
 
     private OrderSupport takeOrderSupportService(OrderSupport orderSupport) {
@@ -52,7 +53,7 @@ class OrderSupportServiceTest {
 
     @BeforeEach
     void setUp() {
-        request = new OrderSupportCreate.Request(
+        request = new CreateOrderSupport.Request(
                 1L,
                 "1234456789012",
                 OrderSupport.Type.ORDER,
@@ -130,17 +131,21 @@ class OrderSupportServiceTest {
     }
 
     @Test
-    @DisplayName("문의를 답변완료 상태로 변경한다")
+    @DisplayName("[관리자] 1:1 문의를 답변 처리한다.")
     void updateSupportToDone_test() {
         // given
         OrderSupport orderSupport = createOrderSupportEntity(request);
+        AnswerOrderSupport.Request answerRequest = new AnswerOrderSupport.Request(
+                1L,
+                "문의해 주셔서 감사합니다. 해당 문의에 대한 답변입니다."
+        );
 
         // mocking
         given(orderSupportRepository.findById(any())).willReturn(Optional.of(orderSupport));
 
         // when
         OrderSupport entity = takeOrderSupportService(orderSupport);
-        orderSupportService.updateSupportToAnswered(entity.getId());
+        orderSupportService.answered(1L, answerRequest.content());
 
         // then
         Assertions.assertEquals("ANSWERED", entity.getStatus().name());
@@ -170,7 +175,7 @@ class OrderSupportServiceTest {
         OrderSupport orderSupport = createOrderSupportEntity(request);
         String title = "updatedTitle";
         String content = "updatedContent";
-        OrderSupportCreate.UpdateRequest updateRequest = new OrderSupportCreate.UpdateRequest(title, content);
+        CreateOrderSupport.UpdateRequest updateRequest = new CreateOrderSupport.UpdateRequest(title, content);
 
         // mocking
         given(orderSupportRepository.findById(any())).willReturn(Optional.of(orderSupport));

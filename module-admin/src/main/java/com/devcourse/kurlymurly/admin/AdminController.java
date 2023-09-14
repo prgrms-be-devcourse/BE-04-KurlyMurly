@@ -6,6 +6,7 @@ import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.product.service.ReviewService;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
+import com.devcourse.kurlymurly.web.dto.order.support.AnswerOrderSupport;
 import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -76,9 +77,9 @@ public class AdminController {
     @Tag(name = "admin")
     @Operation(description = "[관리자 토큰 필요] 상품을 삭제한다.")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "성공적으로 상품을 삭제했습니다."),
-        @ApiResponse(responseCode = "401", description = "권한이 없는 토큰이거나 토큰을 보내지 않은 경우"),
-        @ApiResponse(responseCode = "404", description = "존재하지 않는 상품입니다.")
+            @ApiResponse(responseCode = "200", description = "성공적으로 상품을 삭제했습니다."),
+            @ApiResponse(responseCode = "401", description = "권한이 없는 토큰이거나 토큰을 보내지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 상품입니다.")
     })
     @DeleteMapping("/products/{productId}")
     @ResponseStatus(OK)
@@ -93,9 +94,9 @@ public class AdminController {
     @Tag(name = "admin")
     @Operation(description = "[관리자 토큰 필요] BANNED 리뷰로 변환 API")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "review 상태를 BANNED로 변경한 경우"),
-        @ApiResponse(responseCode = "400", description = "리뷰 id가 명시되지 않은 경우"),
-        @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+            @ApiResponse(responseCode = "200", description = "review 상태를 BANNED로 변경한 경우"),
+            @ApiResponse(responseCode = "400", description = "리뷰 id가 명시되지 않은 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PatchMapping("/reviews/{reviewId}/ban")
     @ResponseStatus(OK)
@@ -110,9 +111,9 @@ public class AdminController {
     @Tag(name = "admin")
     @Operation(description = "[관리자 토큰 필요] BEST 리뷰로 변환 API")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "review 상태를 BEST로 변경한 경우"),
-        @ApiResponse(responseCode = "400", description = "리뷰 id가 명시되지 않은 경우"),
-        @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+            @ApiResponse(responseCode = "200", description = "review 상태를 BEST로 변경한 경우"),
+            @ApiResponse(responseCode = "400", description = "리뷰 id가 명시되지 않은 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PatchMapping("/reviews/{reviewId}/best")
     @ResponseStatus(OK)
@@ -192,22 +193,21 @@ public class AdminController {
         return KurlyResponse.noData();
     }
 
-
-    // TODO: 답변 달아주는 API와 합치기
     @Tag(name = "admin")
-    @Operation(description = "[관리자 토큰 필요] 1:1 문의 상태를 답변 완료로 변환 API")
+    @Operation(description = "[관리자 토큰 필요] 1:1 문의 답변 처리 API")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "orderSupport 상태를 ANSWERED로 변경한 경우"),
+            @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의에 답변 해준 경우"),
             @ApiResponse(responseCode = "400", description = "1:1 문의 id가 명시되지 않은 경우"),
-            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+            @ApiResponse(responseCode = "401", description = "권한이 없는 토큰이거나 토큰을 보내지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의인 경우"),
     })
-    @PostMapping("/orderSupports/{orderSupportId}/answer")
+    @PostMapping("/orderSupports/answer")
     @ResponseStatus(OK)
     public KurlyResponse<Void> changeToAnswered(
             @AuthenticationPrincipal User admin,
-            @PathVariable Long orderSupportId
+            @RequestBody @Valid AnswerOrderSupport.Request answerRequest
     ) {
-        orderSupportService.updateSupportToAnswered(orderSupportId);
+        orderSupportService.answered(answerRequest.orderSupportId(), answerRequest.content());
         return KurlyResponse.noData();
     }
 }

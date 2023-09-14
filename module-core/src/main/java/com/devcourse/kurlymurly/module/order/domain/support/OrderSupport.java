@@ -44,6 +44,9 @@ public class OrderSupport extends BaseEntity {
     @Column(nullable = false, columnDefinition = "text")
     private String content;
 
+    @Column(nullable = true)
+    private String answerContent;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private Status status;
@@ -66,7 +69,8 @@ public class OrderSupport extends BaseEntity {
         this.status = Status.PREPARE;
     }
 
-    public void toAnsweredSupport() {
+    public void toAnsweredSupport(String answerContent) {
+        this.answerContent = answerContent;
         this.status = Status.ANSWERED;
     }
 

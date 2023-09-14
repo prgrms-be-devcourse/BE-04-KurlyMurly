@@ -61,14 +61,14 @@ public class OrderSupportService {
     }
 
     @Transactional
-    public void updateSupportToAnswered(Long id) {
-        OrderSupport orderSupport = findById(id);
-        orderSupport.toAnsweredSupport();
-    }
-
-    @Transactional
     public void deleteOrderSupport(Long id) {
         OrderSupport orderSupport = findById(id);
         orderSupport.deleteSupport();
+    }
+
+    @Transactional
+    public void answered(Long id, String answerContent) {
+        OrderSupport orderSupport = findById(id);
+        orderSupport.toAnsweredSupport(answerContent);
     }
 }
