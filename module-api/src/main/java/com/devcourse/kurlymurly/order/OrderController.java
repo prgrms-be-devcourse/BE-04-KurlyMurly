@@ -7,10 +7,8 @@ import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -36,8 +34,7 @@ public class OrderController {
     }
 
     @Tag(name = "order")
-    @Operation(description = "[토큰 필요] 유저의 주문을 생성한다.")
-    @ApiResponses({
+    @Operation(description = "[토큰 필요] 유저의 주문을 생성한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 주문을 생성한 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
@@ -52,8 +49,7 @@ public class OrderController {
     }
 
     @Tag(name = "order")
-    @Operation(description = "주문 id로 주문을 검색한다.")
-    @ApiResponses({
+    @Operation(description = "주문 id로 주문을 검색한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 주문을 조회한 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 주문일 경우")
     })
@@ -64,8 +60,7 @@ public class OrderController {
     }
 
     @Tag(name = "order")
-    @Operation(description = "[토큰 필요] 해당 유저의 주문 내역을 조회한다.")
-    @ApiResponses({
+    @Operation(description = "[토큰 필요] 해당 유저의 주문 내역을 조회한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 주문을 조회한 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
     })
@@ -76,16 +71,19 @@ public class OrderController {
     }
 
     @Tag(name = "order")
-    @Operation(description = "유저가 직접 주문을 취소한다.")
-    @ApiResponses({
+    @Operation(description = "해당 주문의 주인인 유저가 주문을 취소한다.", responses ={
             @ApiResponse(responseCode = "200", description = "성공적으로 주문을 취소한 경우"),
             @ApiResponse(responseCode = "400", description = "주문 id를 명시하지 않은 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 주문일 경우")
     })
     @PatchMapping("/{id}")
     @ResponseStatus(OK)
-    public HttpStatus cancelOrder(@PathVariable Long id) {
-        orderService.toCancel(id);
-        return HttpStatus.OK;
+    public KurlyResponse<Void> cancelOrder(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long id
+    ) {
+        orderService.toCancelByUser(id, user.getId());
+        return KurlyResponse.noData();
     }
 }
