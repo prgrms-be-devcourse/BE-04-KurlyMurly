@@ -7,6 +7,7 @@ import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
+import com.devcourse.kurlymurly.web.dto.product.review.UpdateReview;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -101,7 +102,7 @@ public class ReviewController {
     public KurlyResponse<Void> updateReviewContent(
             @AuthenticationPrincipal User user,
             @PathVariable Long id,
-            @RequestBody @Valid CreateReview.UpdateRequest request
+            @RequestBody @Valid UpdateReview.Request request
     ) {
         reviewService.updateReviewContent(id, request.content(), request.isSecret());
         return KurlyResponse.noData();

@@ -3,6 +3,8 @@ package com.devcourse.kurlymurly.module.order.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.util.Objects;
+
 @Embeddable
 public class OrderItem {
     @Column(nullable = false)
@@ -17,6 +19,9 @@ public class OrderItem {
     @Column(nullable = false)
     private int quantity;
 
+    @Column(nullable = false)
+    private boolean isReviewed;
+
     protected OrderItem() {
     }
 
@@ -25,6 +30,7 @@ public class OrderItem {
         this.name = name;
         this.totalPrice = totalPrice;
         this.quantity = quantity;
+        this.isReviewed = false;
     }
 
     public Long getProductId() {
@@ -33,5 +39,17 @@ public class OrderItem {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isSameProduct(Long productId) {
+        return Objects.equals(this.productId, productId);
+    }
+
+    public void reviewed() {
+        this.isReviewed = true;
+    }
+
+    public boolean isNotReviewed() {
+        return !this.isReviewed;
     }
 }

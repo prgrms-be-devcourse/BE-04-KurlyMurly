@@ -78,12 +78,10 @@ public class UserService {
     }
 
     public String login(String loginId, String password) {
-        UsernamePasswordAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(loginId, password);
+        Authentication authenticationToken = new UsernamePasswordAuthenticationToken(loginId, password);
+        Authentication authorized = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        return tokenProvider.createToken(authentication);
+        return tokenProvider.createToken(authorized);
     }
 
     @Transactional

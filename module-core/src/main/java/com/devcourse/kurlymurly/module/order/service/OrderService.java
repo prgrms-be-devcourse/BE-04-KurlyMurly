@@ -9,8 +9,6 @@ import com.devcourse.kurlymurly.module.order.domain.ShippingInfo;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrderItem;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,11 +44,7 @@ public class OrderService {
         return new Order(userId, orderItems, paymentInfo, shippingInfo);
     }
 
-    public Page<Order> findOrderAll(Pageable pageable) {
-        return orderRepository.findAll(pageable);
-    }
-
-    public Order findById(Long id) {
+    public Order findByIdOrThrow(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER));
     }
@@ -59,11 +53,13 @@ public class OrderService {
         return orderRepository.findAllByUserId(userId);
     }
 
+    // todo: 쿼리에서 리뷰가 작성되지 않은 주문 가져오도록 수정
     public List<ReviewResponse.Reviewable> getAllReviewableOrdersByUserId(Long userId) {
         LocalDateTime allowedPeriod = LocalDateTime.now().minusDays(REVIEWABLE_DEADLINE);
 
         return orderRepository.findAllReviewableOrdersByUserIdWithinThirtyDays(userId, allowedPeriod).stream()
                 .flatMap(order -> order.getOrderItems().stream()
+                        .filter(OrderItem::isNotReviewed)
                         .map(orderItem -> toReviewableResponse(order, orderItem)))
                 .toList();
     }
@@ -73,6 +69,7 @@ public class OrderService {
         return new ReviewResponse.Reviewable(
                 orderItem.getProductId(),
                 orderItem.getName(),
+                order.getOrderNumber(),
                 delivered,
                 delivered.plusDays(REVIEWABLE_DEADLINE)
         );
@@ -80,25 +77,25 @@ public class OrderService {
 
     @Transactional
     public void toProcessing(Long id) {
-        Order order = findById(id);
+        Order order = findByIdOrThrow(id);
         order.toProcessing();
     }
 
     @Transactional
     public void toDelivering(Long id) {
-        Order order = findById(id);
+        Order order = findByIdOrThrow(id);
         order.toDelivering();
     }
 
     @Transactional
     public void toDelivered(Long id) {
-        Order order = findById(id);
+        Order order = findByIdOrThrow(id);
         order.toDelivered();
     }
 
     @Transactional
     public void toCancel(Long id) {
-        Order order = findById(id);
+        Order order = findByIdOrThrow(id);
         order.toCancel();
     }
 

@@ -26,6 +26,6 @@ public enum ReviewFixture {
     }
 
     public CreateReview.Request toRequest() {
-        return new CreateReview.Request(productId, productName, content, isSecret);
+        return new CreateReview.Request(1L, productId, productName, content, isSecret);
     }
 }

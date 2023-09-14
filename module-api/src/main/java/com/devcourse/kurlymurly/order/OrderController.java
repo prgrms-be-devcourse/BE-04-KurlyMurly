@@ -42,7 +42,7 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public Order findById(@PathVariable Long id) {
-        return orderService.findById(id);
+        return orderService.findByIdOrThrow(id);
     }
 
     @GetMapping("/{userId}") // userId는 노출 x  , TODO
