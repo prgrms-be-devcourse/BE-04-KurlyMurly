@@ -149,6 +149,13 @@ public class UserService {
         shipping.update(description, receiver, contact);
     }
 
+    public void updateAddressInfo(Long userId, Long addressId, String receiver, String contact, String receiveArea,
+                                  String entrancePassword, String alertTime) {
+        Shipping shipping = findAddress(userId, addressId);
+
+        shipping.updateInfo(receiver, contact, receiveArea, entrancePassword, alertTime);
+    }
+
     public void deleteAddress(Long userId, Long addressId) {
         Shipping shipping = findAddress(userId, addressId);
 
@@ -190,6 +197,14 @@ public class UserService {
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_PAYMENT));
 
         payment.deletePayment();
+    }
+
+    public void updatePaymentPassword(Long userId, String payPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
+
+        String encodedPassword = passwordEncoder.encode(payPassword);
+        user.updatePayPassword(encodedPassword);
     }
 
     @Transactional
