@@ -6,7 +6,7 @@ import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.product.service.ReviewService;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
-import com.devcourse.kurlymurly.web.dto.order.support.CreateOrderSupport;
+import com.devcourse.kurlymurly.web.dto.order.support.AnswerOrderSupport;
 import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -205,7 +205,7 @@ public class AdminController {
     @ResponseStatus(OK)
     public KurlyResponse<Void> changeToAnswered(
             @AuthenticationPrincipal User admin,
-            @RequestBody @Valid CreateOrderSupport.AnswerRequest answerRequest
+            @RequestBody @Valid AnswerOrderSupport.Request answerRequest
     ) {
         orderSupportService.answered(answerRequest.orderSupportId(), answerRequest.content());
         return KurlyResponse.noData();
