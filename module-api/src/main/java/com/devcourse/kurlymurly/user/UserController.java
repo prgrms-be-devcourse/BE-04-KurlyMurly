@@ -7,6 +7,7 @@ import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
 import com.devcourse.kurlymurly.module.user.service.UserService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
+import com.devcourse.kurlymurly.web.dto.payment.UpdatePayPassword;
 import com.devcourse.kurlymurly.web.dto.product.CreateCart;
 import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
 import com.devcourse.kurlymurly.web.dto.product.UpdateCart;
@@ -174,6 +175,20 @@ public class UserController {
     }
 
     @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 배송 요청사항 수정 API", responses = {
+            @ApiResponse(responseCode = "200", description = "주소를 수정한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
+    })
+    @PutMapping("/addresses/info")
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> updateAddressInfo(@AuthenticationPrincipal User user, @RequestBody @Valid UpdateAddress.InfoRequest request) {
+        userService.updateAddressInfo(user.getId(), request.addressId(), request.receiver(), request.contact(), request.receiveArea().name(), request.entrancePassword(), request.messageAlertTime().name());
+        return KurlyResponse.noData();
+    }
+
+    @Tag(name = "user")
     @Operation(description = "[토큰 필요] 주소 삭제 API", responses = {
             @ApiResponse(responseCode = "200", description = "해당 주소를 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -245,6 +260,23 @@ public class UserController {
     public KurlyResponse<Void> deletePayment(@AuthenticationPrincipal User user, @PathVariable Long paymentId) {
         userService.deletePayment(user.getId(), paymentId);
 
+        return KurlyResponse.noData();
+    }
+
+    @Tag(name = "user")
+    @Operation(description = "[토큰 필요] 결제 비밀번호 설정 API", responses = {
+            @ApiResponse(responseCode = "200", description = "결제수단을 삭제한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 회원 id값을 조회한 경우")
+    })
+    @PostMapping("/payments/set-password")
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> updatePaymentPassword(
+            @AuthenticationPrincipal User user,
+            @RequestBody @Valid UpdatePayPassword.Request request
+    ) {
+        userService.updatePaymentPassword(user.getId(), request.payPassword());
         return KurlyResponse.noData();
     }
 

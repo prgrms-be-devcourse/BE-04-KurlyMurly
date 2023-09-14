@@ -89,6 +89,10 @@ public class User extends BaseEntity implements UserDetails {
         info.update(birth, sex);
     }
 
+    public void updatePayPassword(String payPassword){
+        this.payPassword = payPassword;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
