@@ -103,4 +103,8 @@ public class Order extends BaseEntity {
     public int getActualPayAmount() {
         return paymentInfo.getActualPayAmount();
     }
+
+    public Long getUserId() {
+        return userId;
+    }
 }
