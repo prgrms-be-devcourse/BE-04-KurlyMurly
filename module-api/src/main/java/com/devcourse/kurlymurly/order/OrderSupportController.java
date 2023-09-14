@@ -4,6 +4,10 @@ import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.dto.order.support.OrderSupportCreate;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,10 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.OK;
+
+@Tag(name = "orderSupport", description = "1:1 문의 API")
 @RestController
 @RequestMapping("/orderSupports")
 public class OrderSupportController {
@@ -26,7 +34,14 @@ public class OrderSupportController {
         this.orderSupportService = orderSupportService;
     }
 
+    @Tag(name = "orderSupport")
+    @Operation(description = "[토큰 필요] 1:1 문의를 생성한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 생성한 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    })
     @PostMapping
+    @ResponseStatus(OK)
     public OrderSupport takeOrderSupport(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid OrderSupportCreate.Request request
@@ -41,18 +56,43 @@ public class OrderSupportController {
         );
     }
 
-    @GetMapping("/{userId}")
-    public List<OrderSupport> findAllByUserId(@PathVariable Long userId) {
-        return orderSupportService.findAllByUserId(userId);
+    @Tag(name = "orderSupport")
+    @Operation(description = "[토큰 필요] 해당 유저의 1:1 문의 내역을 조회한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의 내역을 조회한 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    })
+    @GetMapping
+    @ResponseStatus(OK)
+    public List<OrderSupport> findAllByUserId(@AuthenticationPrincipal User user) {
+        return orderSupportService.findAllByUserId(user.getId());
     }
 
+    @Tag(name = "orderSupport")
+    @Operation(description = "작성한 1:1 문의를 수정한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 수정한 경우"),
+            @ApiResponse(responseCode = "400", description = "1:1문의 id를 명시하지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우")
+    })
     @PatchMapping("/{id}")
-    public OrderSupport updateOrderSupport(@PathVariable Long id,
-                                           @RequestBody @Valid OrderSupportCreate.UpdateRequest request) {
+    @ResponseStatus(OK)
+    public OrderSupport updateOrderSupport(
+            @PathVariable Long id,
+            @RequestBody @Valid OrderSupportCreate.UpdateRequest request
+    ) {
         return orderSupportService.updateOrderSupport(id, request.title(), request.content());
     }
 
+    @Tag(name = "orderSupport")
+    @Operation(description = "작성한 1:1 문의를 삭제한다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 삭제한 경우"),
+            @ApiResponse(responseCode = "400", description = "1:1문의 id를 명시하지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우")
+    })
     @DeleteMapping("/{id}")
+    @ResponseStatus(OK)
     public void deleteOrderSupport(@PathVariable Long id) {
         orderSupportService.deleteOrderSupport(id);
     }
