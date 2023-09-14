@@ -3,6 +3,7 @@ package com.devcourse.kurlymurly.module.orderSupport.service;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupportRepository;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
+import com.devcourse.kurlymurly.web.dto.order.support.AnswerOrderSupport;
 import com.devcourse.kurlymurly.web.dto.order.support.CreateOrderSupport;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -134,7 +135,7 @@ class OrderSupportServiceTest {
     void updateSupportToDone_test() {
         // given
         OrderSupport orderSupport = createOrderSupportEntity(request);
-        CreateOrderSupport.AnswerRequest answerRequest = new CreateOrderSupport.AnswerRequest(
+        AnswerOrderSupport.Request answerRequest = new AnswerOrderSupport.Request(
                 1L,
                 "문의해 주셔서 감사합니다. 해당 문의에 대한 답변입니다."
         );
