@@ -11,7 +11,7 @@ public class OrderItem {
     private Long productId;
 
     @Column(length = 50, nullable = false)
-    private String name;
+    private String productName;
 
     @Column(nullable = false)
     private int totalPrice;
@@ -25,9 +25,9 @@ public class OrderItem {
     protected OrderItem() {
     }
 
-    public OrderItem(Long productId, String name, int totalPrice, int quantity) {
+    public OrderItem(Long productId, String productName, int totalPrice, int quantity) {
         this.productId = productId;
-        this.name = name;
+        this.productName = productName;
         this.totalPrice = totalPrice;
         this.quantity = quantity;
         this.isReviewed = false;
@@ -37,8 +37,8 @@ public class OrderItem {
         return productId;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
     public boolean isSameProduct(Long productId) {

@@ -114,4 +114,12 @@ public class Order extends BaseEntity {
     public Long getUserId() {
         return userId;
     }
+
+    public PaymentInfo getPaymentInfo() {
+        return paymentInfo;
+    }
+
+    public ShippingInfo getShippingInfo() {
+        return shippingInfo;
+    }
 }
