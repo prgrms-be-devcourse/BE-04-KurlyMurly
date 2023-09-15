@@ -1,8 +1,8 @@
 package com.devcourse.kurlymurly.order;
 
-import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.order.support.CreateOrderSupport;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -36,22 +36,17 @@ public class OrderSupportController {
     @Tag(name = "orderSupport")
     @Operation(description = "[토큰 필요] 1:1 문의를 생성한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 생성한 경우"),
+            @ApiResponse(responseCode = "400", description = "1:1 문의를 작성하기 위한 사용자 응답이 적절하지 않은 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PostMapping
     @ResponseStatus(OK)
-    public OrderSupport takeOrderSupport(
+    public KurlyResponse<CreateOrderSupport.Response> takeOrderSupport(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid CreateOrderSupport.Request request
     ) {
-        return orderSupportService.takeOrderSupport(
-                user.getId(),
-                request.orderId(),
-                request.orderNumber(),
-                request.type(),
-                request.title(),
-                request.content()
-        );
+        CreateOrderSupport.Response OrderSupportResponse = orderSupportService.takeOrderSupport(user.getId(), request);
+        return KurlyResponse.ok(OrderSupportResponse);
     }
 
     @Tag(name = "orderSupport")
@@ -61,8 +56,9 @@ public class OrderSupportController {
     })
     @GetMapping
     @ResponseStatus(OK)
-    public List<OrderSupport> findAllByUserId(@AuthenticationPrincipal User user) {
-        return orderSupportService.findAllByUserId(user.getId());
+    public KurlyResponse<List<CreateOrderSupport.Response>> findAllByUserId(@AuthenticationPrincipal User user) {
+        List<CreateOrderSupport.Response> orderSupportResponses = orderSupportService.findAllByUserId(user.getId());
+        return KurlyResponse.ok(orderSupportResponses);
     }
 
     @Tag(name = "orderSupport")
@@ -73,11 +69,12 @@ public class OrderSupportController {
     })
     @PatchMapping("/{id}")
     @ResponseStatus(OK)
-    public OrderSupport updateOrderSupport(
+    public KurlyResponse<Void> updateOrderSupport(
             @PathVariable Long id,
             @RequestBody @Valid CreateOrderSupport.UpdateRequest request
     ) {
-        return orderSupportService.updateOrderSupport(id, request.title(), request.content());
+        orderSupportService.updateOrderSupport(id, request.title(), request.content());
+        return KurlyResponse.noData();
     }
 
     @Tag(name = "orderSupport")
@@ -88,7 +85,8 @@ public class OrderSupportController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(OK)
-    public void deleteOrderSupport(@PathVariable Long id) {
+    public KurlyResponse<Void> deleteOrderSupport(@PathVariable Long id) {
         orderSupportService.deleteOrderSupport(id);
+        return KurlyResponse.noData();
     }
 }
