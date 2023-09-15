@@ -86,7 +86,7 @@ public class OrderService {
         int size = order.getOrderItems().size() - 1;
 
         return new GetOrderResponse.SimpleInfo(
-                productName + size + "건",
+                order.getSimpleProducts(),
                 order.getOrderNumber(),
                 order.getPaymentInfo().getPayment(),
                 order.getPaymentInfo().getActualPayAmount(),
