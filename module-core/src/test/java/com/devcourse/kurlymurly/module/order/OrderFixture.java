@@ -21,7 +21,19 @@ public enum OrderFixture {
             "우리집",
             "문 앞",
             "공동현관 비밀번호(****)",
-            "종이 포장재");
+            "종이 포장재"),
+    HEJOW_ORDER2(1L, List.of(
+            new CreateOrderItem.Request(1L, "소고기", 30000, 2),
+            new CreateOrderItem.Request(2L, "비싼 소고기", 20000, 1)),
+                    50000,
+                    0,
+                    "컬리페이(국민은행)",
+                    "문희조",
+                    "010-1234-****",
+                    "우리집",
+                    "문 앞",
+                    "공동현관 비밀번호(****)",
+                    "종이 포장재");
 
     private final Long userId;
     private final List<CreateOrderItem.Request> orderItemRequests;
@@ -52,7 +64,7 @@ public enum OrderFixture {
     public Order toEntity() {
         return new Order(
                 userId,
-                toOrderItem(),
+                toOrderItems(),
                 new PaymentInfo(totalPrice, totalDiscount, payment),
                 new ShippingInfo(receiver, phoneNumber, address, receiveArea, entranceInfo, packaging)
         );
@@ -73,7 +85,7 @@ public enum OrderFixture {
         );
     }
 
-    private List<OrderItem> toOrderItem() {
+    private List<OrderItem> toOrderItems() {
         return orderItemRequests.stream()
                 .map(request -> new OrderItem(request.productId(), request.name(), request.totalPrice(), request.quantity()))
                 .toList();

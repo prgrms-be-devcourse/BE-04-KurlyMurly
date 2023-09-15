@@ -10,6 +10,7 @@ public sealed interface ReviewResponse permits Reviewable, Reviewed, ReviewOfPro
     record Reviewable(
         Long productId,
         String productName,
+        String orderNumber,
         LocalDateTime deliveredAt,
         LocalDateTime reviewDeadLine
     ) implements ReviewResponse {

@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.product.review;
+package com.devcourse.kurlymurly.product;
 
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.service.ReviewService;
@@ -7,6 +7,7 @@ import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
+import com.devcourse.kurlymurly.web.dto.product.review.UpdateReview;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,9 +39,11 @@ public class ReviewController {
     }
 
     @Tag(name = "review")
-    @Operation(description = "리뷰 등록 API")
-    @ApiResponse(responseCode = "200", description = "성공적으로 review를 등록한 경우")
-    @ApiResponse(responseCode = "400", description = "review를 생성하기 위한 request가 올바르지 않게 넘어온 경우")
+    @Operation(description = "리뷰 등록 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 review를 등록한 경우"),
+            @ApiResponse(responseCode = "400", description = "삭제된 상품에 후기를 작성해서 발생하는 에러"),
+            @ApiResponse(responseCode = "404", description = "주문 정보를 읽어오지 못해서 발생하는 에러")
+    })
     @PostMapping
     @ResponseStatus(OK)
     public KurlyResponse<Void> registerReview(
@@ -52,22 +55,23 @@ public class ReviewController {
     }
 
     @Tag(name = "review")
-    @Operation(description = "특정 리뷰 조회 API")
-    @ApiResponse(responseCode = "200", description = "성공적으로 review를 조회한 경우")
-    @ApiResponse(responseCode = "400", description = "review를 조회하기 위한 id를 명시하지 않은 경우")
-    @ApiResponse(responseCode = "404", description = "조회 할 review 데이터가 없는 경우")
+    @Operation(description = "특정 리뷰 조회 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 후기를 조회한 경우"),
+            @ApiResponse(responseCode = "400", description = "후기를 조회하기 위한 Path Variable을 명시하지 않은 경우 발생하는 상태"),
+            @ApiResponse(responseCode = "404", description = "조회 할 후기 정보가 없어서 발생하는 에러")
+    })
     @GetMapping("/{id}")
     @ResponseStatus(OK)
-    public KurlyResponse<Review> findById(@PathVariable Long id) {
+    public KurlyResponse<Review> findById(@PathVariable Long id) { // todo: response 수정
         Review review = reviewService.findReviewById(id);
         return KurlyResponse.ok(review);
     }
 
     @Tag(name = "review")
-    @Operation(description = "해당 상품에 대한 리뷰 조회 API")
-    @ApiResponse(responseCode = "200", description = "성공적으로 상품의 review를 조회한 경우")
-    @ApiResponse(responseCode = "400", description = "review를 조회하기 위한 상품 id를 명시하지 않은 경우")
-    @ApiResponse(responseCode = "404", description = "조회 할 review 데이터가 없는 경우")
+    @Operation(description = "해당 상품에 대한 리뷰 조회 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 상품의 후기를 가져온 상태"),
+            @ApiResponse(responseCode = "400", description = "review를 조회하기 위한 상품 id를 명시하지 않은 경우")
+    })
     @GetMapping("/{productId}")
     @ResponseStatus(OK)
     public KurlyResponse<Slice<ReviewResponse.ReviewOfProduct>> getReviewsOfProduct(
@@ -79,9 +83,10 @@ public class ReviewController {
 
 
     @Tag(name = "review")
-    @Operation(description = "[토큰 필요] 사용자가 작성한 리뷰 조회 API")
-    @ApiResponse(responseCode = "200", description = "성공적으로 review를 조회한 경우")
-    @ApiResponse(responseCode = "400", description = "review를 조회하기 위한 user_id를 명시하지 않은 경우")
+    @Operation(description = "[토큰 필요] 사용자가 작성한 리뷰 조회 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 상품의 후기를 가져온 상태"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러")
+    })
     @GetMapping
     @ResponseStatus(OK)
     public KurlyResponse<List<ReviewResponse.Reviewed>> getAllReviewsOnMyPage(
@@ -92,26 +97,28 @@ public class ReviewController {
     }
 
     @Tag(name = "review")
-    @Operation(description = "[토큰 필요] 리뷰 수정 API")
-    @ApiResponse(responseCode = "200", description = "성공적으로 상품 후기를 수정한 경우")
-    @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
-    @ApiResponse(responseCode = "404", description = "존재하지 않은 상품 후기")
+    @Operation(description = "[토큰 필요] 리뷰 수정 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 상품 후기를 수정한 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않은 상품 후기")
+    })
     @PatchMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateReviewContent(
             @AuthenticationPrincipal User user,
             @PathVariable Long id,
-            @RequestBody @Valid CreateReview.UpdateRequest request
+            @RequestBody @Valid UpdateReview.Request request
     ) {
         reviewService.updateReviewContent(id, request.content(), request.isSecret());
         return KurlyResponse.noData();
     }
 
     @Tag(name = "review")
-    @Operation(description = "[토큰 필요] 작성한 리뷰 삭제 API")
-    @ApiResponse(responseCode = "200", description = "작성한 review를 삭제한 경우")
-    @ApiResponse(responseCode = "400", description = "삭제할 리뷰 id가 명시되지 않은 경우")
-    @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    @Operation(description = "[토큰 필요] 작성한 리뷰 삭제 API", responses = {
+            @ApiResponse(responseCode = "200", description = "작성한 review를 삭제한 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않은 상품 후기")
+    })
     @DeleteMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> deleteReview(
@@ -123,10 +130,11 @@ public class ReviewController {
     }
 
     @Tag(name = "review")
-    @Operation(description = "[토큰 필요] 리뷰 좋아요 API")
-    @ApiResponse(responseCode = "200", description = "성공적으로 리뷰 좋아요를 활성화한 경우")
-    @ApiResponse(responseCode = "400", description = "활성화를 위한 id가 넘어오지 않은 경우")
-    @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    @Operation(description = "[토큰 필요] 리뷰 좋아요 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 리뷰 좋아요를 활성화한 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않은 상품 후기")
+    })
     @PatchMapping("/{reviewId}/likes")
     @ResponseStatus(OK)
     public KurlyResponse<Void> activeReviewLike(
@@ -138,10 +146,11 @@ public class ReviewController {
     }
 
     @Tag(name = "review")
-    @Operation(description = "[토큰 필요] 리뷰 좋아요 취소 API")
-    @ApiResponse(responseCode = "200", description = "성공적으로 리뷰 좋아요를 취소한 경우")
-    @ApiResponse(responseCode = "400", description = "취소를 위한 id가 넘어오지 않은 경우")
-    @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
+    @Operation(description = "[토큰 필요] 리뷰 좋아요 취소 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 리뷰 좋아요를 취소한 경우"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않은 상품 후기")
+    })
     @DeleteMapping("/{reviewId}/likes")
     @ResponseStatus(OK)
     public KurlyResponse<Void> cancelReviewLike(

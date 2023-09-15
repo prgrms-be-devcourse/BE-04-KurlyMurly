@@ -1,6 +1,8 @@
 package com.devcourse.kurlymurly.module.product.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.module.order.domain.Order;
+import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
@@ -25,11 +27,18 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewLikeRepository reviewLikeRepository;
     private final ProductRetrieve productRetrieve;
+    private final OrderService orderService;
 
-    public ReviewService(ReviewRepository reviewRepository, ReviewLikeRepository reviewLikeRepository, ProductRetrieve productRetrieve) {
+    public ReviewService(
+            ReviewRepository reviewRepository,
+            ReviewLikeRepository reviewLikeRepository,
+            ProductRetrieve productRetrieve,
+            OrderService orderService
+    ) {
         this.reviewRepository = reviewRepository;
         this.reviewLikeRepository = reviewLikeRepository;
         this.productRetrieve = productRetrieve;
+        this.orderService = orderService;
     }
 
     public List<ReviewResponse.Reviewed> getAllReviewsOfUser(Long userId) {
@@ -52,6 +61,11 @@ public class ReviewService {
     @Transactional
     public void registerReview(User user, CreateReview.Request request) {
         Product product = productRetrieve.findByIdOrThrow(request.productId());
+        product.validateSupportable();
+
+        Order order = orderService.findByIdOrThrow(request.orderId());
+        order.markReviewedOrder(product.getId());
+
         Review review = new Review(user, product, request.content(), request.isSecret());
         reviewRepository.save(review);
     }
@@ -67,8 +81,7 @@ public class ReviewService {
     }
 
     private ReviewResponse.ReviewOfProduct toReviewOfProductResponse(Review review) {
-        return new ReviewResponse.ReviewOfProduct
-                (
+        return new ReviewResponse.ReviewOfProduct(
                         review.getProductId(),
                         review.getProductName(),
                         review.getMaskedUserName(),
@@ -77,7 +90,7 @@ public class ReviewService {
                         review.getLikes(),
                         review.getCreateAt(),
                         review.isSecret()
-                );
+        );
     }
 
     @Transactional

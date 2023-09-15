@@ -3,10 +3,9 @@ package com.devcourse.kurlymurly.order;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.web.dto.order.support.OrderSupportCreate;
+import com.devcourse.kurlymurly.web.dto.order.support.CreateOrderSupport;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -67,7 +66,6 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-
     @Operation(description = "작성한 1:1 문의를 수정한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "1:1문의 id를 명시하지 않은 경우"),
@@ -77,7 +75,7 @@ public class OrderSupportController {
     @ResponseStatus(OK)
     public OrderSupport updateOrderSupport(
             @PathVariable Long id,
-            @RequestBody @Valid OrderSupportCreate.UpdateRequest request
+            @RequestBody @Valid CreateOrderSupport.UpdateRequest request
     ) {
         return orderSupportService.updateOrderSupport(id, request.title(), request.content());
     }

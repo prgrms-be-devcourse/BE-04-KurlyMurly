@@ -104,6 +104,13 @@ public class Order extends BaseEntity {
         return paymentInfo.getActualPayAmount();
     }
 
+    public void markReviewedOrder(Long productId) {
+        this.getOrderItems().stream()
+                .filter(orderItem -> orderItem.isSameProduct(productId))
+                .findFirst()
+                .ifPresent(OrderItem::reviewed);
+    }
+
     public Long getUserId() {
         return userId;
     }
