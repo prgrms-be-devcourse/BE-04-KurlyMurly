@@ -141,7 +141,7 @@ public class OrderService {
         order.toCancel();
     }
 
-    private Order findByIdOrThrow(Long id) {
+    public Order findByIdOrThrow(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER));
     }
