@@ -1,7 +1,17 @@
 import {useState} from 'react';
 import axios from "axios";
+import JwtInterceptor from "../apis/ApiController";
+const { instance } = JwtInterceptor();
 
 const Receipt = () => {
+  // const orders = async () => {
+  //   try {
+  //     return await instance.get(``);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
 
   const [orders, setOrders] = useState([
     {

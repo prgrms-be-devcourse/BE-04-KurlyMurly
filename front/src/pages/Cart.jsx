@@ -1,8 +1,18 @@
 import {useState} from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import JwtInterceptor from "../apis/ApiController";
+const { instance } = JwtInterceptor();
 
 function Cart() {
+  // const orders = async () => {
+  //   try {
+  //     return await instance.get(``);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   const navigate = useNavigate();
   const [items, setItems] = useState([
     {cartId: 1, productId: 1, name: '상품 1', price: 10000, quantity: 1},
