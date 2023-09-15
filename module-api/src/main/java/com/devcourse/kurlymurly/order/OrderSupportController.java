@@ -3,10 +3,9 @@ package com.devcourse.kurlymurly.order;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.web.dto.order.support.OrderSupportCreate;
+import com.devcourse.kurlymurly.web.dto.order.support.CreateOrderSupport;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,8 +34,7 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "[토큰 필요] 1:1 문의를 생성한다.")
-    @ApiResponses({
+    @Operation(description = "[토큰 필요] 1:1 문의를 생성한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 생성한 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
@@ -44,7 +42,7 @@ public class OrderSupportController {
     @ResponseStatus(OK)
     public OrderSupport takeOrderSupport(
             @AuthenticationPrincipal User user,
-            @RequestBody @Valid OrderSupportCreate.Request request
+            @RequestBody @Valid CreateOrderSupport.Request request
     ) {
         return orderSupportService.takeOrderSupport(
                 user.getId(),
@@ -57,8 +55,7 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "[토큰 필요] 해당 유저의 1:1 문의 내역을 조회한다.")
-    @ApiResponses({
+    @Operation(description = "[토큰 필요] 해당 유저의 1:1 문의 내역을 조회한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의 내역을 조회한 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
@@ -69,8 +66,7 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "작성한 1:1 문의를 수정한다.")
-    @ApiResponses({
+    @Operation(description = "작성한 1:1 문의를 수정한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "1:1문의 id를 명시하지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우")
@@ -79,14 +75,13 @@ public class OrderSupportController {
     @ResponseStatus(OK)
     public OrderSupport updateOrderSupport(
             @PathVariable Long id,
-            @RequestBody @Valid OrderSupportCreate.UpdateRequest request
+            @RequestBody @Valid CreateOrderSupport.UpdateRequest request
     ) {
         return orderSupportService.updateOrderSupport(id, request.title(), request.content());
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "작성한 1:1 문의를 삭제한다.")
-    @ApiResponses({
+    @Operation(description = "작성한 1:1 문의를 삭제한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "1:1문의 id를 명시하지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우")

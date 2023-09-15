@@ -110,4 +110,8 @@ public class Order extends BaseEntity {
                 .findFirst()
                 .ifPresent(OrderItem::reviewed);
     }
+
+    public Long getUserId() {
+        return userId;
+    }
 }

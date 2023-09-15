@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_ORDER;
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_ORDER_HOST;
 
 @Service
 @Transactional(readOnly = true)
@@ -96,6 +97,14 @@ public class OrderService {
     @Transactional
     public void toCancel(Long id) {
         Order order = findByIdOrThrow(id);
+        order.toCancel();
+    }
+
+    @Transactional
+    public void toCancelByUser(Long id, Long userId) {
+        Order order = orderRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new KurlyBaseException(NOT_ORDER_HOST));
+
         order.toCancel();
     }
 
