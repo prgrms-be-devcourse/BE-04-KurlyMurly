@@ -89,7 +89,7 @@ public class UserService {
 
     @Transactional
     public void join(Join.Request request) {
-        User newUser = toGetAddressResponse(request);
+        User newUser = toUser(request);
 
         checkPassword(request.password(), request.checkPassword());
 
@@ -106,7 +106,7 @@ public class UserService {
         addAddress(savedId, request.roadAddress(), true);
     }
 
-    private User toGetAddressResponse(Join.Request request) {
+    private User toUser(Join.Request request) {
         UserInfo userInfo = new UserInfo(request.birth(), request.recommender(), request.sex());
 
         return new User(request.name(), request.loginId(), passwordEncoder.encode(request.password()), request.email(), userInfo, request.phoneNumber());
