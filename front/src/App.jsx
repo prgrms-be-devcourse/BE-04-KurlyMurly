@@ -11,6 +11,7 @@ import {
   Support,
   Products,
   Category,
+  MyInfo,
 } from './pages';
 
 const App = () => {
@@ -21,9 +22,10 @@ const App = () => {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/my-page" element={<MyPage />} />
-        <Route path="/my-page/review" element={<MyReview />} />
-        <Route path="/favorites" element={<Favorite />} />
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/mypage/review" element={<MyReview />} />
+        <Route path="/mypage/info/modify" element={<MyInfo />} />
+        <Route path="/mypage/pick/list" element={<Favorite />} />
         <Route path="/new-products" element={<Products />} />
         <Route path="/best-products" element={<Products />} />
         <Route path="/favorites" element={<Favorite />} />

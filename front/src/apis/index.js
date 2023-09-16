@@ -1,2 +1,2 @@
 export { default as Auth } from './Auth';
-export { default as MyPage } from './MyPage';
+export { default as User } from './User';

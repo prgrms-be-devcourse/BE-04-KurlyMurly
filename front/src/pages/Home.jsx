@@ -32,7 +32,7 @@ const Home = () => {
         </button>
         <button
           onClick={() => {
-            navigate(`/favorites`);
+            navigate(`/mypage/pick/list`);
           }}
         >
           찜목록
