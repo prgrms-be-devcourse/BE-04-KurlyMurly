@@ -44,7 +44,7 @@ public abstract class BaseEntity {
         return updatedAt;
     }
 
-    public void changeUpdateDate() {
+    public void changeUpdatedDate() {
         this.updatedAt = LocalDateTime.now();
     }
 }
