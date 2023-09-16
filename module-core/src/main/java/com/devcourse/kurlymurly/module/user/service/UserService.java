@@ -89,7 +89,7 @@ public class UserService {
 
     @Transactional
     public void join(Join.Request request) {
-        User newUser = to(request);
+        User newUser = toGetAddressResponse(request);
 
         checkPassword(request.password(), request.checkPassword());
 
@@ -104,6 +104,12 @@ public class UserService {
         Long savedId = userRepository.save(newUser).getId();
 
         addAddress(savedId, request.roadAddress(), true);
+    }
+
+    private User toGetAddressResponse(Join.Request request) {
+        UserInfo userInfo = new UserInfo(request.birth(), request.recommender(), request.sex());
+
+        return new User(request.name(), request.loginId(), passwordEncoder.encode(request.password()), request.email(), userInfo, request.phoneNumber());
     }
 
     public void findUpdateUser(Long userId, UpdateUser.Request request) {
@@ -136,11 +142,11 @@ public class UserService {
 
     public List<GetAddress.Response> getAddress(Long userId) {
         return shippingRepository.findAllByUserId(userId).stream()
-                .map(this::to)
+                .map(this::toGetAddressResponse)
                 .toList();
     }
 
-    private GetAddress.Response to(Shipping shipping) {
+    private GetAddress.Response toGetAddressResponse(Shipping shipping) {
         return new GetAddress.Response(shipping.isDefault(), shipping.getAddress().isExpress()
                 , shipping.getAddress().getDescribedAddress(), shipping.getInfo().getReceiver()
                 , shipping.getInfo().getContact());
@@ -253,11 +259,5 @@ public class UserService {
 
     public Boolean checkEmail(String email) {
         return userRepository.existsByEmail(email);
-    }
-
-    private User to(Join.Request request) {
-        UserInfo userInfo = new UserInfo(request.birth(), request.recommender(), request.sex());
-
-        return new User(request.name(), request.loginId(), passwordEncoder.encode(request.password()), request.email(), userInfo, request.phoneNumber());
     }
 }
