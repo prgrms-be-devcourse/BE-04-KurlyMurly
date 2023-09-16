@@ -46,7 +46,7 @@ public class OrderService {
         return new Order(userId, orderItems, paymentInfo, shippingInfo);
     }
 
-    public GetOrderResponse.DetailInfo findOrderById(Long id) {
+    public GetOrderResponse.DetailInfo findOrderDetailInfoByIdOrThrow(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER));
 
@@ -75,7 +75,7 @@ public class OrderService {
         );
     }
 
-    public List<GetOrderResponse.SimpleInfo> findAllByUserId(Long userId) {
+    public List<GetOrderResponse.SimpleInfo> findOrderListSimpleFormByUserId(Long userId) {
         return orderRepository.findAllByUserId(userId).stream()
                 .map(this::toSimpleInfo)
                 .toList();
