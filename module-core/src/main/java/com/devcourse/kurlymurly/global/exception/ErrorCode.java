@@ -18,6 +18,7 @@ public enum ErrorCode {
     NOT_SUPPORTED_JWT_TOKEN(BAD_REQUEST, "지원하지 않는 토근입니다."),
     NOT_AUTHORIZED_TOKEN(BAD_REQUEST, "권한 정보가 없는 토큰입니다."),
     NOT_SAME_PASSWORD(BAD_REQUEST,"동일한 비밀번호를 입력"),
+    CLIENT_INPUT_INVALID(BAD_REQUEST,null),
 
     // 404
     NOT_FOUND_REVIEW(NOT_FOUND, "존재하는 리뷰가 없습니다."),
