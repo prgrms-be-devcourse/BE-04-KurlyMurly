@@ -17,6 +17,7 @@ import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.user.JoinUser;
+import com.devcourse.kurlymurly.web.dto.user.LoginUser;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -77,11 +78,13 @@ public class UserService {
         return orderService.getAllReviewableOrdersByUserId(userId);
     }
 
-    public String login(String loginId, String password) {
+    public LoginUser.Response login(String loginId, String password) {
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(loginId, password);
         Authentication authorized = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        return tokenProvider.createToken(authorized);
+        String token = tokenProvider.createToken(authorized);
+
+        return new LoginUser.Response(token, 1800000L);
     }
 
     @Transactional

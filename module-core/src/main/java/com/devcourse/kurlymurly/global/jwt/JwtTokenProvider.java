@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
-    private static final long expirationHours = 30 * 60 * 1000L;
+    private static final long expiration = 30 * 60 * 1000L;
 
     private final Key key;
     private final CustomUserDetailService userDetailService;
@@ -48,7 +48,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("authority", authorities)
-                .setExpiration(new Date(System.currentTimeMillis() + expirationHours))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
