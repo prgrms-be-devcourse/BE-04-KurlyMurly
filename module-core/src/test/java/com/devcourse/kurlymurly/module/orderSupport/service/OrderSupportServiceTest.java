@@ -38,17 +38,9 @@ class OrderSupportServiceTest {
                 request.type(), request.title(), request.content());
     }
 
-    private OrderSupport takeOrderSupportService(OrderSupport orderSupport) {
+    private void takeOrderSupportService(OrderSupport orderSupport) {
         given(orderSupportRepository.save(any())).willReturn(orderSupport);
-
-        return orderSupportService.takeOrderSupport(
-                userId,
-                request.orderId(),
-                request.orderNumber(),
-                request.type(),
-                request.title(),
-                request.content()
-        );
+        orderSupportService.takeOrderSupport(userId, request);
     }
 
     @BeforeEach
@@ -72,10 +64,7 @@ class OrderSupportServiceTest {
         given(orderSupportRepository.save(any())).willReturn(orderSupport);
 
         // when
-        OrderSupport orderSupportService = takeOrderSupportService(orderSupport);
-
-        // then
-        assertThat(orderSupport).usingRecursiveComparison().isEqualTo(orderSupportService);
+        takeOrderSupportService(orderSupport);
     }
 
     @Test
@@ -107,10 +96,13 @@ class OrderSupportServiceTest {
 
         // when
         takeOrderSupportService(orderSupport);
-        List<OrderSupport> entity = orderSupportService.findAllByUserId(userId);
+        List<CreateOrderSupport.Response> entity = orderSupportService.findAllByUserId(userId);
 
         // then
-        assertThat(orderSupport).usingRecursiveComparison().isEqualTo(entity.get(0));
+        CreateOrderSupport.Response response = new CreateOrderSupport.Response(orderSupport.getType(), orderSupport.getTitle(), orderSupport.getContent(),
+                orderSupport.getStatus(), orderSupport.getCreateAt());
+
+        assertThat(response).usingRecursiveComparison().isEqualTo(entity.get(0));
     }
 
     @Test
@@ -123,11 +115,11 @@ class OrderSupportServiceTest {
         given(orderSupportRepository.findById(any())).willReturn(Optional.of(orderSupport));
 
         // when
-        OrderSupport entity = takeOrderSupportService(orderSupport);
-        orderSupportService.updateSupportToPrepare(entity.getId());
+        takeOrderSupportService(orderSupport);
+        orderSupportService.updateSupportToPrepare(orderSupport.getId());
 
         // then
-        Assertions.assertEquals("PREPARE", entity.getStatus().name());
+        Assertions.assertEquals("PREPARE", orderSupport.getStatus().name());
     }
 
     @Test
@@ -144,11 +136,11 @@ class OrderSupportServiceTest {
         given(orderSupportRepository.findById(any())).willReturn(Optional.of(orderSupport));
 
         // when
-        OrderSupport entity = takeOrderSupportService(orderSupport);
+        takeOrderSupportService(orderSupport);
         orderSupportService.answered(1L, answerRequest.content());
 
         // then
-        Assertions.assertEquals("ANSWERED", entity.getStatus().name());
+        Assertions.assertEquals("ANSWERED", orderSupport.getStatus().name());
     }
 
     @Test
@@ -161,11 +153,11 @@ class OrderSupportServiceTest {
         given(orderSupportRepository.findById(any())).willReturn(Optional.of(orderSupport));
 
         // when
-        OrderSupport entity = takeOrderSupportService(orderSupport);
-        orderSupportService.deleteOrderSupport(entity.getId());
+        takeOrderSupportService(orderSupport);
+        orderSupportService.deleteOrderSupport(orderSupport.getId());
 
         // then
-        Assertions.assertEquals("DELETED", entity.getStatus().name());
+        Assertions.assertEquals("DELETED", orderSupport.getStatus().name());
     }
 
     @Test
@@ -181,11 +173,11 @@ class OrderSupportServiceTest {
         given(orderSupportRepository.findById(any())).willReturn(Optional.of(orderSupport));
 
         // when
-        OrderSupport entity = takeOrderSupportService(orderSupport);
-        orderSupportService.updateOrderSupport(entity.getId(), updateRequest.title(), updateRequest.content());
+        takeOrderSupportService(orderSupport);
+        orderSupportService.updateOrderSupport(orderSupport.getId(), updateRequest.title(), updateRequest.content());
 
         // then
-        Assertions.assertEquals("updatedTitle", entity.getTitle());
-        Assertions.assertEquals("updatedContent", entity.getContent());
+        Assertions.assertEquals("updatedTitle", orderSupport.getTitle());
+        Assertions.assertEquals("updatedContent", orderSupport.getContent());
     }
 }

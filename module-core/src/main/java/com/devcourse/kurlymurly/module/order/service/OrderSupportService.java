@@ -3,6 +3,7 @@ package com.devcourse.kurlymurly.module.order.service;
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupportRepository;
+import com.devcourse.kurlymurly.web.dto.order.support.CreateOrderSupport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,18 +23,33 @@ public class OrderSupportService {
     }
 
     @Transactional
-    public OrderSupport takeOrderSupport(Long userId, Long orderId, String orderNumber, OrderSupport.Type type,
-                                         String title, String content) {
-        OrderSupport orderSupport = new OrderSupport(userId, orderId, orderNumber, type, title, content);
+    public CreateOrderSupport.Response takeOrderSupport(Long userId, CreateOrderSupport.Request request) {
+        OrderSupport orderSupport = new OrderSupport(
+                userId,
+                request.orderId(),
+                request.orderNumber(),
+                request.type(),
+                request.title(),
+                request.content()
+        );
 
-        return orderSupportRepository.save(orderSupport);
+        orderSupportRepository.save(orderSupport);
+
+        return new CreateOrderSupport.Response(
+                request.type(),
+                request.title(),
+                request.content(),
+                orderSupport.getStatus(),
+                orderSupport.getCreateAt()
+        );
     }
+
 
     public Page<OrderSupport> findOrderSupport(Pageable pageable) {
         return orderSupportRepository.findAll(pageable);
     }
 
-    public OrderSupport findById(Long id) {
+    public OrderSupport findByIdOrThrow(Long id) {
         return orderSupportRepository.findById(id)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER_SUPPORT));
     }
@@ -42,33 +58,43 @@ public class OrderSupportService {
         return orderSupportRepository.findByOrderNumber(orderNumber);
     }
 
-    public List<OrderSupport> findAllByUserId(Long userId) {
-        return orderSupportRepository.findAllByUserId(userId);
+    public List<CreateOrderSupport.Response> findAllByUserId(Long userId) {
+        return orderSupportRepository.findAllByUserId(userId).stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    private CreateOrderSupport.Response toResponse(OrderSupport orderSupport) {
+        return new CreateOrderSupport.Response(
+                orderSupport.getType(),
+                orderSupport.getTitle(),
+                orderSupport.getContent(),
+                orderSupport.getStatus(),
+                orderSupport.getCreateAt()
+        );
     }
 
     @Transactional
-    public OrderSupport updateOrderSupport(Long id, String title, String content) {
-        OrderSupport orderSupport = findById(id);
+    public void updateOrderSupport(Long id, String title, String content) {
+        OrderSupport orderSupport = findByIdOrThrow(id);
         orderSupport.updateOrderSupport(title, content);
-
-        return orderSupport;
     }
 
     @Transactional
     public void updateSupportToPrepare(Long id) {
-        OrderSupport orderSupport = findById(id);
+        OrderSupport orderSupport = findByIdOrThrow(id);
         orderSupport.toPreparedSupport();
     }
 
     @Transactional
     public void deleteOrderSupport(Long id) {
-        OrderSupport orderSupport = findById(id);
+        OrderSupport orderSupport = findByIdOrThrow(id);
         orderSupport.deleteSupport();
     }
 
     @Transactional
     public void answered(Long id, String answerContent) {
-        OrderSupport orderSupport = findById(id);
+        OrderSupport orderSupport = findByIdOrThrow(id);
         orderSupport.toAnsweredSupport(answerContent);
     }
 }
