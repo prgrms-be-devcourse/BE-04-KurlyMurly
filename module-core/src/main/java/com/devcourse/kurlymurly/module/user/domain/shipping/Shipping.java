@@ -40,23 +40,21 @@ public class Shipping extends BaseEntity {
         this.info = new Info();
     }
 
-    private Address checkExpress(String roadAddress) {
-        boolean matches = EXPRESS_REGEX.matcher(roadAddress).matches();
-        return new Address(roadAddress, matches);
-    }
-
     public Address getAddress() {
         return this.address;
     }
 
-    public GetAddress.Response getAddressDto() {
-        return new GetAddress.Response(
-                this.isDefault,
-                this.address.isExpress(),
-                this.address.getDescribedAddress(),
-                this.info.getReceiver(),
-                this.info.getContact()
-        );
+    public Info getInfo() {
+        return info;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    private Address checkExpress(String roadAddress) {
+        boolean matches = EXPRESS_REGEX.matcher(roadAddress).matches();
+        return new Address(roadAddress, matches);
     }
 
     public void update(String description, String receiver, String contact) {

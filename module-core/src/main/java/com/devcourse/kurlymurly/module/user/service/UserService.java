@@ -141,7 +141,9 @@ public class UserService {
     }
 
     private GetAddress.Response to(Shipping shipping) {
-        return shipping.getAddressDto();
+        return new GetAddress.Response(shipping.isDefault(), shipping.getAddress().isExpress()
+                , shipping.getAddress().getDescribedAddress(), shipping.getInfo().getReceiver()
+                , shipping.getInfo().getContact());
     }
 
     public void updateAddress(Long userId, Long addressId, String description, String receiver, String contact) {
