@@ -23,6 +23,20 @@ const MyPage = () => {
       </button>
       <button
         onClick={() => {
+          navigate(`/mypage/pick/list`);
+        }}
+      >
+        찜한 상품
+      </button>
+      <button
+        onClick={() => {
+          navigate(`/mypage/address`);
+        }}
+      >
+        배송지 관리
+      </button>
+      <button
+        onClick={() => {
           navigate(`/mypage/inquiry/products`);
         }}
       >

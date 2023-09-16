@@ -12,6 +12,7 @@ import {
   Products,
   Category,
   MyInfo,
+  MyAddress,
 } from './pages';
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/mypage/review" element={<MyReview />} />
         <Route path="/mypage/info/modify" element={<MyInfo />} />
         <Route path="/mypage/pick/list" element={<Favorite />} />
+        <Route path="/mypage/address" element={<MyAddress />} />
         <Route path="/new-products" element={<Products />} />
         <Route path="/best-products" element={<Products />} />
         <Route path="/favorites" element={<Favorite />} />

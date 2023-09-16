@@ -10,4 +10,5 @@ export { default as Products } from './Products';
 export { default as Category } from './Category';
 export { default as MyReview } from './MyReview';
 export { default as Detail } from './Detail';
+export { default as MyAddress } from './MyAddress';
 export { default as MyInfo } from './MyInfo';
