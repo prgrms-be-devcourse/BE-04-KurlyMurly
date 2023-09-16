@@ -44,4 +44,20 @@ public class PaymentInfo {
     public int getActualPayAmount() {
         return actualPayAmount;
     }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public int getDeliveryFee() {
+        return deliveryFee;
+    }
+
+    public int getTotalDiscount() {
+        return totalDiscount;
+    }
+
+    public String getPayment() {
+        return payment;
+    }
 }

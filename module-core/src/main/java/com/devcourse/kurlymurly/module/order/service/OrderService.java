@@ -8,6 +8,7 @@ import com.devcourse.kurlymurly.module.order.domain.PaymentInfo;
 import com.devcourse.kurlymurly.module.order.domain.ShippingInfo;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrderItem;
+import com.devcourse.kurlymurly.web.dto.order.GetOrderResponse;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,13 +46,53 @@ public class OrderService {
         return new Order(userId, orderItems, paymentInfo, shippingInfo);
     }
 
-    public Order findByIdOrThrow(Long id) {
-        return orderRepository.findById(id)
+    public GetOrderResponse.DetailInfo findOrderById(Long id) {
+        Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER));
+
+        return toOrderInfo(order);
     }
 
-    public List<Order> findAllByUserId(Long userId) {
-        return orderRepository.findAllByUserId(userId);
+    private GetOrderResponse.DetailInfo toOrderInfo(Order order) {
+        PaymentInfo paymentInfo = order.getPaymentInfo();
+        ShippingInfo shippingInfo = order.getShippingInfo();
+
+        return new GetOrderResponse.DetailInfo(
+                order.getId(),
+                order.getOrderNumber(),
+                order.getOrderItems(),
+                paymentInfo.getTotalPrice(),
+                paymentInfo.getDeliveryFee(),
+                paymentInfo.getTotalDiscount(),
+                paymentInfo.getActualPayAmount(),
+                paymentInfo.getPayment(),
+                shippingInfo.getReceiver(),
+                shippingInfo.getPhoneNumber(),
+                shippingInfo.getAddress(),
+                shippingInfo.getReceiveArea(),
+                shippingInfo.getEntranceInfo(),
+                shippingInfo.getPackaging()
+        );
+    }
+
+    public List<GetOrderResponse.SimpleInfo> findAllByUserId(Long userId) {
+        return orderRepository.findAllByUserId(userId).stream()
+                .map(this::toSimpleInfo)
+                .toList();
+    }
+
+    private GetOrderResponse.SimpleInfo toSimpleInfo(Order order) {
+        String productName = order.getOrderItems().get(0).getProductName() + " 외 ";
+        int size = order.getOrderItems().size() - 1;
+
+        return new GetOrderResponse.SimpleInfo(
+                order.getSimpleProducts(),
+                order.getOrderNumber(),
+                order.getPaymentInfo().getPayment(),
+                order.getPaymentInfo().getActualPayAmount(),
+                order.getStatus().name(),
+                order.getCreateAt()
+        );
     }
 
     // todo: 쿼리에서 리뷰가 작성되지 않은 주문 가져오도록 수정
@@ -69,7 +110,7 @@ public class OrderService {
         LocalDateTime delivered = order.getUpdatedAt();
         return new ReviewResponse.Reviewable(
                 orderItem.getProductId(),
-                orderItem.getName(),
+                orderItem.getProductName(),
                 order.getOrderNumber(),
                 delivered,
                 delivered.plusDays(REVIEWABLE_DEADLINE)
@@ -98,6 +139,11 @@ public class OrderService {
     public void toCancel(Long id) {
         Order order = findByIdOrThrow(id);
         order.toCancel();
+    }
+
+    public Order findByIdOrThrow(Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER));
     }
 
     @Transactional

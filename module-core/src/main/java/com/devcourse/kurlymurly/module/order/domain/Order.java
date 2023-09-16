@@ -104,6 +104,18 @@ public class Order extends BaseEntity {
         return paymentInfo.getActualPayAmount();
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public PaymentInfo getPaymentInfo() {
+        return paymentInfo;
+    }
+
+    public ShippingInfo getShippingInfo() {
+        return shippingInfo;
+    }
+
     public void markReviewedOrder(Long productId) {
         this.getOrderItems().stream()
                 .filter(orderItem -> orderItem.isSameProduct(productId))
@@ -111,7 +123,11 @@ public class Order extends BaseEntity {
                 .ifPresent(OrderItem::reviewed);
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getSimpleProducts() {
+        String productName = orderItems.get(0).getProductName() + " 외 " ;
+        int size = orderItems.size() - 1;
+
+        return productName + size + "건";
     }
+
 }
