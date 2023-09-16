@@ -66,19 +66,19 @@ public class OrderSupport extends BaseEntity {
     }
 
     public Status getStatus() {
-        return status;
+        return this.status;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public String getContent() {
-        return content;
+        return this.content;
     }
 
     public Type getType() {
-        return type;
+        return this.type;
     }
 
     public void toPreparedSupport() {
@@ -97,6 +97,6 @@ public class OrderSupport extends BaseEntity {
     public void updateOrderSupport(String title, String content) {
         this.title = title;
         this.content = content;
-        changeUpdateDate();
+        changeUpdatedDate();
     }
 }
