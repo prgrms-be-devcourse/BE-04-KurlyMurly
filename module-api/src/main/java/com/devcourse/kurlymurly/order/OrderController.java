@@ -56,7 +56,7 @@ public class OrderController {
     @GetMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<GetOrderResponse.DetailInfo> getOrderDetailInfoById(@PathVariable Long id) {
-        GetOrderResponse.DetailInfo detailInfo = orderService.findOrderDetailInfoByIdOrThrow(id);
+        GetOrderResponse.DetailInfo detailInfo = orderService.findOrderAndToDetailOrderInfo(id);
         return KurlyResponse.ok(detailInfo);
     }
 
