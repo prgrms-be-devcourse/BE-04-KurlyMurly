@@ -1,18 +1,27 @@
 package com.devcourse.kurlymurly.global.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.CLIENT_INPUT_INVALID;
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.KURLY_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    /**
+     * 애플리케이션 공통 예외(KurlyBaseException)를 잡아주는 예외 핸들러
+     * 예외에 맞게 응답 코드를 넘겨준다.
+     */
     @ExceptionHandler(KurlyBaseException.class)
     public ResponseEntity<ErrorResponse> handleKurlyBaseException(KurlyBaseException e) {
         ErrorCode errorCode = e.getErrorCode();
@@ -21,10 +30,26 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getHttpStatus()).body(response);
     }
 
+    /**
+     * Bean Validation 실패를 잡아주는 예외 핸들러
+     * @Validated는 아직 미적용
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+        @ResponseStatus(BAD_REQUEST)
+        public ErrorResponse handleValidationFailException(HttpServletRequest request, MethodArgumentNotValidException e) {
+            String errorMessage = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+            String requestURI = request.getRequestURI();
+            log.info("ValidationFailed at {} : {}", requestURI, errorMessage);
+            return new ErrorResponse(CLIENT_INPUT_INVALID.name(), errorMessage);
+    }
+
+    /**
+     * 위의 예외를 제외한 예상하지 못한 예외를 잡아주는 핸들러
+     */
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ErrorResponse handleUnexpectedException(RuntimeException e) {
         log.warn("UnexpectedException Occurs : {}", e.getMessage());
-        return ErrorResponse.from(ErrorCode.KURLY_SERVER_ERROR);
+        return ErrorResponse.from(KURLY_SERVER_ERROR);
     }
 }
