@@ -14,7 +14,7 @@ import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.payment.UpdatePayPassword;
 import com.devcourse.kurlymurly.web.dto.product.RemoveCart;
-import com.devcourse.kurlymurly.web.dto.user.JoinUser;
+import com.devcourse.kurlymurly.web.dto.user.Join;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,11 +67,11 @@ class UserServiceTest {
     @Mock
     private CartRepository cartRepository;
 
-    private static JoinUser.Request user;
+    private static Join.Request user;
 
     @BeforeEach
     void setUp() {
-        user = new JoinUser.Request("murly1234", "kurly111", "kurly111", "sehan", "kurly@murly.com", "01094828438"
+        user = new Join.Request("murly1234", "kurly111", "kurly111", "sehan", "kurly@murly.com", "01094828438"
                 , "male", null, "dd", "경기도 구성로");
     }
 
@@ -93,7 +93,7 @@ class UserServiceTest {
     @DisplayName("비밀번호가 서로 일차히지 않으면 예외를 던짐")
     void join_fail_IllegalArgumentException() {
         // Given
-        user = new JoinUser.Request("murly1234", "kurly111", "kurly1234", "sehan", "kurly@murly.com", "01094828438"
+        user = new Join.Request("murly1234", "kurly111", "kurly1234", "sehan", "kurly@murly.com", "01094828438"
                 , "male", null, "dd", "경기 구성로");
 
         // Then

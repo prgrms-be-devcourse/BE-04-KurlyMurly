@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-public sealed interface JoinUser permits JoinUser.Request {
+public sealed interface Join permits Join.Request {
     record Request(
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "사용할 아이디")
@@ -47,6 +47,6 @@ public sealed interface JoinUser permits JoinUser.Request {
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "고객 도로명 주소")
             String roadAddress
-    ) implements JoinUser {
+    ) implements Join {
     }
 }
