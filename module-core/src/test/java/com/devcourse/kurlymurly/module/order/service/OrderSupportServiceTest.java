@@ -1,8 +1,7 @@
-package com.devcourse.kurlymurly.module.orderSupport.service;
+package com.devcourse.kurlymurly.module.order.service;
 
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupportRepository;
-import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.web.dto.order.support.AnswerOrderSupport;
 import com.devcourse.kurlymurly.web.dto.order.support.CreateOrderSupport;
 import org.junit.jupiter.api.Assertions;

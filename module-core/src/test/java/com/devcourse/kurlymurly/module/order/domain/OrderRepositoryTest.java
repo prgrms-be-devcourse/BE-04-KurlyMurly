@@ -41,6 +41,7 @@ class OrderRepositoryTest {
 
         // then
         assertThat(orders).isNotEmpty().hasSize(2);
+        // todo: should not load reviewed orders but doing so
 //        assertThat(orders.stream()
 //                .flatMap(order -> order.getOrderItems()
 //                        .stream()).toList()).hasSize(3);

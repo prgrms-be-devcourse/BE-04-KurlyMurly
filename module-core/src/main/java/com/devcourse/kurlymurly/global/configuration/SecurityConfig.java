@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.common.configuration;
+package com.devcourse.kurlymurly.global.configuration;
 
 import com.devcourse.kurlymurly.global.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
