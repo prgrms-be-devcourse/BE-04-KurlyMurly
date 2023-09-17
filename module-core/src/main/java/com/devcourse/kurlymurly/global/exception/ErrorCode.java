@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 public enum ErrorCode {
     // 400
@@ -37,8 +38,11 @@ public enum ErrorCode {
     // 409
     NOT_ORDER_HOST(CONFLICT, "해당 주문을 주문한 사용자가 아닙니다."),
     NOT_AUTHOR(CONFLICT, "작성자가 아닙니다."),
-    EXIST_SAME_ID(CONFLICT,"사용 불가능한 아이디 입니다."),
-    EXIST_SAME_EMAIL(CONFLICT,"사용 불가능한 이메일 입니다."),
+    EXIST_SAME_ID(CONFLICT, "사용 불가능한 아이디 입니다."),
+    EXIST_SAME_EMAIL(CONFLICT, "사용 불가능한 이메일 입니다."),
+
+    // 422
+    BAD_CREDENTIAL(UNPROCESSABLE_ENTITY, "아이디, 비밀번호를 확인해주세요."),
 
     // 500
     KURLY_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 문제입니다. 관리자에게 문의바랍니다."),
