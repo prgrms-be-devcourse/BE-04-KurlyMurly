@@ -60,7 +60,7 @@ public class UserController {
     @Tag(name = "user")
     @Operation(description = "로그인 API", responses = {
             @ApiResponse(responseCode = "200", description = "로그인에 성공한 경우"),
-            @ApiResponse(responseCode = "400", description = "잘못된 로그인 정보를 입력한 경우"),
+            @ApiResponse(responseCode = "422", description = "잘못된 로그인 정보를 입력한 경우"),
     })
     @PostMapping("/login")
     @ResponseStatus(OK)

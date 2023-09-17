@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,6 +14,8 @@ import static com.devcourse.kurlymurly.global.exception.ErrorCode.CLIENT_INPUT_I
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.KURLY_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -41,6 +44,16 @@ public class GlobalExceptionHandler {
             String requestURI = request.getRequestURI();
             log.info("ValidationFailed at {} : {}", requestURI, errorMessage);
             return new ErrorResponse(CLIENT_INPUT_INVALID.name(), errorMessage);
+    }
+
+    /**
+     * 인증 실패 예외를 잡아주는 핸들러
+     */
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    public ErrorResponse handleUnexpectedException(BadCredentialsException e) {
+        log.warn("BadCredentialException Occurs : {}", e.getMessage());
+        return ErrorResponse.from(ErrorCode.BAD_CREDENTIAL);
     }
 
     /**
