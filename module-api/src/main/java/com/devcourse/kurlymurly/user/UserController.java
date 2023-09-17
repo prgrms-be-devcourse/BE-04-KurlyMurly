@@ -14,8 +14,8 @@ import com.devcourse.kurlymurly.web.dto.product.UpdateCart;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
 import com.devcourse.kurlymurly.web.dto.user.CheckId;
-import com.devcourse.kurlymurly.web.dto.user.JoinUser;
-import com.devcourse.kurlymurly.web.dto.user.LoginUser;
+import com.devcourse.kurlymurly.web.dto.user.Join;
+import com.devcourse.kurlymurly.web.dto.user.Login;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
@@ -64,8 +64,8 @@ public class UserController {
     })
     @PostMapping("/login")
     @ResponseStatus(OK)
-    public KurlyResponse<LoginUser.Response> login(@RequestBody @Valid LoginUser.Request request) {
-        LoginUser.Response response = userService.login(request.loginId(), request.password());
+    public KurlyResponse<Login.Response> login(@RequestBody @Valid Login.Request request) {
+        Login.Response response = userService.login(request.loginId(), request.password());
 
         return KurlyResponse.ok(response);
     }
@@ -79,7 +79,7 @@ public class UserController {
     })
     @PostMapping
     @ResponseStatus(OK)
-    public KurlyResponse<Void> join(@RequestBody @Valid JoinUser.Request request) {
+    public KurlyResponse<Void> join(@RequestBody @Valid Join.Request request) {
         userService.join(request);
         return KurlyResponse.noData();
     }

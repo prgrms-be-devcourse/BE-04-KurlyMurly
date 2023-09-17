@@ -16,8 +16,8 @@ import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
-import com.devcourse.kurlymurly.web.dto.user.JoinUser;
-import com.devcourse.kurlymurly.web.dto.user.LoginUser;
+import com.devcourse.kurlymurly.web.dto.user.Join;
+import com.devcourse.kurlymurly.web.dto.user.Login;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -78,17 +78,17 @@ public class UserService {
         return orderService.getAllReviewableOrdersByUserId(userId);
     }
 
-    public LoginUser.Response login(String loginId, String password) {
+    public Login.Response login(String loginId, String password) {
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(loginId, password);
         Authentication authorized = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         String token = tokenProvider.createToken(authorized);
 
-        return new LoginUser.Response(token, 1800000L);
+        return new Login.Response(token, 1800000L);
     }
 
     @Transactional
-    public void join(JoinUser.Request request) {
+    public void join(Join.Request request) {
         User newUser = to(request);
 
         checkPassword(request.password(), request.checkPassword());
@@ -253,7 +253,7 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    private User to(JoinUser.Request request) {
+    private User to(Join.Request request) {
         UserInfo userInfo = new UserInfo(request.birth(), request.recommender(), request.sex());
 
         return new User(request.name(), request.loginId(), passwordEncoder.encode(request.password()), request.email(), userInfo, request.phoneNumber());
