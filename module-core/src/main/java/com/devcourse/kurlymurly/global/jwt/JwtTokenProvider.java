@@ -11,6 +11,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.xml.bind.DatatypeConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenProvider {
+    private static final Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
     private static final long expiration = 30 * 60 * 1000L;
 
     private final Key key;
@@ -82,14 +85,16 @@ public class JwtTokenProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            throw new KurlyBaseException(ErrorCode.NOT_CORRECT_JWT_SIGN);
+            log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_CORRECT_JWT_SIGN);
         } catch (ExpiredJwtException e) {
-            throw new KurlyBaseException(ErrorCode.EXPIRED_JWT_TOKEN);
+            log.warn("JWT Exception Occurs : {}", ErrorCode.EXPIRED_JWT_TOKEN);
         } catch (UnsupportedJwtException e) {
-            throw new KurlyBaseException(ErrorCode.NOT_SUPPORTED_JWT_TOKEN);
+            log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_SUPPORTED_JWT_TOKEN);
         } catch (IllegalArgumentException e) {
-            throw new KurlyBaseException(ErrorCode.NOT_CORRECT_JWT);
+            log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_CORRECT_JWT);
         }
+
+        return false;
     }
 
     private Claims parseClaims(String accessToken) {
