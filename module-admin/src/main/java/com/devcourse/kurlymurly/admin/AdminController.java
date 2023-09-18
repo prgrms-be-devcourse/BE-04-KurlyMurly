@@ -3,7 +3,7 @@ package com.devcourse.kurlymurly.admin;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.module.product.service.ProductFacade;
-import com.devcourse.kurlymurly.module.product.service.ReviewService;
+import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.order.support.AnswerOrderSupport;
@@ -31,13 +31,18 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/admin")
 public class AdminController {
     private final ProductFacade productFacade;
-    private final ReviewService reviewService;
+    private final ReviewCommand reviewCommand;
     private final OrderService orderService;
     private final OrderSupportService orderSupportService;
 
-    public AdminController(ProductFacade productFacade, ReviewService reviewService, OrderService orderService, OrderSupportService orderSupportService) {
+    public AdminController(
+            ProductFacade productFacade,
+            ReviewCommand reviewCommand,
+            OrderService orderService,
+            OrderSupportService orderSupportService
+    ) {
         this.productFacade = productFacade;
-        this.reviewService = reviewService;
+        this.reviewCommand = reviewCommand;
         this.orderService = orderService;
         this.orderSupportService = orderSupportService;
     }
@@ -87,7 +92,7 @@ public class AdminController {
             @AuthenticationPrincipal User admin,
             @PathVariable Long productId
     ) {
-        productFacade.delete(productId);
+        productFacade.deleteProduct(productId);
         return KurlyResponse.noData();
     }
 
@@ -104,7 +109,7 @@ public class AdminController {
             @AuthenticationPrincipal User admin,
             @PathVariable Long reviewId
     ) {
-        reviewService.updateToBanned(reviewId);
+        reviewCommand.updateToBanned(reviewId);
         return KurlyResponse.noData();
     }
 
@@ -121,7 +126,7 @@ public class AdminController {
             @AuthenticationPrincipal User admin,
             @PathVariable Long reviewId
     ) {
-        reviewService.updateToBest(reviewId);
+        reviewCommand.updateToBest(reviewId);
         return KurlyResponse.noData();
     }
 

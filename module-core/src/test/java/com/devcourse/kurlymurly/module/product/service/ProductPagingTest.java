@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class ProductPagingTest {
     @Autowired
-    private ProductPaging productPaging;
+    private ProductQuery productQuery;
 
     @Autowired
     private ProductRepository productRepository;
@@ -43,7 +43,7 @@ class ProductPagingTest {
         // given
 
         // when
-        List<GetFavorite.Response> result = productPaging.getAllFavoritesByUserId(userId);
+        List<GetFavorite.Response> result = productQuery.getAllFavoritesByUserId(userId);
 
         // then
         assertThat(result).isNotEmpty().hasSize(1);

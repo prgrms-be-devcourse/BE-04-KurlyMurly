@@ -25,7 +25,7 @@ import static com.devcourse.kurlymurly.module.product.ProductFixture.LA_GOGI;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SECRET_SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.domain.Product.Status;
-import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.*;
+import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.DELETED;
 import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -41,19 +41,16 @@ class ProductFacadeTest {
     private ProductFacade productFacade;
 
     @Mock
-    private ProductCreate productCreate;
+    private ProductQuery productQuery;
 
     @Mock
-    private ProductRetrieve productRetrieve;
+    private ProductCommand productCommand;
 
     @Mock
-    private CategoryRetrieve categoryRetrieve;
+    private ReviewCommand reviewCommand;
 
     @Mock
-    private ProductSupportCreate productSupportCreate;
-
-    @Mock
-    private ProductSupportRetrieve productSupportRetrieve;
+    private CategoryQuery categoryQuery;
 
     @Mock
     private FavoriteRepository favoriteRepository;
@@ -67,15 +64,15 @@ class ProductFacadeTest {
             Category category = new Category("hi", "hello");
             CreateProduct.Request request = LA_GOGI.toRequest();
 
-            given(categoryRetrieve.findByIdOrThrow(any())).willReturn(category);
-            willDoNothing().given(productCreate).create(any());
+            given(categoryQuery.findByIdOrThrow(any())).willReturn(category);
+            willDoNothing().given(productCommand).create(any());
 
             // when
             CreateProduct.Response response = productFacade.createProduct(request);
 
             // then
-            then(categoryRetrieve).should(times(1)).findByIdOrThrow(any());
-            then(productCreate).should(times(1)).create(any());
+            then(categoryQuery).should(times(1)).findByIdOrThrow(any());
+            then(productCommand).should(times(1)).create(any());
             assertThat(response.categoryName()).isEqualTo(category.getName());
             assertThat(response.productName()).isEqualTo(request.name());
         }
@@ -85,10 +82,10 @@ class ProductFacadeTest {
         void createProduct_Fail_ByNotExistCategory() {
             // given
             CreateProduct.Request request = LA_GOGI.toRequest();
-            given(categoryRetrieve.findByIdOrThrow(any())).willThrow(EntityNotFoundException.class);
+            given(categoryQuery.findByIdOrThrow(any())).willThrow(EntityNotFoundException.class);
 
             // when, then
-            then(productCreate).shouldHaveNoInteractions();
+            then(productCommand).shouldHaveNoInteractions();
             assertThatExceptionOfType(EntityNotFoundException.class)
                     .isThrownBy(() -> productFacade.createProduct(request));
         }
@@ -103,13 +100,13 @@ class ProductFacadeTest {
         void delete_Success() {
             // given
             Product product = LA_GOGI.toEntity();
-            given(productRetrieve.findByIdOrThrow(any())).willReturn(product);
+            given(productQuery.findProductByIdOrThrow(any())).willReturn(product);
 
             // when
-            productFacade.delete(productId);
+            productFacade.deleteProduct(productId);
 
             // then
-            then(productRetrieve).should(times(1)).findByIdOrThrow(any());
+            then(productQuery).should(times(1)).findProductByIdOrThrow(any());
             assertThat(product.getStatus()).isEqualTo(Status.DELETED);
         }
 
@@ -117,11 +114,11 @@ class ProductFacadeTest {
         @DisplayName("존재하지 않는 상품을 접근하면 예외을 던진다.")
         void delete_Fail_ByNotExistProduct() {
             // given
-            given(productRetrieve.findByIdOrThrow(any())).willThrow(KurlyBaseException.class);
+            given(productQuery.findProductByIdOrThrow(any())).willThrow(KurlyBaseException.class);
 
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)
-                    .isThrownBy(() -> productFacade.delete(productId));
+                    .isThrownBy(() -> productFacade.deleteProduct(productId));
         }
     }
 
@@ -133,13 +130,13 @@ class ProductFacadeTest {
         void soldOutProduct_Success() {
             // given
             Product product = LA_GOGI.toEntity();
-            given(productRetrieve.findByIdOrThrow(any())).willReturn(product);
+            given(productQuery.findProductByIdOrThrow(any())).willReturn(product);
 
             // when
             productFacade.soldOutProduct(product.getId());
 
             // then
-            then(productRetrieve).should(times(1)).findByIdOrThrow(any());
+            then(productQuery).should(times(1)).findProductByIdOrThrow(any());
             assertThat(product.getStatus()).isEqualTo(Status.SOLD_OUT);
         }
 
@@ -150,12 +147,12 @@ class ProductFacadeTest {
             Product product = LA_GOGI.toEntity();
             product.softDelete();
 
-            given(productRetrieve.findByIdOrThrow(any())).willReturn(product);
+            given(productQuery.findProductByIdOrThrow(any())).willReturn(product);
 
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)
                     .isThrownBy(() -> productFacade.soldOutProduct(product.getId()));
-            then(productRetrieve).should(times(1)).findByIdOrThrow(any());
+            then(productQuery).should(times(1)).findProductByIdOrThrow(any());
         }
     }
 
@@ -171,14 +168,14 @@ class ProductFacadeTest {
             // given
             Product product = LA_GOGI.toEntity();
 
-            given(productRetrieve.findByIdOrThrow(any())).willReturn(product);
-            willDoNothing().given(productSupportCreate).create(any(), any(), any(), any());
+            given(productQuery.findProductByIdOrThrow(any())).willReturn(product);
+            willDoNothing().given(productCommand).createSupport(any(), any(), any(), any());
 
             // when
             productFacade.createProductSupport(userId, productId, request);
 
             // then
-            then(productSupportCreate).should(times(1)).create(any(), any(), any(), any());
+            then(productCommand).should(times(1)).createSupport(any(), any(), any(), any());
         }
 
         @Test
@@ -188,12 +185,12 @@ class ProductFacadeTest {
             Product product = LA_GOGI.toEntity();
             product.softDelete();
 
-            given(productRetrieve.findByIdOrThrow(any())).willReturn(product);
+            given(productQuery.findProductByIdOrThrow(any())).willReturn(product);
 
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)
                     .isThrownBy(() -> productFacade.createProductSupport(userId, productId, request));
-            then(productSupportCreate).shouldHaveNoInteractions();
+            then(productCommand).shouldHaveNoInteractions();
         }
     }
 
@@ -207,13 +204,13 @@ class ProductFacadeTest {
         void updateProductSupport_Success() {
             // given
             ProductSupport support = SUPPORT_FIXTURE.toEntity();
-            given(productSupportRetrieve.findByIdOrThrow(any())).willReturn(support);
+            given(productQuery.findSupportByIdOrThrow(any())).willReturn(support);
 
             // when
             productFacade.updateProductSupport(userId, support.getId(), request);
 
             // then
-            then(productSupportRetrieve).should(times(1)).findByIdOrThrow(any());
+            then(productQuery).should(times(1)).findSupportByIdOrThrow(any());
             assertThat(support.isSecret()).isTrue();
         }
 
@@ -222,7 +219,7 @@ class ProductFacadeTest {
         void updateProductSupport_Fail_ByNotMatchAuthor() {
             // given
             ProductSupport support = SUPPORT_FIXTURE.toEntity();
-            given(productSupportRetrieve.findByIdOrThrow(any())).willReturn(support);
+            given(productQuery.findSupportByIdOrThrow(any())).willReturn(support);
 
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)

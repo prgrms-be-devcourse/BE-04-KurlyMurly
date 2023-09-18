@@ -13,8 +13,8 @@ public enum ErrorCode {
     DELETED_PRODUCT(BAD_REQUEST, "삭제된 상품입니다."),
     NOT_CORRECT_QUANTITY(BAD_REQUEST, "상품의 최소 수량은 1개입니다."),
     FAIL_USER_LOGIN(NOT_FOUND, "존재하지 않는 계정입니다."),
-    NOT_SAME_PASSWORD(BAD_REQUEST,"동일한 비밀번호를 입력"),
-    CLIENT_INPUT_INVALID(BAD_REQUEST,null),
+    NOT_SAME_PASSWORD(BAD_REQUEST, "동일한 비밀번호를 입력"),
+    CLIENT_INPUT_INVALID(BAD_REQUEST, null),
     NOT_CORRECT_PASSWORD(NOT_FOUND, "현재 비밀번호를 확인해주세요"),
 
     // 401
@@ -36,6 +36,7 @@ public enum ErrorCode {
     NOT_FOUND_PAYMENT(NOT_FOUND, "존재하는 결제수단이 없습니다."),
     CART_NOT_FOUND(NOT_FOUND, "존재하는 장바구니 상품이 없습니다"),
     SHIPPING_NOT_FOUND(NOT_FOUND, "주소가 존재하지 않습니다."),
+    CATEGORY_NOT_FOUND(NOT_FOUND, "존재하지 않는 카테고리입니다."),
 
     // 409
     NOT_ORDER_HOST(CONFLICT, "해당 주문을 주문한 사용자가 아닙니다."),
