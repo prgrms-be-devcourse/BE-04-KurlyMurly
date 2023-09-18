@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { MyPage } from '../apis';
+import { User } from '../apis';
 
 const ReviewList = () => {
   const [reviews, setReviews] = useState([]);
-  const { loadAllMyReviews } = MyPage();
+  const { loadAllMyReviews } = User();
 
   useEffect(() => {
     loadAllMyReviews(setReviews);

@@ -1,6 +1,6 @@
 import JwtInterceptor from './ApiController';
 
-const MyPage = () => {
+const User = () => {
   const { instance } = JwtInterceptor();
 
   const loadAllReviewables = async () => {
@@ -14,7 +14,6 @@ const MyPage = () => {
   const loadAllMyReviews = async (setReviews) => {
     try {
       const res = await instance.get(`/reviews`);
-      console.log(res.data);
       return res.data;
     } catch (error) {
       console.error(error);
@@ -27,4 +26,4 @@ const MyPage = () => {
   };
 };
 
-export default MyPage;
+export default User;

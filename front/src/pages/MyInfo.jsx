@@ -1,50 +1,35 @@
 import { useState } from 'react';
-import { Auth } from '../apis';
+import { User } from '../apis';
 
-const SignUp = () => {
-  const { checkDuplicationId, checkDuplicationEmail, signUp } = Auth();
+const MyInfo = () => {
+  const [isEmailValidated, setIsEmailValidated] = useState(true);
+  const [currentEmail, setCurrentEmail] = useState('hejow1234@naver.com');
   const [inputs, setInputs] = useState({
-    loginId: '',
+    loginId: 'hejow1234',
+    currentPassword: '',
     password: '',
     checkPassword: '',
-    name: '',
-    email: '',
-    phoneNumber: '',
-    sex: '',
-    birth: '',
-    recommender: '',
-    roadAddress: '',
+    name: '문희조',
+    email: 'hejow1234@naver.com',
+    phoneNumber: '01012341234',
+    sex: '남성',
+    birth: '1995-12-04',
   });
 
-  const [isIdValidated, setIsIdValidated] = useState(false);
-  const [isEmailValidated, setIsEmailValidated] = useState(false);
-
-  const {
-    loginId,
-    password,
-    checkPassword,
-    name,
-    email,
-    phoneNumber,
-    birth,
-    recommender,
-    roadAddress,
-  } = inputs;
+  const { loginId, currentPassword, password, checkPassword, name, email, phoneNumber, birth } =
+    inputs;
 
   const onInputChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === 'email') {
+      value !== currentEmail ? setIsEmailValidated(false) : setIsEmailValidated(true);
+    }
+
     setInputs((inputs) => ({
       ...inputs,
       [name]: value,
     }));
-  };
-
-  const isValidationPassed = () => {
-    return isIdValidated && isEmailValidated;
-  };
-
-  const onSignUp = () => {
-    isValidationPassed() ? signUp(inputs) : alert('중복 검사가 모두 완료되지 않았습니다.');
   };
 
   return (
@@ -52,41 +37,37 @@ const SignUp = () => {
       <h2>회원가입</h2>
       <form>
         <div>
-          <h4>로그인 아이디</h4>
-          <input
-            name="loginId"
-            value={loginId}
-            type="text"
-            onChange={onInputChange}
-            placeholder="아이디를 입력해주세요"
-            maxLength="20"
-          />
-          <button
-            disabled={isIdValidated}
-            type="button"
-            onClick={() => checkDuplicationId(loginId, setIsIdValidated)}
-          >
-            {isIdValidated ? '확인완료' : '중복확인'}
-          </button>
+          <h4>아이디</h4>
+          {loginId}
         </div>
         <div>
-          <h4>비밀번호</h4>
+          <h4>현재 비밀번호</h4>
+          <input
+            name="currentPassword"
+            value={currentPassword}
+            onChange={onInputChange}
+            type="password"
+            placeholder="비밀번호를 입력해 주세요"
+          />
+        </div>
+        <div>
+          <h4>새 비밀번호</h4>
           <input
             name="password"
             value={password}
             onChange={onInputChange}
             type="password"
-            placeholder="비밀번호를 입력해주세요"
+            placeholder="새 비밀번호를 입력해 주세요"
           />
         </div>
         <div>
-          <h4>비밀번호 확인</h4>
+          <h4>새 비밀번호 확인</h4>
           <input
             name="checkPassword"
             value={checkPassword}
             onChange={onInputChange}
             type="password"
-            placeholder="비밀번호를 한번 더 입력해주세요"
+            placeholder="새 비밀번호를 한번 더 입력해 주세요"
           />
         </div>
         <div>
@@ -106,7 +87,7 @@ const SignUp = () => {
             value={email}
             onChange={onInputChange}
             type="email"
-            placeholder="예: marketkurly@kurly.com"
+            placeholder={email}
             maxLength="30"
           />
           <button
@@ -128,10 +109,6 @@ const SignUp = () => {
           />
         </div>
         <div>
-          <h4>주소</h4>
-          <input name="roadAddress" value={roadAddress} onChange={onInputChange} type="text" />
-        </div>
-        <div>
           <h4>성별</h4>
           <input name="sex" value="남성" onChange={onInputChange} type="radio" />
           <label>남성</label>
@@ -144,20 +121,11 @@ const SignUp = () => {
           <h4>생년월일</h4>
           <input name="birth" value={birth} onChange={onInputChange} type="date" />
         </div>
-        <div>
-          <h4>추천인</h4>
-          <input
-            name="recommender"
-            value={recommender}
-            onChange={onInputChange}
-            type="text"
-            placeholder="없으면 비워주세요"
-          />
-        </div>
       </form>
-      <button onClick={onSignUp}>가입하기</button>
+      <button>탈퇴하기</button>
+      <button>회원정보수정</button>
     </div>
   );
 };
 
-export default SignUp;
+export default MyInfo;
