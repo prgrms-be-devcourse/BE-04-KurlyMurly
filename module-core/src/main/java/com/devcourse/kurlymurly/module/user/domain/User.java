@@ -93,6 +93,10 @@ public class User extends BaseEntity implements UserDetails {
         this.payPassword = payPassword;
     }
 
+    public boolean validatePayPassword(String payPassword){
+        return this.payPassword.equals(payPassword);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
