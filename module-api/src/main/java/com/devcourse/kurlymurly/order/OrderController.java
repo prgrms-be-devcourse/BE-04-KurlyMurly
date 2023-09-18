@@ -49,26 +49,26 @@ public class OrderController {
     }
 
     @Tag(name = "order")
-    @Operation(description = "주문 id로 주문을 조회한다.", responses = {
+    @Operation(description = "주문 id로 주문 상세정보를 조회한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 주문을 조회한 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 주문일 경우")
     })
     @GetMapping("/{id}")
     @ResponseStatus(OK)
-    public KurlyResponse<GetOrderResponse.DetailInfo> findById(@PathVariable Long id) {
-        GetOrderResponse.DetailInfo detailInfo = orderService.findOrderById(id);
+    public KurlyResponse<GetOrderResponse.DetailInfo> getOrderDetailInfoById(@PathVariable Long id) {
+        GetOrderResponse.DetailInfo detailInfo = orderService.findOrderAndToDetailOrderInfo(id);
         return KurlyResponse.ok(detailInfo);
     }
 
     @Tag(name = "order")
-    @Operation(description = "[토큰 필요] 해당 유저의 주문 내역을 조회한다.", responses = {
+    @Operation(description = "[토큰 필요] 해당 유저의 주문 내역을 간단한 정보로 조회한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 주문을 조회한 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
     })
     @GetMapping
     @ResponseStatus(OK)
-    public KurlyResponse<List<GetOrderResponse.SimpleInfo>> findAllByUserId(@AuthenticationPrincipal User user) {
-        List<GetOrderResponse.SimpleInfo> simpleOrderInfos = orderService.findAllByUserId(user.getId());
+    public KurlyResponse<List<GetOrderResponse.SimpleInfo>> getOrderListOfUserByUserId(@AuthenticationPrincipal User user) {
+        List<GetOrderResponse.SimpleInfo> simpleOrderInfos = orderService.findOrderListSimpleFormByUserId(user.getId());
         return KurlyResponse.ok(simpleOrderInfos);
     }
 

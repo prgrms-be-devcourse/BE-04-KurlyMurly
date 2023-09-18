@@ -46,14 +46,13 @@ public class OrderService {
         return new Order(userId, orderItems, paymentInfo, shippingInfo);
     }
 
-    public GetOrderResponse.DetailInfo findOrderById(Long id) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER));
+    public GetOrderResponse.DetailInfo findOrderAndToDetailOrderInfo(Long id) {
+        Order order = findByIdOrThrow(id);
 
-        return toOrderInfo(order);
+        return toDetailInfo(order);
     }
 
-    private GetOrderResponse.DetailInfo toOrderInfo(Order order) {
+    private GetOrderResponse.DetailInfo toDetailInfo(Order order) {
         PaymentInfo paymentInfo = order.getPaymentInfo();
         ShippingInfo shippingInfo = order.getShippingInfo();
 
@@ -75,16 +74,18 @@ public class OrderService {
         );
     }
 
-    public List<GetOrderResponse.SimpleInfo> findAllByUserId(Long userId) {
+    public Order findByIdOrThrow(Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER));
+    }
+
+    public List<GetOrderResponse.SimpleInfo> findOrderListSimpleFormByUserId(Long userId) {
         return orderRepository.findAllByUserId(userId).stream()
                 .map(this::toSimpleInfo)
                 .toList();
     }
 
     private GetOrderResponse.SimpleInfo toSimpleInfo(Order order) {
-        String productName = order.getOrderItems().get(0).getProductName() + " 외 ";
-        int size = order.getOrderItems().size() - 1;
-
         return new GetOrderResponse.SimpleInfo(
                 order.getSimpleProducts(),
                 order.getOrderNumber(),
@@ -139,11 +140,6 @@ public class OrderService {
     public void toCancel(Long id) {
         Order order = findByIdOrThrow(id);
         order.toCancel();
-    }
-
-    public Order findByIdOrThrow(Long id) {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER));
     }
 
     @Transactional
