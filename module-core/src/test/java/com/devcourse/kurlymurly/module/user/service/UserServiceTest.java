@@ -336,55 +336,55 @@ class UserServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("개인정보 변경 테스트")
+    class update {
+        private static UpdateUser.Request request;
 
-    @Test
-    @DisplayName("개인정보 변경 테스트_비밀번호")
-    void update_user_password() {
-        // Given
-        UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
-                , "sehan", "kurly@murly.com", "01094828438", "male", null);
+        @BeforeEach
+        void setUp(){
+            request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
+                    , "sehan", "kurly@murly.com", "01094828438", "male", null);
+        }
 
-        UserInfo info = new UserInfo(null, "sehan", "male");
+        @Test
+        @DisplayName("개인정보 변경 테스트_비밀번호")
+        void update_user_password() {
+            // Given
+            doReturn("editEncodePassword").when(passwordEncoder).encode(any());
+            doReturn(true).when(passwordEncoder).matches(any(), any());
+            doReturn(Optional.of(user)).when(userRepository).findById(any());
 
-        doReturn("editEncodePassword").when(passwordEncoder).encode(any());
-        doReturn(true).when(passwordEncoder).matches(any(), any());
-        doReturn(Optional.of(user)).when(userRepository).findById(any());
+            // When
+            userService.findUpdateUser(1L, request);
 
-        // When
-        userService.findUpdateUser(1L, request);
+            // Then
+            assertThat(user.isEqualPassword("editEncodePassword")).isTrue();
+            assertThat(user.getRole()).isEqualTo(ROLE_USER);
+        }
 
-        // Then
-        assertThat(user.isEqualPassword("editEncodePassword")).isTrue();
-        assertThat(user.getRole()).isEqualTo(ROLE_USER);
-    }
+        @Test
+        @DisplayName("해당 회원이 조회되지 않으면 예외를 던짐")
+        void update_fail_notExistsUser() {
+            // Given
+            doReturn(Optional.empty()).when(userRepository).findById(any());
 
-    @Test
-    @DisplayName("해당 회원이 조회되지 않으면 예외를 던짐")
-    void update_fail_notExistsUser() {
-        // Given
-        UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
-                , "sehan", "kurly@murly.com", "01094828438", "male", null);
+            // Then
+            assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
+        }
 
-        doReturn(Optional.empty()).when(userRepository).findById(any());
+        @Test
+        @DisplayName("현재 비밀번호가 일치하지 않으면 예외를 던짐")
+        void update_user_ByNotCorrectPassword() {
+            // Given
+            UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
+                    , "sehan", "murly@kurly.com", "01012221212", "male", null);
 
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
-    }
+            doReturn(Optional.of(user)).when(userRepository).findById(any());
 
-    @Test
-    @DisplayName("현재 비밀번호가 일치하지 않으면 예외를 던짐")
-    void update_user_ByNotCorrectPassword() {
-        // Given
-        UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
-                , "sehan", "murly@kurly.com", "01012221212", "male", null);
-
-        User newUser = new User("kurly", "kurly4321", "encodePassword", "kyrly@murly.com"
-                , null, "01094828438");
-
-        doReturn(Optional.of(newUser)).when(userRepository).findById(any());
-
-        // When,Then
-        assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
+            // When,Then
+            assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
+        }
     }
 
     @Nested
