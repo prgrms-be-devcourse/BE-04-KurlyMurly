@@ -1,6 +1,7 @@
 package com.devcourse.kurlymurly.module.user.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.module.user.UserFixture;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
@@ -63,57 +64,65 @@ class UserServiceTest {
     @Mock
     private CartRepository cartRepository;
 
-    private static Join.Request user;
+    private static User user;
 
     @BeforeEach
     void setUp() {
-        user = new Join.Request("murly1234", "kurly111", "kurly111", "sehan", "kurly@murly.com", "01094828438"
-                , "male", null, "dd", "경기도 구성로");
+        user = UserFixture.USER_FIXTURE.toEntity();
     }
 
-    @Test
-    @DisplayName("회원가입 완료 테스트")
-    void join() {
-        // Given
-        User newUser = new User("kurly", "kurly1234", "murly4321", "kyrly@murly.com"
-                , null, "01094828438");
+    @Nested
+    @DisplayName("회원가입 테스트")
+    class join {
+        private static Join.Request JoinRequest;
 
-        doReturn(newUser).when(userRepository).save(any());
-        doReturn("encryptedPassword").when(passwordEncoder).encode(any());
+        @BeforeEach
+        void setUp() {
+            JoinRequest = new Join.Request("murly1234", "kurly111", "kurly111", "sehan", "kurly@murly.com", "01094828438"
+                    , "male", null, "dd", "경기도 구성로");
+        }
 
-        // When
-        userService.join(user);
-    }
+        @Test
+        @DisplayName("회원가입 완료 테스트")
+        void join() {
+            // Given
+            doReturn(user).when(userRepository).save(any());
+            doReturn("encryptedPassword").when(passwordEncoder).encode(any());
 
-    @Test
-    @DisplayName("비밀번호가 서로 일차히지 않으면 예외를 던짐")
-    void join_fail_IllegalArgumentException() {
-        // Given
-        user = new Join.Request("murly1234", "kurly111", "kurly1234", "sehan", "kurly@murly.com", "01094828438"
-                , "male", null, "dd", "경기 구성로");
+            // When
+            userService.join(JoinRequest);
+        }
 
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.join(user));
-    }
+        @Test
+        @DisplayName("비밀번호가 서로 일차히지 않으면 예외를 던짐")
+        void join_fail_IllegalArgumentException() {
+            // Given
+            JoinRequest = new Join.Request("murly1234", "kurly111", "kurly1234", "sehan", "kurly@murly.com", "01094828438"
+                    , "male", null, "dd", "경기 구성로");
 
-    @Test
-    @DisplayName("아이디가 중복되면 예외를 던짐")
-    void join_fail_id_ExistUserInfoException() {
-        // Given
-        doReturn(true).when(userRepository).existsByLoginId(any());
+            // When , Then
+            assertThrows(KurlyBaseException.class, () -> userService.join(JoinRequest));
+        }
 
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.join(user));
-    }
+        @Test
+        @DisplayName("아이디가 중복되면 예외를 던짐")
+        void join_fail_id_ExistUserInfoException() {
+            // Given
+            doReturn(true).when(userRepository).existsByLoginId(any());
 
-    @Test
-    @DisplayName("이메일이 중복되면 예외를 던짐")
-    void join_fail_email_ExistUserInfoException() {
-        // Given
-        doReturn(true).when(userRepository).existsByEmail(any());
+            // Then
+            assertThrows(KurlyBaseException.class, () -> userService.join(JoinRequest));
+        }
 
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.join(user));
+        @Test
+        @DisplayName("이메일이 중복되면 예외를 던짐")
+        void join_fail_email_ExistUserInfoException() {
+            // Given
+            doReturn(true).when(userRepository).existsByEmail(any());
+
+            // Then
+            assertThrows(KurlyBaseException.class, () -> userService.join(JoinRequest));
+        }
     }
 
     @Test
@@ -182,7 +191,7 @@ class UserServiceTest {
         doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
 
         // When
-        userService.updateAddressInfo(1L, 1L, "세한", "01000000000","DOOR","1234","ALWAYS");
+        userService.updateAddressInfo(1L, 1L, "세한", "01000000000", "DOOR", "1234", "ALWAYS");
 
         // Then
         then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
