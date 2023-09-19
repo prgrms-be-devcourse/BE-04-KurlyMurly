@@ -82,19 +82,6 @@ public class User extends BaseEntity implements UserDetails {
         this.status = UserStatus.NORMAL;
     }
 
-    public User(String name, String loginId, String password, String email, String payPassword, UserInfo info, String phoneNumber) {
-        this.name = name;
-        this.loginId = loginId;
-        this.password = password;
-        this.tier = Tier.THE_PURPLE;
-        this.email = email;
-        this.payPassword = payPassword;
-        this.info = info;
-        this.phoneNumber = phoneNumber;
-        this.role = Role.ROLE_USER;
-        this.status = UserStatus.NORMAL;
-    }
-
     public void update(String name, String password, String email, String sex, LocalDate birth, String phoneNumber) {
         this.name = name;
         this.password = password;

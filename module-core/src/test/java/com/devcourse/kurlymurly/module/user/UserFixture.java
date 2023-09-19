@@ -6,28 +6,29 @@ import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import java.time.LocalDate;
 
 public enum UserFixture {
-    USER_FIXTURE("수연장", "abd1234", "11", "aaaa@gmail.com", "123456",
+    USER_FIXTURE("수연장", "abd1234", "11", "aaaa@gmail.com",
             new UserInfo(LocalDate.now(), "문희조", "MAN"), "1234-4567");
 
     private final String name;
     private final String loginId;
     private final String password;
     private final String email;
-    private final String payPassword;
     private final UserInfo userInfo;
     private final String phoneNumber;
 
-    UserFixture(String name, String loginId, String password, String email, String payPassword, UserInfo userInfo, String phoneNumber) {
+    UserFixture(String name, String loginId, String password, String email, UserInfo userInfo, String phoneNumber) {
         this.name = name;
         this.loginId = loginId;
         this.password = password;
         this.email = email;
-        this.payPassword = payPassword;
         this.userInfo = userInfo;
         this.phoneNumber = phoneNumber;
     }
 
     public User toEntity() {
-        return new User(name, loginId, password, email, payPassword, userInfo, phoneNumber);
+        User user =  new User(name, loginId, password, email, userInfo, phoneNumber);
+        user.updatePayPassword("123456");
+
+        return user;
     }
 }
