@@ -1,7 +1,6 @@
 package com.devcourse.kurlymurly.module.user.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
-import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
@@ -60,9 +59,6 @@ class UserServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
-
-    @Mock
-    private ProductFacade productFacade;
 
     @Mock
     private CartRepository cartRepository;
@@ -386,7 +382,6 @@ class UserServiceTest {
         @DisplayName("주문 가능한 상품은 장바구니에 추가할 수 있다.")
         void addCart_Success() {
             // given
-            willDoNothing().given(productFacade).validateOrderable(any());
 
             // when
             userService.addCart(userId, productId, quantity);
@@ -402,7 +397,6 @@ class UserServiceTest {
             Cart cart = new Cart(userId, productId, quantity);
 
             // mocking
-            willDoNothing().given(productFacade).validateOrderable(any());
             given(cartRepository.findById(any())).willReturn(Optional.of(cart));
 
             // when
@@ -446,7 +440,6 @@ class UserServiceTest {
             Cart cart = new Cart(userId, productId, quantity);
 
             // mocking
-            willDoNothing().given(productFacade).validateOrderable(any());
             given(cartRepository.findById(any())).willReturn(Optional.of(cart));
 
             // when
@@ -464,7 +457,6 @@ class UserServiceTest {
             Cart cart = new Cart(userId, productId, quantity);
 
             // mocking
-            willDoNothing().given(productFacade).validateOrderable(any());
             given(cartRepository.findById(any())).willReturn(Optional.of(cart));
 
             // when
@@ -482,7 +474,6 @@ class UserServiceTest {
             Cart cart = new Cart(userId, productId, 1);
 
             // mocking
-            willDoNothing().given(productFacade).validateOrderable(any());
             given(cartRepository.findById(any())).willReturn(Optional.of(cart));
 
             // when, then
@@ -492,16 +483,15 @@ class UserServiceTest {
                     .isThrownBy(() -> userService.changeItemQuantity(1L, false));
         }
 
-        @Test
-        @DisplayName("삭제되었거나 품절인 상품을 장바구니에 담으려고 하면 IllegalStateException을 던진다.")
-        void addCart_Fail_ByInvalidStatus() {
-            // given
-            willThrow(IllegalStateException.class).given(productFacade).validateOrderable(any());
-
-            // when, then
-            assertThatExceptionOfType(IllegalStateException.class)
-                    .isThrownBy(() -> userService.addCart(userId, productId, quantity));
-            then(cartRepository).shouldHaveNoInteractions();
-        }
+//        @Test
+//        @DisplayName("삭제되었거나 품절인 상품을 장바구니에 담으려고 하면 IllegalStateException을 던진다.")
+//        void addCart_Fail_ByInvalidStatus() {
+//            // given
+//
+//            // when, then
+//            assertThatExceptionOfType(IllegalStateException.class)
+//                    .isThrownBy(() -> userService.addCart(userId, productId, quantity));
+//            then(cartRepository).shouldHaveNoInteractions();
+//        }
     }
 }

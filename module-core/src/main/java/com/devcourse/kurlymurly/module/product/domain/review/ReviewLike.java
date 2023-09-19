@@ -26,11 +26,11 @@ public class ReviewLike extends BaseEntity {
         this.isDeleted = false;
     }
 
-    public void cancelLike() {
+    public void cancel() {
         this.isDeleted = true;
     }
 
-    public void activeLike() {
+    public void activate() {
         this.isDeleted = false;
     }
 

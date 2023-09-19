@@ -1,14 +1,15 @@
 package com.devcourse.kurlymurly.module.product.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.module.product.ProductSupportFixture;
 import com.devcourse.kurlymurly.module.product.domain.Product;
-import com.devcourse.kurlymurly.module.product.domain.category.Category;
+import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
+import com.devcourse.kurlymurly.module.product.domain.SupportDomain;
 import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
 import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
+import com.devcourse.kurlymurly.module.product.domain.support.ProductSupportRepository;
 import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
-import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -32,62 +33,58 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-class ProductFacadeTest {
+class ProductCommandTest {
     @InjectMocks
-    private ProductFacade productFacade;
+    private ProductCommand productCommand;
+
+    @Mock
+    private CategoryQuery categoryQuery;
 
     @Mock
     private ProductQuery productQuery;
 
     @Mock
-    private ProductCommand productCommand;
+    private ProductRepository productRepository;
 
     @Mock
-    private ReviewCommand reviewCommand;
-
-    @Mock
-    private CategoryQuery categoryQuery;
+    private ProductSupportRepository productSupportRepository;
 
     @Mock
     private FavoriteRepository favoriteRepository;
 
     @Nested
     class createTest {
+        private final CreateProduct.Request request = LA_GOGI.toRequest();
+
         @Test
-        @DisplayName("상품 생성 요청이 들어오면 데이터가 저장되고 응답이 잘 생성된다.")
+        @DisplayName("상품 생성 요청이 들어오면 데이터가 저장된다.")
         void createProduct_Success() {
             // given
-            Category category = new Category("hi", "hello");
-            CreateProduct.Request request = LA_GOGI.toRequest();
-
-            given(categoryQuery.findByIdOrThrow(any())).willReturn(category);
-            willDoNothing().given(productCommand).create(any());
+            willDoNothing().given(categoryQuery).validateIsExist(any());
 
             // when
-            CreateProduct.Response response = productFacade.createProduct(request);
+            productCommand.create(request.categoryId(), LA_GOGI.toDomain());
 
             // then
-            then(categoryQuery).should(times(1)).findByIdOrThrow(any());
-            then(productCommand).should(times(1)).create(any());
-            assertThat(response.categoryName()).isEqualTo(category.getName());
-            assertThat(response.productName()).isEqualTo(request.name());
+            then(categoryQuery).should(times(1)).validateIsExist(any());
+            then(productRepository).should(times(1)).save(any());
         }
 
         @Test
-        @DisplayName("존재하지 않는 카테고리로 생성 요청을 하면 EntityNotFoundException을 던진다.")
+        @DisplayName("존재하지 않는 카테고리로 생성 요청을 하면 예외을 던진다.")
         void createProduct_Fail_ByNotExistCategory() {
             // given
-            CreateProduct.Request request = LA_GOGI.toRequest();
-            given(categoryQuery.findByIdOrThrow(any())).willThrow(EntityNotFoundException.class);
+            willThrow(KurlyBaseException.class).given(categoryQuery).validateIsExist(any());
 
             // when, then
-            then(productCommand).shouldHaveNoInteractions();
-            assertThatExceptionOfType(EntityNotFoundException.class)
-                    .isThrownBy(() -> productFacade.createProduct(request));
+            assertThatExceptionOfType(KurlyBaseException.class)
+                    .isThrownBy(() -> productCommand.create(request.categoryId(), LA_GOGI.toDomain()));
+            then(productRepository).shouldHaveNoInteractions();
         }
     }
 
@@ -103,7 +100,7 @@ class ProductFacadeTest {
             given(productQuery.findProductByIdOrThrow(any())).willReturn(product);
 
             // when
-            productFacade.deleteProduct(productId);
+            productCommand.deleteProduct(productId);
 
             // then
             then(productQuery).should(times(1)).findProductByIdOrThrow(any());
@@ -118,7 +115,7 @@ class ProductFacadeTest {
 
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)
-                    .isThrownBy(() -> productFacade.deleteProduct(productId));
+                    .isThrownBy(() -> productCommand.deleteProduct(productId));
         }
     }
 
@@ -133,7 +130,7 @@ class ProductFacadeTest {
             given(productQuery.findProductByIdOrThrow(any())).willReturn(product);
 
             // when
-            productFacade.soldOutProduct(product.getId());
+            productCommand.soldOutProduct(product.getId());
 
             // then
             then(productQuery).should(times(1)).findProductByIdOrThrow(any());
@@ -151,7 +148,7 @@ class ProductFacadeTest {
 
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)
-                    .isThrownBy(() -> productFacade.soldOutProduct(product.getId()));
+                    .isThrownBy(() -> productCommand.soldOutProduct(product.getId()));
             then(productQuery).should(times(1)).findProductByIdOrThrow(any());
         }
     }
@@ -160,22 +157,20 @@ class ProductFacadeTest {
     class createProductSupportTest {
         private final Long userId = 1L;
         private final Long productId = 1L;
-        private final SupportProduct.Request request = SUPPORT_FIXTURE.toRequest();
+        private final SupportDomain domain = SUPPORT_FIXTURE.toDomain();
 
         @Test
         @DisplayName("상품 문의를 생성하면 유효성 검사를 통과하고 생성 호출이 정상적으로 이루어진다.")
         void createProductSupport_Success() {
             // given
             Product product = LA_GOGI.toEntity();
-
             given(productQuery.findProductByIdOrThrow(any())).willReturn(product);
-            willDoNothing().given(productCommand).createSupport(any(), any(), any(), any());
 
             // when
-            productFacade.createProductSupport(userId, productId, request);
+            productCommand.createSupport(userId, productId, domain);
 
             // then
-            then(productCommand).should(times(1)).createSupport(any(), any(), any(), any());
+            then(productQuery).should(times(1)).findProductByIdOrThrow(any());
         }
 
         @Test
@@ -189,25 +184,25 @@ class ProductFacadeTest {
 
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)
-                    .isThrownBy(() -> productFacade.createProductSupport(userId, productId, request));
-            then(productCommand).shouldHaveNoInteractions();
+                    .isThrownBy(() -> productCommand.createSupport(userId, productId, domain));
+            then(productSupportRepository).shouldHaveNoInteractions();
         }
     }
 
     @Nested
     class updateProductSupportTest {
         private final Long userId = SUPPORT_FIXTURE.getUserId();
-        private final SupportProduct.Request request = SECRET_SUPPORT_FIXTURE.toRequest();
+        private final ProductSupportFixture fixture = SUPPORT_FIXTURE;
 
         @Test
         @DisplayName("상품 문의를 비밀글로 수정 요청이 들어오면 반영이 잘되어야 한다.")
         void updateProductSupport_Success() {
             // given
-            ProductSupport support = SUPPORT_FIXTURE.toEntity();
+            ProductSupport support = fixture.toEntity();
             given(productQuery.findSupportByIdOrThrow(any())).willReturn(support);
 
             // when
-            productFacade.updateProductSupport(userId, support.getId(), request);
+            productCommand.updateSupport(userId, support.getId(), fixture.toSecretDomain());
 
             // then
             then(productQuery).should(times(1)).findSupportByIdOrThrow(any());
@@ -223,10 +218,10 @@ class ProductFacadeTest {
 
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)
-                    .isThrownBy(() -> productFacade.updateProductSupport(
+                    .isThrownBy(() -> productCommand.updateSupport(
                             SECRET_SUPPORT_FIXTURE.getUserId(),
                             support.getId(),
-                            request)
+                            fixture.toDomain())
                     );
         }
     }
@@ -252,11 +247,11 @@ class ProductFacadeTest {
             given(favoriteRepository.findByUserIdAndProductId(any(), any())).willReturn(Optional.of(favorite));
 
             // when
-            productFacade.favoriteProduct(userId, product.getId());
+            productCommand.favoriteProduct(userId, product.getId());
 
             // then
             then(favoriteRepository).should(times(1)).findByUserIdAndProductId(any(), any());
-            then(favoriteRepository).shouldHaveNoMoreInteractions();
+            then(favoriteRepository).should(times(0)).save(any());
             assertThat(favorite.getStatus()).isEqualTo(NORMAL);
         }
 
@@ -268,7 +263,7 @@ class ProductFacadeTest {
             given(favoriteRepository.save(any())).willReturn(favorite);
 
             // when
-            productFacade.favoriteProduct(userId, product.getId());
+            productCommand.favoriteProduct(userId, product.getId());
 
             // then
             then(favoriteRepository).should(times(1)).findByUserIdAndProductId(any(), any());
@@ -282,7 +277,7 @@ class ProductFacadeTest {
             given(favoriteRepository.findByUserIdAndProductId(any(), any())).willReturn(Optional.of(favorite));
 
             // when
-            productFacade.cancelFavorite(userId, product.getId());
+            productCommand.cancelFavorite(userId, product.getId());
 
             // then
             then(favoriteRepository).should(times(1)).findByUserIdAndProductId(any(), any());
@@ -297,7 +292,7 @@ class ProductFacadeTest {
 
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)
-                    .isThrownBy(() -> productFacade.cancelFavorite(userId, product.getId()))
+                    .isThrownBy(() -> productCommand.cancelFavorite(userId, product.getId()))
                     .withMessage(NEVER_FAVORITE.getMessage());
         }
     }

@@ -1,54 +1,88 @@
 package com.devcourse.kurlymurly.module.product.service;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.Product;
-import com.devcourse.kurlymurly.module.product.domain.ProductDetail;
+import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
+import com.devcourse.kurlymurly.module.product.domain.SupportDomain;
+import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
+import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupportRepository;
-import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
-import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NEVER_FAVORITE;
+
 @Component
-@Transactional(readOnly = true)
+@Transactional
 public class ProductCommand {
+    private final CategoryQuery categoryQuery;
+    private final ProductQuery productQuery;
     private final ProductRepository productRepository;
     private final ProductSupportRepository productSupportRepository;
+    private final FavoriteRepository favoriteRepository;
 
-    public ProductCommand(ProductRepository productRepository, ProductSupportRepository productSupportRepository) {
+    public ProductCommand(
+            CategoryQuery categoryQuery,
+            ProductQuery productQuery,
+            ProductRepository productRepository,
+            ProductSupportRepository productSupportRepository,
+            FavoriteRepository favoriteRepository
+    ) {
+        this.categoryQuery = categoryQuery;
+        this.productQuery = productQuery;
         this.productRepository = productRepository;
         this.productSupportRepository = productSupportRepository;
+        this.favoriteRepository = favoriteRepository;
     }
 
-    public void create(CreateProduct.Request request) {
-        Product product = toEntity(request);
-        productRepository.save(product);
+    public Product create(Long categoryId, ProductDomain productDomain) {
+        categoryQuery.validateIsExist(categoryId);
+
+        Product product = productDomain.toEntity(categoryId);
+        return productRepository.save(product);
     }
 
-    public void createSupport(Long userId, Long productId, String productName, SupportProduct.Request request) {
-        ProductSupport support = new ProductSupport(userId, productId, productName, request.title(), request.content(), request.isSecret());
+    public void createSupport(Long userId, Long productId, SupportDomain supportDomain) {
+        Product product = productQuery.findProductByIdOrThrow(productId);
+        product.validateSupportable();
+
+        ProductSupport support = supportDomain.toSupportEntity(userId, productId, product.getName());
         productSupportRepository.save(support);
     }
 
-    private Product toEntity(CreateProduct.Request request) {
-        ProductDetail detail = toDetail(request);
-        return new Product(request.categoryId(),
-                request.name(),
-                request.description(),
-                request.price(),
-                request.delivery(),
-                detail,
-                request.isKurlyOnly());
+    public void updateSupport(Long userId, Long supportId, SupportDomain supportDomain) {
+        ProductSupport support = productQuery.findSupportByIdOrThrow(supportId);
+        support.validateAuthor(userId);
+        support.update(supportDomain.getTitle(), supportDomain.getContent(), supportDomain.isSecret());
     }
 
-    private ProductDetail toDetail(CreateProduct.Request request) {
-        return new ProductDetail(request.seller(),
-                request.storageType(),
-                request.saleUnit(),
-                request.weight(),
-                request.origin(),
-                request.allergyInfo(),
-                request.expirationInformation());
+    public void soldOutProduct(Long id) {
+        Product product = productQuery.findProductByIdOrThrow(id);
+        product.soldOut();
+    }
+
+    public void deleteProduct(Long id) {
+        Product product = productQuery.findProductByIdOrThrow(id);
+        product.softDelete();
+    }
+
+    public void favoriteProduct(Long userId, Long productId) {
+        Favorite favorite = favoriteRepository.findByUserIdAndProductId(userId, productId)
+                .orElseGet(() -> createFavorite(userId, productId));
+        favorite.activate();
+    }
+
+    private Favorite createFavorite(Long userId, Long productId) {
+        Product product = productQuery.findProductByIdOrThrow(productId);
+        Favorite favorite = new Favorite(userId, product);
+        return favoriteRepository.save(favorite);
+    }
+
+    public void cancelFavorite(Long userId, Long productId) {
+        Favorite favorite = favoriteRepository.findByUserIdAndProductId(userId, productId)
+                .orElseThrow(() -> new KurlyBaseException(NEVER_FAVORITE));
+        favorite.softDelete();
     }
 }

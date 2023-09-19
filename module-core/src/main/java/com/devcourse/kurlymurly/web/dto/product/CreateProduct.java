@@ -67,8 +67,6 @@ public sealed interface CreateProduct permits Request, Response {
     }
 
     record Response(
-            String categoryName,
-            String subCategoryName,
             String productName,
             int price,
             String delivery,

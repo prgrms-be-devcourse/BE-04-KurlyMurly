@@ -31,6 +31,12 @@ public class OrderService {
     }
 
     @Transactional
+    public void reviewOrderItem(Long id, Long productId) {
+        Order order = findByIdOrThrow(id);
+        order.markReviewedOrder(productId);
+    }
+
+    @Transactional
     public CreateOrder.Response createOrder(Long userId, CreateOrder.Request request) {
         Order order = toOrder(userId, request);
         orderRepository.save(order);

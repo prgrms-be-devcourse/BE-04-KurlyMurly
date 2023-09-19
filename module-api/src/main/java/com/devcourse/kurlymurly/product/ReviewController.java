@@ -1,10 +1,8 @@
 package com.devcourse.kurlymurly.product;
 
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
-import com.devcourse.kurlymurly.module.product.service.ProductFacade;
-import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
-import com.devcourse.kurlymurly.module.product.service.ReviewQuery;
 import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.product.application.ProductFacade;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
@@ -13,7 +11,6 @@ import com.devcourse.kurlymurly.web.dto.product.review.UpdateReview;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,17 +32,9 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/reviews")
 public class ReviewController {
     private final ProductFacade productFacade;
-    private final ReviewQuery reviewQuery;
-    private final ReviewCommand reviewCommand;
 
-    public ReviewController(
-            ProductFacade productFacade,
-            ReviewQuery reviewQuery,
-            ReviewCommand reviewCommand
-    ) {
+    public ReviewController(ProductFacade productFacade) {
         this.productFacade = productFacade;
-        this.reviewQuery = reviewQuery;
-        this.reviewCommand = reviewCommand;
     }
 
     @Tag(name = "review")
@@ -58,7 +47,7 @@ public class ReviewController {
     @ResponseStatus(OK)
     public KurlyResponse<Void> registerReview(
             @AuthenticationPrincipal User user,
-            @RequestBody @Valid CreateReview.Request request
+            @RequestBody CreateReview.Request request
     ) {
         productFacade.registerReview(user, request);
         return KurlyResponse.noData();
@@ -73,7 +62,7 @@ public class ReviewController {
     @GetMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Review> findById(@PathVariable Long id) { // todo: response 수정
-        Review review = reviewQuery.findReviewByIdOrThrow(id);
+        Review review = productFacade.findReviewByIdOrThrow(id);
         return KurlyResponse.ok(review);
     }
 
@@ -86,9 +75,10 @@ public class ReviewController {
     @ResponseStatus(OK)
     public KurlyResponse<Slice<ReviewResponse.ReviewOfProduct>> getReviewsOfProduct(
             @PathVariable Long productId,
-            @RequestBody @Valid ReviewRequest.OfProduct request) {
-        Slice<ReviewResponse.ReviewOfProduct> reviewsOfProduct = reviewQuery.getReviewsOfProduct(productId, request.start());
-        return KurlyResponse.ok(reviewsOfProduct);
+            @RequestBody ReviewRequest.OfProduct request
+    ) {
+        Slice<ReviewResponse.ReviewOfProduct> responses = productFacade.loadReviewsOfProduct(productId, request);
+        return KurlyResponse.ok(responses);
     }
 
 
@@ -102,7 +92,7 @@ public class ReviewController {
     public KurlyResponse<List<ReviewResponse.Reviewed>> getAllReviewsOnMyPage(
             @AuthenticationPrincipal User user
     ) {
-        List<ReviewResponse.Reviewed> response = reviewQuery.getAllReviewsOfUser(user.getId());
+        List<ReviewResponse.Reviewed> response = productFacade.loadReviewsOfUser(user.getId());
         return KurlyResponse.ok(response);
     }
 
@@ -117,9 +107,9 @@ public class ReviewController {
     public KurlyResponse<Void> updateReviewContent(
             @AuthenticationPrincipal User user,
             @PathVariable Long id,
-            @RequestBody @Valid UpdateReview.Request request
+            @RequestBody UpdateReview.Request request
     ) {
-        reviewCommand.updateReviewContent(id, request.content(), request.isSecret());
+        productFacade.updateReview(id, request);
         return KurlyResponse.noData();
     }
 
@@ -135,7 +125,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user,
             @PathVariable Long id
     ) {
-        reviewCommand.deleteReview(id);
+        productFacade.deleteReview(id);
         return KurlyResponse.noData();
     }
 
@@ -151,7 +141,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user,
             @PathVariable Long reviewId
     ) {
-        reviewCommand.activeReviewLike(user.getId(), reviewId);
+        productFacade.likeReview(user.getId(), reviewId);
         return KurlyResponse.noData();
     }
 
@@ -167,7 +157,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user,
             @PathVariable Long reviewId
     ) {
-        reviewCommand.cancelReviewLike(reviewId);
+        productFacade.cancelReviewLike(user.getId(), reviewId);
         return KurlyResponse.noData();
     }
 }

@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.module.product;
 
+import com.devcourse.kurlymurly.module.product.domain.SupportDomain;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
 
@@ -32,6 +33,22 @@ public enum ProductSupportFixture {
                 this.title,
                 this.content,
                 this.isSecret
+        );
+    }
+
+    public SupportDomain toDomain() {
+        return new SupportDomain(
+                this.title,
+                this.content,
+                this.isSecret
+        );
+    }
+
+    public SupportDomain toSecretDomain() {
+        return new SupportDomain(
+                this.title,
+                this.content,
+                !this.isSecret
         );
     }
 
