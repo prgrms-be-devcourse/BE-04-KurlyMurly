@@ -1,22 +1,24 @@
 package com.devcourse.kurlymurly.module.product.service;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.category.Category;
 import com.devcourse.kurlymurly.module.product.domain.category.CategoryRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.CATEGORY_NOT_FOUND;
+
 @Service
 @Transactional(readOnly = true)
-public class CategoryRetrieve {
+public class CategoryQuery {
     private final CategoryRepository categoryRepository;
 
-    public CategoryRetrieve(CategoryRepository categoryRepository) {
+    public CategoryQuery(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
-    public Category findByIdOrThrow(Long categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(EntityNotFoundException::new);
+    public Category findByIdOrThrow(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> KurlyBaseException.withId(CATEGORY_NOT_FOUND, id));
     }
 }

@@ -1,7 +1,9 @@
 package com.devcourse.kurlymurly.product;
 
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
-import com.devcourse.kurlymurly.module.product.service.ReviewService;
+import com.devcourse.kurlymurly.module.product.service.ProductFacade;
+import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
+import com.devcourse.kurlymurly.module.product.service.ReviewQuery;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
@@ -32,10 +34,18 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/reviews")
 public class ReviewController {
-    private final ReviewService reviewService;
+    private final ProductFacade productFacade;
+    private final ReviewQuery reviewQuery;
+    private final ReviewCommand reviewCommand;
 
-    public ReviewController(ReviewService reviewService) {
-        this.reviewService = reviewService;
+    public ReviewController(
+            ProductFacade productFacade,
+            ReviewQuery reviewQuery,
+            ReviewCommand reviewCommand
+    ) {
+        this.productFacade = productFacade;
+        this.reviewQuery = reviewQuery;
+        this.reviewCommand = reviewCommand;
     }
 
     @Tag(name = "review")
@@ -50,7 +60,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user,
             @RequestBody @Valid CreateReview.Request request
     ) {
-        reviewService.registerReview(user, request);
+        productFacade.registerReview(user, request);
         return KurlyResponse.noData();
     }
 
@@ -63,7 +73,7 @@ public class ReviewController {
     @GetMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Review> findById(@PathVariable Long id) { // todo: response 수정
-        Review review = reviewService.findReviewById(id);
+        Review review = reviewQuery.findReviewByIdOrThrow(id);
         return KurlyResponse.ok(review);
     }
 
@@ -77,7 +87,7 @@ public class ReviewController {
     public KurlyResponse<Slice<ReviewResponse.ReviewOfProduct>> getReviewsOfProduct(
             @PathVariable Long productId,
             @RequestBody @Valid ReviewRequest.OfProduct request) {
-        Slice<ReviewResponse.ReviewOfProduct> reviewsOfProduct = reviewService.getReviewsOfProduct(productId, request.start());
+        Slice<ReviewResponse.ReviewOfProduct> reviewsOfProduct = reviewQuery.getReviewsOfProduct(productId, request.start());
         return KurlyResponse.ok(reviewsOfProduct);
     }
 
@@ -92,7 +102,7 @@ public class ReviewController {
     public KurlyResponse<List<ReviewResponse.Reviewed>> getAllReviewsOnMyPage(
             @AuthenticationPrincipal User user
     ) {
-        List<ReviewResponse.Reviewed> response = reviewService.getAllReviewsOfUser(user.getId());
+        List<ReviewResponse.Reviewed> response = reviewQuery.getAllReviewsOfUser(user.getId());
         return KurlyResponse.ok(response);
     }
 
@@ -109,7 +119,7 @@ public class ReviewController {
             @PathVariable Long id,
             @RequestBody @Valid UpdateReview.Request request
     ) {
-        reviewService.updateReviewContent(id, request.content(), request.isSecret());
+        reviewCommand.updateReviewContent(id, request.content(), request.isSecret());
         return KurlyResponse.noData();
     }
 
@@ -125,7 +135,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user,
             @PathVariable Long id
     ) {
-        reviewService.deleteReview(id);
+        reviewCommand.deleteReview(id);
         return KurlyResponse.noData();
     }
 
@@ -141,7 +151,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user,
             @PathVariable Long reviewId
     ) {
-        reviewService.activeReviewLike(user.getId(), reviewId);
+        reviewCommand.activeReviewLike(user.getId(), reviewId);
         return KurlyResponse.noData();
     }
 
@@ -157,7 +167,7 @@ public class ReviewController {
             @AuthenticationPrincipal User user,
             @PathVariable Long reviewId
     ) {
-        reviewService.cancelReviewLike(reviewId);
+        reviewCommand.cancelReviewLike(reviewId);
         return KurlyResponse.noData();
     }
 }

@@ -46,6 +46,9 @@ public class Order extends BaseEntity {
     @Embedded
     private ShippingInfo shippingInfo;
 
+    @Column
+    private LocalDateTime deliveredAt;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private Status status;
@@ -73,6 +76,7 @@ public class Order extends BaseEntity {
 
     public void toDelivered() {
         this.status = Status.DELIVERED;
+        this.deliveredAt = LocalDateTime.now();
     }
 
     public void toCancel() {
@@ -104,10 +108,6 @@ public class Order extends BaseEntity {
         return paymentInfo.getActualPayAmount();
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
     public PaymentInfo getPaymentInfo() {
         return paymentInfo;
     }
@@ -129,5 +129,4 @@ public class Order extends BaseEntity {
 
         return productName + size + "건";
     }
-
 }

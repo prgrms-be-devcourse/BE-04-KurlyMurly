@@ -14,7 +14,7 @@ import java.util.List;
 
 import static com.devcourse.kurlymurly.module.product.ReviewFixture.REVIEW_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.ReviewFixture.SECRET_REVIEW_FIXTURE;
-import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.*;
+import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.DELETED;
 
 @DataJpaTest
 class ReviewRepositoryTest {
