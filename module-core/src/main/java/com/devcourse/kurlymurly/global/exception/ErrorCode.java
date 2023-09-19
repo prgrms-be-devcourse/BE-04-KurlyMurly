@@ -10,6 +10,8 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 public enum ErrorCode {
     // 400
+    CANCELED_ORDER(BAD_REQUEST, "이미 취소된 주문입니다."),
+    DELIVERED_ORDER(BAD_REQUEST, "이미 배송 완료된 주문입니다."),
     DELETED_PRODUCT(BAD_REQUEST, "삭제된 상품입니다."),
     NOT_CORRECT_QUANTITY(BAD_REQUEST, "상품의 최소 수량은 1개입니다."),
     FAIL_USER_LOGIN(NOT_FOUND, "존재하지 않는 계정입니다."),
@@ -19,6 +21,7 @@ public enum ErrorCode {
     BAD_STATE_REVIEW(NOT_FOUND, "삭제되었거나 차단된 후기입니다."),
 
     // 401
+    NOT_CORRECT_PAY_PASSWORD(BAD_REQUEST, "잘못된 결제 비밀번호입니다."),
     NOT_CORRECT_JWT_SIGN(BAD_REQUEST, "잘못된 JWT SIGN값입니다."),
     NOT_CORRECT_JWT(BAD_REQUEST, "잘못된 JWT 토큰입니다."),
     EXPIRED_JWT_TOKEN(BAD_REQUEST, "만료된 토큰입니다."),

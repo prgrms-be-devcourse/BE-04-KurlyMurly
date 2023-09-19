@@ -26,6 +26,9 @@ public enum UserFixture {
     }
 
     public User toEntity() {
-        return new User(name, loginId, password, email, userInfo, phoneNumber);
+        User user =  new User(name, loginId, password, email, userInfo, phoneNumber);
+        user.updatePayPassword("123456");
+
+        return user;
     }
 }

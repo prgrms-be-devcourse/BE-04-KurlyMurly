@@ -6,16 +6,19 @@ import com.devcourse.kurlymurly.module.order.domain.OrderItem;
 import com.devcourse.kurlymurly.module.order.domain.OrderRepository;
 import com.devcourse.kurlymurly.module.order.domain.PaymentInfo;
 import com.devcourse.kurlymurly.module.order.domain.ShippingInfo;
+import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrderItem;
 import com.devcourse.kurlymurly.web.dto.order.GetOrderResponse;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PAY_PASSWORD;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_ORDER;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_ORDER_HOST;
 
@@ -25,9 +28,11 @@ public class OrderService {
     private static final int REVIEWABLE_DEADLINE = 30;
 
     private final OrderRepository orderRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, PasswordEncoder passwordEncoder) {
         this.orderRepository = orderRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -37,11 +42,17 @@ public class OrderService {
     }
 
     @Transactional
-    public CreateOrder.Response createOrder(Long userId, CreateOrder.Request request) {
-        Order order = toOrder(userId, request);
-        orderRepository.save(order);
+    public CreateOrder.Response createOrder(User user, CreateOrder.Request request) {
+        boolean validatePayPassword = user.validatePayPassword(request.payPassword(), passwordEncoder);
 
-        return new CreateOrder.Response(request.address(), order.getOrderNumber(), order.getActualPayAmount());
+        if(validatePayPassword) {
+            Order order = toOrder(user.getId(), request);
+            orderRepository.save(order);
+
+            return new CreateOrder.Response(request.address(), order.getOrderNumber(), order.getActualPayAmount());
+        }
+
+        throw new KurlyBaseException(NOT_CORRECT_PAY_PASSWORD);
     }
 
     private Order toOrder(Long userId, CreateOrder.Request request) {

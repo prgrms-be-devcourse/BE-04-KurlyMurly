@@ -21,9 +21,9 @@ import java.util.List;
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails {
 
-    public enum Role { ROLE_USER, ROLE_ADMIN }
+    public enum Role {ROLE_USER, ROLE_ADMIN}
 
-    public enum UserStatus { CANCEL, NORMAL }
+    public enum UserStatus {CANCEL, NORMAL}
 
     public enum Tier {
         THE_PURPLE,
@@ -75,8 +75,8 @@ public class User extends BaseEntity implements UserDetails {
         this.password = password;
         this.tier = Tier.THE_PURPLE;
         this.email = email;
-        this.info = info;
         this.payPassword = null;
+        this.info = info;
         this.phoneNumber = phoneNumber;
         this.role = Role.ROLE_USER;
         this.status = UserStatus.NORMAL;
@@ -90,12 +90,12 @@ public class User extends BaseEntity implements UserDetails {
         info.update(birth, sex);
     }
 
-    public void updatePayPassword(String payPassword){
+    public void updatePayPassword(String payPassword) {
         this.payPassword = payPassword;
     }
 
-    public boolean validatePayPassword(String payPassword, PasswordEncoder encoder){
-        return encoder.matches(payPassword,this.payPassword);
+    public boolean validatePayPassword(String payPassword, PasswordEncoder encoder) {
+        return encoder.matches(payPassword, this.payPassword);
     }
 
     @Override
