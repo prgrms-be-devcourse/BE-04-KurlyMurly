@@ -1,6 +1,7 @@
 package com.devcourse.kurlymurly.module.user.domain;
 
 import com.devcourse.kurlymurly.module.BaseEntity;
+import com.devcourse.kurlymurly.module.user.domain.strategy.Reward;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -21,9 +22,9 @@ import java.util.List;
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails {
 
-    public enum Role { ROLE_USER, ROLE_ADMIN }
+    public enum Role {ROLE_USER, ROLE_ADMIN}
 
-    public enum UserStatus { CANCEL, NORMAL }
+    public enum UserStatus {CANCEL, NORMAL}
 
     public enum Tier {
         THE_PURPLE,
@@ -58,6 +59,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 15)
     private String phoneNumber;
 
+    private int reward;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
     private Role role;
@@ -90,12 +93,18 @@ public class User extends BaseEntity implements UserDetails {
         info.update(birth, sex);
     }
 
-    public void updatePayPassword(String payPassword){
+    public void updatePayPassword(String payPassword) {
         this.payPassword = payPassword;
     }
 
-    public boolean validatePayPassword(String payPassword, PasswordEncoder encoder){
-        return encoder.matches(payPassword,this.payPassword);
+    public boolean validatePayPassword(String payPassword, PasswordEncoder encoder) {
+        return encoder.matches(payPassword, this.payPassword);
+    }
+
+    public int saveReward(Reward reward, int totalPrice) {
+        int totalReward = reward.saveReward(totalPrice);
+
+        return this.reward += totalReward;
     }
 
     @Override
