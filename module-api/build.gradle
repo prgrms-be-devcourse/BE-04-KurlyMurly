@@ -1,5 +1,6 @@
 dependencies {
     implementation project(":module-core")
+    implementation project(":module-image")
 }
 
 bootJar.enabled=false

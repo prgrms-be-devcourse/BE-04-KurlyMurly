@@ -10,6 +10,7 @@ import com.devcourse.kurlymurly.module.product.service.ProductQuery;
 import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
 import com.devcourse.kurlymurly.module.product.service.ReviewQuery;
 import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.service.ImageService;
 import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
 import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;
@@ -21,6 +22,7 @@ import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class ProductFacade {
     private final ReviewCommand reviewCommand;
     private final OrderService orderService;
     private final ProductMapper productMapper;
+    private final ImageService imageService;
 
     public ProductFacade(
             ProductQuery productQuery,
@@ -39,7 +42,8 @@ public class ProductFacade {
             ReviewQuery reviewQuery,
             ReviewCommand reviewCommand,
             OrderService orderService,
-            ProductMapper productMapper
+            ProductMapper productMapper,
+            ImageService imageService
     ) {
         this.productQuery = productQuery;
         this.productCommand = productCommand;
@@ -47,6 +51,7 @@ public class ProductFacade {
         this.reviewCommand = reviewCommand;
         this.orderService = orderService;
         this.productMapper = productMapper;
+        this.imageService = imageService;
     }
 
     public ListPagingResponse<GetFavorite.Response> getUserFavorites(Long userId) {
@@ -64,9 +69,14 @@ public class ProductFacade {
     }
 
     // admin
-    public CreateProduct.Response createProduct(@Valid CreateProduct.Request request) {
+    public CreateProduct.Response createProduct(
+            MultipartFile image,
+            @Valid CreateProduct.Request request
+    ) {
         ProductDomain productDomain = productMapper.toProductDomain(request);
-        productCommand.create(request.categoryId(), productDomain);
+        String imageUrl = imageService.upload(image);
+
+        productCommand.create(request.categoryId(), imageUrl, productDomain);
         return productMapper.toCreateProductResponse(request);
     }
 
@@ -82,17 +92,12 @@ public class ProductFacade {
         productCommand.updateSupport(userId, supportId, supportDomain);
     }
 
-    public void validateProductOrderable(Long id) {
-        Product product = productQuery.findProductByIdOrThrow(id);
-        product.validateOrderable();
-    }
-
     public void registerReview(User user, @Valid CreateReview.Request request) {
         Product product = productQuery.findProductByIdOrThrow(request.productId());
         product.validateSupportable();
 
-        orderService.reviewOrderItem(request.orderId(), request.productId());
         reviewCommand.create(user, product, request.content(), request.isSecret());
+        orderService.reviewOrderItem(request.orderId(), request.productId());
     }
 
     public Slice<ReviewResponse.ReviewOfProduct> loadReviewsOfProduct(Long productId, @Valid ReviewRequest.OfProduct request) {
@@ -114,12 +119,12 @@ public class ProductFacade {
         productCommand.cancelFavorite(userId, productId);
     }
 
-    public void updateReview(Long reviewId, @Valid UpdateReview.Request request) {
-        reviewCommand.update(reviewId, request.content(), request.isSecret());
+    public void updateReview(Long userId, Long reviewId, @Valid UpdateReview.Request request) {
+        reviewCommand.update(userId, reviewId, request.content(), request.isSecret());
     }
 
-    public void deleteReview(Long reviewId) {
-        reviewCommand.delete(reviewId);
+    public void deleteReview(Long userId, Long reviewId) {
+        reviewCommand.delete(userId, reviewId);
     }
 
     public void likeReview(Long userId, Long reviewId) {

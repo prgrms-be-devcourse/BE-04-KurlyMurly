@@ -60,6 +60,7 @@ class ProductCommandTest {
     @Nested
     class createTest {
         private final CreateProduct.Request request = LA_GOGI.toRequest();
+        private final String imageUrl = "";
 
         @Test
         @DisplayName("상품 생성 요청이 들어오면 데이터가 저장된다.")
@@ -68,7 +69,7 @@ class ProductCommandTest {
             willDoNothing().given(categoryQuery).validateIsExist(any());
 
             // when
-            productCommand.create(request.categoryId(), LA_GOGI.toDomain());
+            productCommand.create(request.categoryId(), imageUrl, LA_GOGI.toDomain());
 
             // then
             then(categoryQuery).should(times(1)).validateIsExist(any());
@@ -83,7 +84,7 @@ class ProductCommandTest {
 
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)
-                    .isThrownBy(() -> productCommand.create(request.categoryId(), LA_GOGI.toDomain()));
+                    .isThrownBy(() -> productCommand.create(request.categoryId(), imageUrl, LA_GOGI.toDomain()));
             then(productRepository).shouldHaveNoInteractions();
         }
     }

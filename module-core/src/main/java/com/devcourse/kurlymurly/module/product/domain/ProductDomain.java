@@ -40,13 +40,14 @@ public class ProductDomain {
         this.expirationInformation = expirationInformation;
     }
 
-    public Product toEntity(Long categoryId) {
+    public Product toEntity(Long categoryId, String imageUrl) {
         return new Product(
                 categoryId,
                 name,
                 description,
                 price,
                 delivery,
+                imageUrl,
                 new ProductDetail(seller,
                         storageType,
                         saleUnit,

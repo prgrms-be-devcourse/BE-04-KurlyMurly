@@ -35,7 +35,8 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private Delivery delivery;
 
-    // todo: images
+    @Column(nullable = false)
+    private String imageUrl;
 
     @Embedded
     private ProductDetail detail;
@@ -51,12 +52,13 @@ public class Product extends BaseEntity {
     }
 
     public Product(Long categoryId, String name, String description, int price, Delivery delivery,
-                   ProductDetail detail, boolean isKurlyOnly) {
+                   String imageUrl, ProductDetail detail, boolean isKurlyOnly) {
         this.categoryId = categoryId;
         this.name = name;
         this.description = description;
         this.price = price;
         this.delivery = delivery;
+        this.imageUrl = imageUrl;
         this.detail = detail;
         this.status = Status.NORMAL;
         this.isKurlyOnly = isKurlyOnly;

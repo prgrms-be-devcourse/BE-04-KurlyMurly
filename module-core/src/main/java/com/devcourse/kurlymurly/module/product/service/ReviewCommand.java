@@ -34,8 +34,9 @@ public class ReviewCommand {
         reviewRepository.save(review);
     }
 
-    public void update(Long id, String content, boolean isSecret) {
+    public void update(Long userId, Long id, String content, boolean isSecret) {
         Review review = reviewQuery.findReviewByIdOrThrow(id);
+        review.validateAuthor(userId);
         review.update(content, isSecret);
     }
 
@@ -49,8 +50,9 @@ public class ReviewCommand {
         review.toBest();
     }
 
-    public void delete(Long id) {
+    public void delete(Long userId, Long id) {
         Review review = reviewQuery.findReviewByIdOrThrow(id);
+        review.validateAuthor(userId);
         review.softDelete();
     }
 

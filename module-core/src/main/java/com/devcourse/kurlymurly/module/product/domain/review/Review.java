@@ -14,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.BAD_STATE_REVIEW;
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_AUTHOR;
 import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.BANNED;
 import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.BEST;
 import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.DELETED;
@@ -25,10 +26,10 @@ public class Review extends BaseEntity {
     public enum Status { NORMAL, BANNED, BEST, DELETED,}
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private User user;
+    private User user; // fetch join
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Product product;
+    private Product product; // fetch join
 
     @Column(nullable = false, columnDefinition = "text")
     private String content;
@@ -80,6 +81,12 @@ public class Review extends BaseEntity {
     private void validateInteractive() {
         if (this.status == DELETED || this.status == BANNED) {
             throw KurlyBaseException.withId(BAD_STATE_REVIEW, this.getId());
+        }
+    }
+
+    public void validateAuthor(Long userId) {
+        if (user.isNotAuthor(userId)) {
+            throw KurlyBaseException.withId(NOT_AUTHOR, userId);
         }
     }
 
