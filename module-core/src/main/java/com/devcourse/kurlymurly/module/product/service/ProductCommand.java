@@ -37,10 +37,10 @@ public class ProductCommand {
         this.favoriteRepository = favoriteRepository;
     }
 
-    public Product create(Long categoryId, ProductDomain productDomain) {
+    public Product create(Long categoryId, String imageUrl, ProductDomain productDomain) {
         categoryQuery.validateIsExist(categoryId);
 
-        Product product = productDomain.toEntity(categoryId);
+        Product product = productDomain.toEntity(categoryId, imageUrl);
         return productRepository.save(product);
     }
 

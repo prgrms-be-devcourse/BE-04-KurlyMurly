@@ -14,6 +14,7 @@ public enum ProductFixture {
             "100g당 가격 4,363원",
             34_900,
             Delivery.EXPRESS,
+            "",
             "컬리",
             StorageType.FROZEN,
             "1개",
@@ -29,6 +30,7 @@ public enum ProductFixture {
     private final String description;
     private final int price;
     private final Delivery delivery;
+    private final String imageUrl;
     private final String seller;
     private final StorageType storageType;
     private final String saleUnit;
@@ -38,11 +40,12 @@ public enum ProductFixture {
     private final String expirationInformation;
     private final boolean isKurlyOnly;
 
-    ProductFixture(Long categoryId, String name, String description, int price, Delivery delivery, String seller, StorageType storageType,
+    ProductFixture(Long categoryId, String name, String description, int price, Delivery delivery, String imageUrl, String seller, StorageType storageType,
                    String saleUnit, String weight, String origin, String allergyInfo, String expirationInformation, boolean isKurlyOnly) {
         this.categoryId = categoryId;
         this.name = name;
         this.description = description;
+        this.imageUrl = imageUrl;
         this.price = price;
         this.delivery = delivery;
         this.seller = seller;
@@ -69,6 +72,7 @@ public enum ProductFixture {
                 this.description,
                 this.price,
                 this.delivery,
+                imageUrl,
                 detail,
                 this.isKurlyOnly);
     }

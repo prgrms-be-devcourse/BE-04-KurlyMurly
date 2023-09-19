@@ -1,12 +1,4 @@
 DROP TABLE IF EXISTS categories;
-DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS product_supports;
-DROP TABLE IF EXISTS favorites;
-DROP TABLE IF EXISTS reviews;
-DROP TABLE IF EXISTS review_likes;
-DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS order_supports;
-
 CREATE TABLE categories
 (
     category_id  BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -16,6 +8,7 @@ CREATE TABLE categories
     updated_at   TIMESTAMP(6)
 );
 
+DROP TABLE IF EXISTS products;
 CREATE TABLE products
 (
     product_id             BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -24,6 +17,7 @@ CREATE TABLE products
     description            VARCHAR(100) NOT NULL,
     price                  INT          NOT NULL,
     delivery               VARCHAR(15)  NOT NULL,
+    image_url              VARCHAR(50)  NOT NULL,
     seller                 VARCHAR(20)  NOT NULL,
     storage_type           VARCHAR(15)  NOT NULL,
     sale_unit              VARCHAR(20)  NOT NULL,
@@ -37,6 +31,7 @@ CREATE TABLE products
     updated_at             TIMESTAMP(6)
 );
 
+DROP TABLE IF EXISTS product_supports;
 CREATE TABLE product_supports
 (
     product_support_id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -50,6 +45,7 @@ CREATE TABLE product_supports
     updated_at         TIMESTAMP(6)
 );
 
+DROP TABLE IF EXISTS favorites;
 CREATE TABLE favorites
 (
     favorite_id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -61,6 +57,7 @@ CREATE TABLE favorites
     FOREIGN KEY (product_id) REFERENCES products (product_id)
 );
 
+DROP TABLE IF EXISTS orders;
 CREATE TABLE orders
 (
     order_id     BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -75,6 +72,7 @@ CREATE TABLE orders
     updated_at   DATETIME(6)
 );
 
+DROP TABLE IF EXISTS order_supports;
 CREATE TABLE order_supports
 (
     order_supports_id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -89,6 +87,7 @@ CREATE TABLE order_supports
     updated_at        DATETIME(6)
 );
 
+DROP TABLE IF EXISTS reviews;
 CREATE TABLE reviews
 (
     review_id  BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -102,11 +101,12 @@ CREATE TABLE reviews
     updated_at DATETIME             DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS review_likes;
 CREATE TABLE review_likes
 (
     review_like_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    like_user_id   BIGINT NOT NULL,
-    review_id      BIGINT NOT NULL,
+    like_user_id   BIGINT  NOT NULL,
+    review_id      BIGINT  NOT NULL,
     is_deleted     BOOLEAN NOT NULL,
     created_at     DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at     DATETIME DEFAULT CURRENT_TIMESTAMP
