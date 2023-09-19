@@ -6,10 +6,12 @@ import com.devcourse.kurlymurly.module.order.domain.OrderItem;
 import com.devcourse.kurlymurly.module.order.domain.OrderRepository;
 import com.devcourse.kurlymurly.module.order.domain.PaymentInfo;
 import com.devcourse.kurlymurly.module.order.domain.ShippingInfo;
+import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrderItem;
 import com.devcourse.kurlymurly.web.dto.order.GetOrderResponse;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,14 +27,18 @@ public class OrderService {
     private static final int REVIEWABLE_DEADLINE = 30;
 
     private final OrderRepository orderRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, PasswordEncoder passwordEncoder) {
         this.orderRepository = orderRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
-    public CreateOrder.Response createOrder(Long userId, CreateOrder.Request request) {
-        Order order = toOrder(userId, request);
+    public CreateOrder.Response createOrder(User user, CreateOrder.Request request) {
+        user.validatePayPassword(request.payPassword(), passwordEncoder);
+
+        Order order = toOrder(user.getId(), request);
         orderRepository.save(order);
 
         return new CreateOrder.Response(request.address(), order.getOrderNumber(), order.getActualPayAmount());
@@ -119,21 +125,9 @@ public class OrderService {
     }
 
     @Transactional
-    public void toProcessing(Long id) {
+    public void toNextState(Long id) {
         Order order = findByIdOrThrow(id);
-        order.toProcessing();
-    }
-
-    @Transactional
-    public void toDelivering(Long id) {
-        Order order = findByIdOrThrow(id);
-        order.toDelivering();
-    }
-
-    @Transactional
-    public void toDelivered(Long id) {
-        Order order = findByIdOrThrow(id);
-        order.toDelivered();
+        order.toNextState();
     }
 
     @Transactional

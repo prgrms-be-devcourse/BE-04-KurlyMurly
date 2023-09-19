@@ -16,6 +16,7 @@ public enum OrderFixture {
             50000,
             0,
             "컬리페이(국민은행)",
+            "123456",
             "문희조",
             "010-1234-****",
             "우리집",
@@ -28,6 +29,7 @@ public enum OrderFixture {
                     50000,
                     0,
                     "컬리페이(국민은행)",
+                    "123456",
                     "문희조",
                     "010-1234-****",
                     "우리집",
@@ -40,6 +42,7 @@ public enum OrderFixture {
     private final int totalPrice;
     private final int totalDiscount;
     private final String payment;
+    private final String payPassword;
     private final String receiver;
     private final String phoneNumber;
     private final String address;
@@ -47,12 +50,13 @@ public enum OrderFixture {
     private final String entranceInfo;
     private final String packaging;
 
-    OrderFixture(Long userId, List<CreateOrderItem.Request> orderItemRequests, int totalPrice, int totalDiscount, String payment, String receiver, String phoneNumber, String address, String receiveArea, String entranceInfo, String packaging) {
+    OrderFixture(Long userId, List<CreateOrderItem.Request> orderItemRequests, int totalPrice, int totalDiscount, String payment, String payPassword, String receiver, String phoneNumber, String address, String receiveArea, String entranceInfo, String packaging) {
         this.userId = userId;
         this.orderItemRequests = orderItemRequests;
         this.totalPrice = totalPrice;
         this.totalDiscount = totalDiscount;
         this.payment = payment;
+        this.payPassword = payPassword;
         this.receiver = receiver;
         this.phoneNumber = phoneNumber;
         this.address = address;
@@ -76,6 +80,7 @@ public enum OrderFixture {
                 totalPrice,
                 totalDiscount,
                 payment,
+                payPassword,
                 receiver,
                 phoneNumber,
                 address,

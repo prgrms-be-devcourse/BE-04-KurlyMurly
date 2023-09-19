@@ -44,7 +44,7 @@ public class OrderController {
             @AuthenticationPrincipal User user,
             @RequestBody @Valid CreateOrder.Request request
     ) {
-        CreateOrder.Response response = orderService.createOrder(user.getId(), request);
+        CreateOrder.Response response = orderService.createOrder(user, request);
         return KurlyResponse.ok(response);
     }
 
@@ -73,7 +73,7 @@ public class OrderController {
     }
 
     @Tag(name = "order")
-    @Operation(description = "해당 주문의 주인인 유저가 주문을 취소한다.", responses = {
+    @Operation(description = "[토큰 필요] 해당 주문의 주인인 유저가 주문을 취소한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 주문을 취소한 경우"),
             @ApiResponse(responseCode = "400", description = "주문 id를 명시하지 않은 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),

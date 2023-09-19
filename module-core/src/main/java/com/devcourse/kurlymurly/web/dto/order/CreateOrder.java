@@ -30,6 +30,10 @@ public sealed interface CreateOrder permits Request, Response {
             String payment,
 
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
+            @Schema(name = "결제비밀번호")
+            String payPassword,
+
+            @NotBlank(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "수령인")
             String receiver,
 
