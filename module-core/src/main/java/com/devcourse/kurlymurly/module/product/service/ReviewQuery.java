@@ -5,7 +5,6 @@ import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewRepository;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,44 +26,17 @@ public class ReviewQuery {
         this.reviewLikeRepository = reviewLikeRepository;
     }
 
-    public List<ReviewResponse.Reviewed> getAllReviewsOfUser(Long userId) {
-        return reviewRepository.findAllByUserIdAndStatusIsNotOrderByIdDesc(userId, DELETED).stream()
-                .map(this::toReviewedResponse)
-                .toList();
+    public List<Review> getAllReviewsOfUser(Long userId) {
+        return reviewRepository.findAllByUserIdAndStatusIsNotOrderByIdDesc(userId, DELETED);
     }
 
-    private ReviewResponse.Reviewed toReviewedResponse(Review review) {
-        return new ReviewResponse.Reviewed(
-                review.getProductId(),
-                review.getProductName(),
-                review.getContent(),
-                review.isSecret(),
-                review.getCreateAt(),
-                review.getUpdatedAt()
-        );
-    }
-
-    public Slice<ReviewResponse.ReviewOfProduct> getReviewsOfProduct(Long productId, Long start) {
-        return reviewRepository.getTenReviewsOfProductFromStart(productId, start)
-                .map(this::toReviewOfProductResponse);
-    }
-
-    private ReviewResponse.ReviewOfProduct toReviewOfProductResponse(Review review) {
-        return new ReviewResponse.ReviewOfProduct(
-                review.getProductId(),
-                review.getProductName(),
-                review.getMaskedUserName(),
-                review.getUserTier(),
-                review.getContent(),
-                review.getLikes(),
-                review.getCreateAt(),
-                review.isSecret()
-        );
+    public Slice<Review> getReviewsOfProduct(Long productId, Long start) {
+        return reviewRepository.getTenReviewsOfProductFromStart(productId, start);
     }
 
     public Review findReviewByIdOrThrow(Long id) {
         return reviewRepository.findById(id)
-                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_REVIEW));
+                .orElseThrow(() -> KurlyBaseException.withId(NOT_FOUND_REVIEW, id));
     }
 
     public ReviewLike findLikesByIdOrThrow(Long likeId) {

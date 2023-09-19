@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.module.product.service;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
@@ -9,8 +10,10 @@ import com.devcourse.kurlymurly.module.user.domain.User;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NEVER_LIKED;
+
 @Component
-@Transactional(readOnly = true)
+@Transactional
 public class ReviewCommand {
     private final ReviewQuery reviewQuery;
     private final ReviewRepository reviewRepository;
@@ -26,57 +29,51 @@ public class ReviewCommand {
         this.reviewLikeRepository = reviewLikeRepository;
     }
 
-    @Transactional
     public void create(User user, Product product, String content, boolean isSecret) {
         Review review = new Review(user, product, content, isSecret);
         reviewRepository.save(review);
     }
 
-    @Transactional
-    public void updateReviewContent(Long id, String content, boolean isSecret) {
+    public void update(Long id, String content, boolean isSecret) {
         Review review = reviewQuery.findReviewByIdOrThrow(id);
-        review.updateReview(content, isSecret);
+        review.update(content, isSecret);
     }
 
-    @Transactional
-    public void updateToBanned(Long id) {
+    public void banned(Long id) {
         Review review = reviewQuery.findReviewByIdOrThrow(id);
-        review.toBanned();
+        review.ban();
     }
 
-    @Transactional
-    public void updateToBest(Long id) {
+    public void toBestReview(Long id) {
         Review review = reviewQuery.findReviewByIdOrThrow(id);
         review.toBest();
     }
 
-    @Transactional
-    public void deleteReview(Long id) {
+    public void delete(Long id) {
         Review review = reviewQuery.findReviewByIdOrThrow(id);
-        review.softDeleted();
+        review.softDelete();
     }
 
-    @Transactional
-    public void activeReviewLike(Long userId, Long reviewId) {
-        ReviewLike reviewLike = reviewLikeRepository.findByUserIdAndReviewId(userId, reviewId)
+    public void likeReview(Long userId, Long reviewId) {
+        ReviewLike like = reviewLikeRepository.findByUserIdAndReviewId(userId, reviewId)
                 .orElseGet(() -> createLike(userId, reviewId));
-        Review review = reviewQuery.findReviewByIdOrThrow(reviewLike.getReviewId());
+        Review review = reviewQuery.findReviewByIdOrThrow(like.getReviewId());
 
-        reviewLike.activeLike();
+        like.activate();
         review.liked();
     }
 
     private ReviewLike createLike(Long userId, Long reviewId) {
-        ReviewLike reviewLike = new ReviewLike(userId, reviewId);
-        return reviewLikeRepository.save(reviewLike);
+        ReviewLike like = new ReviewLike(userId, reviewId);
+        return reviewLikeRepository.save(like);
     }
 
-    @Transactional
-    public void cancelReviewLike(Long likeId) {
-        ReviewLike reviewLike = reviewQuery.findLikesByIdOrThrow(likeId);
-        Review review = reviewQuery.findReviewByIdOrThrow(reviewLike.getReviewId());
+    public void cancelLike(Long userId, Long reviewId) {
+        ReviewLike like = reviewLikeRepository.findByUserIdAndReviewId(userId, reviewId)
+                .orElseThrow(() -> new KurlyBaseException(NEVER_LIKED));
+        Review review = reviewQuery.findReviewByIdOrThrow(like.getReviewId());
 
-        reviewLike.cancelLike();
+        like.cancel();
         review.disliked();
     }
 }

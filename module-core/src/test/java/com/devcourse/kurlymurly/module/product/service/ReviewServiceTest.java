@@ -44,19 +44,19 @@ class ReviewServiceTest {
     @DisplayName("유저가 작성한 리뷰가 응답 객체로 잘 변환되어야 한다")
     void findAllByUserIdAndStatusIsNotOrderByIdDesc_Success() {
         // given
-        review.softDeleted();
+        review.softDelete();
 
         given(reviewRepository.findAllByUserIdAndStatusIsNotOrderByIdDesc(any(), any())).willReturn(List.of(review));
 
         // when
-        List<ReviewResponse.Reviewed> responses = reviewQuery.getAllReviewsOfUser(userId);
+        List<Review> reviews = reviewQuery.getAllReviewsOfUser(userId);
 
         // then
         then(reviewRepository).should(times(1)).findAllByUserIdAndStatusIsNotOrderByIdDesc(any(), any());
-        assertThat(responses).isNotEmpty().hasSize(1);
+        assertThat(reviews).isNotEmpty().hasSize(1);
 
-        ReviewResponse.Reviewed response = responses.get(0);
-        assertThat(response.productId()).isEqualTo(review.getProductId());
+        Review response = reviews.get(0);
+        assertThat(response.getProductId()).isEqualTo(review.getProductId());
         assertThat(response.isSecret()).isFalse();
     }
 }

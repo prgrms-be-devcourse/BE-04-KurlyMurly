@@ -2,6 +2,7 @@ package com.devcourse.kurlymurly.module.product;
 
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductDetail;
+import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
 import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 
 import static com.devcourse.kurlymurly.module.product.domain.Product.Delivery;
@@ -70,6 +71,22 @@ public enum ProductFixture {
                 this.delivery,
                 detail,
                 this.isKurlyOnly);
+    }
+
+    public ProductDomain toDomain() {
+        return new ProductDomain(this.name,
+                this.description,
+                this.price,
+                this.delivery,
+                this.isKurlyOnly,
+                this.seller,
+                this.storageType,
+                this.saleUnit,
+                this.weight,
+                this.origin,
+                this.allergyInfo,
+                this.expirationInformation
+        );
     }
 
     public CreateProduct.Request toRequest() {

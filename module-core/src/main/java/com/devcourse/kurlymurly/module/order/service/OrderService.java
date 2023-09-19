@@ -36,6 +36,12 @@ public class OrderService {
     }
 
     @Transactional
+    public void reviewOrderItem(Long id, Long productId) {
+        Order order = findByIdOrThrow(id);
+        order.markReviewedOrder(productId);
+    }
+
+    @Transactional
     public CreateOrder.Response createOrder(User user, CreateOrder.Request request) {
         boolean validatePayPassword = user.validatePayPassword(request.payPassword(), passwordEncoder);
 
@@ -130,9 +136,21 @@ public class OrderService {
     }
 
     @Transactional
-    public void toNextState(Long id) {
+    public void toProcessing(Long id) {
         Order order = findByIdOrThrow(id);
-        order.toNextState();
+        order.toProcessing();
+    }
+
+    @Transactional
+    public void toDelivering(Long id) {
+        Order order = findByIdOrThrow(id);
+        order.toDelivering();
+    }
+
+    @Transactional
+    public void toDelivered(Long id) {
+        Order order = findByIdOrThrow(id);
+        order.toDelivered();
     }
 
     @Transactional

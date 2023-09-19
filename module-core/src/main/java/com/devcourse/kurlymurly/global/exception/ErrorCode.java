@@ -18,6 +18,7 @@ public enum ErrorCode {
     NOT_SAME_PASSWORD(BAD_REQUEST, "동일한 비밀번호를 입력"),
     CLIENT_INPUT_INVALID(BAD_REQUEST, null),
     NOT_CORRECT_PASSWORD(NOT_FOUND, "현재 비밀번호를 확인해주세요"),
+    BAD_STATE_REVIEW(NOT_FOUND, "삭제되었거나 차단된 후기입니다."),
 
     // 401
     NOT_CORRECT_PAY_PASSWORD(BAD_REQUEST, "잘못된 결제 비밀번호입니다."),
@@ -40,6 +41,7 @@ public enum ErrorCode {
     CART_NOT_FOUND(NOT_FOUND, "존재하는 장바구니 상품이 없습니다"),
     SHIPPING_NOT_FOUND(NOT_FOUND, "주소가 존재하지 않습니다."),
     CATEGORY_NOT_FOUND(NOT_FOUND, "존재하지 않는 카테고리입니다."),
+    NEVER_LIKED(NOT_FOUND, "후기를 좋아요한 적이 없습니다."),
 
     // 409
     NOT_ORDER_HOST(CONFLICT, "해당 주문을 주문한 사용자가 아닙니다."),
