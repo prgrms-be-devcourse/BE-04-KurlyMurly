@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PAY_PASSWORD;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_ORDER;
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_ORDER_HOST;
 
@@ -36,12 +37,16 @@ public class OrderService {
 
     @Transactional
     public CreateOrder.Response createOrder(User user, CreateOrder.Request request) {
-        user.validatePayPassword(request.payPassword(), passwordEncoder);
+        boolean validatePayPassword = user.validatePayPassword(request.payPassword(), passwordEncoder);
 
-        Order order = toOrder(user.getId(), request);
-        orderRepository.save(order);
+        if(validatePayPassword) {
+            Order order = toOrder(user.getId(), request);
+            orderRepository.save(order);
 
-        return new CreateOrder.Response(request.address(), order.getOrderNumber(), order.getActualPayAmount());
+            return new CreateOrder.Response(request.address(), order.getOrderNumber(), order.getActualPayAmount());
+        }
+
+        throw new KurlyBaseException(NOT_CORRECT_PAY_PASSWORD);
     }
 
     private Order toOrder(Long userId, CreateOrder.Request request) {
