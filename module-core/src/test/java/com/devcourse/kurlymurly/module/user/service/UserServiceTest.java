@@ -311,9 +311,6 @@ class UserServiceTest {
         @DisplayName("결제 비밀번호 설정")
         void update_pay_password() {
             // Given
-            User user = new User("kurly", "kurly1234", "murly4321", "kyrly@murly.com"
-                    , null, "01094828438");
-
             UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
 
             doReturn(Optional.of(user)).when(userRepository).findById(any());
@@ -349,19 +346,16 @@ class UserServiceTest {
 
         UserInfo info = new UserInfo(null, "sehan", "male");
 
-        User newUser = new User("kurly", "kurly4321", "encodePassword", "kyrly@murly.com"
-                , info, "01094828438");
-
         doReturn("editEncodePassword").when(passwordEncoder).encode(any());
         doReturn(true).when(passwordEncoder).matches(any(), any());
-        doReturn(Optional.of(newUser)).when(userRepository).findById(any());
+        doReturn(Optional.of(user)).when(userRepository).findById(any());
 
         // When
         userService.findUpdateUser(1L, request);
 
         // Then
-        assertThat(newUser.isEqualPassword("editEncodePassword")).isTrue();
-        assertThat(newUser.getRole()).isEqualTo(ROLE_USER);
+        assertThat(user.isEqualPassword("editEncodePassword")).isTrue();
+        assertThat(user.getRole()).isEqualTo(ROLE_USER);
     }
 
     @Test
