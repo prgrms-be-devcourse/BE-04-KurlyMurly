@@ -1,6 +1,7 @@
 package com.devcourse.kurlymurly.module.user.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.module.user.ShippingFixture;
 import com.devcourse.kurlymurly.module.user.UserFixture;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
@@ -132,7 +133,7 @@ class UserServiceTest {
 
         @BeforeEach
         void setUp() {
-            shipping = new Shipping(1L, "컬리단길", true);
+            shipping = ShippingFixture.SHIPPING_FIXTURE.toEntity();
         }
 
         @Test
@@ -159,7 +160,6 @@ class UserServiceTest {
         @DisplayName("회원에게 등록된 배송주소들을 가져온다.")
         void get_addresses() {
             // Given
-            shipping = new Shipping(1L, "컬리단길", true);
             Shipping shipping2 = new Shipping(1L, "컬리단길", true);
 
             doReturn(List.of(shipping, shipping2)).when(shippingRepository).findAllByUserId(any());
@@ -175,8 +175,6 @@ class UserServiceTest {
         @DisplayName("주소 정보 변경 테스트")
         void update_address() {
             // Given
-            shipping = new Shipping(1L, "컬리단길", true);
-
             doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
 
             // When
@@ -190,8 +188,6 @@ class UserServiceTest {
         @DisplayName("배송 요청사항 변경 테스트")
         void update_address_info() {
             // Given
-            shipping = new Shipping(1L, "컬리단길", true);
-
             doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
 
             // When
@@ -215,8 +211,6 @@ class UserServiceTest {
         @DisplayName("주소 삭제 테스트")
         void delete_address() {
             // Given
-            shipping = new Shipping(1L, "컬리단길", true);
-
             doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
 
             // When
