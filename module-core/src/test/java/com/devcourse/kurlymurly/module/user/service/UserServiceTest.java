@@ -125,102 +125,108 @@ class UserServiceTest {
         }
     }
 
-    @Test
-    @DisplayName("샛별 배송 주소 추가 테스트_샛별 배송 지역")
-    void add_address_express_address() {
-        // Given
-        Shipping shipping = new Shipping(1L, "경기 구성 33번길", true);
+    @Nested
+    @DisplayName("배송지 관리 테스트")
+    class shipping_test {
+        private static Shipping shipping;
 
-        //When
-        userService.addAddress(1L, "경기 구성로 33번길", false);
+        @BeforeEach
+        void setUp() {
+            shipping = new Shipping(1L, "컬리단길", true);
+        }
 
-        // Then
-        assertThat(shipping.getAddress().isExpress()).isTrue();
-    }
+        @Test
+        @DisplayName("샛별 배송 주소 추가 테스트_샛별 배송 지역")
+        void add_address_express_address() {
+            // Given
+            Shipping shipping = new Shipping(1L, "경기 구성 33번길", true);
 
-    @Test
-    @DisplayName("샛별 배송 주소 추가 테스트_샛별 배송 불가")
-    void add_address_non_express_address() {
-        // Given
-        Shipping shipping = new Shipping(1L, "불가 컬리번길", true);
+            // When , Then
+            assertThat(shipping.getAddress().isExpress()).isTrue();
+        }
 
-        //When
-        userService.addAddress(1L, "경기 구성로 33번길", false);
+        @Test
+        @DisplayName("샛별 배송 주소 추가 테스트_샛별 배송 불가")
+        void add_address_non_express_address() {
+            // Given
+            Shipping shipping = new Shipping(1L, "불가 컬리번길", true);
 
-        // Then
-        assertThat(shipping.getAddress().isExpress()).isFalse();
-    }
+            // When , Then
+            assertThat(shipping.getAddress().isExpress()).isFalse();
+        }
 
-    @Test
-    @DisplayName("회원에게 등록된 배송주소들을 가져온다.")
-    void get_addresses() {
-        // Given
-        Shipping shipping1 = new Shipping(1L, "컬리단길", true);
-        Shipping shipping2 = new Shipping(1L, "컬리단길", true);
+        @Test
+        @DisplayName("회원에게 등록된 배송주소들을 가져온다.")
+        void get_addresses() {
+            // Given
+            shipping = new Shipping(1L, "컬리단길", true);
+            Shipping shipping2 = new Shipping(1L, "컬리단길", true);
 
-        doReturn(List.of(shipping1, shipping2)).when(shippingRepository).findAllByUserId(any());
+            doReturn(List.of(shipping, shipping2)).when(shippingRepository).findAllByUserId(any());
 
-        // When
-        List<GetAddress.Response> addressList = userService.getAddress(1L);
+            // When
+            List<GetAddress.Response> addressList = userService.getAddress(1L);
 
-        // Then
-        assertThat(addressList.size()).isEqualTo(2);
-    }
+            // Then
+            assertThat(addressList.size()).isEqualTo(2);
+        }
 
-    @Test
-    @DisplayName("주소 정보 변경 테스트")
-    void update_address() {
-        // Given
-        Shipping shipping = new Shipping(1L, "컬리단길", true);
+        @Test
+        @DisplayName("주소 정보 변경 테스트")
+        void update_address() {
+            // Given
+            shipping = new Shipping(1L, "컬리단길", true);
 
-        doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
+            doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
 
-        // When
-        userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000");
+            // When
+            userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000");
 
-        // Then
-        then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
-    }
+            // Then
+            then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
+        }
 
-    @Test
-    @DisplayName("배송 요청사항 변경 테스트")
-    void update_address_info() {
-        // Given
-        Shipping shipping = new Shipping(1L, "컬리단길", true);
+        @Test
+        @DisplayName("배송 요청사항 변경 테스트")
+        void update_address_info() {
+            // Given
+            shipping = new Shipping(1L, "컬리단길", true);
 
-        doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
+            doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
 
-        // When
-        userService.updateAddressInfo(1L, 1L, "세한", "01000000000", "DOOR", "1234", "ALWAYS");
+            // When
+            userService.updateAddressInfo(1L, 1L, "세한", "01000000000", "DOOR", "1234", "ALWAYS");
 
-        // Then
-        then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
-    }
+            // Then
+            then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
+        }
 
-    @Test
-    @DisplayName("존재하지 않는 주소를 변경할 경우 예외를 던짐")
-    void update_address_byAddressNotFound() {
-        // Given
-        doReturn(Optional.empty()).when(shippingRepository).findByIdAndUserId(any(), any());
+        @Test
+        @DisplayName("존재하지 않는 주소를 변경할 경우 예외를 던짐")
+        void update_address_byAddressNotFound() {
+            // Given
+            doReturn(Optional.empty()).when(shippingRepository).findByIdAndUserId(any(), any());
 
-        // When , Then
-        assertThrows(KurlyBaseException.class, () -> userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000"));
-    }
+            // When , Then
+            assertThrows(KurlyBaseException.class, () -> userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000"));
+        }
 
-    @Test
-    @DisplayName("주소 삭제 테스트")
-    void delete_address() {
-        // Given
-        Shipping shipping = new Shipping(1L, "컬리단길", true);
+        @Test
+        @DisplayName("주소 삭제 테스트")
+        void delete_address() {
+            // Given
+            shipping = new Shipping(1L, "컬리단길", true);
 
-        doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
+            doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
 
-        // When
-        userService.deleteAddress(1L, 1L);
+            // When
+            userService.deleteAddress(1L, 1L);
 
-        // Then
-        then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
-        then(shippingRepository).should(times(1)).delete(any());
+            // Then
+            then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
+            then(shippingRepository).should(times(1)).delete(any());
+        }
+
     }
 
     @Test
