@@ -43,14 +43,14 @@ class ProductPagingTest {
         // given
 
         // when
-        List<GetFavorite.Response> result = productQuery.getAllFavoritesByUserId(userId);
+        List<Favorite> result = productQuery.getAllFavoritesByUserId(userId);
 
         // then
         assertThat(result).isNotEmpty().hasSize(1);
 
-        GetFavorite.Response response = result.get(0);
-        assertThat(response.id()).isEqualTo(favorite.getId());
-        assertThat(response.name()).isEqualTo(product.getName());
-        assertThat(response.price()).isEqualTo(product.getPrice());
+        Favorite response = result.get(0);
+        assertThat(response.getId()).isEqualTo(favorite.getId());
+        assertThat(response.getProductName()).isEqualTo(product.getName());
+        assertThat(response.getProductPrice()).isEqualTo(product.getPrice());
     }
 }

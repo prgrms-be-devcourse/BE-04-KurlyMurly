@@ -3,7 +3,6 @@ package com.devcourse.kurlymurly.module.user.service;
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.global.jwt.JwtTokenProvider;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
-import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
@@ -44,7 +43,6 @@ import static com.devcourse.kurlymurly.global.exception.ErrorCode.SHIPPING_NOT_F
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ProductFacade productFacade;
     private final CartRepository cartRepository;
     private final ShippingRepository shippingRepository;
     private final PaymentRepository paymentRepository;
@@ -55,7 +53,6 @@ public class UserService {
     public UserService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            ProductFacade productFacade,
             CartRepository cartRepository,
             ShippingRepository shippingRepository,
             PaymentRepository paymentRepository,
@@ -65,7 +62,6 @@ public class UserService {
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.productFacade = productFacade;
         this.cartRepository = cartRepository;
         this.shippingRepository = shippingRepository;
         this.paymentRepository = paymentRepository;
@@ -218,7 +214,7 @@ public class UserService {
 
     @Transactional
     public void addCart(Long id, Long productId, int quantity) {
-        productFacade.validateOrderable(productId);
+//        productFacade.validateOrderable(productId);
         Cart cart = new Cart(id, productId, quantity);
         cartRepository.save(cart);
     }

@@ -1,7 +1,6 @@
 package com.devcourse.kurlymurly.module.product.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
-import com.devcourse.kurlymurly.module.product.domain.category.Category;
 import com.devcourse.kurlymurly.module.product.domain.category.CategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +16,9 @@ public class CategoryQuery {
         this.categoryRepository = categoryRepository;
     }
 
-    public Category findByIdOrThrow(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> KurlyBaseException.withId(CATEGORY_NOT_FOUND, id));
+    public void validateIsExist(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw KurlyBaseException.withId(CATEGORY_NOT_FOUND, id);
+        }
     }
 }

@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.product;
 
-import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.product.application.ProductFacade;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
 import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;
@@ -9,7 +9,6 @@ import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +39,7 @@ public class ProductController {
     })
     @GetMapping("/favorites")
     @ResponseStatus(OK)
-    public KurlyResponse<ListPagingResponse> getFavorites(@AuthenticationPrincipal User user) {
+    public KurlyResponse<ListPagingResponse<GetFavorite.Response>> getFavorites(@AuthenticationPrincipal User user) {
         ListPagingResponse<GetFavorite.Response> response = productFacade.getUserFavorites(user.getId());
         return KurlyResponse.ok(response);
     }
@@ -90,7 +89,7 @@ public class ProductController {
     public KurlyResponse<Void> updateProductSupport(
             @AuthenticationPrincipal User user,
             @PathVariable Long supportId,
-            @RequestBody @Valid SupportProduct.Request request
+            @RequestBody SupportProduct.Request request
     ) {
         productFacade.updateProductSupport(user.getId(), supportId, request);
         return KurlyResponse.noData();

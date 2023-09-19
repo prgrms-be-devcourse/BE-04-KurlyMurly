@@ -2,12 +2,10 @@ package com.devcourse.kurlymurly.admin;
 
 import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
-import com.devcourse.kurlymurly.module.product.service.ProductFacade;
 import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.order.support.AnswerOrderSupport;
-import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -30,37 +28,37 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
-    private final ProductFacade productFacade;
+//    private final ProductFacade productFacade; // todo : separate module
     private final ReviewCommand reviewCommand;
     private final OrderService orderService;
     private final OrderSupportService orderSupportService;
 
     public AdminController(
-            ProductFacade productFacade,
+//            ProductFacade productFacade,
             ReviewCommand reviewCommand,
             OrderService orderService,
             OrderSupportService orderSupportService
     ) {
-        this.productFacade = productFacade;
+//        this.productFacade = productFacade;
         this.reviewCommand = reviewCommand;
         this.orderService = orderService;
         this.orderSupportService = orderSupportService;
     }
 
-    @Tag(name = "admin")
-    @Operation(description = "[관리자 토큰 필요] 새로운 상품을 등록한다.", responses = {
-            @ApiResponse(responseCode = "200", description = "성공적으로 상품을 등록했습니다."),
-            @ApiResponse(responseCode = "401", description = "권한이 없는 토큰이거나 토큰을 보내지 않은 경우")
-    })
-    @PostMapping("/products")
-    @ResponseStatus(OK)
-    public KurlyResponse<CreateProduct.Response> createProduct(
-            @AuthenticationPrincipal User admin,
-            @RequestBody @Valid CreateProduct.Request request
-    ) {
-        CreateProduct.Response response = productFacade.createProduct(request);
-        return KurlyResponse.ok(response);
-    }
+//    @Tag(name = "admin")
+//    @Operation(description = "[관리자 토큰 필요] 새로운 상품을 등록한다.", responses = {
+//            @ApiResponse(responseCode = "200", description = "성공적으로 상품을 등록했습니다."),
+//            @ApiResponse(responseCode = "401", description = "권한이 없는 토큰이거나 토큰을 보내지 않은 경우")
+//    })
+//    @PostMapping("/products")
+//    @ResponseStatus(OK)
+//    public KurlyResponse<CreateProduct.Response> createProduct(
+//            @AuthenticationPrincipal User admin,
+//            @RequestBody @Valid CreateProduct.Request request
+//    ) {
+//        CreateProduct.Response response = productFacade.createProduct(request);
+//        return KurlyResponse.ok(response);
+//    }
 
     @Tag(name = "admin")
     @Operation(description = "[관리자 토큰 필요] 상품을 품절로 처리하는 API")
@@ -75,7 +73,7 @@ public class AdminController {
             @AuthenticationPrincipal User admin,
             @PathVariable Long productId
     ) {
-        productFacade.soldOutProduct(productId);
+//        productFacade.soldOutProduct(productId);
         return KurlyResponse.noData();
     }
 
@@ -92,7 +90,7 @@ public class AdminController {
             @AuthenticationPrincipal User admin,
             @PathVariable Long productId
     ) {
-        productFacade.deleteProduct(productId);
+//        productFacade.deleteProduct(productId);
         return KurlyResponse.noData();
     }
 
@@ -109,7 +107,7 @@ public class AdminController {
             @AuthenticationPrincipal User admin,
             @PathVariable Long reviewId
     ) {
-        reviewCommand.updateToBanned(reviewId);
+        reviewCommand.banned(reviewId);
         return KurlyResponse.noData();
     }
 
@@ -126,7 +124,7 @@ public class AdminController {
             @AuthenticationPrincipal User admin,
             @PathVariable Long reviewId
     ) {
-        reviewCommand.updateToBest(reviewId);
+        reviewCommand.toBestReview(reviewId);
         return KurlyResponse.noData();
     }
 

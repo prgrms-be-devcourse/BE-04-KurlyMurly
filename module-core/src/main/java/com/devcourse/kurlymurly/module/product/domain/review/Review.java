@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.module.product.domain.review;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.BaseEntity;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.user.domain.User;
@@ -11,6 +12,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.BAD_STATE_REVIEW;
+import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.BANNED;
+import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.BEST;
+import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.DELETED;
+import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.NORMAL;
 
 @Entity
 @Table(name = "reviews")
@@ -44,39 +51,40 @@ public class Review extends BaseEntity {
         this.product = product;
         this.content = content;
         this.likes = 0;
-        this.status = Status.NORMAL;
+        this.status = NORMAL;
         this.isSecret = isSecret;
     }
 
-    public Integer liked() {
+    public void liked() {
         this.likes += 1;
-        return this.likes;
     }
 
-    public Integer disliked() {
+    public void disliked() {
         this.likes -= 1;
-        return this.likes;
     }
 
-    public void updateReview(String content, boolean isSecret) {
+    public void update(String content, boolean isSecret) {
         this.content = content;
         this.isSecret = isSecret;
     }
 
-    public void toBanned() {
-        this.status = Status.BANNED;
-    }
-
-    public void toSecret() {
-        this.isSecret = true;
+    public void ban() {
+        this.status = BANNED;
     }
 
     public void toBest() {
-        this.status = Status.BEST;
+        validateInteractive();
+        this.status = BEST;
     }
 
-    public void softDeleted() {
-        this.status = Status.DELETED;
+    private void validateInteractive() {
+        if (this.status == DELETED || this.status == BANNED) {
+            throw KurlyBaseException.withId(BAD_STATE_REVIEW, this.getId());
+        }
+    }
+
+    public void softDelete() {
+        this.status = DELETED;
     }
 
     public Long getProductId() {
