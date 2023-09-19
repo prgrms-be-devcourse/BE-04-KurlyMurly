@@ -1,6 +1,8 @@
 package com.devcourse.kurlymurly.module.user.service;
 
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.module.user.ShippingFixture;
+import com.devcourse.kurlymurly.module.user.UserFixture;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
@@ -63,312 +65,320 @@ class UserServiceTest {
     @Mock
     private CartRepository cartRepository;
 
-    private static Join.Request user;
+    private static User user;
 
     @BeforeEach
     void setUp() {
-        user = new Join.Request("murly1234", "kurly111", "kurly111", "sehan", "kurly@murly.com", "01094828438"
-                , "male", null, "dd", "경기도 구성로");
+        user = UserFixture.USER_FIXTURE.toEntity();
     }
 
-    @Test
-    @DisplayName("회원가입 완료 테스트")
-    void join() {
-        // Given
-        User newUser = new User("kurly", "kurly1234", "murly4321", "kyrly@murly.com"
-                , null, "01094828438");
+    @Nested
+    @DisplayName("회원가입 테스트")
+    class join {
+        private static Join.Request JoinRequest;
 
-        doReturn(newUser).when(userRepository).save(any());
-        doReturn("encryptedPassword").when(passwordEncoder).encode(any());
+        @BeforeEach
+        void setUp() {
+            JoinRequest = new Join.Request("murly1234", "kurly111", "kurly111", "sehan", "kurly@murly.com", "01094828438"
+                    , "male", null, "dd", "경기도 구성로");
+        }
 
-        // When
-        userService.join(user);
+        @Test
+        @DisplayName("회원가입 완료 테스트")
+        void join() {
+            // Given
+            doReturn(user).when(userRepository).save(any());
+            doReturn("encryptedPassword").when(passwordEncoder).encode(any());
+
+            // When
+            userService.join(JoinRequest);
+        }
+
+        @Test
+        @DisplayName("비밀번호가 서로 일차히지 않으면 예외를 던짐")
+        void join_fail_IllegalArgumentException() {
+            // Given
+            JoinRequest = new Join.Request("murly1234", "kurly111", "kurly1234", "sehan", "kurly@murly.com", "01094828438"
+                    , "male", null, "dd", "경기 구성로");
+
+            // When , Then
+            assertThrows(KurlyBaseException.class, () -> userService.join(JoinRequest));
+        }
+
+        @Test
+        @DisplayName("아이디가 중복되면 예외를 던짐")
+        void join_fail_id_ExistUserInfoException() {
+            // Given
+            doReturn(true).when(userRepository).existsByLoginId(any());
+
+            // Then
+            assertThrows(KurlyBaseException.class, () -> userService.join(JoinRequest));
+        }
+
+        @Test
+        @DisplayName("이메일이 중복되면 예외를 던짐")
+        void join_fail_email_ExistUserInfoException() {
+            // Given
+            doReturn(true).when(userRepository).existsByEmail(any());
+
+            // Then
+            assertThrows(KurlyBaseException.class, () -> userService.join(JoinRequest));
+        }
     }
 
-    @Test
-    @DisplayName("비밀번호가 서로 일차히지 않으면 예외를 던짐")
-    void join_fail_IllegalArgumentException() {
-        // Given
-        user = new Join.Request("murly1234", "kurly111", "kurly1234", "sehan", "kurly@murly.com", "01094828438"
-                , "male", null, "dd", "경기 구성로");
+    @Nested
+    @DisplayName("배송지 관리 테스트")
+    class shipping_test {
+        private static Shipping shipping;
 
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.join(user));
+        @BeforeEach
+        void setUp() {
+            shipping = ShippingFixture.SHIPPING_FIXTURE.toEntity();
+        }
+
+        @Test
+        @DisplayName("샛별 배송 주소 추가 테스트_샛별 배송 지역")
+        void add_address_express_address() {
+            // Given
+            Shipping shipping = new Shipping(1L, "경기 구성 33번길", true);
+
+            // When , Then
+            assertThat(shipping.getAddress().isExpress()).isTrue();
+        }
+
+        @Test
+        @DisplayName("샛별 배송 주소 추가 테스트_샛별 배송 불가")
+        void add_address_non_express_address() {
+            // Given
+            Shipping shipping = new Shipping(1L, "불가 컬리번길", true);
+
+            // When , Then
+            assertThat(shipping.getAddress().isExpress()).isFalse();
+        }
+
+        @Test
+        @DisplayName("회원에게 등록된 배송주소들을 가져온다.")
+        void get_addresses() {
+            // Given
+            Shipping shipping2 = new Shipping(1L, "컬리단길", true);
+
+            doReturn(List.of(shipping, shipping2)).when(shippingRepository).findAllByUserId(any());
+
+            // When
+            List<GetAddress.Response> addressList = userService.getAddress(1L);
+
+            // Then
+            assertThat(addressList.size()).isEqualTo(2);
+        }
+
+        @Test
+        @DisplayName("주소 정보 변경 테스트")
+        void update_address() {
+            // Given
+            doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
+
+            // When
+            userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000");
+
+            // Then
+            then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
+        }
+
+        @Test
+        @DisplayName("배송 요청사항 변경 테스트")
+        void update_address_info() {
+            // Given
+            doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
+
+            // When
+            userService.updateAddressInfo(1L, 1L, "세한", "01000000000", "DOOR", "1234", "ALWAYS");
+
+            // Then
+            then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 주소를 변경할 경우 예외를 던짐")
+        void update_address_byAddressNotFound() {
+            // Given
+            doReturn(Optional.empty()).when(shippingRepository).findByIdAndUserId(any(), any());
+
+            // When , Then
+            assertThrows(KurlyBaseException.class, () -> userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000"));
+        }
+
+        @Test
+        @DisplayName("주소 삭제 테스트")
+        void delete_address() {
+            // Given
+            doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
+
+            // When
+            userService.deleteAddress(1L, 1L);
+
+            // Then
+            then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
+            then(shippingRepository).should(times(1)).delete(any());
+        }
+
     }
 
-    @Test
-    @DisplayName("아이디가 중복되면 예외를 던짐")
-    void join_fail_id_ExistUserInfoException() {
-        // Given
-        doReturn(true).when(userRepository).existsByLoginId(any());
+    @Nested
+    @DisplayName("결제수단 관리 테스트")
+    class payment_test {
 
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.join(user));
+        @Test
+        @DisplayName("신용카드 결제 수단 추가 테스트")
+        void add_credit() {
+            // Given
+            RegisterPayment.creditRequest request = new RegisterPayment.creditRequest("12341234", "hana", null, 53);
+
+            // When
+            userService.addCredit(1L, request);
+
+            // Then
+            then(paymentRepository).should(times(1)).save(any());
+        }
+
+        @Test
+        @DisplayName("간편결제 결제 수단 추가 테스트")
+        void add_easy_pay() {
+            // given
+            RegisterPayment.easyPayRequest request = new RegisterPayment.easyPayRequest("12341234", "hana");
+
+            // when
+            userService.addEasyPay(1L, request);
+
+            // then
+            then(paymentRepository).should(times(1)).save(any());
+        }
+
+        @Test
+        @DisplayName("결제 수단 조회 테스트")
+        void get_payment() {
+            // Given
+            Payment payment = new Payment(1L, null);
+
+            doReturn(List.of(payment)).when(paymentRepository).findAllById(Collections.singleton(1L));
+            userService.getPayments(1L);
+
+            // then
+            then(paymentRepository).should(times(1)).findAllById(any());
+        }
+
+        @Test
+        @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
+        void get_payment_fail_ByNotFoundPayments() {
+            // When
+            doReturn(Collections.emptyList()).when(paymentRepository).findAllById(Collections.singleton(1L));
+
+            // Then
+            assertThrows(KurlyBaseException.class, () -> userService.getPayments(1L));
+        }
+
+        @Test
+        @DisplayName("결제 수단 삭제 테스트")
+        void delete_payment() {
+            // Given
+            Payment payment = new Payment(1L, null);
+
+            doReturn(Optional.of(payment)).when(paymentRepository).findByUserIdAndId(1L, 1L);
+
+            // When
+            userService.deletePayment(1L, 1L);
+
+            // Then
+            then(paymentRepository).should(times(1)).findByUserIdAndId(any(), any());
+        }
+
+        @Test
+        @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
+        void delete_payment_fail_ByNotFoundPayments() {
+            // When
+            doReturn(Optional.empty()).when(paymentRepository).findByUserIdAndId(any(), any());
+
+            // Then
+            assertThrows(KurlyBaseException.class, () -> userService.deletePayment(1L, 1L));
+        }
+
+        @Test
+        @DisplayName("결제 비밀번호 설정")
+        void update_pay_password() {
+            // Given
+            UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
+
+            doReturn(Optional.of(user)).when(userRepository).findById(any());
+
+            // When
+            userService.updatePaymentPassword(1L, request.payPassword());
+
+            // Then
+            then(userRepository).should(times(1)).findById(any());
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 유저를 조회할 경우 예외를 던짐")
+        void update_pay_password_notFoundUser() {
+            // Given
+            UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
+
+            doReturn(Optional.empty()).when(userRepository).findById(any());
+
+            // When , Then
+            assertThrows(KurlyBaseException.class, () -> userService.updatePaymentPassword(1L, request.payPassword()));
+        }
+
     }
 
-    @Test
-    @DisplayName("이메일이 중복되면 예외를 던짐")
-    void join_fail_email_ExistUserInfoException() {
-        // Given
-        doReturn(true).when(userRepository).existsByEmail(any());
+    @Nested
+    @DisplayName("개인정보 변경 테스트")
+    class update {
+        private static UpdateUser.Request request;
 
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.join(user));
-    }
+        @BeforeEach
+        void setUp() {
+            request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
+                    , "sehan", "kurly@murly.com", "01094828438", "male", null);
+        }
 
-    @Test
-    @DisplayName("샛별 배송 주소 추가 테스트_샛별 배송 지역")
-    void add_address_express_address() {
-        // Given
-        Shipping shipping = new Shipping(1L, "경기 구성 33번길", true);
+        @Test
+        @DisplayName("개인정보 변경 테스트_비밀번호")
+        void update_user_password() {
+            // Given
+            doReturn("editEncodePassword").when(passwordEncoder).encode(any());
+            doReturn(true).when(passwordEncoder).matches(any(), any());
+            doReturn(Optional.of(user)).when(userRepository).findById(any());
 
-        //When
-        userService.addAddress(1L, "경기 구성로 33번길", false);
+            // When
+            userService.findUpdateUser(1L, request);
 
-        // Then
-        assertThat(shipping.getAddress().isExpress()).isTrue();
-    }
+            // Then
+            assertThat(user.isEqualPassword("editEncodePassword")).isTrue();
+            assertThat(user.getRole()).isEqualTo(ROLE_USER);
+        }
 
-    @Test
-    @DisplayName("샛별 배송 주소 추가 테스트_샛별 배송 불가")
-    void add_address_non_express_address() {
-        // Given
-        Shipping shipping = new Shipping(1L, "불가 컬리번길", true);
+        @Test
+        @DisplayName("해당 회원이 조회되지 않으면 예외를 던짐")
+        void update_fail_notExistsUser() {
+            // Given
+            doReturn(Optional.empty()).when(userRepository).findById(any());
 
-        //When
-        userService.addAddress(1L, "경기 구성로 33번길", false);
+            // Then
+            assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
+        }
 
-        // Then
-        assertThat(shipping.getAddress().isExpress()).isFalse();
-    }
+        @Test
+        @DisplayName("현재 비밀번호가 일치하지 않으면 예외를 던짐")
+        void update_user_ByNotCorrectPassword() {
+            // Given
+            UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
+                    , "sehan", "murly@kurly.com", "01012221212", "male", null);
 
-    @Test
-    @DisplayName("회원에게 등록된 배송주소들을 가져온다.")
-    void get_addresses() {
-        // Given
-        Shipping shipping1 = new Shipping(1L, "컬리단길", true);
-        Shipping shipping2 = new Shipping(1L, "컬리단길", true);
+            doReturn(Optional.of(user)).when(userRepository).findById(any());
 
-        doReturn(List.of(shipping1, shipping2)).when(shippingRepository).findAllByUserId(any());
-
-        // When
-        List<GetAddress.Response> addressList = userService.getAddress(1L);
-
-        // Then
-        assertThat(addressList.size()).isEqualTo(2);
-    }
-
-    @Test
-    @DisplayName("주소 정보 변경 테스트")
-    void update_address() {
-        // Given
-        Shipping shipping = new Shipping(1L, "컬리단길", true);
-
-        doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
-
-        // When
-        userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000");
-
-        // Then
-        then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
-    }
-
-    @Test
-    @DisplayName("배송 요청사항 변경 테스트")
-    void update_address_info() {
-        // Given
-        Shipping shipping = new Shipping(1L, "컬리단길", true);
-
-        doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
-
-        // When
-        userService.updateAddressInfo(1L, 1L, "세한", "01000000000","DOOR","1234","ALWAYS");
-
-        // Then
-        then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 주소를 변경할 경우 예외를 던짐")
-    void update_address_byAddressNotFound() {
-        // Given
-        doReturn(Optional.empty()).when(shippingRepository).findByIdAndUserId(any(), any());
-
-        // When , Then
-        assertThrows(KurlyBaseException.class, () -> userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000"));
-    }
-
-    @Test
-    @DisplayName("주소 삭제 테스트")
-    void delete_address() {
-        // Given
-        Shipping shipping = new Shipping(1L, "컬리단길", true);
-
-        doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
-
-        // When
-        userService.deleteAddress(1L, 1L);
-
-        // Then
-        then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
-        then(shippingRepository).should(times(1)).delete(any());
-    }
-
-    @Test
-    @DisplayName("신용카드 결제 수단 추가 테스트")
-    void add_credit() {
-        // Given
-        RegisterPayment.creditRequest request = new RegisterPayment.creditRequest("12341234", "hana", null, 53);
-
-        // When
-        userService.addCredit(1L, request);
-
-        // Then
-        then(paymentRepository).should(times(1)).save(any());
-    }
-
-    @Test
-    @DisplayName("간편결제 결제 수단 추가 테스트")
-    void add_easy_pay() {
-        // given
-        RegisterPayment.easyPayRequest request = new RegisterPayment.easyPayRequest("12341234", "hana");
-
-        // when
-        userService.addEasyPay(1L, request);
-
-        // then
-        then(paymentRepository).should(times(1)).save(any());
-    }
-
-    @Test
-    @DisplayName("결제 수단 조회 테스트")
-    void get_payment() {
-        // Given
-        Payment payment = new Payment(1L, null);
-
-        doReturn(List.of(payment)).when(paymentRepository).findAllById(Collections.singleton(1L));
-        userService.getPayments(1L);
-
-        // then
-        then(paymentRepository).should(times(1)).findAllById(any());
-    }
-
-    @Test
-    @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
-    void get_payment_fail_ByNotFoundPayments() {
-        // When
-        doReturn(Collections.emptyList()).when(paymentRepository).findAllById(Collections.singleton(1L));
-
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.getPayments(1L));
-    }
-
-    @Test
-    @DisplayName("결제 수단 삭제 테스트")
-    void delete_payment() {
-        // Given
-        Payment payment = new Payment(1L, null);
-
-        doReturn(Optional.of(payment)).when(paymentRepository).findByUserIdAndId(1L, 1L);
-
-        // When
-        userService.deletePayment(1L, 1L);
-
-        // Then
-        then(paymentRepository).should(times(1)).findByUserIdAndId(any(), any());
-    }
-
-    @Test
-    @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
-    void delete_payment_fail_ByNotFoundPayments() {
-        // When
-        doReturn(Optional.empty()).when(paymentRepository).findByUserIdAndId(any(), any());
-
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.deletePayment(1L, 1L));
-    }
-
-    @Test
-    @DisplayName("결제 비밀번호 설정")
-    void update_pay_password() {
-        // Given
-        User user = new User("kurly", "kurly1234", "murly4321", "kyrly@murly.com"
-                , null, "01094828438");
-
-        UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
-
-        doReturn(Optional.of(user)).when(userRepository).findById(any());
-
-        // When
-        userService.updatePaymentPassword(1L, request.payPassword());
-
-        // Then
-        then(userRepository).should(times(1)).findById(any());
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 유저를 조회할 경우 예외를 던짐")
-    void update_pay_password_notFoundUser() {
-        // Given
-        UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
-
-        doReturn(Optional.empty()).when(userRepository).findById(any());
-
-        // When , Then
-        assertThrows(KurlyBaseException.class, () -> userService.updatePaymentPassword(1L, request.payPassword()));
-    }
-
-    @Test
-    @DisplayName("개인정보 변경 테스트_비밀번호")
-    void update_user_password() {
-        // Given
-        UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
-                , "sehan", "kurly@murly.com", "01094828438", "male", null);
-
-        UserInfo info = new UserInfo(null, "sehan", "male");
-
-        User newUser = new User("kurly", "kurly4321", "encodePassword", "kyrly@murly.com"
-                , info, "01094828438");
-
-        doReturn("editEncodePassword").when(passwordEncoder).encode(any());
-        doReturn(true).when(passwordEncoder).matches(any(), any());
-        doReturn(Optional.of(newUser)).when(userRepository).findById(any());
-
-        // When
-        userService.findUpdateUser(1L, request);
-
-        // Then
-        assertThat(newUser.isEqualPassword("editEncodePassword")).isTrue();
-        assertThat(newUser.getRole()).isEqualTo(ROLE_USER);
-    }
-
-    @Test
-    @DisplayName("해당 회원이 조회되지 않으면 예외를 던짐")
-    void update_fail_notExistsUser() {
-        // Given
-        UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
-                , "sehan", "kurly@murly.com", "01094828438", "male", null);
-
-        doReturn(Optional.empty()).when(userRepository).findById(any());
-
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
-    }
-
-    @Test
-    @DisplayName("현재 비밀번호가 일치하지 않으면 예외를 던짐")
-    void update_user_ByNotCorrectPassword() {
-        // Given
-        UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
-                , "sehan", "murly@kurly.com", "01012221212", "male", null);
-
-        User newUser = new User("kurly", "kurly4321", "encodePassword", "kyrly@murly.com"
-                , null, "01094828438");
-
-        doReturn(Optional.of(newUser)).when(userRepository).findById(any());
-
-        // When,Then
-        assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
+            // When,Then
+            assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
+        }
     }
 
     @Nested
