@@ -4,6 +4,7 @@ spring:
       - db
       - jwt
       - jasypt
+      - image
 
 logging:
   level:
@@ -11,6 +12,3 @@ logging:
       springframework:
         core:
           LocalVariableTableParameterNameDiscoverer: error
-
-server:
-  port: 8080

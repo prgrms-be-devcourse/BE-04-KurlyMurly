@@ -48,4 +48,10 @@ public class ProductQuery {
         return productSupportRepository.findById(id)
                 .orElseThrow(() -> KurlyBaseException.withId(NEVER_WRITE_PRODUCT_SUPPORT, id));
     }
+
+    // todo: user facade에서 사용
+    public void validateOrderable(Long id) {
+        Product product = findProductByIdOrThrow(id);
+        product.validateOrderable();
+    }
 }

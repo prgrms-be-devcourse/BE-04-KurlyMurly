@@ -92,17 +92,12 @@ public class ProductFacade {
         productCommand.updateSupport(userId, supportId, supportDomain);
     }
 
-    public void validateProductOrderable(Long id) {
-        Product product = productQuery.findProductByIdOrThrow(id);
-        product.validateOrderable();
-    }
-
     public void registerReview(User user, @Valid CreateReview.Request request) {
         Product product = productQuery.findProductByIdOrThrow(request.productId());
         product.validateSupportable();
 
-        orderService.reviewOrderItem(request.orderId(), request.productId());
         reviewCommand.create(user, product, request.content(), request.isSecret());
+        orderService.reviewOrderItem(request.orderId(), request.productId());
     }
 
     public Slice<ReviewResponse.ReviewOfProduct> loadReviewsOfProduct(Long productId, @Valid ReviewRequest.OfProduct request) {
@@ -124,12 +119,12 @@ public class ProductFacade {
         productCommand.cancelFavorite(userId, productId);
     }
 
-    public void updateReview(Long reviewId, @Valid UpdateReview.Request request) {
-        reviewCommand.update(reviewId, request.content(), request.isSecret());
+    public void updateReview(Long userId, Long reviewId, @Valid UpdateReview.Request request) {
+        reviewCommand.update(userId, reviewId, request.content(), request.isSecret());
     }
 
-    public void deleteReview(Long reviewId) {
-        reviewCommand.delete(reviewId);
+    public void deleteReview(Long userId, Long reviewId) {
+        reviewCommand.delete(userId, reviewId);
     }
 
     public void likeReview(Long userId, Long reviewId) {

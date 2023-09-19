@@ -37,7 +37,7 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "성공적으로 찜 목록을 불러왔습니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아 발생하는 에러")
     })
-    @GetMapping("/favorites")
+    @GetMapping("/favorites") // GET /users/favorites
     @ResponseStatus(OK)
     public KurlyResponse<ListPagingResponse<GetFavorite.Response>> getFavorites(@AuthenticationPrincipal User user) {
         ListPagingResponse<GetFavorite.Response> response = productFacade.getUserFavorites(user.getId());
@@ -78,7 +78,7 @@ public class ProductController {
     }
 
     @Tag(name = "product")
-    @Operation(description = "[토큰 필요] 상품 문의를 수정한다.", responses = {
+    @Operation(description = "[토큰 필요] 상품 문의를 수정한다. 비밀글로 변경하기도 처리한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 상품 문의를 수정했습니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아 발생하는 에러"),
             @ApiResponse(responseCode = "404", description = "요청에 맞는 문의를 찾을 수 없어서 발생하는 에러"),
