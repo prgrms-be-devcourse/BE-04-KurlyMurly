@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -153,6 +154,10 @@ public class User extends BaseEntity implements UserDetails {
 
     public String getMaskedUserName() {
         return this.name.replaceAll("(?<=.{1})", "*");
+    }
+
+    public boolean isNotAuthor(Long id) {
+        return !Objects.equals(this.getId(), id);
     }
 }
 
