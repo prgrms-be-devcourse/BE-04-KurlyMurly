@@ -342,7 +342,7 @@ class UserServiceTest {
         private static UpdateUser.Request request;
 
         @BeforeEach
-        void setUp(){
+        void setUp() {
             request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
                     , "sehan", "kurly@murly.com", "01094828438", "male", null);
         }
