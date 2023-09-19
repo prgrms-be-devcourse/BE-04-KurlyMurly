@@ -229,109 +229,116 @@ class UserServiceTest {
 
     }
 
-    @Test
-    @DisplayName("신용카드 결제 수단 추가 테스트")
-    void add_credit() {
-        // Given
-        RegisterPayment.creditRequest request = new RegisterPayment.creditRequest("12341234", "hana", null, 53);
+    @Nested
+    @DisplayName("결제수단 관리 테스트")
+    class payment_test {
 
-        // When
-        userService.addCredit(1L, request);
+        @Test
+        @DisplayName("신용카드 결제 수단 추가 테스트")
+        void add_credit() {
+            // Given
+            RegisterPayment.creditRequest request = new RegisterPayment.creditRequest("12341234", "hana", null, 53);
 
-        // Then
-        then(paymentRepository).should(times(1)).save(any());
+            // When
+            userService.addCredit(1L, request);
+
+            // Then
+            then(paymentRepository).should(times(1)).save(any());
+        }
+
+        @Test
+        @DisplayName("간편결제 결제 수단 추가 테스트")
+        void add_easy_pay() {
+            // given
+            RegisterPayment.easyPayRequest request = new RegisterPayment.easyPayRequest("12341234", "hana");
+
+            // when
+            userService.addEasyPay(1L, request);
+
+            // then
+            then(paymentRepository).should(times(1)).save(any());
+        }
+
+        @Test
+        @DisplayName("결제 수단 조회 테스트")
+        void get_payment() {
+            // Given
+            Payment payment = new Payment(1L, null);
+
+            doReturn(List.of(payment)).when(paymentRepository).findAllById(Collections.singleton(1L));
+            userService.getPayments(1L);
+
+            // then
+            then(paymentRepository).should(times(1)).findAllById(any());
+        }
+
+        @Test
+        @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
+        void get_payment_fail_ByNotFoundPayments() {
+            // When
+            doReturn(Collections.emptyList()).when(paymentRepository).findAllById(Collections.singleton(1L));
+
+            // Then
+            assertThrows(KurlyBaseException.class, () -> userService.getPayments(1L));
+        }
+
+        @Test
+        @DisplayName("결제 수단 삭제 테스트")
+        void delete_payment() {
+            // Given
+            Payment payment = new Payment(1L, null);
+
+            doReturn(Optional.of(payment)).when(paymentRepository).findByUserIdAndId(1L, 1L);
+
+            // When
+            userService.deletePayment(1L, 1L);
+
+            // Then
+            then(paymentRepository).should(times(1)).findByUserIdAndId(any(), any());
+        }
+
+        @Test
+        @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
+        void delete_payment_fail_ByNotFoundPayments() {
+            // When
+            doReturn(Optional.empty()).when(paymentRepository).findByUserIdAndId(any(), any());
+
+            // Then
+            assertThrows(KurlyBaseException.class, () -> userService.deletePayment(1L, 1L));
+        }
+
+        @Test
+        @DisplayName("결제 비밀번호 설정")
+        void update_pay_password() {
+            // Given
+            User user = new User("kurly", "kurly1234", "murly4321", "kyrly@murly.com"
+                    , null, "01094828438");
+
+            UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
+
+            doReturn(Optional.of(user)).when(userRepository).findById(any());
+
+            // When
+            userService.updatePaymentPassword(1L, request.payPassword());
+
+            // Then
+            then(userRepository).should(times(1)).findById(any());
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 유저를 조회할 경우 예외를 던짐")
+        void update_pay_password_notFoundUser() {
+            // Given
+            UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
+
+            doReturn(Optional.empty()).when(userRepository).findById(any());
+
+            // When , Then
+            assertThrows(KurlyBaseException.class, () -> userService.updatePaymentPassword(1L, request.payPassword()));
+        }
+
     }
 
-    @Test
-    @DisplayName("간편결제 결제 수단 추가 테스트")
-    void add_easy_pay() {
-        // given
-        RegisterPayment.easyPayRequest request = new RegisterPayment.easyPayRequest("12341234", "hana");
-
-        // when
-        userService.addEasyPay(1L, request);
-
-        // then
-        then(paymentRepository).should(times(1)).save(any());
-    }
-
-    @Test
-    @DisplayName("결제 수단 조회 테스트")
-    void get_payment() {
-        // Given
-        Payment payment = new Payment(1L, null);
-
-        doReturn(List.of(payment)).when(paymentRepository).findAllById(Collections.singleton(1L));
-        userService.getPayments(1L);
-
-        // then
-        then(paymentRepository).should(times(1)).findAllById(any());
-    }
-
-    @Test
-    @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
-    void get_payment_fail_ByNotFoundPayments() {
-        // When
-        doReturn(Collections.emptyList()).when(paymentRepository).findAllById(Collections.singleton(1L));
-
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.getPayments(1L));
-    }
-
-    @Test
-    @DisplayName("결제 수단 삭제 테스트")
-    void delete_payment() {
-        // Given
-        Payment payment = new Payment(1L, null);
-
-        doReturn(Optional.of(payment)).when(paymentRepository).findByUserIdAndId(1L, 1L);
-
-        // When
-        userService.deletePayment(1L, 1L);
-
-        // Then
-        then(paymentRepository).should(times(1)).findByUserIdAndId(any(), any());
-    }
-
-    @Test
-    @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
-    void delete_payment_fail_ByNotFoundPayments() {
-        // When
-        doReturn(Optional.empty()).when(paymentRepository).findByUserIdAndId(any(), any());
-
-        // Then
-        assertThrows(KurlyBaseException.class, () -> userService.deletePayment(1L, 1L));
-    }
-
-    @Test
-    @DisplayName("결제 비밀번호 설정")
-    void update_pay_password() {
-        // Given
-        User user = new User("kurly", "kurly1234", "murly4321", "kyrly@murly.com"
-                , null, "01094828438");
-
-        UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
-
-        doReturn(Optional.of(user)).when(userRepository).findById(any());
-
-        // When
-        userService.updatePaymentPassword(1L, request.payPassword());
-
-        // Then
-        then(userRepository).should(times(1)).findById(any());
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 유저를 조회할 경우 예외를 던짐")
-    void update_pay_password_notFoundUser() {
-        // Given
-        UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
-
-        doReturn(Optional.empty()).when(userRepository).findById(any());
-
-        // When , Then
-        assertThrows(KurlyBaseException.class, () -> userService.updatePaymentPassword(1L, request.payPassword()));
-    }
 
     @Test
     @DisplayName("개인정보 변경 테스트_비밀번호")
