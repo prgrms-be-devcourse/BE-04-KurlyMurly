@@ -1,6 +1,7 @@
 package com.devcourse.kurlymurly.module.user.domain;
 
 import com.devcourse.kurlymurly.module.BaseEntity;
+import com.devcourse.kurlymurly.module.user.domain.strategy.Reward;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -59,6 +60,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 15)
     private String phoneNumber;
 
+    private int reward;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
     private Role role;
@@ -97,6 +100,12 @@ public class User extends BaseEntity implements UserDetails {
 
     public boolean validatePayPassword(String payPassword, PasswordEncoder encoder) {
         return encoder.matches(payPassword, this.payPassword);
+    }
+
+    public int saveReward(Reward reward, int totalPrice) {
+        int totalReward = reward.saveReward(totalPrice);
+
+        return this.reward += totalReward;
     }
 
     @Override
