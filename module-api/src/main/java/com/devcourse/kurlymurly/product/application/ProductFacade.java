@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.product.application;
 
+import com.devcourse.kurlymurly.image.service.ImageService;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
@@ -10,7 +11,6 @@ import com.devcourse.kurlymurly.module.product.service.ProductQuery;
 import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
 import com.devcourse.kurlymurly.module.product.service.ReviewQuery;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.image.service.ImageService;
 import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
 import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;
@@ -135,7 +135,8 @@ public class ProductFacade {
         reviewCommand.cancelLike(userId, reviewId);
     }
 
-    public Review findReviewByIdOrThrow(Long id) { // todo: will be delete
-        return reviewQuery.findReviewByIdOrThrow(id);
+    public ReviewResponse.Reviewed loadReviewedById(Long id) { // todo: will be delete
+        Review review = reviewQuery.findReviewByIdOrThrow(id);
+        return productMapper.toReviewedResponse(review);
     }
 }
