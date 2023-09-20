@@ -22,12 +22,8 @@ import java.util.Random;
 @Table(name = "orders")
 public class Order extends BaseEntity {
     private static final int RANDOM_BOUND = 10000;
-
-    @Transient
-    private final Random random = new Random();
-
-    @Transient
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyMMddss");
+    private static final Random random = new Random();
+    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyMMddss");
 
     public enum Status {
         ORDERED,
@@ -90,7 +86,7 @@ public class Order extends BaseEntity {
 
     private String generateOrderNumber() {
         LocalDateTime localDateTime = LocalDateTime.now();
-        String currentDate = localDateTime.format(dateTimeFormatter);
+        String currentDate = localDateTime.format(dateFormat);
 
         int randomDigits = random.nextInt(RANDOM_BOUND);
 
