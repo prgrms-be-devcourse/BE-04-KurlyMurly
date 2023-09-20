@@ -62,8 +62,8 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(requests ->
-//                        requests.requestMatchers(restrictedUserUrls).hasAuthority(ROLE_USER.name())
-//                                .requestMatchers(restrictedAdminUrls).hasAuthority((ROLE_ADMIN.name()))
+//                        requests.requestMatchers(restrictedUserUrls).hasAuthority(ROLE_USER.productName())
+//                                .requestMatchers(restrictedAdminUrls).hasAuthority((ROLE_ADMIN.productName()))
                         requests.anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

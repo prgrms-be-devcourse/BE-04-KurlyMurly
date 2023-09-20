@@ -10,6 +10,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +22,8 @@ import java.util.Random;
 @Table(name = "orders")
 public class Order extends BaseEntity {
     private static final int RANDOM_BOUND = 10000;
+    private static final Random random = new Random();
+    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyMMddss");
 
     public enum Status {
         ORDERED,
@@ -53,6 +56,9 @@ public class Order extends BaseEntity {
     @Column(nullable = false)
     private Status status;
 
+    @Transient
+    private OrderState orderState;
+
     protected Order() {
     }
 
@@ -65,29 +71,24 @@ public class Order extends BaseEntity {
         this.status = Status.ORDERED;
     }
 
-    // TODO: 이름 간결하게 바꾸기
-    public void toProcessing() {
-        this.status = Status.PROCESSING;
+    public void updateStatus(Status status) {
+        this.status = status;
     }
 
-    public void toDelivering() {
-        this.status = Status.DELIVERING;
-    }
-
-    public void toDelivered() {
-        this.status = Status.DELIVERED;
-        this.deliveredAt = LocalDateTime.now();
+    public void toNextState() {
+        this.orderState = orderState.nextState();
     }
 
     public void toCancel() {
         this.status = Status.CANCELED;
+        this.orderState = orderState.cancel();
     }
 
     private String generateOrderNumber() {
         LocalDateTime localDateTime = LocalDateTime.now();
-        String currentDate = localDateTime.format(DateTimeFormatter.ofPattern("yyMMddss"));
+        String currentDate = localDateTime.format(dateFormat);
 
-        int randomDigits = new Random().nextInt(RANDOM_BOUND);
+        int randomDigits = random.nextInt(RANDOM_BOUND);
 
         return currentDate + randomDigits;
     }
