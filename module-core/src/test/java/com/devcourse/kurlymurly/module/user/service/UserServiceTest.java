@@ -192,7 +192,6 @@ class UserServiceTest {
 
             // When
             userService.updateAddressInfo(1L, 1L, "세한", "01000000000", "DOOR", "1234", "ALWAYS");
-
             // Then
             then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
         }
