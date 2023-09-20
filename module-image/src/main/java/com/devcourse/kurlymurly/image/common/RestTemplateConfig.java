@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.common;
+package com.devcourse.kurlymurly.image.common;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

@@ -1,12 +1,13 @@
-package com.devcourse.kurlymurly.service;
+package com.devcourse.kurlymurly.image.service;
 
-import com.devcourse.kurlymurly.common.CustomInputStreamResource;
+import com.devcourse.kurlymurly.image.common.CustomInputStreamResource;
+import com.devcourse.kurlymurly.image.exception.ImageConvertFailException;
+import com.devcourse.kurlymurly.image.exception.ImageUploadFailException;
+import com.devcourse.kurlymurly.image.model.ImageResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -15,22 +16,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 
 @Component
 class RestTemplateImageService implements ImageService {
     private static final String IMAGE_KEY = "image";
+    private static final String API_KEY = "key";
 
     private final RestTemplate restTemplate;
-    private final String imageUrl;
 
-    public RestTemplateImageService(
-            RestTemplate restTemplate,
-            @Value("${kurly.image.server}") String imageUrl
-    ) {
+    @Value("${kurly.image.server}")
+    private String imageUrl;
+
+    @Value("${kurly.image.key}")
+    private String apiKey;
+
+    public RestTemplateImageService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -40,19 +42,19 @@ class RestTemplateImageService implements ImageService {
     }
 
     private String sendRequestToImageServer(HttpEntity<MultiValueMap<String, Object>> request) {
-        ResponseEntity<String> response = restTemplate.exchange(imageUrl, POST, request, String.class);
-        handleErrors(response.getStatusCode());
-        return response.getBody();
+        ImageResponse response = restTemplate.postForEntity(imageUrl, request, ImageResponse.class).getBody();
+        validateUploadSuccess(response);
+        return extractImageURLFromResponse(response);
     }
 
-    private void handleErrors(HttpStatusCode status) { // todo: 유의미한 예외 던지기
-        if (status.is4xxClientError()) {
-            throw new RuntimeException("너무 큰 이미지를 올렸습니다.");
+    private void validateUploadSuccess(ImageResponse response) {
+        if (response == null || !response.success()) {
+            throw new ImageUploadFailException();
         }
+    }
 
-        if (status.is5xxServerError()) {
-            throw new RuntimeException("파일 업로드에 실패했습니다.");
-        }
+    private String extractImageURLFromResponse(ImageResponse response) {
+        return response.data().displayUrl();
     }
 
     private HttpEntity<MultiValueMap<String, Object>> generateHttpEntityRequest(MultipartFile image) {
@@ -64,6 +66,7 @@ class RestTemplateImageService implements ImageService {
     private MultiValueMap<String, Object> getMultiValueMap(MultipartFile image) {
         InputStreamResource resource = initResource(image);
         return new LinkedMultiValueMap<>() {{
+            add(API_KEY, apiKey);
             add(IMAGE_KEY, resource);
         }};
     }
@@ -72,7 +75,7 @@ class RestTemplateImageService implements ImageService {
         try {
             return new CustomInputStreamResource(image.getInputStream(), image.getOriginalFilename(), image.getSize());
         } catch (IOException e) {
-            throw new RuntimeException("파일 변환에 실패했습니다.", e); // todo: 유의미한 에러 던지기
+            throw new ImageConvertFailException(e);
         }
     }
 
