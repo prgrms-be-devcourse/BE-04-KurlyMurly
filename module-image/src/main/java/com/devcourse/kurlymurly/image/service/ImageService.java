@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.service;
+package com.devcourse.kurlymurly.image.service;
 
 import org.springframework.web.multipart.MultipartFile;
 

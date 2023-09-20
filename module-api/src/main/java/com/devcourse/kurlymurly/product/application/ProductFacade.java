@@ -10,7 +10,7 @@ import com.devcourse.kurlymurly.module.product.service.ProductQuery;
 import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
 import com.devcourse.kurlymurly.module.product.service.ReviewQuery;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.service.ImageService;
+import com.devcourse.kurlymurly.image.service.ImageService;
 import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
 import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
 import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;

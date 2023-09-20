@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.common;
+package com.devcourse.kurlymurly.image.common;
 
 import org.springframework.core.io.InputStreamResource;
 
