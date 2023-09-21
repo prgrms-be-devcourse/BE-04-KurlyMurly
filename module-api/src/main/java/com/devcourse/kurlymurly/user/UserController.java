@@ -196,7 +196,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
     })
-    @DeleteMapping("/addresses/{addressId}")
+    @DeleteMapping("/address/shipping-address/{addressId}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> deleteAddress(@AuthenticationPrincipal User user, @PathVariable Long addressId) {
         userService.deleteAddress(user.getId(), addressId);
