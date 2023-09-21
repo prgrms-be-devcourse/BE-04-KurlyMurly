@@ -101,6 +101,10 @@ public class User extends BaseEntity implements UserDetails {
         return encoder.matches(payPassword, this.payPassword);
     }
 
+    public boolean validatePassword(String password, PasswordEncoder encoder) {
+        return encoder.matches(password, this.password);
+    }
+
     public int saveReward(Reward reward, int totalPrice) {
         int totalReward = reward.saveReward(totalPrice);
 
