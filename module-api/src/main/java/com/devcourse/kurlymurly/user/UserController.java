@@ -242,7 +242,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "결제수단 정보들이 조회되지 않은 경우")
     })
-    @GetMapping("/credits")
+    @GetMapping("/payment/list")
     @ResponseStatus(OK)
     public KurlyResponse<List<Payment>> getPayment(@AuthenticationPrincipal User user) {
         List<Payment> creditList = userService.getPayments(user.getId());
