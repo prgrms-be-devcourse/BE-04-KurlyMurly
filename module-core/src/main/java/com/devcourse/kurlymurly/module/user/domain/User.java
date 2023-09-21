@@ -54,7 +54,6 @@ public class User extends BaseEntity implements UserDetails {
     @Embedded
     private UserInfo info;
 
-    @Column
     private String payPassword;
 
     @Column(nullable = false, length = 15)

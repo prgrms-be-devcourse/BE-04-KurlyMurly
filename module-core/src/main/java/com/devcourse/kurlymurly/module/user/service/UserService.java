@@ -108,6 +108,7 @@ public class UserService {
         return new User(request.name(), request.loginId(), passwordEncoder.encode(request.password()), request.email(), userInfo, request.phoneNumber());
     }
 
+    @Transactional
     public void findUpdateUser(Long userId, UpdateUser.Request request) {
         String inputPassword = passwordEncoder.encode(request.password());
 
@@ -148,12 +149,14 @@ public class UserService {
                 , shipping.getInfo().getContact());
     }
 
+    @Transactional
     public void updateAddress(Long userId, Long addressId, String description, String receiver, String contact) {
         Shipping shipping = findAddress(userId, addressId);
 
         shipping.update(description, receiver, contact);
     }
 
+    @Transactional
     public void updateAddressInfo(Long userId, Long addressId, String receiver, String contact, String receiveArea,
                                   String entrancePassword, String alertTime) {
         Shipping shipping = findAddress(userId, addressId);
@@ -161,6 +164,7 @@ public class UserService {
         shipping.updateInfo(receiver, contact, receiveArea, entrancePassword, alertTime);
     }
 
+    @Transactional
     public void deleteAddress(Long userId, Long addressId) {
         Shipping shipping = findAddress(userId, addressId);
 
@@ -197,6 +201,7 @@ public class UserService {
         return paymentList;
     }
 
+    @Transactional
     public void deletePayment(Long userId, Long paymentId) {
         Payment payment = paymentRepository.findByUserIdAndId(userId, paymentId)
                 .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_PAYMENT));
@@ -204,6 +209,7 @@ public class UserService {
         payment.deletePayment();
     }
 
+    @Transactional
     public void updatePaymentPassword(Long userId, String payPassword) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
