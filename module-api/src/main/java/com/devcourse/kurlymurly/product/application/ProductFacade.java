@@ -135,7 +135,7 @@ public class ProductFacade {
         reviewCommand.cancelLike(userId, reviewId);
     }
 
-    public ReviewResponse.Reviewed loadReviewedById(Long id) { // todo: will be delete
+    public ReviewResponse.Reviewed loadSpecificReviewById(Long id) {
         Review review = reviewQuery.findReviewByIdOrThrow(id);
         return productMapper.toReviewedResponse(review);
     }

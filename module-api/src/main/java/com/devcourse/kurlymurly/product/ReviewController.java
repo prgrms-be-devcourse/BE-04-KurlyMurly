@@ -61,7 +61,7 @@ public class ReviewController {
     @GetMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<ReviewResponse.Reviewed> findById(@PathVariable Long id) {
-        ReviewResponse.Reviewed response = productFacade.loadReviewedById(id);
+        ReviewResponse.Reviewed response = productFacade.loadSpecificReviewById(id);
         return KurlyResponse.ok(response);
     }
 
