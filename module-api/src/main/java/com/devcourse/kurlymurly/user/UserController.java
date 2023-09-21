@@ -138,7 +138,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
-    @PostMapping("/address")
+    @PostMapping("/shipping")
     @ResponseStatus(OK)
     public KurlyResponse<Void> addAddress(
             @AuthenticationPrincipal User user,
@@ -154,7 +154,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
-    @GetMapping("/address/list")
+    @GetMapping("/shipping/list")
     @ResponseStatus(OK)
     public KurlyResponse<List<GetAddress.Response>> getAddress(@AuthenticationPrincipal User user) {
         List<GetAddress.Response> addressList = userService.getAddress(user.getId());
@@ -168,7 +168,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
     })
-    @PutMapping("/address/shipping-address/update")
+    @PutMapping("/shipping")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateAddress(@AuthenticationPrincipal User user, @RequestBody UpdateAddress.Request request) {
         userService.updateAddress(user.getId(), request.addressId(), request.description(), request.receiver(), request.contact());
@@ -182,7 +182,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
     })
-    @PostMapping("/address/shipping-address/info")
+    @PostMapping("/shipping/info")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateAddressInfo(@AuthenticationPrincipal User user, @RequestBody @Valid UpdateAddress.InfoRequest request) {
         userService.updateAddressInfo(user.getId(), request.addressId(), request.receiver(), request.contact(), request.receiveArea().name(), request.entrancePassword(), request.messageAlertTime().name());
@@ -196,7 +196,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
     })
-    @DeleteMapping("/address/shipping-address/{addressId}")
+    @DeleteMapping("/shipping/{addressId}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> deleteAddress(@AuthenticationPrincipal User user, @PathVariable Long addressId) {
         userService.deleteAddress(user.getId(), addressId);
