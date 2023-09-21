@@ -271,7 +271,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 회원 id값을 조회한 경우")
     })
-    @PostMapping("/set-password")
+    @PostMapping("/pay-password")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updatePaymentPassword(
             @AuthenticationPrincipal User user,
