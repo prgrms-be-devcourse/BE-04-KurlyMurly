@@ -2,6 +2,7 @@ package com.devcourse.kurlymurly.web.dto.payment;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 
@@ -18,13 +19,13 @@ public sealed interface RegisterPayment permits creditRequest, easyPayRequest {
             @Schema(name = "은행명")
             String bank,
 
-            @NotBlank(message = "빈 값이 들어올 수 없습니다.")
+            @NotNull(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "신용카드 만료일")
             Date expiredDate,
 
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "비밀번호 앞 2자리")
-            Integer password
+            String password
     ) implements RegisterPayment {
     }
 

@@ -7,7 +7,7 @@ import java.util.Date;
 @Embeddable
 public class CreditInfo {
 
-    public CreditInfo(Date expiredDate, Integer password) {
+    public CreditInfo(Date expiredDate, String password) {
         this.expiredDate = expiredDate;
         this.password = password;
     }
@@ -17,5 +17,5 @@ public class CreditInfo {
 
     Date expiredDate;
 
-    Integer password;
+    String password;
 }
