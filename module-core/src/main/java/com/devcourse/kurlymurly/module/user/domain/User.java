@@ -59,7 +59,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 15)
     private String phoneNumber;
 
-    private int reward;
+    private Integer reward;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
