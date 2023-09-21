@@ -99,7 +99,7 @@ public class UserController {
             @AuthenticationPrincipal User user,
             @RequestBody @Valid UpdateUser.Request request
     ) {
-        boolean isPasswordNotEqual = request.password().equals(request.checkPassword());
+        boolean isPasswordNotEqual = !request.password().equals(request.checkPassword());
 
         if (isPasswordNotEqual) {
             throw new KurlyBaseException(ErrorCode.NOT_SAME_PASSWORD);

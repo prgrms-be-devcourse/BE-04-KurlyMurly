@@ -110,12 +110,10 @@ public class UserService {
 
     @Transactional
     public void findUpdateUser(Long userId, UpdateUser.Request request) {
-        String inputPassword = passwordEncoder.encode(request.password());
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
 
-        boolean notCorrectPassword = !passwordEncoder.matches(user.getPassword(), inputPassword);
+        boolean notCorrectPassword = user.validatePassword(request.password(),passwordEncoder);
 
         if (notCorrectPassword) {
             throw new KurlyBaseException(NOT_CORRECT_PASSWORD);
@@ -127,7 +125,7 @@ public class UserService {
     private void updateUserInfo(UpdateUser.Request request, User user) {
         String editPassword = passwordEncoder.encode(request.password());
         System.out.println(editPassword);
-        user.update(request.name(), editPassword, request.email(), request.sex(), request.bitrh(), request.phoneNumber());
+        user.update(request.name(), editPassword, request.email(), request.sex(), request.birth(), request.phoneNumber());
     }
 
     @Transactional
