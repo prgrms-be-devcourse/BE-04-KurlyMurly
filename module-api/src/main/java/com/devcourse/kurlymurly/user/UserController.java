@@ -182,7 +182,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
     })
-    @PostMapping("/addresses/info")
+    @PostMapping("/address/shipping-address/info")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateAddressInfo(@AuthenticationPrincipal User user, @RequestBody @Valid UpdateAddress.InfoRequest request) {
         userService.updateAddressInfo(user.getId(), request.addressId(), request.receiver(), request.contact(), request.receiveArea().name(), request.entrancePassword(), request.messageAlertTime().name());
