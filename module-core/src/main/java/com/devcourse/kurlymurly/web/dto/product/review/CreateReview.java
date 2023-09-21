@@ -17,10 +17,6 @@ public sealed interface CreateReview permits Request {
             Long productId,
 
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
-            @Schema(name = "상품 이름")
-            String productName,
-
-            @NotBlank(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "리뷰 내용")
             String content,
 

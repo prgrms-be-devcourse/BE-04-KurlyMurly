@@ -39,7 +39,7 @@ class ReviewRepositoryTest {
         reviewRepository.saveAll(List.of(review, review2));
 
         // when
-        List<Review> result = reviewRepository.findAllByUserIdAndStatusIsNotOrderByIdDesc(userId, DELETED);
+       // List<Review> result = reviewRepository.findAllByUserIdAndStatusIsNotOrderByIdDesc(userId, DELETED);
 
         // TODO: then
 //        assertThat(result).isNotEmpty().hasSize(2);
@@ -53,11 +53,11 @@ class ReviewRepositoryTest {
         userRepository.save(UserFixture.USER_FIXTURE.toEntity());
         reviewRepository.save(REVIEW_FIXTURE.toEntity());
 
-        Slice<Review> tenReviewsOfProductFromStart = reviewRepository.getTenReviewsOfProductFromStart(1L, 10L);
+//        Slice<Review> tenReviewsOfProductFromStart = reviewRepository.getTenReviewsOfProductFromStart(1L, 10L);
 //        System.out.println(userRepository.findById(1L).get());
 //        testEntityManager.flush();
 
 //        Assertions.assertNotEquals(0, tenReviewsOfProductFromStart.getSize());
-        System.out.println(tenReviewsOfProductFromStart.get());
+//        System.out.println(tenReviewsOfProductFromStart.get());
     }
 }

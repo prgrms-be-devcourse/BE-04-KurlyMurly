@@ -81,7 +81,7 @@ public class Order extends BaseEntity {
 
     public void toCancel() {
         this.status = Status.CANCELED;
-        this.orderState = orderState.cancel();
+        //this.orderState = orderState.cancel();
     }
 
     private String generateOrderNumber() {
@@ -125,6 +125,10 @@ public class Order extends BaseEntity {
     }
 
     public String getSimpleProducts() {
+        if(orderItems.size() == 1) {
+            return orderItems.get(0).getProductName();
+        }
+
         String productName = orderItems.get(0).getProductName() + " 외 " ;
         int size = orderItems.size() - 1;
 
