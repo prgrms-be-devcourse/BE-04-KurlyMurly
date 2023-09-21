@@ -114,7 +114,7 @@ public class UserController {
     @Operation(description = "id 중복 체크 API", responses = {
             @ApiResponse(responseCode = "200", description = "해당 id의 중복검사를 진행"),
     })
-    @PostMapping("/login-id")
+    @PostMapping("/check-id")
     @ResponseStatus(OK)
     public KurlyResponse<Void> checkId(@RequestBody @Valid CheckId.Request request) {
         boolean result = userService.checkId(request.loginId());
