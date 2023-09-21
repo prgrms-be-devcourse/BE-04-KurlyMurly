@@ -154,7 +154,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
-    @GetMapping("/addresses")
+    @GetMapping("/address/list")
     @ResponseStatus(OK)
     public KurlyResponse<List<GetAddress.Response>> getAddress(@AuthenticationPrincipal User user) {
         List<GetAddress.Response> addressList = userService.getAddress(user.getId());
