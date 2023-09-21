@@ -6,16 +6,16 @@ import java.util.Date;
 
 @Embeddable
 public class CreditInfo {
+    private Date expiredDate;
+
+    private String password;
+
+    protected CreditInfo() {
+        this.password = "none";
+    }
 
     public CreditInfo(Date expiredDate, String password) {
         this.expiredDate = expiredDate;
         this.password = password;
     }
-
-    public CreditInfo() {
-    }
-
-    Date expiredDate;
-
-    String password;
 }
