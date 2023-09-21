@@ -62,7 +62,7 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "작성한 1:1 문의를 수정한다.", responses = {
+    @Operation(description = "[토큰 필요] 작성한 1:1 문의를 수정한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "1:1문의 id를 명시하지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우")
@@ -70,23 +70,27 @@ public class OrderSupportController {
     @PatchMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateOrderSupport(
+            @AuthenticationPrincipal User user,
             @PathVariable Long id,
             @RequestBody @Valid CreateOrderSupport.UpdateRequest request
     ) {
-        orderSupportService.updateOrderSupport(id, request.title(), request.content());
+        orderSupportService.updateOrderSupport(user.getId(), id, request.title(), request.content());
         return KurlyResponse.noData();
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "작성한 1:1 문의를 삭제한다.", responses = {
+    @Operation(description = "[토큰 필요] 작성한 1:1 문의를 삭제한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "1:1문의 id를 명시하지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우")
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(OK)
-    public KurlyResponse<Void> deleteOrderSupport(@PathVariable Long id) {
-        orderSupportService.deleteOrderSupport(id);
+    public KurlyResponse<Void> deleteOrderSupport(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long id
+    ) {
+        orderSupportService.deleteOrderSupport(user.getId(), id);
         return KurlyResponse.noData();
     }
 }

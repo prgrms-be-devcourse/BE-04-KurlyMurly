@@ -75,8 +75,9 @@ public class OrderSupportService {
     }
 
     @Transactional
-    public void updateOrderSupport(Long id, String title, String content) {
+    public void updateOrderSupport(Long userId, Long id, String title, String content) {
         OrderSupport orderSupport = findByIdOrThrow(id);
+        orderSupport.validateAuthor(userId);
         orderSupport.updateOrderSupport(title, content);
     }
 
@@ -87,8 +88,9 @@ public class OrderSupportService {
     }
 
     @Transactional
-    public void deleteOrderSupport(Long id) {
+    public void deleteOrderSupport(Long userId, Long id) {
         OrderSupport orderSupport = findByIdOrThrow(id);
+        orderSupport.validateAuthor(userId);
         orderSupport.deleteSupport();
     }
 
