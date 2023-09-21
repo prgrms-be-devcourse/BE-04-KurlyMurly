@@ -93,7 +93,7 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "해당 id값을 가진 유저가 조회되지 않는 경우"),
             @ApiResponse(responseCode = "404", description = "현재 비밀번호가 일치하지 않는 경우")
     })
-    @PutMapping
+    @PutMapping("/modify")
     @ResponseStatus(OK)
     public KurlyResponse<Void> update(
             @AuthenticationPrincipal User user,
