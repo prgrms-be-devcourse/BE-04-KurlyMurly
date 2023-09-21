@@ -168,7 +168,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
     })
-    @PutMapping("/addresses")
+    @PutMapping("/address/shipping-address/update")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateAddress(@AuthenticationPrincipal User user, @RequestBody UpdateAddress.Request request) {
         userService.updateAddress(user.getId(), request.addressId(), request.description(), request.receiver(), request.contact());
