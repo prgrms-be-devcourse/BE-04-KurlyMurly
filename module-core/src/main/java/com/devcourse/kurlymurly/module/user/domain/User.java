@@ -59,6 +59,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false, length = 15)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private Integer reward;
 
     @Enumerated(value = EnumType.STRING)
@@ -79,6 +80,7 @@ public class User extends BaseEntity implements UserDetails {
         this.tier = Tier.THE_PURPLE;
         this.email = email;
         this.payPassword = null;
+        this.reward = 0;
         this.info = info;
         this.phoneNumber = phoneNumber;
         this.role = Role.ROLE_USER;
