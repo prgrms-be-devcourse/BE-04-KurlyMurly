@@ -5,10 +5,14 @@ import com.devcourse.kurlymurly.product.application.ProductFacade;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
 import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;
+import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +34,38 @@ public class ProductController {
 
     public ProductController(ProductFacade productFacade) {
         this.productFacade = productFacade;
+    }
+
+    @Tag(name = "product")
+    @Operation(summary = "[토큰] 상품에 대한 리뷰 등록", description = "[토큰 필요] 상품에 대한 리뷰 등록 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 review를 등록한 경우"),
+            @ApiResponse(responseCode = "400", description = "삭제된 상품에 후기를 작성해서 발생하는 에러"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러"),
+            @ApiResponse(responseCode = "404", description = "주문 정보를 읽어오지 못해서 발생하는 에러")
+    })
+    @PostMapping("/review")
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> registerReview(
+            @AuthenticationPrincipal User user,
+            @RequestBody CreateReview.Request request
+    ) {
+        productFacade.registerReview(user, request);
+        return KurlyResponse.noData();
+    }
+
+    @Tag(name = "product")
+    @Operation(summary = "상품 리뷰 조회", description = "해당 상품에 대한 리뷰 조회 API", responses = {
+            @ApiResponse(responseCode = "200", description = "[페이징 정보] 성공적으로 상품의 후기를 가져온 상태"),
+            @ApiResponse(responseCode = "400", description = "review를 조회하기 위한 상품 id를 명시하지 않은 경우")
+    })
+    @GetMapping("/{productId}/reviews")
+    @ResponseStatus(OK)
+    public KurlyResponse<Slice<ReviewResponse.ReviewOfProduct>> getReviewsOfProduct(
+            @PathVariable Long productId,
+            @RequestBody ReviewRequest.OfProduct request
+    ) {
+        Slice<ReviewResponse.ReviewOfProduct> responses = productFacade.loadReviewsOfProduct(productId, request);
+        return KurlyResponse.ok(responses);
     }
 
     @Tag(name = "product")
