@@ -24,7 +24,7 @@ public sealed interface RegisterPayment permits creditRequest, easyPayRequest {
 
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "비밀번호 앞 2자리")
-            int password
+            Integer password
     ) implements RegisterPayment {
     }
 
