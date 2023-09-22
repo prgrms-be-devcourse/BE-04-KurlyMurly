@@ -11,7 +11,6 @@ public class CreditInfo {
     private String password;
 
     protected CreditInfo() {
-        this.password = "none";
     }
 
     public CreditInfo(Date expiredDate, String password) {
