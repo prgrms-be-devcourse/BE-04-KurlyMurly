@@ -46,6 +46,7 @@ public enum ErrorCode {
     // 409
     NOT_ORDER_HOST(CONFLICT, "해당 주문을 주문한 사용자가 아닙니다."),
     NOT_AUTHOR(CONFLICT, "작성자가 아닙니다."),
+    NOT_OWNER(CONFLICT, "주문자가 아닙니다."),
     EXIST_SAME_ID(CONFLICT, "사용 불가능한 아이디 입니다."),
     EXIST_SAME_EMAIL(CONFLICT, "사용 불가능한 이메일 입니다."),
 

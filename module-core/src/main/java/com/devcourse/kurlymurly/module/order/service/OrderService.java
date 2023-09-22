@@ -152,6 +152,7 @@ public class OrderService {
         Order order = orderRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new KurlyBaseException(NOT_ORDER_HOST));
 
+        order.validateOrdersOwner(userId);
         order.toCancel();
     }
 
