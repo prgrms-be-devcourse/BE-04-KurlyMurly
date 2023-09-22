@@ -73,7 +73,7 @@ public class UserController {
     @Tag(name = "user")
     @Operation(description = "회원 가입 API", responses = {
             @ApiResponse(responseCode = "200", description = "회원 가입에 성공한 경우"),
-            @ApiResponse(responseCode = "400", description = "동일한 비밀번호를 입력하지 않은 경우"),
+            @ApiResponse(responseCode = "400", description = "변경할 비밀번호와 확인 비밀번호가 일치하지 않는 경우"),
             @ApiResponse(responseCode = "409", description = "이미 가입된 아이디를 입력한 경우"),
             @ApiResponse(responseCode = "409", description = "이미 가입된 이메일을 입력한 경우")
     })
@@ -86,11 +86,11 @@ public class UserController {
 
     @Tag(name = "user")
     @Operation(description = "[토큰 필요] 개인정보 수정 API", responses = {
-            @ApiResponse(responseCode = "200", description = "개인정보를 수정한 경우"),
+            @ApiResponse(responseCode = "200", description = "개인정보를 성공적으로 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
-            @ApiResponse(responseCode = "400", description = "동일한 비밀번호를 입력하지 않는 경우"),
+            @ApiResponse(responseCode = "400", description = "재확인 비밀번호가 일치하지 않는 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
-            @ApiResponse(responseCode = "404", description = "해당 id값을 가진 유저가 조회되지 않는 경우"),
+            @ApiResponse(responseCode = "404", description = "해당 유저가 조회되지 않는 경우"),
             @ApiResponse(responseCode = "404", description = "현재 비밀번호가 일치하지 않는 경우")
     })
     @PutMapping("/info")
@@ -133,8 +133,8 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 주소 등록 API", responses = {
-            @ApiResponse(responseCode = "200", description = "주소를 추가한 경우"),
+    @Operation(description = "[토큰 필요] 도로명 주소 등록 API", responses = {
+            @ApiResponse(responseCode = "200", description = "주소를 성공적으로 추가한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
@@ -149,7 +149,7 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 주소 조회 API", responses = {
+    @Operation(description = "[토큰 필요] 주소 목록 조회 API", responses = {
             @ApiResponse(responseCode = "200", description = "유저가 등록한 주소들을 조회"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
@@ -163,10 +163,10 @@ public class UserController {
 
     @Tag(name = "user")
     @Operation(description = "[토큰 필요] 주소 수정 API", responses = {
-            @ApiResponse(responseCode = "200", description = "주소를 수정한 경우"),
+            @ApiResponse(responseCode = "200", description = "주소를 성공적으로 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
-            @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
+            @ApiResponse(responseCode = "404", description = "수정할 주소가 조회되지 않을 경우")
     })
     @PutMapping("/shipping")
     @ResponseStatus(OK)
@@ -177,10 +177,10 @@ public class UserController {
 
     @Tag(name = "user")
     @Operation(description = "[토큰 필요] 배송 요청사항 설정 API", responses = {
-            @ApiResponse(responseCode = "200", description = "주소를 수정한 경우"),
+            @ApiResponse(responseCode = "200", description = "요청사항을 성공적으로 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
-            @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
+            @ApiResponse(responseCode = "404", description = "요청사항을 추가할 주소가 조회되지 않을 경우")
     })
     @PostMapping("/shipping/info")
     @ResponseStatus(OK)
@@ -194,7 +194,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "해당 주소를 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
-            @ApiResponse(responseCode = "404", description = "해당 id에 맞는 주소가 조회되지 않을 경우")
+            @ApiResponse(responseCode = "404", description = "삭제할 주소가 조회되지 않을 경우")
     })
     @DeleteMapping("/shipping/{addressId}")
     @ResponseStatus(OK)
@@ -205,7 +205,7 @@ public class UserController {
 
     @Tag(name = "user")
     @Operation(description = "[토큰 필요] 신용카드 등록 API", responses = {
-            @ApiResponse(responseCode = "200", description = "신용카드를 등록한 경우"),
+            @ApiResponse(responseCode = "200", description = "신용카드를 성공적으로 등록한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
@@ -221,7 +221,7 @@ public class UserController {
 
     @Tag(name = "user")
     @Operation(description = "[토큰 필요] 간편결제 등록 API", responses = {
-            @ApiResponse(responseCode = "200", description = "간편 결제수단을 등록한 경우"),
+            @ApiResponse(responseCode = "200", description = "간편 결제수단을 성공적으로 등록한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
@@ -236,8 +236,8 @@ public class UserController {
     }
 
     @Tag(name = "user")
-    @Operation(description = "[토큰 필요] 결제수단 조회 API", responses = {
-            @ApiResponse(responseCode = "200", description = "결제수단 정보들을 조회한 경우"),
+    @Operation(description = "[토큰 필요] 결제수단 목록 조회 API", responses = {
+            @ApiResponse(responseCode = "200", description = "결제수단 정보 목록을 성공적으로 조회한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "결제수단 정보들이 조회되지 않은 경우")
@@ -251,10 +251,10 @@ public class UserController {
 
     @Tag(name = "user")
     @Operation(description = "[토큰 필요] 결제 수단 삭제 API", responses = {
-            @ApiResponse(responseCode = "200", description = "결제수단을 삭제한 경우"),
+            @ApiResponse(responseCode = "200", description = "결제수단을 성공적으로 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
-            @ApiResponse(responseCode = "404", description = "결제수단 정보들이 조회되지 않은 경우")
+            @ApiResponse(responseCode = "404", description = "삭제할 결제수단 정보가 조회되지 않은 경우")
     })
     @DeleteMapping("/payment/{paymentId}")
     @ResponseStatus(OK)
@@ -266,10 +266,10 @@ public class UserController {
 
     @Tag(name = "user")
     @Operation(description = "[토큰 필요] 결제 비밀번호 설정 API", responses = {
-            @ApiResponse(responseCode = "200", description = "결제수단을 삭제한 경우"),
+            @ApiResponse(responseCode = "200", description = "결제수단을 성공적으로 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 회원 id값을 조회한 경우")
+            @ApiResponse(responseCode = "404", description = "회원이 조회되지 않는 경우")
     })
     @PostMapping("/pay-password")
     @ResponseStatus(OK)
