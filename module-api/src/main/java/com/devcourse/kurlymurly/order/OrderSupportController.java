@@ -25,7 +25,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Tag(name = "orderSupport", description = "1:1 문의 API")
 @RestController
-@RequestMapping("/orderSupports")
+@RequestMapping("/inquiry")
 public class OrderSupportController {
     private final OrderSupportService orderSupportService;
 
@@ -54,7 +54,7 @@ public class OrderSupportController {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의 내역을 조회한 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
-    @GetMapping
+    @GetMapping("/list")
     @ResponseStatus(OK)
     public KurlyResponse<List<CreateOrderSupport.Response>> findAllByUserId(@AuthenticationPrincipal User user) {
         List<CreateOrderSupport.Response> orderSupportResponses = orderSupportService.findAllByUserId(user.getId());
