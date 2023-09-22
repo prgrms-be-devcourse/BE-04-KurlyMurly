@@ -50,6 +50,10 @@ public class UserController {
     }
 
     @Tag(name = "user")
+    @Operation(summary = "[토큰] 작성 가능 리뷰 조회", description = "[토큰 필요] 작성 가능 리뷰 조회 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 작성 가능한 리뷰 목록을 가져온 상태"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러")
+    })
     @GetMapping("/reviews")
     @ResponseStatus(OK)
     public KurlyResponse<List<ReviewResponse.Reviewable>> getReviewableOrdersOnMyPage(@AuthenticationPrincipal User user) {
