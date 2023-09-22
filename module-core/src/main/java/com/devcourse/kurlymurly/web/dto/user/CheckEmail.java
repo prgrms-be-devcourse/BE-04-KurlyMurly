@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public sealed interface CheckEmail permits CheckEmail.Request {
     record Request(
-            @NotBlank(message = "빈 값이 들어올 수 없습니다.")
+            @NotBlank(message = "검사할 이메일을 입력해주세요.")
             @Schema(name = "중복 검사할 이메일")
             String email
     ) implements CheckEmail {

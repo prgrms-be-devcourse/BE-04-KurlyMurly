@@ -7,33 +7,46 @@ import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 
+import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.EMAIL_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.PASSWORD_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.PHONE_NUMBER_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.USER_NAME_REGEXP;
+
 public sealed interface UpdateUser permits UpdateUser.Request {
     record Request(
-            @NotNull(message = "현재 비밀번호를 확인해주세요")
+            @NotNull(message = "현재 비밀번호를 확인해주세요.")
             @Schema(name = "현재 비밀번호")
             String currentPassword,
 
-            @Length(min = 10)
+            @NotNull(message = "변경할 비밀번호를 입력해주세요.")
+            @Pattern(regexp = PASSWORD_REGEXP, message = "비밀번호 형식을 지켜주세요")
             @Schema(name = "변경할 비밀번호")
             String password,
 
+            @NotNull(message = "비밀번호를 다시 입력해주세요.")
             @Schema(name = "비밀번호 확인")
             String checkPassword,
 
-            @Pattern(regexp = "^[가-힣a-z]{2,20}")
+            @NotNull(message = "변경할 이름을 입력해주세요.")
+            @Pattern(regexp = USER_NAME_REGEXP, message = "이름 형식이 올바르지 않습니다.")
             @Schema(name = "변경할 이름")
             String name,
 
-            @Pattern(regexp = "\\b[\\w\\.-]+@[\\w\\.-]+\\.\\w{2,4}\\b")
+            @NotNull(message = "변경할 이메일을 입력해주세요.")
+            @Pattern(regexp = EMAIL_REGEXP, message = "이메일 형식이 아닙니다.")
             @Schema(name = "변경할 이메일")
             String email,
 
+            @NotNull(message = "변경할 휴대폰 번호를 입력해주세요.")
+            @Pattern(regexp = PHONE_NUMBER_REGEXP, message = "핸드폰 번호 형식이 아닙니다.")
             @Schema(name = "변경할 휴대폰 번호")
             String phoneNumber,
 
-            @Schema(name = "변경할 성별")
+            @NotNull(message = "변경할 성별을 입력해주세요.")
+            @Schema(name = "변경할 성별", allowableValues = {"male", "female", "none"})
             String sex,
 
+            @NotNull(message = "변경할 생년월일을 입력해주세요.")
             @Schema(name = "변경할 생년월일")
             LocalDate birth
     ) implements UpdateUser {
