@@ -12,3 +12,6 @@ logging:
       springframework:
         core:
           LocalVariableTableParameterNameDiscoverer: error
+
+springdoc:
+  use-fqn: true
