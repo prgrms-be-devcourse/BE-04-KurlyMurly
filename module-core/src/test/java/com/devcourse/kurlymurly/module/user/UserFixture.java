@@ -6,7 +6,7 @@ import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import java.time.LocalDate;
 
 public enum UserFixture {
-    USER_FIXTURE("수연장", "abd1234", "11", "aaaa@gmail.com",
+    USER_FIXTURE("수연장", "abd1234", "kurly1234", "aaaa@gmail.com",
             new UserInfo(LocalDate.now(), "문희조", "MAN"), "1234-4567");
 
     private final String name;
