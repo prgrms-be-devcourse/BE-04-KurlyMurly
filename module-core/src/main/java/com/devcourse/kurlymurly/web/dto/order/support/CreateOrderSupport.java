@@ -45,7 +45,12 @@ public sealed interface CreateOrderSupport permits Request, Response, UpdateRequ
     }
 
     record UpdateRequest(
+            @NotBlank(message = "빈 값이 들어올 수 없습니다.")
+            @Schema(name = "수정할 1대1 문의 제목")
             String title,
+
+            @NotBlank(message = "빈 값이 들어올 수 없습니다.")
+            @Schema(name = "수정할 1대1 문의 내용")
             String content
     ) implements CreateOrderSupport {
     }
