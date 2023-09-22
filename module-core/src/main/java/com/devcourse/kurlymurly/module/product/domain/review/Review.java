@@ -25,7 +25,7 @@ import static com.devcourse.kurlymurly.module.product.domain.review.Review.Statu
 public class Review extends BaseEntity {
     public enum Status { NORMAL, BANNED, BEST, DELETED,}
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private User user; // fetch join
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
