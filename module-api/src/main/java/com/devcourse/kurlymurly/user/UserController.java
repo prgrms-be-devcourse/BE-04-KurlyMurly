@@ -282,6 +282,11 @@ public class UserController {
     }
 
     @Tag(name = "user")
+    @Operation(summary = "[토큰] 장바구니 상품 추가", description = "[토큰 필요] 장바구니 상품 추가", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 장바구니에 상품을 추가한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+    })
     @PostMapping("/carts")
     @ResponseStatus(OK)
     public KurlyResponse<Void> addCart(
@@ -293,6 +298,11 @@ public class UserController {
     }
 
     @Tag(name = "user")
+    @Operation(summary = "[토큰] 장바구니 특정 상품 삭제", description = "[토큰 필요] 장바구니 특정 상품 삭제", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 장바구니 특정 상품을 삭제한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+    })
     @DeleteMapping("/carts/{cartId}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> removeProduct(
@@ -304,6 +314,11 @@ public class UserController {
     }
 
     @Tag(name = "user")
+    @Operation(summary = "[토큰] 장바구니 선택 상품 삭제", description = "[토큰 필요] 장바구니 선택 상품 삭제", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 장바구니 상품을 선택 삭제한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+    })
     @DeleteMapping("/carts")
     @ResponseStatus(OK)
     public KurlyResponse<Void> removeCartItemList(
@@ -315,6 +330,11 @@ public class UserController {
     }
 
     @Tag(name = "user")
+    @Operation(summary = "[토큰] 장바구니 상품 수량 수정", description = "[토큰 필요] 장바구니 상품 수량 수정", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 장바구니 상품 수량을 수정한 경우"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+    })
     @PutMapping("/carts")
     @ResponseStatus(OK)
     public KurlyResponse<Void> changeItemQuantity(
