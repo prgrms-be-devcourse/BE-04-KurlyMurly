@@ -1,9 +1,10 @@
 package com.devcourse.kurlymurly.product;
 
+import com.devcourse.kurlymurly.web.common.KurlyPagingRequest;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.product.application.ProductFacade;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
-import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
+import com.devcourse.kurlymurly.web.dto.product.GetProduct;
 import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;
 import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +23,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -75,9 +80,21 @@ public class ProductController {
     })
     @GetMapping("/favorites") // GET /users/favorites
     @ResponseStatus(OK)
-    public KurlyResponse<ListPagingResponse<GetFavorite.Response>> getFavorites(@AuthenticationPrincipal User user) {
-        ListPagingResponse<GetFavorite.Response> response = productFacade.getUserFavorites(user.getId());
+    public KurlyResponse<List<GetFavorite.Response>> getFavorites(@AuthenticationPrincipal User user) {
+        List<GetFavorite.Response> response = productFacade.getUserFavorites(user.getId());
         return KurlyResponse.ok(response);
+    }
+
+    @Tag(name = "product")
+    @Operation(description = "카테고리에 맞는 상품 목록을 페이징으로 보여준다.")
+    @GetMapping("/{categoryId}")
+    @ResponseStatus(OK)
+    public KurlyResponse<Page<GetProduct.SimpleResponse>> getProductPagingOfCategory(
+            @PathVariable Long categoryId,
+            @RequestParam KurlyPagingRequest request
+    ) {
+        Page<GetProduct.SimpleResponse> responses = productFacade.loadProductPageResponse(categoryId, request.toPageable());
+        return KurlyResponse.ok(responses);
     }
 
     @Tag(name = "product")
