@@ -1,6 +1,7 @@
 package com.devcourse.kurlymurly.module.user.domain;
 
 import com.devcourse.kurlymurly.module.BaseEntity;
+import com.devcourse.kurlymurly.module.user.domain.strategy.Reward;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -53,11 +54,13 @@ public class User extends BaseEntity implements UserDetails {
     @Embedded
     private UserInfo info;
 
-    @Column(length = 50)
     private String payPassword;
 
     @Column(nullable = false, length = 15)
     private String phoneNumber;
+
+    @Column(nullable = false)
+    private Integer reward;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
@@ -77,6 +80,7 @@ public class User extends BaseEntity implements UserDetails {
         this.tier = Tier.THE_PURPLE;
         this.email = email;
         this.payPassword = null;
+        this.reward = 0;
         this.info = info;
         this.phoneNumber = phoneNumber;
         this.role = Role.ROLE_USER;
@@ -97,6 +101,16 @@ public class User extends BaseEntity implements UserDetails {
 
     public boolean validatePayPassword(String payPassword, PasswordEncoder encoder) {
         return encoder.matches(payPassword, this.payPassword);
+    }
+
+    public boolean validatePassword(String password, PasswordEncoder encoder) {
+        return encoder.matches(password, this.password);
+    }
+
+    public int saveReward(Reward reward, int totalPrice) {
+        int totalReward = reward.saveReward(totalPrice);
+
+        return this.reward += totalReward;
     }
 
     @Override
@@ -146,10 +160,6 @@ public class User extends BaseEntity implements UserDetails {
 
     public Role getRole() {
         return role;
-    }
-
-    public boolean isEqualPassword(String password) {
-        return this.password.equals(password);
     }
 
     public String getMaskedUserName() {

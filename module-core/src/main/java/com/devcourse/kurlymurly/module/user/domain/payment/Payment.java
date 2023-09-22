@@ -36,7 +36,7 @@ public class Payment extends BaseEntity {
     @Column(nullable = false, length = 10)
     private PaymentStatus status;
 
-    public Payment() {
+    protected Payment() {
     }
 
     public Payment(Long userId, String payInfo, CreditInfo creditInfo) {
@@ -52,6 +52,7 @@ public class Payment extends BaseEntity {
         this.payInfo = payInfo;
         this.type = Payment.Type.EASY;
         this.status = Payment.PaymentStatus.NORMAL;
+        this.creditInfo = new CreditInfo();
     }
 
     public void deletePayment() {

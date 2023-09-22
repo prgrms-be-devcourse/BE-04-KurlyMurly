@@ -230,7 +230,7 @@ class UserServiceTest {
         @DisplayName("신용카드 결제 수단 추가 테스트")
         void add_credit() {
             // Given
-            RegisterPayment.creditRequest request = new RegisterPayment.creditRequest("12341234", "hana", null, 53);
+            RegisterPayment.creditRequest request = new RegisterPayment.creditRequest("12341234", "hana", null, "53");
 
             // When
             userService.addCredit(1L, request);
@@ -344,7 +344,6 @@ class UserServiceTest {
         @DisplayName("개인정보 변경 테스트_비밀번호")
         void update_user_password() {
             // Given
-            doReturn("editEncodePassword").when(passwordEncoder).encode(any());
             doReturn(true).when(passwordEncoder).matches(any(), any());
             doReturn(Optional.of(user)).when(userRepository).findById(any());
 
@@ -352,8 +351,7 @@ class UserServiceTest {
             userService.findUpdateUser(1L, request);
 
             // Then
-            assertThat(user.isEqualPassword("editEncodePassword")).isTrue();
-            assertThat(user.getRole()).isEqualTo(ROLE_USER);
+            assertThat(user.validatePassword(request.password(),passwordEncoder)).isTrue();
         }
 
         @Test

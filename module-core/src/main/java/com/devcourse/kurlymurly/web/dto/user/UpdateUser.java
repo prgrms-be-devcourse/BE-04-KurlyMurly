@@ -35,7 +35,7 @@ public sealed interface UpdateUser permits UpdateUser.Request {
             String sex,
 
             @Schema(name = "변경할 생년월일")
-            LocalDate bitrh
+            LocalDate birth
     ) implements UpdateUser {
     }
 }

@@ -11,7 +11,7 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 public enum ErrorCode {
     // 400
     CANCELED_ORDER(BAD_REQUEST, "이미 취소된 주문입니다."),
-    DELIVERED_ORDER(BAD_REQUEST, "이미 배송 완료된 주문입니다."),
+    DELIVERED_ORDER(BAD_REQUEST, "이미 배송된 주문입니다."),
     DELETED_PRODUCT(BAD_REQUEST, "삭제된 상품입니다."),
     NOT_CORRECT_QUANTITY(BAD_REQUEST, "상품의 최소 수량은 1개입니다."),
     FAIL_USER_LOGIN(NOT_FOUND, "존재하지 않는 계정입니다."),

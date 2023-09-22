@@ -15,7 +15,7 @@ public sealed interface CreateOrderItem permits Request {
 
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "상품 이름")
-            String name,
+            String productName,
 
             @Positive(message = "0보다 작은 값이 들어올 수 없습니다.")
             @Schema(name = "총 주문 금액")

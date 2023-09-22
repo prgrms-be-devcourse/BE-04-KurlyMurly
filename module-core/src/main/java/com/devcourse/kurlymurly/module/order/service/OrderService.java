@@ -136,26 +136,14 @@ public class OrderService {
     }
 
     @Transactional
-    public void toProcessing(Long id) {
-        Order order = findByIdOrThrow(id);
-        order.toProcessing();
-    }
-
-    @Transactional
-    public void toDelivering(Long id) {
-        Order order = findByIdOrThrow(id);
-        order.toDelivering();
-    }
-
-    @Transactional
-    public void toDelivered(Long id) {
-        Order order = findByIdOrThrow(id);
-        order.toDelivered();
+    public void toNextState(Long id) {
+        Order order = findByIdOrThrow(id); // todo: entity에서 domain으로 변경
+        order.toNextState();
     }
 
     @Transactional
     public void toCancel(Long id) {
-        Order order = findByIdOrThrow(id);
+        Order order = findByIdOrThrow(id); // todo: entity에서 domain으로 변경
         order.toCancel();
     }
 
@@ -174,7 +162,7 @@ public class OrderService {
     }
 
     private OrderItem toOrderItem(CreateOrderItem.Request request) {
-        return new OrderItem(request.productId(), request.name(), request.totalPrice(), request.quantity());
+        return new OrderItem(request.productId(), request.productName(), request.totalPrice(), request.quantity());
     }
 
     private PaymentInfo paymentInfo(CreateOrder.Request request) {

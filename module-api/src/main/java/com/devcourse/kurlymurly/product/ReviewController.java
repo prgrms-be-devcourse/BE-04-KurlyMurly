@@ -1,6 +1,5 @@
 package com.devcourse.kurlymurly.product;
 
-import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.product.application.ProductFacade;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
@@ -44,7 +43,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "주문 정보를 읽어오지 못해서 발생하는 에러")
     })
     @PostMapping
-    @ResponseStatus(OK) // POST /products/1/review
+    @ResponseStatus(OK) // todo: POST /products/1/review
     public KurlyResponse<Void> registerReview(
             @AuthenticationPrincipal User user,
             @RequestBody CreateReview.Request request
@@ -61,9 +60,9 @@ public class ReviewController {
     })
     @GetMapping("/{id}")
     @ResponseStatus(OK)
-    public KurlyResponse<Review> findById(@PathVariable Long id) { // todo: response 수정
-        Review review = productFacade.findReviewByIdOrThrow(id);
-        return KurlyResponse.ok(review);
+    public KurlyResponse<ReviewResponse.Reviewed> findById(@PathVariable Long id) {
+        ReviewResponse.Reviewed response = productFacade.loadSpecificReviewById(id);
+        return KurlyResponse.ok(response);
     }
 
     @Tag(name = "review")
@@ -71,7 +70,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "200", description = "성공적으로 상품의 후기를 가져온 상태"),
             @ApiResponse(responseCode = "400", description = "review를 조회하기 위한 상품 id를 명시하지 않은 경우")
     })
-    @GetMapping("/{productId}") // GET /products/1/reviews
+    @GetMapping("/{productId}") // todo: GET /products/1/reviews
     @ResponseStatus(OK)
     public KurlyResponse<Slice<ReviewResponse.ReviewOfProduct>> getReviewsOfProduct(
             @PathVariable Long productId,
@@ -87,7 +86,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "200", description = "성공적으로 상품의 후기를 가져온 상태"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러")
     })
-    @GetMapping // GET /users/reviews
+    @GetMapping // todo: GET /users/reviews
     @ResponseStatus(OK)
     public KurlyResponse<List<ReviewResponse.Reviewed>> getAllReviewsOnMyPage(
             @AuthenticationPrincipal User user

@@ -92,7 +92,7 @@ public enum OrderFixture {
 
     private List<OrderItem> toOrderItems() {
         return orderItemRequests.stream()
-                .map(request -> new OrderItem(request.productId(), request.name(), request.totalPrice(), request.quantity()))
+                .map(request -> new OrderItem(request.productId(), request.productName(), request.totalPrice(), request.quantity()))
                 .toList();
     }
 }
