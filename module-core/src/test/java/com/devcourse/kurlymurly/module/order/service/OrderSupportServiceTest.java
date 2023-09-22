@@ -153,7 +153,7 @@ class OrderSupportServiceTest {
 
         // when
         takeOrderSupportService(orderSupport);
-        orderSupportService.deleteOrderSupport(orderSupport.getId());
+        orderSupportService.deleteOrderSupport(1L, orderSupport.getId());
 
         // then
         Assertions.assertEquals("DELETED", orderSupport.getStatus().name());
@@ -173,7 +173,7 @@ class OrderSupportServiceTest {
 
         // when
         takeOrderSupportService(orderSupport);
-        orderSupportService.updateOrderSupport(orderSupport.getId(), updateRequest.title(), updateRequest.content());
+        orderSupportService.updateOrderSupport(1L, orderSupport.getId(), updateRequest.title(), updateRequest.content());
 
         // then
         Assertions.assertEquals("updatedTitle", orderSupport.getTitle());

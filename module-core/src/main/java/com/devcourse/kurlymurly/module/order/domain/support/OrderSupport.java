@@ -1,11 +1,16 @@
 package com.devcourse.kurlymurly.module.order.domain.support;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+
+import java.util.Objects;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_AUTHOR;
 
 @Entity
 @Table(name = "order_supports")
@@ -98,5 +103,11 @@ public class OrderSupport extends BaseEntity {
         this.title = title;
         this.content = content;
         changeUpdatedDate();
+    }
+
+    public void validateAuthor(Long userId) {
+        if (!Objects.equals(this.userId, userId)) {
+            throw KurlyBaseException.withId(NOT_AUTHOR, userId);
+        }
     }
 }

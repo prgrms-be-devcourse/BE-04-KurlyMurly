@@ -34,7 +34,7 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "[토큰 필요] 1:1 문의를 생성한다.", responses = {
+    @Operation(summary = "[토큰] 1:1 문의 생성", description = "[토큰 필요] 1:1 문의를 생성한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 생성한 경우"),
             @ApiResponse(responseCode = "400", description = "1:1 문의를 작성하기 위한 사용자 응답이 적절하지 않은 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
@@ -50,7 +50,7 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "[토큰 필요] 해당 유저의 1:1 문의 내역을 조회한다.", responses = {
+    @Operation(summary = "[토큰] 사용자 1:1 문의 내역 조회", description = "[토큰 필요] 해당 유저의 1:1 문의 내역을 조회한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의 내역을 조회한 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
@@ -62,31 +62,39 @@ public class OrderSupportController {
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "작성한 1:1 문의를 수정한다.", responses = {
+    @Operation(summary = "[토큰] 1:1 문의 수정", description = "[토큰 필요] 작성한 1:1 문의를 수정한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "1:1문의 id를 명시하지 않은 경우"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우")
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우"),
+            @ApiResponse(responseCode = "409", description = "문의 작성자가 아닐 경우")
     })
     @PatchMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateOrderSupport(
+            @AuthenticationPrincipal User user,
             @PathVariable Long id,
             @RequestBody @Valid CreateOrderSupport.UpdateRequest request
     ) {
-        orderSupportService.updateOrderSupport(id, request.title(), request.content());
+        orderSupportService.updateOrderSupport(user.getId(), id, request.title(), request.content());
         return KurlyResponse.noData();
     }
 
     @Tag(name = "orderSupport")
-    @Operation(description = "작성한 1:1 문의를 삭제한다.", responses = {
+    @Operation(summary = "[토큰] 1:1 문의 삭제", description = "[토큰 필요] 작성한 1:1 문의를 삭제한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 1:1 문의를 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "1:1문의 id를 명시하지 않은 경우"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우")
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 1:1 문의일 경우"),
+            @ApiResponse(responseCode = "409", description = "문의 작성자가 아닐 경우")
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(OK)
-    public KurlyResponse<Void> deleteOrderSupport(@PathVariable Long id) {
-        orderSupportService.deleteOrderSupport(id);
+    public KurlyResponse<Void> deleteOrderSupport(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long id
+    ) {
+        orderSupportService.deleteOrderSupport(user.getId(), id);
         return KurlyResponse.noData();
     }
 }

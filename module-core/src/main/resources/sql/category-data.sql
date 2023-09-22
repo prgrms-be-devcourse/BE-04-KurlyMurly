@@ -1,4 +1,4 @@
-INSERT INTO categories(name, subCategory)
+INSERT INTO categories(name, sub_category)
 VALUES ("채소", "친환경"),
        ("과일·견과·쌀", "친환경"),
        ("수산·해산·건어물", "제철수산"),

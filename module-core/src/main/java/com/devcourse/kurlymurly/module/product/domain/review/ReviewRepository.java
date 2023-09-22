@@ -14,7 +14,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.product " +
             "WHERE r.status = 'NORMAL' " +
-            "AND r.status = 'BEST' " +
+            "OR r.status = 'BEST' " +
             "AND r.product.id = :productId " +
             "AND r.id < :start " +
             "ORDER BY r.id DESC " +
