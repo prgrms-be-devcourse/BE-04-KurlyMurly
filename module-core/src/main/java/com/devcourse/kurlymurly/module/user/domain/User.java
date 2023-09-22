@@ -160,10 +160,6 @@ public class User extends BaseEntity implements UserDetails {
         return role;
     }
 
-    public boolean isEqualPassword(String password) {
-        return this.password.equals(password);
-    }
-
     public String getMaskedUserName() {
         return this.name.replaceAll("(?<=.{1})", "*");
     }

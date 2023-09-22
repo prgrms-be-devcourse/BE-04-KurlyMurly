@@ -113,7 +113,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
 
-        boolean notCorrectPassword = user.validatePassword(request.password(),passwordEncoder);
+        boolean notCorrectPassword = !user.validatePassword(request.currentPassword(),passwordEncoder);
 
         if (notCorrectPassword) {
             throw new KurlyBaseException(NOT_CORRECT_PASSWORD);
