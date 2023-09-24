@@ -33,6 +33,7 @@ public class Payment extends BaseEntity {
     @Column(nullable = false)
     private Type type;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
     private PaymentStatus status;
 
