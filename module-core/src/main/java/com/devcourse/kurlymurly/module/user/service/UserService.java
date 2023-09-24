@@ -26,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.devcourse.kurlymurly.global.exception.ErrorCode.CART_NOT_FOUND;
@@ -190,7 +189,7 @@ public class UserService {
     }
 
     public List<Payment> getPayments(Long userId) {
-        return paymentRepository.findByUserIdAndStatus(userId);
+        return paymentRepository.findAllByUserIdAndStatus(userId);
     }
 
     @Transactional

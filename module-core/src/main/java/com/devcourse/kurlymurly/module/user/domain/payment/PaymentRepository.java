@@ -11,5 +11,5 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     Optional<Payment> findByUserIdAndId(Long userId, Long paymentId);
 
     @Query("SELECT e FROM Payment e WHERE e.userId = :userId AND (e.status = 'DEFAULT' OR e.status = 'NORMAL')")
-    List<Payment> findByUserIdAndStatus(@Param("userId") Long userId);
+    List<Payment> findAllByUserIdAndStatus(@Param("userId") Long userId);
 }

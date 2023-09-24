@@ -27,7 +27,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -256,21 +255,11 @@ class UserServiceTest {
             // Given
             Payment payment = new Payment(1L, null);
 
-            doReturn(List.of(payment)).when(paymentRepository).findAllById(Collections.singleton(1L));
+            doReturn(List.of(payment)).when(paymentRepository).findAllByUserIdAndStatus(1L);
             userService.getPayments(1L);
 
             // then
-            then(paymentRepository).should(times(1)).findAllById(any());
-        }
-
-        @Test
-        @DisplayName("조회 된 결제 수단이 없을 경우 예외를 던진다.")
-        void get_payment_fail_ByNotFoundPayments() {
-            // When
-            doReturn(Collections.emptyList()).when(paymentRepository).findAllById(Collections.singleton(1L));
-
-            // Then
-            assertThrows(KurlyBaseException.class, () -> userService.getPayments(1L));
+            then(paymentRepository).should(times(1)).findAllByUserIdAndStatus(any());
         }
 
         @Test
