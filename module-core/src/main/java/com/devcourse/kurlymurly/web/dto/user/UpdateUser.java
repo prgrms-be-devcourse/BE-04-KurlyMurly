@@ -1,6 +1,7 @@
 package com.devcourse.kurlymurly.web.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
@@ -14,35 +15,35 @@ import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.USER_NAME_
 
 public sealed interface UpdateUser permits UpdateUser.Request {
     record Request(
-            @NotNull(message = "현재 비밀번호를 확인해주세요.")
+            @NotBlank(message = "현재 비밀번호를 확인해주세요.")
             @Schema(name = "현재 비밀번호")
             String currentPassword,
 
-            @NotNull(message = "변경할 비밀번호를 입력해주세요.")
+            @NotBlank(message = "변경할 비밀번호를 입력해주세요.")
             @Pattern(regexp = PASSWORD_REGEXP, message = "비밀번호 형식을 지켜주세요")
             @Schema(name = "변경할 비밀번호")
             String password,
 
-            @NotNull(message = "비밀번호를 다시 입력해주세요.")
+            @NotBlank(message = "비밀번호를 다시 입력해주세요.")
             @Schema(name = "비밀번호 확인")
             String checkPassword,
 
-            @NotNull(message = "변경할 이름을 입력해주세요.")
+            @NotBlank(message = "변경할 이름을 입력해주세요.")
             @Pattern(regexp = USER_NAME_REGEXP, message = "이름 형식이 올바르지 않습니다.")
             @Schema(name = "변경할 이름")
             String name,
 
-            @NotNull(message = "변경할 이메일을 입력해주세요.")
+            @NotBlank(message = "변경할 이메일을 입력해주세요.")
             @Pattern(regexp = EMAIL_REGEXP, message = "이메일 형식이 아닙니다.")
             @Schema(name = "변경할 이메일")
             String email,
 
-            @NotNull(message = "변경할 휴대폰 번호를 입력해주세요.")
+            @NotBlank(message = "변경할 휴대폰 번호를 입력해주세요.")
             @Pattern(regexp = PHONE_NUMBER_REGEXP, message = "핸드폰 번호 형식이 아닙니다.")
             @Schema(name = "변경할 휴대폰 번호")
             String phoneNumber,
 
-            @NotNull(message = "변경할 성별을 입력해주세요.")
+            @NotBlank(message = "변경할 성별을 입력해주세요.")
             @Schema(name = "변경할 성별", allowableValues = {"male", "female", "none"})
             String sex,
 
