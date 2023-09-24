@@ -8,7 +8,7 @@ const Auth = () => {
 
   const checkDuplicationId = async (loginId, setIsIdValidated) => {
     try {
-      const res = await instance.post(`/users/login-id`, {
+      const res = await instance.post(`/check-id`, {
         loginId: loginId,
       });
       setIsIdValidated(!res.data.success);
@@ -21,7 +21,7 @@ const Auth = () => {
 
   const checkDuplicationEmail = async (email, setIsEmailValidated) => {
     try {
-      const res = await instance.post('/users/check-email', {
+      const res = await instance.post('/check-email', {
         email: email,
       });
       setIsEmailValidated(!res.data.success);
@@ -34,7 +34,7 @@ const Auth = () => {
 
   const signUp = async (joinData) => {
     try {
-      const res = await instance.post(`/users`, {
+      const res = await instance.post(`/signUp`, {
         loginId: joinData.loginId,
         password: joinData.password,
         checkPassword: joinData.checkPassword,
@@ -58,7 +58,7 @@ const Auth = () => {
 
   const login = async (loginData) => {
     try {
-      const res = await instance.post(`/users/login`, {
+      const res = await instance.post(`/login`, {
         loginId: loginData.loginId,
         password: loginData.password,
       });
