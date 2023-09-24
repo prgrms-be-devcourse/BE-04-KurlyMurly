@@ -113,7 +113,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
 
-        boolean notCorrectPassword = !user.validatePassword(request.currentPassword(),passwordEncoder);
+        boolean notCorrectPassword = !user.validatePassword(request.currentPassword(), passwordEncoder);
 
         if (notCorrectPassword) {
             throw new KurlyBaseException(NOT_CORRECT_PASSWORD);
@@ -189,13 +189,7 @@ public class UserService {
     }
 
     public List<Payment> getPayments(Long userId) {
-        List<Payment> paymentList = paymentRepository.findAllById(Collections.singleton(userId));
-
-        if (paymentList.isEmpty()) {
-            throw new KurlyBaseException(NOT_FOUND_PAYMENT);
-        }
-
-        return paymentList;
+        return paymentRepository.findByUserIdAndStatus(userId);
     }
 
     @Transactional
