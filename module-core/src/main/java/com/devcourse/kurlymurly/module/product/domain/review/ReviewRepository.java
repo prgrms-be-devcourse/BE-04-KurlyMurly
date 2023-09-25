@@ -22,7 +22,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<ReviewResponse.Reviewed> getAllReviewsByUserId(@Param("userId") Long userId);
 
     @Query("""
-           SELECT NEW com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse$ReviewOfProduct(
+           SELECT NEW com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse$OfProduct(
                 u.name, u.tier, p.name, r.id, r.content, r.likes, r.createAt, r.isSecret
            )
            FROM Review r
@@ -33,5 +33,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
            ORDER BY r.id DESC
            LIMIT 10
            """)
-    Slice<ReviewResponse.ReviewOfProduct> getTenReviewsOfProductFromStart(@Param("productId") Long productId, @Param("startId") Long startId);
+    Slice<ReviewResponse.OfProduct> getTenReviewsOfProductFromStart(@Param("productId") Long productId, @Param("startId") Long startId);
 }

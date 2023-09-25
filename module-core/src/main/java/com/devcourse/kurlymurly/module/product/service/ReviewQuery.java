@@ -30,7 +30,7 @@ public class ReviewQuery {
         return reviewRepository.getAllReviewsByUserId(userId);
     }
 
-    public Slice<ReviewResponse.ReviewOfProduct> getReviewsOfProduct(Long productId, Long start) {
+    public Slice<ReviewResponse.OfProduct> getReviewsOfProduct(Long productId, Long start) {
         return reviewRepository.getTenReviewsOfProductFromStart(productId, start);
     }
 

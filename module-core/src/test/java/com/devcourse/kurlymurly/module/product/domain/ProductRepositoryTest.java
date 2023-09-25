@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.module.product.domain;
 
 import com.devcourse.kurlymurly.web.common.KurlyPagingRequest;
-import com.devcourse.kurlymurly.web.dto.product.GetProduct;
+import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,12 +32,12 @@ class ProductRepositoryTest {
         Pageable request = pagingRequest.toPageable();
 
         // when
-        Page<GetProduct.SimpleResponse> responses = productRepository.loadProductsByCategory(categoryId, request);
+        Page<ProductResponse.GetSimple> responses = productRepository.loadProductsByCategory(categoryId, request);
 
         // then
         assertThat(responses).isNotEmpty().hasSize(1);
 
-        GetProduct.SimpleResponse response = responses.get().toList().get(0);
+        ProductResponse.GetSimple response = responses.get().toList().get(0);
         assertThat(response.reviewCount()).isNotNull().isEqualTo(0);
     }
 }
