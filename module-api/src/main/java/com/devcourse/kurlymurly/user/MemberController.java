@@ -105,7 +105,7 @@ public class MemberController {
     })
     @PutMapping("/shipping")
     @ResponseStatus(OK)
-    public KurlyResponse<Void> updateAddress(@AuthenticationPrincipal User user, @RequestBody UpdateAddress.Request request) {
+    public KurlyResponse<Void> updateAddress(@AuthenticationPrincipal User user, @RequestBody @Valid UpdateAddress.Request request) {
         memberService.updateAddress(user.getId(), request.addressId(), request.description(), request.receiver(), request.contact());
         return KurlyResponse.noData();
     }
