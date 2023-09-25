@@ -110,7 +110,7 @@ public class UserService {
     @Transactional
     public void findUpdateUser(Long userId, UpdateUser.Request request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
+                .orElseThrow(() -> KurlyBaseException.withId(NOT_EXISTS_USER,userId));
 
         boolean notCorrectPassword = !user.validatePassword(request.currentPassword(), passwordEncoder);
 
@@ -169,7 +169,7 @@ public class UserService {
 
     private Shipping findAddress(Long userId, Long shippingId) {
         return shippingRepository.findByIdAndUserId(shippingId, userId)
-                .orElseThrow(() -> new KurlyBaseException(SHIPPING_NOT_FOUND));
+                .orElseThrow(() -> KurlyBaseException.withId(SHIPPING_NOT_FOUND,shippingId));
     }
 
     @Transactional
@@ -194,7 +194,7 @@ public class UserService {
     @Transactional
     public void deletePayment(Long userId, Long paymentId) {
         Payment payment = paymentRepository.findByUserIdAndId(userId, paymentId)
-                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_PAYMENT));
+                .orElseThrow(() -> KurlyBaseException.withId(NOT_FOUND_PAYMENT,paymentId));
 
         payment.deletePayment();
     }
@@ -202,7 +202,7 @@ public class UserService {
     @Transactional
     public void updatePaymentPassword(Long userId, String payPassword) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new KurlyBaseException(NOT_EXISTS_USER));
+                .orElseThrow(() -> KurlyBaseException.withId(NOT_EXISTS_USER,userId));
 
         String encodedPassword = passwordEncoder.encode(payPassword);
         user.updatePayPassword(encodedPassword);
