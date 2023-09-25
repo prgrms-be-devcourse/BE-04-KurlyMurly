@@ -3,9 +3,11 @@
 # 💜 마켓컬리 클론코딩 (23.08.26 ~ 23.09.22)
 
 > 마켓컬리 클론 코딩 프로젝트 입니다. </br>
-> 회원가입부터 리뷰 작성까지 일련의 과정을 구현했습니다.
+> 회원가입부터 리뷰 작성까지 일련의 과정을 구현했습니다. </br>
+> 함이커머스의 복잡한 도메인을 경험해볼 수 있다는 점에 있어서 마켓 컬리를 선택하게 되었습니다.
 
 <img src="https://github.com/prgrms-be-devcourse/BE-04-KurlyMurly/assets/89267864/a7d81cca-cd52-4d07-beb4-98a6e9f74204">
+
 
 ### 💜 프로젝트의 목표
 
@@ -38,9 +40,15 @@
 |:------------------------------------:|:----------------------------------:|:-------------------------------:|
 | [장수연](https://github.com/sujjangOvO) | [오세한](https://github.com/2jie0516) | [문희조](https://github.com/Hejow) |
 
-## 💜 기술 스택 (Tech)
+## 💜 도메인 분석 ([MIRO](https://miro.com/app/board/uXjVMrSCrG0=/?share_link_id=156100042697))
 
-### 개발 환경 (Environment)
+![img_1.png](img_1.png)
+
+![img_2.png](img_2.png)
+
+## 💜 기술 스택
+
+### 개발 환경
 
 <img src="https://img.shields.io/badge/Java  20-007396?style=flat-square&logo=openJDK&logoColor=white&style=flat"/></a>
 <img src="https://img.shields.io/badge/Spring Boot 3.1.3-6DB33F?style=flat-square&logo=Springboot&logoColor=white&style=flat"/></a>
@@ -48,7 +56,7 @@
 <img src="https://img.shields.io/badge/Spring Data JPA-gray?style=flat-square&logo=DataJPA&logoColor=white&style=flat"/></a>
 </br>
 <img src="https://img.shields.io/badge/MySQL 8-4479A1?style=flat-square&logo=MySQL&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/H2 8-4479A1?style=flat-square&logo=H2&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/H2-4479A1?style=flat-square&logo=H2&logoColor=white&style=flat"/></a>
 <img src="https://img.shields.io/badge/Junit-25A162?style=flat-&logo=JUnit5&logoColor=white&style=flat"/></a>
 <img src="https://img.shields.io/badge/Gradle-4429A1?style=flat-square&logo=gradle&logoColor=white&style=flat"/></a>
 <img src="https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=Swagger&logoColor=white&style=flat"/></a>
@@ -80,7 +88,6 @@
 
 ### 💜 팀 페이지
 🔮️ [팀 노션](https://www.notion.so/backend-devcourse/Team-Project-bb03676699354455902ecc34ff24440d) </br>
-🔮️ [미로](https://miro.com/app/board/uXjVMrSCrG0=/?share_link_id=156100042697) </br>
 🔮️ [지라](https://2jie0516.atlassian.net/jira/software/projects/KM/boards/1?assignee=62c79dadb6357aecd7c7d360) </br>
 
 ![footer](https://capsule-render.vercel.app/api?type=waving&&customColorList=10,1,10color=gradient&height=10&section=footer)
