@@ -56,9 +56,7 @@ public class ProductFacade {
     }
 
     public List<FavoriteResponse.Get> getUserFavorites(Long userId) {
-        return productQuery.getAllFavoritesByUserId(userId).stream()
-                .map(productMapper::toFavoriteResponse)
-                .toList();
+        return productQuery.getAllFavoritesByUserId(userId);
     }
 
     // todo : user api

@@ -2,6 +2,7 @@ package com.devcourse.kurlymurly.module.product.domain.favorite;
 
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
+import com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,9 +55,14 @@ class FavoriteRepositoryTest {
         favoriteRepository.saveAll(List.of(target, nonTarget));
         
         // when
-        List<Favorite> result = favoriteRepository.findAllByUserId(userId);
+        List<FavoriteResponse.Get> result = favoriteRepository.findAllByUserId(userId);
 
         // then
         assertThat(result).isNotEmpty().hasSize(1);
+
+        FavoriteResponse.Get response = result.get(0);
+        assertThat(response.productId()).isEqualTo(product.getId());
+        assertThat(response.productName()).isEqualTo(product.getName());
+        assertThat(response.price()).isEqualTo(product.getPrice());
     }
 }

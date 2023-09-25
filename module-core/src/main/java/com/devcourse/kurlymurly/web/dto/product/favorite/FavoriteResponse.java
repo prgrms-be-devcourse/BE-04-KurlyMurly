@@ -4,8 +4,9 @@ import static com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse
 
 public sealed interface FavoriteResponse permits Get {
     record Get(
-            Long id,
-            String name,
+            Long productId,
+            String imageUrl,
+            String productName,
             int price
     ) implements FavoriteResponse {
     }

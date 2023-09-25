@@ -49,9 +49,9 @@ DROP TABLE IF EXISTS favorites;
 CREATE TABLE favorites
 (
     favorite_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id     BIGINT      NOT NULL,
-    product_id  BIGINT      NOT NULL,
-    status      VARCHAR(15) NOT NULL,
+    user_id     BIGINT  NOT NULL,
+    product_id  BIGINT  NOT NULL,
+    is_deleted  BOOLEAN NOT NULL,
     created_at  TIMESTAMP(6),
     updated_at  TIMESTAMP(6),
     FOREIGN KEY (product_id) REFERENCES products (product_id)

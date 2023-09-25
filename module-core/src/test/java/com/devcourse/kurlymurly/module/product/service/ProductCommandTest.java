@@ -26,8 +26,6 @@ import static com.devcourse.kurlymurly.module.product.ProductFixture.LA_GOGI;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SECRET_SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.domain.Product.Status;
-import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.DELETED;
-import static com.devcourse.kurlymurly.module.product.domain.favorite.Favorite.Status.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
@@ -253,7 +251,7 @@ class ProductCommandTest {
             // then
             then(favoriteRepository).should(times(1)).findByUserIdAndProductId(any(), any());
             then(favoriteRepository).should(times(0)).save(any());
-            assertThat(favorite.getStatus()).isEqualTo(NORMAL);
+            assertThat(favorite.isDeleted()).isFalse();
         }
 
         @Test
@@ -282,7 +280,7 @@ class ProductCommandTest {
 
             // then
             then(favoriteRepository).should(times(1)).findByUserIdAndProductId(any(), any());
-            assertThat(favorite.getStatus()).isEqualTo(DELETED);
+            assertThat(favorite.isDeleted()).isTrue();
         }
 
         @Test
