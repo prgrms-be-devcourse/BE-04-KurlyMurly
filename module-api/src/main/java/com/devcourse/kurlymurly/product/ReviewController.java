@@ -54,7 +54,6 @@ public class ReviewController {
     @Tag(name = "review")
     @Operation(summary = "특정 리뷰 조회", description = "리뷰 ID로 특정 리뷰 조회 API", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 특정한 후기를 조회한 경우"),
-            @ApiResponse(responseCode = "400", description = "후기를 조회하기 위한 Path Variable을 명시하지 않은 경우 발생하는 상태"),
             @ApiResponse(responseCode = "404", description = "조회 할 후기 정보가 없어서 발생하는 에러")
     })
     @GetMapping("/{id}")
@@ -63,22 +62,6 @@ public class ReviewController {
         ReviewResponse.Reviewed response = productFacade.loadSpecificReviewById(id);
         return KurlyResponse.ok(response);
     }
-
-    @Tag(name = "review")
-    @Operation(summary = "상품 리뷰 가져오기", description = "해당 상품에 대한 리뷰 조회 API", responses = {
-            @ApiResponse(responseCode = "200", description = "[페이징 정보] 성공적으로 상품의 후기를 가져온 상태"),
-            @ApiResponse(responseCode = "400", description = "review를 조회하기 위한 상품 id를 명시하지 않은 경우")
-    })
-    @GetMapping("/product/{productId}") // todo: GET /products/1/reviews
-    @ResponseStatus(OK)
-    public KurlyResponse<Slice<ReviewResponse.OfProduct>> getReviewsOfProduct(
-            @PathVariable Long productId,
-            @RequestBody ReviewRequest.OfProduct request
-    ) {
-        Slice<ReviewResponse.OfProduct> responses = productFacade.loadReviewsOfProduct(productId, request);
-        return KurlyResponse.ok(responses);
-    }
-
 
     @Tag(name = "review")
     @Operation(summary = "[토큰] 사용자 리뷰 조회", description = "[토큰 필요] 사용자가 작성한 리뷰 조회 API", responses = {
