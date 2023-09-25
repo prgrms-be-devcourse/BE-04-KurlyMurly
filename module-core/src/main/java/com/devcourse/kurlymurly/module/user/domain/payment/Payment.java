@@ -14,7 +14,7 @@ public class Payment extends BaseEntity {
 
     public enum Type { CREDIT, EASY }
 
-    public enum PaymentStatus { DEFAULT, NORMAL, EXPIRED, DELETED }
+    public enum Status { DEFAULT, NORMAL, EXPIRED, DELETED }
 
     @Column(nullable = false)
     private Long userId;
@@ -35,7 +35,7 @@ public class Payment extends BaseEntity {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private PaymentStatus status;
+    private Status status;
 
     protected Payment() {
     }
@@ -45,18 +45,18 @@ public class Payment extends BaseEntity {
         this.payInfo = payInfo;
         this.creditInfo = creditInfo;
         this.type = Payment.Type.CREDIT;
-        this.status = Payment.PaymentStatus.NORMAL;
+        this.status = Status.NORMAL;
     }
 
     public Payment(Long userId, String payInfo) {
         this.userId = userId;
         this.payInfo = payInfo;
         this.type = Payment.Type.EASY;
-        this.status = Payment.PaymentStatus.NORMAL;
+        this.status = Status.NORMAL;
         this.creditInfo = new CreditInfo();
     }
 
     public void deletePayment() {
-        this.status = PaymentStatus.DELETED;
+        this.status = Status.DELETED;
     }
 }
