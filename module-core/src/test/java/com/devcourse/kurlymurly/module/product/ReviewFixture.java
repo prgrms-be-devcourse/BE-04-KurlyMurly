@@ -1,8 +1,8 @@
 package com.devcourse.kurlymurly.module.product;
 
+import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
-import com.devcourse.kurlymurly.module.user.UserFixture;
-import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
+import com.devcourse.kurlymurly.module.user.domain.User;
 
 public enum ReviewFixture {
     REVIEW_FIXTURE(1L, "LA갈비", "고기가 너무 맛있어요!", false),
@@ -21,11 +21,7 @@ public enum ReviewFixture {
         this.isSecret = isSecret;
     }
 
-    public Review toEntity() {
-        return new Review(UserFixture.USER_FIXTURE.toEntity(), ProductFixture.LA_GOGI.toEntity(), content, isSecret);
-    }
-
-    public CreateReview.Request toRequest() {
-        return new CreateReview.Request(1L, productId, productName, content, isSecret);
+    public Review toEntity(User user, Product product) {
+        return new Review(user, product, content, isSecret);
     }
 }

@@ -65,21 +65,9 @@ public class ProductMapper {
         );
     }
 
-    public ReviewResponse.ReviewOfProduct toReviewOfProductResponse(Review review) {
-        return new ReviewResponse.ReviewOfProduct(
-                review.getProductId(),
-                review.getProductName(),
-                review.getMaskedUserName(),
-                review.getUserTier(),
-                review.getContent(),
-                review.getLikes(),
-                review.getCreateAt(),
-                review.isSecret()
-        );
-    }
-
     public ReviewResponse.Reviewed toReviewedResponse(Review review) {
         return new ReviewResponse.Reviewed(
+                review.getId(),
                 review.getProductId(),
                 review.getProductName(),
                 review.getContent(),
