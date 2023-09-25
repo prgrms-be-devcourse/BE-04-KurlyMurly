@@ -188,8 +188,8 @@ public class UserService {
         paymentRepository.save(easyPay);
     }
 
-    public List<Payment> getPayments(Long userId) {
-        return paymentRepository.findAllByUserIdAndStatus(userId);
+    public List<String> getPayments(Long userId) {
+        return paymentRepository.findAllByUserId(userId);
     }
 
     @Transactional

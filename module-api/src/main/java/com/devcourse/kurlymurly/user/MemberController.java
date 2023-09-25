@@ -182,8 +182,8 @@ public class MemberController {
     })
     @GetMapping("/payment/list")
     @ResponseStatus(OK)
-    public KurlyResponse<List<Payment>> getPayment(@AuthenticationPrincipal User user) {
-        List<Payment> creditList = userService.getPayments(user.getId());
+    public KurlyResponse<List<String>> getPayment(@AuthenticationPrincipal User user) {
+        List<String> creditList = userService.getPayments(user.getId());
         return KurlyResponse.ok(creditList);
     }
 
