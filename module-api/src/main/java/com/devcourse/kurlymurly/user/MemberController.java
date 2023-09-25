@@ -35,7 +35,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
-@Tag(name = "user", description = "유저 API")
+@Tag(name = "member", description = "유저 API")
 @RestController
 @RequestMapping("/users")
 public class MemberController {
@@ -46,7 +46,7 @@ public class MemberController {
         this.userService = userService;
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @GetMapping("/reviews")
     @ResponseStatus(OK)
     public KurlyResponse<List<ReviewResponse.Reviewable>> getReviewableOrdersOnMyPage(@AuthenticationPrincipal User user) {
@@ -54,7 +54,7 @@ public class MemberController {
         return KurlyResponse.ok(responses);
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(description = "[토큰 필요] 개인정보 수정 API", responses = {
             @ApiResponse(responseCode = "200", description = "개인정보를 성공적으로 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -80,7 +80,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(description = "[토큰 필요] 도로명 주소 등록 API", responses = {
             @ApiResponse(responseCode = "200", description = "주소를 성공적으로 추가한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -96,7 +96,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(description = "[토큰 필요] 주소 목록 조회 API", responses = {
             @ApiResponse(responseCode = "200", description = "유저가 등록한 주소들을 조회"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -109,7 +109,7 @@ public class MemberController {
         return KurlyResponse.ok(addressList);
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(description = "[토큰 필요] 주소 수정 API", responses = {
             @ApiResponse(responseCode = "200", description = "주소를 성공적으로 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -123,7 +123,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(description = "[토큰 필요] 배송 요청사항 설정 API", responses = {
             @ApiResponse(responseCode = "200", description = "요청사항을 성공적으로 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -137,7 +137,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(description = "[토큰 필요] 주소 삭제 API", responses = {
             @ApiResponse(responseCode = "200", description = "해당 주소를 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -151,7 +151,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(description = "[토큰 필요] 신용카드 등록 API", responses = {
             @ApiResponse(responseCode = "200", description = "신용카드를 성공적으로 등록한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -167,7 +167,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(description = "[토큰 필요] 간편결제 등록 API", responses = {
             @ApiResponse(responseCode = "200", description = "간편 결제수단을 성공적으로 등록한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -183,7 +183,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(description = "[토큰 필요] 결제수단 목록 조회 API", responses = {
             @ApiResponse(responseCode = "200", description = "결제수단 정보 목록을 성공적으로 조회한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -197,7 +197,7 @@ public class MemberController {
         return KurlyResponse.ok(creditList);
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(description = "[토큰 필요] 결제 수단 삭제 API", responses = {
             @ApiResponse(responseCode = "200", description = "결제수단을 성공적으로 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -212,7 +212,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(description = "[토큰 필요] 결제 비밀번호 설정 API", responses = {
             @ApiResponse(responseCode = "200", description = "결제수단을 성공적으로 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -229,7 +229,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(summary = "[토큰] 장바구니 상품 추가", description = "[토큰 필요] 장바구니 상품 추가", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 장바구니에 상품을 추가한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -245,7 +245,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(summary = "[토큰] 장바구니 특정 상품 삭제", description = "[토큰 필요] 장바구니 특정 상품 삭제", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 장바구니 특정 상품을 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -261,7 +261,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(summary = "[토큰] 장바구니 선택 상품 삭제", description = "[토큰 필요] 장바구니 선택 상품 삭제", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 장바구니 상품을 선택 삭제한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
@@ -277,7 +277,7 @@ public class MemberController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "member")
     @Operation(summary = "[토큰] 장바구니 상품 수량 수정", description = "[토큰 필요] 장바구니 상품 수량 수정", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 장바구니 상품 수량을 수정한 경우"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
