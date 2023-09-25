@@ -21,12 +21,17 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
            """)
     List<ReviewResponse.Reviewed> getAllReviewsByUserId(@Param("userId") Long userId);
 
-    @Query("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.product " +
-            "WHERE r.status = 'NORMAL' " +
-            "OR r.status = 'BEST' " +
-            "AND r.product.id = :productId " +
-            "AND r.id < :start " +
-            "ORDER BY r.id DESC " +
-            "LIMIT 10")
-    Slice<Review> getTenReviewsOfProductFromStart(@Param("productId") Long productId, @Param("start") Long start);
+    @Query("""
+           SELECT NEW com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse$OfProduct(
+                u.name, u.tier, p.name, r.id, r.content, r.likes, r.createAt, r.isSecret
+           )
+           FROM Review r
+           LEFT JOIN r.user u
+           LEFT JOIN r.product p
+           WHERE r.status in ('NORMAL', 'BEST')
+           AND r.id < :startId AND p.id = :productId
+           ORDER BY r.id DESC
+           LIMIT 10
+           """)
+    Slice<ReviewResponse.OfProduct> getTenReviewsOfProductFromStart(@Param("productId") Long productId, @Param("startId") Long startId);
 }

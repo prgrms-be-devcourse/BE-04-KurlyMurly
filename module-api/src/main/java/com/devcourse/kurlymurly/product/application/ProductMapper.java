@@ -5,15 +5,17 @@ import com.devcourse.kurlymurly.module.product.domain.SupportDomain;
 import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
-import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
-import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;
+import com.devcourse.kurlymurly.web.dto.product.ProductRequest;
+import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
+import com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
-import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
+import com.devcourse.kurlymurly.web.dto.product.support.SupportRequest;
+import com.devcourse.kurlymurly.web.dto.product.support.SupportResponse;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProductMapper {
-    public ProductDomain toProductDomain(CreateProduct.Request request) {
+    public ProductDomain toProductDomain(ProductRequest.Create request) {
         return new ProductDomain(
                 request.name(),
                 request.description(),
@@ -30,20 +32,20 @@ public class ProductMapper {
         );
     }
 
-    public SupportDomain toSupportDomain(SupportProduct.Request request) {
+    public SupportDomain toSupportDomain(SupportRequest request) {
         return new SupportDomain(request.title(), request.content(), request.isSecret());
     }
 
-    public GetFavorite.Response toFavoriteResponse(Favorite favorite) {
-        return new GetFavorite.Response(
+    public FavoriteResponse.Get toFavoriteResponse(Favorite favorite) {
+        return new FavoriteResponse.Get(
                 favorite.getId(),
                 favorite.getProductName(),
                 favorite.getProductPrice()
         );
     }
 
-    public SupportProduct.Response toSupportResponse(ProductSupport productSupport) {
-        return new SupportProduct.Response(
+    public SupportResponse.Create toSupportResponse(ProductSupport productSupport) {
+        return new SupportResponse.Create(
                 productSupport.getId(),
                 productSupport.getProductId(),
                 productSupport.getProductName(),
@@ -55,8 +57,8 @@ public class ProductMapper {
         );
     }
 
-    public CreateProduct.Response toCreateProductResponse(CreateProduct.Request request) {
-        return new CreateProduct.Response(
+    public ProductResponse.Create toCreateProductResponse(ProductRequest.Create request) {
+        return new ProductResponse.Create(
                 request.name(),
                 request.price(),
                 request.delivery().name(),

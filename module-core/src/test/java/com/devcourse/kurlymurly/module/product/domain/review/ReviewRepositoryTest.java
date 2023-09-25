@@ -74,12 +74,12 @@ class ReviewRepositoryTest {
         entityManager.clear(); // to detach entities
 
         // when
-        Slice<ReviewResponse.ReviewOfProduct> responses = reviewRepository.getTenReviewsOfProductFromStart(product.getId(), 10L);
+        Slice<ReviewResponse.OfProduct> responses = reviewRepository.getTenReviewsOfProductFromStart(product.getId(), 10L);
 
         // then
         assertThat(responses).isNotEmpty().hasSize(1);
 
-        ReviewResponse.ReviewOfProduct response = responses.get().toList().get(0);
+        ReviewResponse.OfProduct response = responses.get().toList().get(0);
         assertThat(response.productName()).isEqualTo(product.getName());
         assertThat(response.reviewId()).isEqualTo(review.getId());
     }
