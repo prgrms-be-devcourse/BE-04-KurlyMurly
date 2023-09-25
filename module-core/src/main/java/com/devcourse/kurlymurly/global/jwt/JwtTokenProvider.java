@@ -80,18 +80,20 @@ public class JwtTokenProvider {
         }
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_CORRECT_JWT_SIGN);
-        } catch (ExpiredJwtException e) {
-            log.warn("JWT Exception Occurs : {}", ErrorCode.EXPIRED_JWT_TOKEN);
-        } catch (UnsupportedJwtException e) {
-            log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_SUPPORTED_JWT_TOKEN);
-        } catch (IllegalArgumentException e) {
-            log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_CORRECT_JWT);
+    public boolean isValidToken(String token) {
+        if (token != null) {
+            try {
+                Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+                return true;
+            } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+                log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_CORRECT_JWT_SIGN);
+            } catch (ExpiredJwtException e) {
+                log.warn("JWT Exception Occurs : {}", ErrorCode.EXPIRED_JWT_TOKEN);
+            } catch (UnsupportedJwtException e) {
+                log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_SUPPORTED_JWT_TOKEN);
+            } catch (IllegalArgumentException e) {
+                log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_CORRECT_JWT);
+            }
         }
 
         return false;

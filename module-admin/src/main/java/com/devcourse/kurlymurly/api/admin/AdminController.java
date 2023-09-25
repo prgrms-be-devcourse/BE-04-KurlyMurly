@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.admin;
+package com.devcourse.kurlymurly.api.admin;
 
 import com.devcourse.kurlymurly.application.product.ProductFacade;
 import com.devcourse.kurlymurly.module.order.service.OrderService;

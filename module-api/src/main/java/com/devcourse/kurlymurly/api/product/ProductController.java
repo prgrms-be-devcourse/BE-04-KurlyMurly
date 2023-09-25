@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.product;
+package com.devcourse.kurlymurly.api.product;
 
 import com.devcourse.kurlymurly.web.common.KurlyPagingRequest;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;

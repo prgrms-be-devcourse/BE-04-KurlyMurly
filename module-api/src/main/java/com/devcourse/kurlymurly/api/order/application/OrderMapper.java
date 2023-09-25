@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.order.application;
+package com.devcourse.kurlymurly.api.order.application;
 
 import com.devcourse.kurlymurly.module.order.domain.OrderDomain;
 import com.devcourse.kurlymurly.module.order.domain.OrderItem;
