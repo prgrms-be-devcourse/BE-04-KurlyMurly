@@ -7,7 +7,7 @@ import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
 import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupportRepository;
-import com.devcourse.kurlymurly.web.dto.product.GetProduct;
+import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -34,7 +34,7 @@ public class ProductQuery {
         this.productSupportRepository = productSupportRepository;
     }
 
-    public Page<GetProduct.SimpleResponse> getProductsPageOfCategory(Long categoryId, Pageable pageable) {
+    public Page<ProductResponse.GetSimple> getProductsPageOfCategory(Long categoryId, Pageable pageable) {
         return productRepository.loadProductsByCategory(categoryId, pageable);
     }
 

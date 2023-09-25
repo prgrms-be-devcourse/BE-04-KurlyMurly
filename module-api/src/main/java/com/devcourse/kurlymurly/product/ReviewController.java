@@ -3,10 +3,8 @@ package com.devcourse.kurlymurly.product;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.product.application.ProductFacade;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
-import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
-import com.devcourse.kurlymurly.web.dto.product.review.UpdateReview;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,7 +45,7 @@ public class ReviewController {
     @ResponseStatus(OK) // todo: POST /products/1/review
     public KurlyResponse<Void> registerReview(
             @AuthenticationPrincipal User user,
-            @RequestBody CreateReview.Request request
+            @RequestBody ReviewRequest.Create request
     ) {
         productFacade.registerReview(user, request);
         return KurlyResponse.noData();
@@ -61,23 +59,23 @@ public class ReviewController {
     })
     @GetMapping("/{id}")
     @ResponseStatus(OK)
-    public KurlyResponse<ReviewResponse.Reviewed> findById(@PathVariable Long id) {
+    public KurlyResponse<ReviewResponse.Reviewed> getSpecificReview(@PathVariable Long id) {
         ReviewResponse.Reviewed response = productFacade.loadSpecificReviewById(id);
         return KurlyResponse.ok(response);
     }
 
     @Tag(name = "review")
-    @Operation(summary = "상품 리뷰 조회", description = "해당 상품에 대한 리뷰 조회 API", responses = {
+    @Operation(summary = "상품 리뷰 가져오기", description = "해당 상품에 대한 리뷰 조회 API", responses = {
             @ApiResponse(responseCode = "200", description = "[페이징 정보] 성공적으로 상품의 후기를 가져온 상태"),
             @ApiResponse(responseCode = "400", description = "review를 조회하기 위한 상품 id를 명시하지 않은 경우")
     })
     @GetMapping("/product/{productId}") // todo: GET /products/1/reviews
     @ResponseStatus(OK)
-    public KurlyResponse<Slice<ReviewResponse.ReviewOfProduct>> getReviewsOfProduct(
+    public KurlyResponse<Slice<ReviewResponse.OfProduct>> getReviewsOfProduct(
             @PathVariable Long productId,
             @RequestBody ReviewRequest.OfProduct request
     ) {
-        Slice<ReviewResponse.ReviewOfProduct> responses = productFacade.loadReviewsOfProduct(productId, request);
+        Slice<ReviewResponse.OfProduct> responses = productFacade.loadReviewsOfProduct(productId, request);
         return KurlyResponse.ok(responses);
     }
 
@@ -108,7 +106,7 @@ public class ReviewController {
     public KurlyResponse<Void> updateReviewContent(
             @AuthenticationPrincipal User user,
             @PathVariable Long id,
-            @RequestBody UpdateReview.Request request
+            @RequestBody ReviewRequest.Update request
     ) {
         productFacade.updateReview(user.getId(), id, request);
         return KurlyResponse.noData();

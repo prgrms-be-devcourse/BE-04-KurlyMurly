@@ -9,7 +9,7 @@ import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
 import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupportRepository;
-import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
+import com.devcourse.kurlymurly.web.dto.product.ProductRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -59,7 +59,7 @@ class ProductCommandTest {
 
     @Nested
     class createTest {
-        private final CreateProduct.Request request = LA_GOGI.toRequest();
+        private final ProductRequest.Create request = LA_GOGI.toRequest();
         private final String imageUrl = "";
 
         @Test
