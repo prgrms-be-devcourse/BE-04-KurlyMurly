@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.user;
 
-import com.devcourse.kurlymurly.module.user.service.UserService;
+import com.devcourse.kurlymurly.module.auth.AuthService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
 import com.devcourse.kurlymurly.web.dto.user.CheckId;
@@ -19,11 +19,11 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Tag(name = "auth", description = "유저 API")
 @RestController
-public class UserController {
-    private final UserService userService;
+public class AuthController {
+    private final AuthService authService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     @Tag(name = "auth")
@@ -34,7 +34,7 @@ public class UserController {
     @PostMapping("/login")
     @ResponseStatus(OK)
     public KurlyResponse<Login.Response> login(@RequestBody @Valid Login.Request request) {
-        Login.Response response = userService.login(request.loginId(), request.password());
+        Login.Response response = authService.login(request.loginId(), request.password());
 
         return KurlyResponse.ok(response);
     }
@@ -49,7 +49,7 @@ public class UserController {
     @PostMapping("/signUp")
     @ResponseStatus(OK)
     public KurlyResponse<Void> join(@RequestBody @Valid Join.Request request) {
-        userService.join(request);
+        authService.join(request);
         return KurlyResponse.noData();
     }
 
@@ -60,7 +60,7 @@ public class UserController {
     @PostMapping("/check-id")
     @ResponseStatus(OK)
     public KurlyResponse<Void> checkId(@RequestBody @Valid CheckId.Request request) {
-        boolean result = userService.checkId(request.loginId());
+        boolean result = authService.checkId(request.loginId());
         return KurlyResponse.ok(result);
     }
 
@@ -71,7 +71,7 @@ public class UserController {
     @PostMapping("/check-email")
     @ResponseStatus(OK)
     public KurlyResponse<Void> checkEmail(@RequestBody @Valid CheckEmail.Request request) {
-        boolean result = userService.checkEmail(request.email());
+        boolean result = authService.checkEmail(request.email());
         return KurlyResponse.ok(result);
     }
 }

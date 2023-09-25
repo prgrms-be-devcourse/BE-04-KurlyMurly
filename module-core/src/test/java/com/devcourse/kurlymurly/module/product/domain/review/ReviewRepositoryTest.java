@@ -3,18 +3,16 @@ package com.devcourse.kurlymurly.module.product.domain.review;
 import com.devcourse.kurlymurly.module.product.ProductFixture;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
 import com.devcourse.kurlymurly.module.user.UserFixture;
-import com.devcourse.kurlymurly.module.user.domain.UserRepository;
+import com.devcourse.kurlymurly.module.auth.AuthRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
 import static com.devcourse.kurlymurly.module.product.ReviewFixture.REVIEW_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.ReviewFixture.SECRET_REVIEW_FIXTURE;
-import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.DELETED;
 
 @DataJpaTest
 class ReviewRepositoryTest {
@@ -22,7 +20,7 @@ class ReviewRepositoryTest {
     private ReviewRepository reviewRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private AuthRepository authRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -50,7 +48,7 @@ class ReviewRepositoryTest {
     @Test
     void getTenReviewsOfProductFromStart() {
         productRepository.save(ProductFixture.LA_GOGI.toEntity());
-        userRepository.save(UserFixture.USER_FIXTURE.toEntity());
+        authRepository.save(UserFixture.USER_FIXTURE.toEntity());
         reviewRepository.save(REVIEW_FIXTURE.toEntity());
 
 //        Slice<Review> tenReviewsOfProductFromStart = reviewRepository.getTenReviewsOfProductFromStart(1L, 10L);

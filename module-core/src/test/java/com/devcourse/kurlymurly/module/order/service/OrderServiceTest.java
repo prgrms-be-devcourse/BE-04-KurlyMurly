@@ -4,7 +4,6 @@ import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.order.domain.Order;
 import com.devcourse.kurlymurly.module.order.domain.OrderRepository;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
