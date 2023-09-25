@@ -61,8 +61,7 @@ public class ProductFacade {
 
     // todo : user api
     public Slice<SupportResponse.Create> getAllMySupports(Long userId, Long lastId) {
-        return productQuery.getTenSupportsOfUserPageFromLastId(userId, lastId)
-                .map(productMapper::toSupportResponse);
+        return productQuery.getTenSupportsOfUserPageFromLastId(userId, lastId);
     }
 
     public Page<ProductResponse.GetSimple> loadProductPageResponse(
