@@ -34,19 +34,6 @@ public class ProductMapper {
         return new SupportDomain(request.title(), request.content(), request.isSecret());
     }
 
-    public SupportResponse.Create toSupportResponse(ProductSupport productSupport) {
-        return new SupportResponse.Create(
-                productSupport.getId(),
-                productSupport.getProductId(),
-                productSupport.getProductName(),
-                productSupport.getTitle(),
-                productSupport.getContent(),
-                productSupport.isSecret(),
-                productSupport.getStatus().name(),
-                productSupport.getCreateAt()
-        );
-    }
-
     public ProductResponse.Create toCreateProductResponse(ProductRequest.Create request) {
         return new ProductResponse.Create(
                 request.name(),
