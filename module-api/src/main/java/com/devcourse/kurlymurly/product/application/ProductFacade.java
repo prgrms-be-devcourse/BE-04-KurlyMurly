@@ -14,12 +14,6 @@ import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.dto.product.ProductRequest;
 import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
 import com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse;
-import com.devcourse.kurlymurly.image.service.ImageService;
-import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
-import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
-import com.devcourse.kurlymurly.web.dto.product.GetProduct;
-import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;
-import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.product.support.SupportRequest;
@@ -61,10 +55,8 @@ public class ProductFacade {
         this.imageService = imageService;
     }
 
-    public ListPagingResponse<GetFavorite.Response> getUserFavorites(Long userId) {
-        return productQuery.getAllFavoritesByUserId(userId).stream()
-                .map(productMapper::toFavoriteResponse)
-                .toList();
+    public List<FavoriteResponse.Get> getUserFavorites(Long userId) {
+        return productQuery.getAllFavoritesByUserId(userId);
     }
 
     // todo : user api

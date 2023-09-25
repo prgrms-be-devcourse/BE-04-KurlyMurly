@@ -36,14 +36,6 @@ public class ProductMapper {
         return new SupportDomain(request.title(), request.content(), request.isSecret());
     }
 
-    public FavoriteResponse.Get toFavoriteResponse(Favorite favorite) {
-        return new FavoriteResponse.Get(
-                favorite.getId(),
-                favorite.getProductName(),
-                favorite.getProductPrice()
-        );
-    }
-
     public SupportResponse.Create toSupportResponse(ProductSupport productSupport) {
         return new SupportResponse.Create(
                 productSupport.getId(),
