@@ -1,8 +1,7 @@
-package com.devcourse.kurlymurly.web.dto.product;
+package com.devcourse.kurlymurly.web.product;
 
-import com.devcourse.kurlymurly.module.product.domain.Product;
-
-import static com.devcourse.kurlymurly.web.dto.product.ProductResponse.*;
+import static com.devcourse.kurlymurly.web.product.ProductResponse.Create;
+import static com.devcourse.kurlymurly.web.product.ProductResponse.GetSimple;
 
 public sealed interface ProductResponse permits Create, GetSimple {
     record Create(
@@ -16,13 +15,13 @@ public sealed interface ProductResponse permits Create, GetSimple {
 
     record GetSimple(
             String imageUrl,
-            Product.Delivery delivery,
+            String delivery,
             String productName,
             String description,
             int price,
             Long reviewCount,
             boolean isKurlyOnly,
-            Product.Status status
+            String status
     ) implements ProductResponse {
     }
 }

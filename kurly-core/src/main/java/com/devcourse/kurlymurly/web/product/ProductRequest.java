@@ -1,13 +1,11 @@
-package com.devcourse.kurlymurly.web.dto.product;
+package com.devcourse.kurlymurly.web.product;
 
-import com.devcourse.kurlymurly.module.product.domain.Product;
-import com.devcourse.kurlymurly.module.product.domain.ProductDetail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-import static com.devcourse.kurlymurly.web.dto.product.ProductRequest.Create;
+import static com.devcourse.kurlymurly.web.product.ProductRequest.Create;
 
 public sealed interface ProductRequest permits Create {
     record Create(
@@ -29,7 +27,7 @@ public sealed interface ProductRequest permits Create {
 
             @NotNull(message = "배송 정보로 빈 값이 들어올 수 없습니다.")
             @Schema(name = "배송 정보", allowableValues = {"EXPRESS", "NORMAL"})
-            Product.Delivery delivery,
+            String delivery,
 
             @NotBlank(message = "판매자 정보로 빈 값이 들어올 수 없습니다.")
             @Schema(name = "판매자 정보")
@@ -37,7 +35,7 @@ public sealed interface ProductRequest permits Create {
 
             @NotNull(message = "상품 보관 정보로 빈 값이 들어올 수 없습니다.")
             @Schema(name = "상품 보관 정보", allowableValues = {"FROZEN", "REFRIGERATE", "ROOM_TEMPERATURE"})
-            ProductDetail.StorageType storageType,
+            String storageType,
 
             @NotBlank(message = "판매 단위로 빈 값이 들어올 수 없습니다.")
             @Schema(name = "판매 단위")

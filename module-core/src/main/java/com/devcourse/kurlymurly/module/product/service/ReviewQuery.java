@@ -5,7 +5,7 @@ import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLikeRepository;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewRepository;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
+import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

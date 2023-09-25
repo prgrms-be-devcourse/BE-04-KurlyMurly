@@ -9,7 +9,7 @@ import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
 import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupportRepository;
-import com.devcourse.kurlymurly.web.dto.product.ProductRequest;
+import com.devcourse.kurlymurly.web.product.ProductRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

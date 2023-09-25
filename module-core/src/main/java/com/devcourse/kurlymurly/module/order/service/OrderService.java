@@ -10,7 +10,7 @@ import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrderItem;
 import com.devcourse.kurlymurly.web.dto.order.GetOrderResponse;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
+import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

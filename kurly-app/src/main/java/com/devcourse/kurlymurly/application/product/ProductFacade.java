@@ -1,5 +1,12 @@
-package com.devcourse.kurlymurly.product.application;
+package com.devcourse.kurlymurly.application.product;
 
+import com.devcourse.kurlymurly.web.product.FavoriteResponse;
+import com.devcourse.kurlymurly.web.product.ProductRequest;
+import com.devcourse.kurlymurly.web.product.ProductResponse;
+import com.devcourse.kurlymurly.web.product.ReviewRequest;
+import com.devcourse.kurlymurly.web.product.ReviewResponse;
+import com.devcourse.kurlymurly.web.product.SupportRequest;
+import com.devcourse.kurlymurly.web.product.SupportResponse;
 import com.devcourse.kurlymurly.image.service.ImageService;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.module.product.domain.Product;
@@ -11,13 +18,6 @@ import com.devcourse.kurlymurly.module.product.service.ProductQuery;
 import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
 import com.devcourse.kurlymurly.module.product.service.ReviewQuery;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.web.dto.product.ProductRequest;
-import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
-import com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
-import com.devcourse.kurlymurly.web.dto.product.support.SupportRequest;
-import com.devcourse.kurlymurly.web.dto.product.support.SupportResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -83,7 +83,6 @@ public class ProductFacade {
         return reviewQuery.getAllReviewsOfUser(userId);
     }
 
-    // admin
     public ProductResponse.Create createProduct(
             MultipartFile image,
             @Valid ProductRequest.Create request
