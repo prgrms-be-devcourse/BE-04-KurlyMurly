@@ -11,8 +11,8 @@ import com.devcourse.kurlymurly.module.product.service.ProductQuery;
 import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
 import com.devcourse.kurlymurly.module.product.service.ReviewQuery;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
 import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
+import com.devcourse.kurlymurly.web.dto.product.GetProduct;
 import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;
 import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
@@ -20,6 +20,8 @@ import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.product.review.UpdateReview;
 import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,18 +56,23 @@ public class ProductFacade {
         this.imageService = imageService;
     }
 
-    public ListPagingResponse<GetFavorite.Response> getUserFavorites(Long userId) {
-        List<GetFavorite.Response> responses = productQuery.getAllFavoritesByUserId(userId).stream()
+    public List<GetFavorite.Response> getUserFavorites(Long userId) {
+        return productQuery.getAllFavoritesByUserId(userId).stream()
                 .map(productMapper::toFavoriteResponse)
                 .toList();
-
-        return new ListPagingResponse<>(responses);
     }
 
     // todo : user api
     public Slice<SupportProduct.Response> getAllMySupports(Long userId, Long lastId) {
         return productQuery.getTenSupportsOfUserPageFromLastId(userId, lastId)
                 .map(productMapper::toSupportResponse);
+    }
+
+    public Page<GetProduct.SimpleResponse> loadProductPageResponse(
+            Long categoryId,
+            @Valid Pageable pageable
+    ) {
+        return productQuery.getProductsPageOfCategory(categoryId, pageable);
     }
 
     // admin
@@ -80,19 +87,28 @@ public class ProductFacade {
         return productMapper.toCreateProductResponse(request);
     }
 
-    public void createProductSupport(Long userId, Long productId,
-                                     @Valid SupportProduct.Request request) {
+    public void createProductSupport(
+            Long userId,
+            Long productId,
+            @Valid SupportProduct.Request request
+    ) {
         SupportDomain supportDomain = productMapper.toSupportDomain(request);
         productCommand.createSupport(userId, productId, supportDomain);
     }
 
-    public void updateProductSupport(Long userId, Long supportId,
-                                     @Valid SupportProduct.Request request) { // todo : 업데이트 객체 분리
+    public void updateProductSupport(
+            Long userId,
+            Long supportId,
+            @Valid SupportProduct.Request request
+    ) { // todo : 업데이트 객체 분리
         SupportDomain supportDomain = productMapper.toSupportDomain(request);
         productCommand.updateSupport(userId, supportId, supportDomain);
     }
 
-    public void registerReview(User user, @Valid CreateReview.Request request) {
+    public void registerReview(
+            User user,
+            @Valid CreateReview.Request request
+    ) {
         Product product = productQuery.findProductByIdOrThrow(request.productId());
         product.validateSupportable();
 
@@ -101,14 +117,11 @@ public class ProductFacade {
     }
 
     public Slice<ReviewResponse.ReviewOfProduct> loadReviewsOfProduct(Long productId, @Valid ReviewRequest.OfProduct request) {
-        return reviewQuery.getReviewsOfProduct(productId, request.start())
-                .map(productMapper::toReviewOfProductResponse);
+        return reviewQuery.getReviewsOfProduct(productId, request.start());
     }
 
     public List<ReviewResponse.Reviewed> loadReviewsOfUser(Long userId) {
-        return reviewQuery.getAllReviewsOfUser(userId).stream()
-                .map(productMapper::toReviewedResponse)
-                .toList();
+        return reviewQuery.getAllReviewsOfUser(userId);
     }
 
     public void favoriteProduct(Long userId, Long productId) {
@@ -119,7 +132,11 @@ public class ProductFacade {
         productCommand.cancelFavorite(userId, productId);
     }
 
-    public void updateReview(Long userId, Long reviewId, @Valid UpdateReview.Request request) {
+    public void updateReview(
+            Long userId,
+            Long reviewId,
+            @Valid UpdateReview.Request request
+    ) {
         reviewCommand.update(userId, reviewId, request.content(), request.isSecret());
     }
 

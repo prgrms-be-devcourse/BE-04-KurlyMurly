@@ -1,7 +1,6 @@
 package com.devcourse.kurlymurly.web.dto.user.shipping;
 
 import com.devcourse.kurlymurly.module.user.domain.shipping.Info;
-import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
