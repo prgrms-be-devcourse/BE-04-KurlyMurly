@@ -6,6 +6,8 @@ import com.devcourse.kurlymurly.web.common.KurlyPagingRequest;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
 import com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.product.support.SupportRequest;
 import com.devcourse.kurlymurly.web.dto.product.GetProduct;
 import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;
@@ -18,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -97,6 +100,20 @@ public class ProductController {
             @ModelAttribute KurlyPagingRequest request
     ) {
         Page<ProductResponse.GetSimple> responses = productFacade.loadProductPageResponse(categoryId, request.toPageable());
+        return KurlyResponse.ok(responses);
+    }
+
+    @Tag(name = "review")
+    @Operation(summary = "상품 리뷰 가져오기", description = "해당 상품에 대한 리뷰 조회 API", responses = {
+            @ApiResponse(responseCode = "200", description = "[페이징 정보] 성공적으로 상품의 후기를 가져온 상태"),
+    })
+    @GetMapping("/{productId}/reviews")
+    @ResponseStatus(OK)
+    public KurlyResponse<Slice<ReviewResponse.OfProduct>> getReviewsOfProduct(
+            @PathVariable Long productId,
+            @RequestBody ReviewRequest.OfProduct request
+    ) {
+        Slice<ReviewResponse.OfProduct> responses = productFacade.loadReviewsOfProduct(productId, request);
         return KurlyResponse.ok(responses);
     }
 
