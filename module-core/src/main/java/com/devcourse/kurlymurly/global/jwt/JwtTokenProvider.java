@@ -80,7 +80,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public boolean validateToken(String token) {
+    public boolean isValidToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -94,7 +94,7 @@ public class JwtTokenProvider {
             log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_CORRECT_JWT);
         }
 
-        return false;
+        throw new KurlyBaseException(ErrorCode.CHECK_TOKEN_ERROR);
     }
 
     private Claims parseClaims(String accessToken) {
