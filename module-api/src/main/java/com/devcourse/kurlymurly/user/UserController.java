@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.http.HttpStatus.OK;
 
-@Tag(name = "user", description = "유저 API")
+@Tag(name = "auth", description = "유저 API")
 @RestController
 public class UserController {
     private final UserService userService;
@@ -26,7 +26,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Tag(name = "user")
+    @Tag(name = "auth")
     @Operation(description = "로그인 API", responses = {
             @ApiResponse(responseCode = "200", description = "로그인에 성공한 경우"),
             @ApiResponse(responseCode = "422", description = "잘못된 로그인 정보를 입력한 경우"),
@@ -39,7 +39,7 @@ public class UserController {
         return KurlyResponse.ok(response);
     }
 
-    @Tag(name = "user")
+    @Tag(name = "auth")
     @Operation(description = "회원 가입 API", responses = {
             @ApiResponse(responseCode = "200", description = "회원 가입에 성공한 경우"),
             @ApiResponse(responseCode = "400", description = "변경할 비밀번호와 확인 비밀번호가 일치하지 않는 경우"),
@@ -53,7 +53,7 @@ public class UserController {
         return KurlyResponse.noData();
     }
 
-    @Tag(name = "user")
+    @Tag(name = "auth")
     @Operation(description = "id 중복 체크 API", responses = {
             @ApiResponse(responseCode = "200", description = "해당 id의 중복검사를 진행"),
     })
@@ -64,7 +64,7 @@ public class UserController {
         return KurlyResponse.ok(result);
     }
 
-    @Tag(name = "user")
+    @Tag(name = "auth")
     @Operation(description = "이메일 중복 체크 API", responses = {
             @ApiResponse(responseCode = "200", description = "해당 이메일에 대한 중복검사를 진행")
     })
