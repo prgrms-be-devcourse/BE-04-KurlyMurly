@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return bearerToken.substring(BEARER_PREFIX.length());
         }
 
-        throw new KurlyBaseException(ErrorCode.CHECK_TOKEN_ERROR);
+        return null;
     }
 }
 
