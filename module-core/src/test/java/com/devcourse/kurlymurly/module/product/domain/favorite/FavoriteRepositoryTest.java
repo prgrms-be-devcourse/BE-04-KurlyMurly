@@ -2,7 +2,7 @@ package com.devcourse.kurlymurly.module.product.domain.favorite;
 
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
-import com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse;
+import com.devcourse.kurlymurly.web.product.FavoriteResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,13 +1,14 @@
 package com.devcourse.kurlymurly.module.product.service;
 
+import com.devcourse.kurlymurly.web.product.FavoriteResponse;
+import com.devcourse.kurlymurly.web.product.ProductResponse;
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
 import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupportRepository;
-import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
-import com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse;
+import com.devcourse.kurlymurly.web.product.SupportResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -42,7 +43,7 @@ public class ProductQuery {
         return favoriteRepository.findAllByUserId(userId);
     }
 
-    public Slice<ProductSupport> getTenSupportsOfUserPageFromLastId(Long userId, Long lastId) {
+    public Slice<SupportResponse.Create> getTenSupportsOfUserPageFromLastId(Long userId, Long lastId) {
         return productSupportRepository.findTenByUserIdFromStartId(userId, lastId + DEFAULT_PAGE_SIZE);
     }
 

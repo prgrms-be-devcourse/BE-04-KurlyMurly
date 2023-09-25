@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.module.product.domain.support;
 
+import com.devcourse.kurlymurly.web.product.SupportResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -25,9 +26,15 @@ class ProductSupportRepositoryTest {
         productSupportRepository.saveAll(List.of(targetSupport, nonTargetSupport));
 
         // when
-        Slice<ProductSupport> result = productSupportRepository.findTenByUserIdFromStartId(userId, 10L);
+        Slice<SupportResponse.Create> result = productSupportRepository.findTenByUserIdFromStartId(userId, 10L);
 
         // then
         assertThat(result).isNotEmpty().hasSize(1);
+
+        SupportResponse.Create response = result.get().toList().get(0);
+        assertThat(response.productId()).isEqualTo(targetSupport.getProductId());
+        assertThat(response.productName()).isEqualTo(targetSupport.getProductName());
+        assertThat(response.status()).isEqualTo(targetSupport.getStatus().name());
+        assertThat(response.isSecret()).isFalse();
     }
 }

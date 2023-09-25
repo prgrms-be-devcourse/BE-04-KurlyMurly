@@ -40,20 +40,20 @@ public class Payment extends BaseEntity {
     protected Payment() {
     }
 
-    private Payment(Long userId, String payInfo, Type type, Status status) {
+    private Payment(Long userId, String payInfo, CreditInfo creditInfo, Type type) {
         this.userId = userId;
         this.payInfo = payInfo;
+        this.creditInfo = creditInfo;
         this.type = type;
-        this.status = status;
+        this.status = Status.NORMAL;
     }
 
     public Payment(Long userId, String payInfo, CreditInfo creditInfo) {
-        this(userId, payInfo, Type.CREDIT, Status.NORMAL);
-        this.creditInfo = creditInfo;
+        this(userId, payInfo, creditInfo, Type.CREDIT);
     }
 
     public Payment(Long userId, String payInfo) {
-        this(userId, payInfo, Type.EASY, Status.NORMAL);
+        this(userId, payInfo, new CreditInfo(), Type.EASY);
     }
 
     public void deletePayment() {

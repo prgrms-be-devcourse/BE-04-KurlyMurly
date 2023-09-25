@@ -106,19 +106,7 @@ public class Review extends BaseEntity {
         return content;
     }
 
-    public Integer getLikes() {
-        return this.likes;
-    }
-
     public boolean isSecret() {
         return isSecret;
-    }
-
-    public String getMaskedUserName() {
-        return user.getMaskedUserName();
-    }
-
-    public String getUserTier() {
-        return user.getTier().name();
     }
 }

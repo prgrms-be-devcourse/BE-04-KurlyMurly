@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.product.domain;
 
-import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
+import com.devcourse.kurlymurly.web.product.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,8 +9,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("""
-            SELECT NEW com.devcourse.kurlymurly.web.dto.product.ProductResponse$GetSimple(
-               p.imageUrl, p.delivery, p.name, p.description, p.price, COALESCE(r.reviewCount, 0), p.isKurlyOnly, p.status
+            SELECT NEW com.devcourse.kurlymurly.web.product.ProductResponse$GetSimple(
+               p.imageUrl, CAST(p.delivery AS STRING), p.name, p.description, p.price, COALESCE(r.reviewCount, 0), p.isKurlyOnly, CAST(p.status AS STRING)
             )
             FROM Product p
             LEFT JOIN (
