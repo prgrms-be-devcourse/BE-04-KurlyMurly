@@ -1,11 +1,14 @@
 package com.devcourse.kurlymurly.admin;
 
+import com.devcourse.kurlymurly.application.product.ProductFacade;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.order.support.AnswerOrderSupport;
+import com.devcourse.kurlymurly.web.product.ProductRequest;
+import com.devcourse.kurlymurly.web.product.ProductResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,8 +22,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -28,37 +33,38 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
-//    private final ProductFacade productFacade; // todo : separate module
+    private final ProductFacade productFacade;
     private final ReviewCommand reviewCommand;
     private final OrderService orderService;
     private final OrderSupportService orderSupportService;
 
     public AdminController(
-//            ProductFacade productFacade,
+            ProductFacade productFacade,
             ReviewCommand reviewCommand,
             OrderService orderService,
             OrderSupportService orderSupportService
     ) {
-//        this.productFacade = productFacade;
+        this.productFacade = productFacade;
         this.reviewCommand = reviewCommand;
         this.orderService = orderService;
         this.orderSupportService = orderSupportService;
     }
 
-//    @Tag(name = "admin")
-//    @Operation(description = "[관리자 토큰 필요] 새로운 상품을 등록한다.", responses = {
-//            @ApiResponse(responseCode = "200", description = "성공적으로 상품을 등록했습니다."),
-//            @ApiResponse(responseCode = "401", description = "권한이 없는 토큰이거나 토큰을 보내지 않은 경우")
-//    })
-//    @PostMapping("/products")
-//    @ResponseStatus(OK)
-//    public KurlyResponse<CreateProduct.Response> createProduct(
-//            @AuthenticationPrincipal User admin,
-//            @RequestBody @Valid CreateProduct.Request request
-//    ) {
-//        CreateProduct.Response response = productFacade.createProduct(request);
-//        return KurlyResponse.ok(response);
-//    }
+    @Tag(name = "admin")
+    @Operation(description = "[관리자 토큰 필요] 새로운 상품을 등록한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 상품을 등록했습니다."),
+            @ApiResponse(responseCode = "401", description = "권한이 없는 토큰이거나 토큰을 보내지 않은 경우")
+    })
+    @PostMapping("/products")
+    @ResponseStatus(OK)
+    public KurlyResponse<ProductResponse.Create> createProduct(
+            @AuthenticationPrincipal User admin,
+            @RequestPart MultipartFile image,
+            @RequestBody ProductRequest.Create request
+    ) {
+        ProductResponse.Create response = productFacade.createProduct(image, request);
+        return KurlyResponse.ok(response);
+    }
 
     @Tag(name = "admin")
     @Operation(description = "[관리자 토큰 필요] 상품을 품절로 처리하는 API")

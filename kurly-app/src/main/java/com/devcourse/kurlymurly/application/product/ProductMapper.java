@@ -1,16 +1,14 @@
-package com.devcourse.kurlymurly.product.application;
+package com.devcourse.kurlymurly.application.product;
 
+import com.devcourse.kurlymurly.web.product.ProductRequest;
+import com.devcourse.kurlymurly.web.product.ProductResponse;
+import com.devcourse.kurlymurly.web.product.ReviewResponse;
+import com.devcourse.kurlymurly.web.product.SupportRequest;
+import com.devcourse.kurlymurly.web.product.SupportResponse;
 import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
 import com.devcourse.kurlymurly.module.product.domain.SupportDomain;
-import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
-import com.devcourse.kurlymurly.web.dto.product.ProductRequest;
-import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
-import com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
-import com.devcourse.kurlymurly.web.dto.product.support.SupportRequest;
-import com.devcourse.kurlymurly.web.dto.product.support.SupportResponse;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -44,7 +42,7 @@ public class ProductMapper {
                 productSupport.getTitle(),
                 productSupport.getContent(),
                 productSupport.isSecret(),
-                productSupport.getStatus(),
+                productSupport.getStatus().name(),
                 productSupport.getCreateAt()
         );
     }
@@ -53,8 +51,8 @@ public class ProductMapper {
         return new ProductResponse.Create(
                 request.name(),
                 request.price(),
-                request.delivery().name(),
-                request.storageType().name(),
+                request.delivery(),
+                request.storageType(),
                 request.saleUnit()
         );
     }

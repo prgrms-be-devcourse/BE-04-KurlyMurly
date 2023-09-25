@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.product.domain.favorite;
 
-import com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse;
+import com.devcourse.kurlymurly.web.product.FavoriteResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +12,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     Optional<Favorite> findByUserIdAndProductId(Long userId, Long productId);
 
     @Query("""
-            SELECT NEW com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse$Get(
+            SELECT NEW com.devcourse.kurlymurly.web.product.FavoriteResponse$Get(
                 p.id, p.imageUrl, p.name, p.price
             )
             FROM Favorite f

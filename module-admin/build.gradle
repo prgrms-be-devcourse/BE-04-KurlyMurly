@@ -1,6 +1,9 @@
 dependencies {
+    implementation project(":kurly-app")
+    implementation project(":kurly-core")
+
     implementation project(":module-core")
 }
 
-bootJar.enabled=false
-jar.enabled=true
+bootJar.enabled=true
+jar.enabled=false

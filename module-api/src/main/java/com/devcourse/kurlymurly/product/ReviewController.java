@@ -1,14 +1,13 @@
 package com.devcourse.kurlymurly.product;
 
-import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.product.application.ProductFacade;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
+import com.devcourse.kurlymurly.web.product.ReviewRequest;
+import com.devcourse.kurlymurly.web.product.ReviewResponse;
+import com.devcourse.kurlymurly.application.product.ProductFacade;
+import com.devcourse.kurlymurly.module.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,10 +1,8 @@
-package com.devcourse.kurlymurly.web.dto.product.support;
-
-import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
+package com.devcourse.kurlymurly.web.product;
 
 import java.time.LocalDateTime;
 
-import static com.devcourse.kurlymurly.web.dto.product.support.SupportResponse.Create;
+import static com.devcourse.kurlymurly.web.product.SupportResponse.Create;
 
 public sealed interface SupportResponse permits Create {
     record Create(
@@ -14,7 +12,7 @@ public sealed interface SupportResponse permits Create {
             String title,
             String content,
             boolean isSecret,
-            ProductSupport.Status status,
+            String status,
             LocalDateTime createdAt
     ) implements SupportResponse {
     }

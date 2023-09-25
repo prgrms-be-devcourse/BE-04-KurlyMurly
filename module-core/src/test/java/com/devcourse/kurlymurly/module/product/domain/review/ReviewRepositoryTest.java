@@ -6,7 +6,7 @@ import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
 import com.devcourse.kurlymurly.module.user.UserFixture;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserRepository;
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
+import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

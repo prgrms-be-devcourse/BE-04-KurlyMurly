@@ -1,11 +1,11 @@
-package com.devcourse.kurlymurly.web.dto.product.support;
+package com.devcourse.kurlymurly.web.product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import static com.devcourse.kurlymurly.web.dto.product.support.SupportRequest.Create;
-import static com.devcourse.kurlymurly.web.dto.product.support.SupportRequest.Update;
+import static com.devcourse.kurlymurly.web.product.SupportRequest.Create;
+import static com.devcourse.kurlymurly.web.product.SupportRequest.Update;
 
 public sealed interface SupportRequest permits Create, Update {
     String title();

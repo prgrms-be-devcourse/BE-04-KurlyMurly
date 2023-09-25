@@ -1,0 +1,10 @@
+dependencies {
+    implementation project(":module-core")
+    implementation project(":module-image")
+    implementation project(":kurly-core")
+
+    api 'org.springframework.boot:spring-boot-starter-security'
+}
+
+bootJar.enabled=false
+jar.enabled=true

@@ -1,13 +1,13 @@
-package com.devcourse.kurlymurly.web.dto.product.review;
+package com.devcourse.kurlymurly.web.product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import static com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest.*;
-import static com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest.Create;
-import static com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest.OfProduct;
-import static com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest.Update;
+import static com.devcourse.kurlymurly.web.product.ReviewRequest.Create;
+import static com.devcourse.kurlymurly.web.product.ReviewRequest.Like;
+import static com.devcourse.kurlymurly.web.product.ReviewRequest.OfProduct;
+import static com.devcourse.kurlymurly.web.product.ReviewRequest.Update;
 
 public sealed interface ReviewRequest permits Create, Update, Like, OfProduct {
     record Create(

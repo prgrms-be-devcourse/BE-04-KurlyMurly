@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.module.product.domain;
 
 import com.devcourse.kurlymurly.web.common.KurlyPagingRequest;
-import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
+import com.devcourse.kurlymurly.web.product.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

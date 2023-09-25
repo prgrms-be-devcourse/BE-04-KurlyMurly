@@ -3,7 +3,7 @@ package com.devcourse.kurlymurly.module.product;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductDetail;
 import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
-import com.devcourse.kurlymurly.web.dto.product.ProductRequest;
+import com.devcourse.kurlymurly.web.product.ProductRequest;
 
 import static com.devcourse.kurlymurly.module.product.domain.Product.Delivery;
 import static com.devcourse.kurlymurly.module.product.domain.ProductDetail.StorageType;
@@ -81,10 +81,10 @@ public enum ProductFixture {
         return new ProductDomain(this.name,
                 this.description,
                 this.price,
-                this.delivery,
+                this.delivery.name(),
                 this.isKurlyOnly,
                 this.seller,
-                this.storageType,
+                this.storageType.name(),
                 this.saleUnit,
                 this.weight,
                 this.origin,
@@ -99,9 +99,9 @@ public enum ProductFixture {
                 this.name,
                 this.description,
                 this.price,
-                this.delivery,
+                this.delivery.name(),
                 this.seller,
-                this.storageType,
+                this.storageType.name(),
                 this.saleUnit,
                 this.weight,
                 this.origin,

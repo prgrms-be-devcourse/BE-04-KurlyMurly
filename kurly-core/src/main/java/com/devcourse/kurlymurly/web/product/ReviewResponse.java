@@ -1,13 +1,11 @@
-package com.devcourse.kurlymurly.web.dto.product.review;
-
-import com.devcourse.kurlymurly.module.user.domain.User;
+package com.devcourse.kurlymurly.web.product;
 
 import java.time.LocalDateTime;
 
-import static com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse.Like;
-import static com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse.OfProduct;
-import static com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse.Reviewable;
-import static com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse.Reviewed;
+import static com.devcourse.kurlymurly.web.product.ReviewResponse.Like;
+import static com.devcourse.kurlymurly.web.product.ReviewResponse.OfProduct;
+import static com.devcourse.kurlymurly.web.product.ReviewResponse.Reviewable;
+import static com.devcourse.kurlymurly.web.product.ReviewResponse.Reviewed;
 
 public sealed interface ReviewResponse permits Reviewable, Reviewed, OfProduct, Like {
     record Reviewable(
@@ -32,7 +30,7 @@ public sealed interface ReviewResponse permits Reviewable, Reviewed, OfProduct, 
 
     record OfProduct(
             String userName,
-            User.Tier tier,
+            String tier,
             String productName,
             Long reviewId,
             String content,

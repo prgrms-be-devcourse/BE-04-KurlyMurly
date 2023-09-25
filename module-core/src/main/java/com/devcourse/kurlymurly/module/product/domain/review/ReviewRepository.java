@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.product.domain.review;
 
-import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
+import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("""
-           SELECT NEW com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse$Reviewed(
+           SELECT NEW com.devcourse.kurlymurly.web.product.ReviewResponse$Reviewed(
                 r.id, p.id, p.name, r.content, r.isSecret, r.createAt, r.updatedAt
            )
            FROM Review r
@@ -22,8 +22,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<ReviewResponse.Reviewed> getAllReviewsByUserId(@Param("userId") Long userId);
 
     @Query("""
-           SELECT NEW com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse$OfProduct(
-                u.name, u.tier, p.name, r.id, r.content, r.likes, r.createAt, r.isSecret
+           SELECT NEW com.devcourse.kurlymurly.web.product.ReviewResponse$OfProduct(
+                u.name, CAST(u.tier AS STRING), p.name, r.id, r.content, r.likes, r.createAt, r.isSecret
            )
            FROM Review r
            LEFT JOIN r.user u
