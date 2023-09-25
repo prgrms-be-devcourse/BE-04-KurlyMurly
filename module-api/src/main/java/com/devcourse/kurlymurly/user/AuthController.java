@@ -42,7 +42,6 @@ public class AuthController {
     @Tag(name = "auth")
     @Operation(description = "회원 가입 API", responses = {
             @ApiResponse(responseCode = "200", description = "회원 가입에 성공한 경우"),
-            @ApiResponse(responseCode = "400", description = "변경할 비밀번호와 확인 비밀번호가 일치하지 않는 경우"),
             @ApiResponse(responseCode = "409", description = "이미 가입된 아이디를 입력한 경우"),
             @ApiResponse(responseCode = "409", description = "이미 가입된 이메일을 입력한 경우")
     })
