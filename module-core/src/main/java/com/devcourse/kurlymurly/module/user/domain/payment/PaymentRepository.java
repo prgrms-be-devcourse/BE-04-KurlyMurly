@@ -10,6 +10,10 @@ import java.util.Optional;
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     Optional<Payment> findByUserIdAndId(Long userId, Long paymentId);
 
-    @Query("SELECT e FROM Payment e WHERE e.userId = :userId AND (e.status = 'DEFAULT' OR e.status = 'NORMAL')")
-    List<Payment> findAllByUserIdAndStatus(@Param("userId") Long userId);
+    @Query("""
+            SELECT CONCAT(SUBSTRING(p.payInfo, 1, 6), '******', SUBSTRING(p.payInfo, 13, 4)) 
+            FROM Payment p 
+            WHERE p.userId = :userId AND p.status IN ('DEFAULT','NORMAL')
+            """)
+    List<String> findAllByUserId(@Param("userId") Long userId);
 }
