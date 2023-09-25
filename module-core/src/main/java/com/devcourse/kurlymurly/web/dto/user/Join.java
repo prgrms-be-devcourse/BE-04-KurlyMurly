@@ -8,10 +8,10 @@ import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 
-import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.EMAIL_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.PASSWORD_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.PHONE_NUMBER_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.USER_NAME_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.UserRegexp.EMAIL_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.UserRegexp.PASSWORD_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.UserRegexp.PHONE_NUMBER_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.UserRegexp.USER_NAME_REGEXP;
 
 public sealed interface Join permits Join.Request {
     record Request(

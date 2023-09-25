@@ -4,14 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 
-import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.EMAIL_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.PASSWORD_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.PHONE_NUMBER_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.USER_NAME_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.UserRegexp.EMAIL_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.UserRegexp.PASSWORD_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.UserRegexp.PHONE_NUMBER_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.UserRegexp.USER_NAME_REGEXP;
 
 public sealed interface UpdateUser permits UpdateUser.Request {
     record Request(

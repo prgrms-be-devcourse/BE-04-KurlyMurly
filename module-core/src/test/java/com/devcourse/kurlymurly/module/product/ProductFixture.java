@@ -3,7 +3,7 @@ package com.devcourse.kurlymurly.module.product;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductDetail;
 import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
-import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
+import com.devcourse.kurlymurly.web.dto.product.ProductRequest;
 
 import static com.devcourse.kurlymurly.module.product.domain.Product.Delivery;
 import static com.devcourse.kurlymurly.module.product.domain.ProductDetail.StorageType;
@@ -93,8 +93,8 @@ public enum ProductFixture {
         );
     }
 
-    public CreateProduct.Request toRequest() {
-        return new CreateProduct.Request(
+    public ProductRequest.Create toRequest() {
+        return new ProductRequest.Create(
                 this.categoryId,
                 this.name,
                 this.description,

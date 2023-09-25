@@ -1,15 +1,14 @@
 package com.devcourse.kurlymurly.web.dto.user.shipping;
 
 import com.devcourse.kurlymurly.module.user.domain.shipping.Info;
-import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
-import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.PHONE_NUMBER_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.user.regexp.UserRegexp.USER_NAME_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.UserRegexp.PHONE_NUMBER_REGEXP;
+import static com.devcourse.kurlymurly.web.dto.UserRegexp.USER_NAME_REGEXP;
 
 public sealed interface UpdateAddress permits UpdateAddress.Request, UpdateAddress.InfoRequest {
     record Request(

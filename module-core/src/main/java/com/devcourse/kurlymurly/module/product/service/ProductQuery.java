@@ -3,10 +3,13 @@ package com.devcourse.kurlymurly.module.product.service;
 import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
-import com.devcourse.kurlymurly.module.product.domain.favorite.Favorite;
 import com.devcourse.kurlymurly.module.product.domain.favorite.FavoriteRepository;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import com.devcourse.kurlymurly.module.product.domain.support.ProductSupportRepository;
+import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
+import com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +34,11 @@ public class ProductQuery {
         this.productSupportRepository = productSupportRepository;
     }
 
-    public List<Favorite> getAllFavoritesByUserId(Long userId) {
+    public Page<ProductResponse.GetSimple> getProductsPageOfCategory(Long categoryId, Pageable pageable) {
+        return productRepository.loadProductsByCategory(categoryId, pageable);
+    }
+
+    public List<FavoriteResponse.Get> getAllFavoritesByUserId(Long userId) {
         return favoriteRepository.findAllByUserId(userId);
     }
 

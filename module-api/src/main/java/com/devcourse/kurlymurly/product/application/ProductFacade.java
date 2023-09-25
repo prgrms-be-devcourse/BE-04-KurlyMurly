@@ -11,15 +11,16 @@ import com.devcourse.kurlymurly.module.product.service.ProductQuery;
 import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
 import com.devcourse.kurlymurly.module.product.service.ReviewQuery;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.web.dto.ListPagingResponse;
-import com.devcourse.kurlymurly.web.dto.product.CreateProduct;
-import com.devcourse.kurlymurly.web.dto.product.favorite.GetFavorite;
-import com.devcourse.kurlymurly.web.dto.product.review.CreateReview;
+import com.devcourse.kurlymurly.web.dto.product.ProductRequest;
+import com.devcourse.kurlymurly.web.dto.product.ProductResponse;
+import com.devcourse.kurlymurly.web.dto.product.favorite.FavoriteResponse;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewRequest;
 import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
-import com.devcourse.kurlymurly.web.dto.product.review.UpdateReview;
-import com.devcourse.kurlymurly.web.dto.product.support.SupportProduct;
+import com.devcourse.kurlymurly.web.dto.product.support.SupportRequest;
+import com.devcourse.kurlymurly.web.dto.product.support.SupportResponse;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,24 +55,38 @@ public class ProductFacade {
         this.imageService = imageService;
     }
 
-    public ListPagingResponse<GetFavorite.Response> getUserFavorites(Long userId) {
-        List<GetFavorite.Response> responses = productQuery.getAllFavoritesByUserId(userId).stream()
-                .map(productMapper::toFavoriteResponse)
-                .toList();
-
-        return new ListPagingResponse<>(responses);
+    public List<FavoriteResponse.Get> getUserFavorites(Long userId) {
+        return productQuery.getAllFavoritesByUserId(userId);
     }
 
     // todo : user api
-    public Slice<SupportProduct.Response> getAllMySupports(Long userId, Long lastId) {
+    public Slice<SupportResponse.Create> getAllMySupports(Long userId, Long lastId) {
         return productQuery.getTenSupportsOfUserPageFromLastId(userId, lastId)
                 .map(productMapper::toSupportResponse);
     }
 
+    public Page<ProductResponse.GetSimple> loadProductPageResponse(
+            Long categoryId,
+            @Valid Pageable pageable
+    ) {
+        return productQuery.getProductsPageOfCategory(categoryId, pageable);
+    }
+
+    public Slice<ReviewResponse.OfProduct> loadReviewsOfProduct(
+            Long productId,
+            @Valid ReviewRequest.OfProduct request
+    ) {
+        return reviewQuery.getReviewsOfProduct(productId, request.start());
+    }
+
+    public List<ReviewResponse.Reviewed> loadReviewsOfUser(Long userId) {
+        return reviewQuery.getAllReviewsOfUser(userId);
+    }
+
     // admin
-    public CreateProduct.Response createProduct(
+    public ProductResponse.Create createProduct(
             MultipartFile image,
-            @Valid CreateProduct.Request request
+            @Valid ProductRequest.Create request
     ) {
         ProductDomain productDomain = productMapper.toProductDomain(request);
         String imageUrl = imageService.upload(image);
@@ -80,35 +95,33 @@ public class ProductFacade {
         return productMapper.toCreateProductResponse(request);
     }
 
-    public void createProductSupport(Long userId, Long productId,
-                                     @Valid SupportProduct.Request request) {
+    public void createProductSupport(
+            Long userId,
+            Long productId,
+            @Valid SupportRequest.Create request
+    ) {
         SupportDomain supportDomain = productMapper.toSupportDomain(request);
         productCommand.createSupport(userId, productId, supportDomain);
     }
 
-    public void updateProductSupport(Long userId, Long supportId,
-                                     @Valid SupportProduct.Request request) { // todo : 업데이트 객체 분리
+    public void updateProductSupport(
+            Long userId,
+            Long supportId,
+            @Valid SupportRequest.Update request
+    ) {
         SupportDomain supportDomain = productMapper.toSupportDomain(request);
         productCommand.updateSupport(userId, supportId, supportDomain);
     }
 
-    public void registerReview(User user, @Valid CreateReview.Request request) {
+    public void registerReview(
+            User user,
+            @Valid ReviewRequest.Create request
+    ) {
         Product product = productQuery.findProductByIdOrThrow(request.productId());
         product.validateSupportable();
 
         reviewCommand.create(user, product, request.content(), request.isSecret());
         orderService.reviewOrderItem(request.orderId(), request.productId());
-    }
-
-    public Slice<ReviewResponse.ReviewOfProduct> loadReviewsOfProduct(Long productId, @Valid ReviewRequest.OfProduct request) {
-        return reviewQuery.getReviewsOfProduct(productId, request.start())
-                .map(productMapper::toReviewOfProductResponse);
-    }
-
-    public List<ReviewResponse.Reviewed> loadReviewsOfUser(Long userId) {
-        return reviewQuery.getAllReviewsOfUser(userId).stream()
-                .map(productMapper::toReviewedResponse)
-                .toList();
     }
 
     public void favoriteProduct(Long userId, Long productId) {
@@ -119,7 +132,11 @@ public class ProductFacade {
         productCommand.cancelFavorite(userId, productId);
     }
 
-    public void updateReview(Long userId, Long reviewId, @Valid UpdateReview.Request request) {
+    public void updateReview(
+            Long userId,
+            Long reviewId,
+            @Valid ReviewRequest.Update request
+    ) {
         reviewCommand.update(userId, reviewId, request.content(), request.isSecret());
     }
 

@@ -1,9 +1,9 @@
-package com.devcourse.kurlymurly.web.dto.product;
+package com.devcourse.kurlymurly.web.dto.user.cart;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
-import static com.devcourse.kurlymurly.web.dto.product.UpdateCart.Request;
+import static com.devcourse.kurlymurly.web.dto.user.cart.UpdateCart.Request;
 
 public sealed interface UpdateCart permits Request {
     record Request(
