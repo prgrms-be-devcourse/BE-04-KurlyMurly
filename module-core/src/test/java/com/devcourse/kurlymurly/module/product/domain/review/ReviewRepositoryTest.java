@@ -1,19 +1,18 @@
 package com.devcourse.kurlymurly.module.product.domain.review;
-
+import com.devcourse.kurlymurly.module.auth.AuthRepository;
 import com.devcourse.kurlymurly.module.product.ProductFixture;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
 import com.devcourse.kurlymurly.module.user.UserFixture;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.module.user.domain.UserRepository;
-import com.devcourse.kurlymurly.web.product.ReviewResponse;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import com.devcourse.kurlymurly.module.auth.AuthRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Slice;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +40,7 @@ class ReviewRepositoryTest {
 
     @BeforeEach
     void setup() {
-        user = userRepository.save(UserFixture.USER_FIXTURE.toEntity());
+        user = authRepository.save(UserFixture.USER_FIXTURE.toEntity());
         product = productRepository.save(ProductFixture.LA_GOGI.toEntity());
     }
 
@@ -67,6 +66,7 @@ class ReviewRepositoryTest {
     }
 
     @Test
+    @DisplayName("마지막 번호부터 상품에 대한 10건의 리뷰를 가져올 수 있어야한다.")
     void getTenReviewsOfProductFromStart_Success() {
         // given
         Review review = reviewRepository.save(REVIEW_FIXTURE.toEntity(user, product));

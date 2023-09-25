@@ -62,12 +62,6 @@ public class MemberService {
         User user = authRepository.findById(userId)
                 .orElseThrow(() -> KurlyBaseException.withId(NOT_EXISTS_USER, userId));
 
-        boolean notCorrectPassword = !user.validatePassword(request.currentPassword(), passwordEncoder);
-
-        if (notCorrectPassword) {
-            throw new KurlyBaseException(NOT_CORRECT_PASSWORD);
-        }
-
         updateUserInfo(request, user);
     }
 

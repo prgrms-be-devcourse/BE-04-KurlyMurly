@@ -297,19 +297,6 @@ class MemberServiceTest {
             // Then
             assertThrows(KurlyBaseException.class, () -> memberService.findUpdateUser(1L, request));
         }
-
-        @Test
-        @DisplayName("현재 비밀번호가 일치하지 않으면 예외를 던짐")
-        void update_user_ByNotCorrectPassword() {
-            // Given
-            UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
-                    , "sehan", "murly@kurly.com", "01012221212", "male", null);
-
-            doReturn(Optional.of(user)).when(authRepository).findById(any());
-
-            // When,Then
-            assertThrows(KurlyBaseException.class, () -> memberService.findUpdateUser(1L, request));
-        }
     }
 
     @Nested
