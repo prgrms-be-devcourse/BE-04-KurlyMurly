@@ -67,6 +67,7 @@ class ReviewRepositoryTest {
     }
 
     @Test
+    @DisplayName("마지막 번호부터 상품에 대한 10건의 리뷰를 가져올 수 있어야한다.")
     void getTenReviewsOfProductFromStart_Success() {
         // given
         Review review = reviewRepository.save(REVIEW_FIXTURE.toEntity(user, product));

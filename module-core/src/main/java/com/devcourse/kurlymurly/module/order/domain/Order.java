@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.module.order.domain;
 
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.BaseEntity;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -16,7 +17,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+
+import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_OWNER;
 
 @Entity
 @Table(name = "orders")
@@ -81,7 +85,7 @@ public class Order extends BaseEntity {
 
     public void toCancel() {
         this.status = Status.CANCELED;
-        this.orderState = orderState.cancel();
+        //this.orderState = orderState.cancel();
     }
 
     private String generateOrderNumber() {
@@ -125,9 +129,19 @@ public class Order extends BaseEntity {
     }
 
     public String getSimpleProducts() {
+        if(orderItems.size() == 1) {
+            return orderItems.get(0).getProductName();
+        }
+
         String productName = orderItems.get(0).getProductName() + " 외 " ;
         int size = orderItems.size() - 1;
 
         return productName + size + "건";
+    }
+
+    public void validateOrdersOwner(Long userId) {
+        if (!Objects.equals(this.userId, userId)) {
+            throw KurlyBaseException.withId(NOT_OWNER, userId);
+        }
     }
 }

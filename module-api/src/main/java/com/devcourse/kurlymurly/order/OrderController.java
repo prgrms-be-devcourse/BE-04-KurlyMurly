@@ -34,7 +34,7 @@ public class OrderController {
     }
 
     @Tag(name = "order")
-    @Operation(description = "[토큰 필요] 유저의 주문을 생성한다.", responses = {
+    @Operation(summary = "[토큰] 주문 생성", description = "[토큰 필요] 유저의 주문을 생성한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 주문을 생성한 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
@@ -49,8 +49,8 @@ public class OrderController {
     }
 
     @Tag(name = "order")
-    @Operation(description = "주문 id로 주문 상세정보를 조회한다.", responses = {
-            @ApiResponse(responseCode = "200", description = "성공적으로 주문을 조회한 경우"),
+    @Operation(summary = "주문서 상세정보 조회", description = "주문 id로 주문 상세정보를 조회한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 주문을 상세하게 조회한 경우"),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 주문일 경우")
     })
     @GetMapping("/{id}")
@@ -61,8 +61,8 @@ public class OrderController {
     }
 
     @Tag(name = "order")
-    @Operation(description = "[토큰 필요] 해당 유저의 주문 내역을 간단한 정보로 조회한다.", responses = {
-            @ApiResponse(responseCode = "200", description = "성공적으로 주문을 조회한 경우"),
+    @Operation(summary = "[토큰] 주문 내역 간단히 조회", description = "[토큰 필요] 해당 유저의 주문 내역을 간단한 정보로 조회한다.", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 주문 내역을 간단하게 조회한 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
     })
     @GetMapping
@@ -73,11 +73,12 @@ public class OrderController {
     }
 
     @Tag(name = "order")
-    @Operation(description = "[토큰 필요] 해당 주문의 주인인 유저가 주문을 취소한다.", responses = {
+    @Operation(summary = "[토큰] 주문 취소", description = "[토큰 필요] 사용자가 주문을 취소한다.", responses = {
             @ApiResponse(responseCode = "200", description = "성공적으로 주문을 취소한 경우"),
             @ApiResponse(responseCode = "400", description = "주문 id를 명시하지 않은 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
-            @ApiResponse(responseCode = "404", description = "존재하지 않는 주문일 경우")
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 주문일 경우"),
+            @ApiResponse(responseCode = "409", description = "주문자가 아닌 경우")
     })
     @PatchMapping("/{id}")
     @ResponseStatus(OK)
