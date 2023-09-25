@@ -12,9 +12,9 @@ import jakarta.persistence.Table;
 @Table(name = "payments")
 public class Payment extends BaseEntity {
 
-    public enum Type { CREDIT, EASY }
+    public enum Type {CREDIT, EASY}
 
-    public enum Status { DEFAULT, NORMAL, EXPIRED, DELETED }
+    public enum Status {DEFAULT, NORMAL, EXPIRED, DELETED}
 
     @Column(nullable = false)
     private Long userId;
@@ -40,20 +40,20 @@ public class Payment extends BaseEntity {
     protected Payment() {
     }
 
-    public Payment(Long userId, String payInfo, CreditInfo creditInfo) {
+    private Payment(Long userId, String payInfo, Type type, Status status) {
         this.userId = userId;
         this.payInfo = payInfo;
+        this.type = type;
+        this.status = status;
+    }
+
+    public Payment(Long userId, String payInfo, CreditInfo creditInfo) {
+        this(userId, payInfo, Type.CREDIT, Status.NORMAL);
         this.creditInfo = creditInfo;
-        this.type = Payment.Type.CREDIT;
-        this.status = Status.NORMAL;
     }
 
     public Payment(Long userId, String payInfo) {
-        this.userId = userId;
-        this.payInfo = payInfo;
-        this.type = Payment.Type.EASY;
-        this.status = Status.NORMAL;
-        this.creditInfo = new CreditInfo();
+        this(userId, payInfo, Type.EASY, Status.NORMAL);
     }
 
     public void deletePayment() {
