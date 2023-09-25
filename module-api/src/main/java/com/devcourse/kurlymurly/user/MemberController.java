@@ -57,7 +57,6 @@ public class MemberController {
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 개인정보 수정 API", responses = {
             @ApiResponse(responseCode = "200", description = "개인정보를 성공적으로 수정한 경우"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "400", description = "재확인 비밀번호가 일치하지 않는 경우"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "해당 유저가 조회되지 않는 경우"),
@@ -83,7 +82,6 @@ public class MemberController {
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 도로명 주소 등록 API", responses = {
             @ApiResponse(responseCode = "200", description = "주소를 성공적으로 추가한 경우"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PostMapping("/shipping")
@@ -99,7 +97,6 @@ public class MemberController {
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 주소 목록 조회 API", responses = {
             @ApiResponse(responseCode = "200", description = "유저가 등록한 주소들을 조회"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @GetMapping("/shipping/list")
@@ -112,7 +109,6 @@ public class MemberController {
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 주소 수정 API", responses = {
             @ApiResponse(responseCode = "200", description = "주소를 성공적으로 수정한 경우"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "수정할 주소가 조회되지 않을 경우")
     })
@@ -126,7 +122,6 @@ public class MemberController {
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 배송 요청사항 설정 API", responses = {
             @ApiResponse(responseCode = "200", description = "요청사항을 성공적으로 수정한 경우"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "요청사항을 추가할 주소가 조회되지 않을 경우")
     })
@@ -140,7 +135,6 @@ public class MemberController {
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 주소 삭제 API", responses = {
             @ApiResponse(responseCode = "200", description = "해당 주소를 삭제한 경우"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "삭제할 주소가 조회되지 않을 경우")
     })
@@ -154,7 +148,6 @@ public class MemberController {
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 신용카드 등록 API", responses = {
             @ApiResponse(responseCode = "200", description = "신용카드를 성공적으로 등록한 경우"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PostMapping("/register-credit")
@@ -170,7 +163,6 @@ public class MemberController {
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 간편결제 등록 API", responses = {
             @ApiResponse(responseCode = "200", description = "간편 결제수단을 성공적으로 등록한 경우"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @PostMapping("/register-easy")
@@ -186,9 +178,7 @@ public class MemberController {
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 결제수단 목록 조회 API", responses = {
             @ApiResponse(responseCode = "200", description = "결제수단 정보 목록을 성공적으로 조회한 경우"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
-            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
-            @ApiResponse(responseCode = "404", description = "결제수단 정보들이 조회되지 않은 경우")
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우")
     })
     @GetMapping("/payment/list")
     @ResponseStatus(OK)
@@ -200,7 +190,6 @@ public class MemberController {
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 결제 수단 삭제 API", responses = {
             @ApiResponse(responseCode = "200", description = "결제수단을 성공적으로 삭제한 경우"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "삭제할 결제수단 정보가 조회되지 않은 경우")
     })
@@ -215,7 +204,6 @@ public class MemberController {
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 결제 비밀번호 설정 API", responses = {
             @ApiResponse(responseCode = "200", description = "결제수단을 성공적으로 삭제한 경우"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않은 경우"),
             @ApiResponse(responseCode = "404", description = "회원이 조회되지 않는 경우")
     })
