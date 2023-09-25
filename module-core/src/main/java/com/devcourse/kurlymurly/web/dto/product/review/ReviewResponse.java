@@ -1,5 +1,7 @@
 package com.devcourse.kurlymurly.web.dto.product.review;
 
+import com.devcourse.kurlymurly.module.user.domain.User;
+
 import java.time.LocalDateTime;
 
 import static com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse.ReviewOfProduct;
@@ -17,6 +19,7 @@ public sealed interface ReviewResponse permits Reviewable, Reviewed, ReviewOfPro
     }
 
     record Reviewed(
+            Long reviewId,
             Long productId,
             String productName,
             String content,
@@ -27,10 +30,10 @@ public sealed interface ReviewResponse permits Reviewable, Reviewed, ReviewOfPro
     }
 
     record ReviewOfProduct(
-            Long productId,
-            String productName,
             String userName,
-            String userTier,
+            User.Tier tier,
+            String productName,
+            Long reviewId,
             String content,
             Integer likes,
             LocalDateTime createdAt,

@@ -28,7 +28,7 @@ class ProductRepositoryTest {
     void loadProductsByCategory_Success() {
         // given
         Long categoryId = 1L;
-        KurlyPagingRequest pagingRequest = new KurlyPagingRequest(0, null);
+        KurlyPagingRequest pagingRequest = new KurlyPagingRequest(1, null);
         Pageable request = pagingRequest.toPageable();
 
         // when

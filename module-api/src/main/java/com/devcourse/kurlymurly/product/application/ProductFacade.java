@@ -121,14 +121,11 @@ public class ProductFacade {
     }
 
     public Slice<ReviewResponse.ReviewOfProduct> loadReviewsOfProduct(Long productId, @Valid ReviewRequest.OfProduct request) {
-        return reviewQuery.getReviewsOfProduct(productId, request.start())
-                .map(productMapper::toReviewOfProductResponse);
+        return reviewQuery.getReviewsOfProduct(productId, request.start());
     }
 
     public List<ReviewResponse.Reviewed> loadReviewsOfUser(Long userId) {
-        return reviewQuery.getAllReviewsOfUser(userId).stream()
-                .map(productMapper::toReviewedResponse)
-                .toList();
+        return reviewQuery.getAllReviewsOfUser(userId);
     }
 
     public void favoriteProduct(Long userId, Long productId) {
