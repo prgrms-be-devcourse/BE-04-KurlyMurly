@@ -4,7 +4,7 @@ import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.user.ShippingFixture;
 import com.devcourse.kurlymurly.module.user.UserFixture;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.module.user.domain.UserRepository;
+import com.devcourse.kurlymurly.module.auth.AuthRepository;
 import com.devcourse.kurlymurly.module.user.domain.cart.Cart;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
 import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
@@ -44,12 +44,12 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class MemberServiceTest {
     @InjectMocks
-    private UserService userService;
+    private MemberService memberService;
 
     @Mock
-    private UserRepository userRepository;
+    private AuthRepository authRepository;
 
     @Mock
     private PaymentRepository paymentRepository;
@@ -68,60 +68,6 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
         user = UserFixture.USER_FIXTURE.toEntity();
-    }
-
-    @Nested
-    @DisplayName("회원가입 테스트")
-    class join {
-        private static Join.Request JoinRequest;
-
-        @BeforeEach
-        void setUp() {
-            JoinRequest = new Join.Request("murly1234", "kurly111", "kurly111", "sehan", "kurly@murly.com", "01094828438"
-                    , "male", null, "dd", "경기도 구성로");
-        }
-
-        @Test
-        @DisplayName("회원가입 완료 테스트")
-        void join() {
-            // Given
-            doReturn(user).when(userRepository).save(any());
-            doReturn("encryptedPassword").when(passwordEncoder).encode(any());
-
-            // When
-            userService.join(JoinRequest);
-        }
-
-        @Test
-        @DisplayName("비밀번호가 서로 일차히지 않으면 예외를 던짐")
-        void join_fail_IllegalArgumentException() {
-            // Given
-            JoinRequest = new Join.Request("murly1234", "kurly111", "kurly1234", "sehan", "kurly@murly.com", "01094828438"
-                    , "male", null, "dd", "경기 구성로");
-
-            // When , Then
-            assertThrows(KurlyBaseException.class, () -> userService.join(JoinRequest));
-        }
-
-        @Test
-        @DisplayName("아이디가 중복되면 예외를 던짐")
-        void join_fail_id_ExistUserInfoException() {
-            // Given
-            doReturn(true).when(userRepository).existsByLoginId(any());
-
-            // Then
-            assertThrows(KurlyBaseException.class, () -> userService.join(JoinRequest));
-        }
-
-        @Test
-        @DisplayName("이메일이 중복되면 예외를 던짐")
-        void join_fail_email_ExistUserInfoException() {
-            // Given
-            doReturn(true).when(userRepository).existsByEmail(any());
-
-            // Then
-            assertThrows(KurlyBaseException.class, () -> userService.join(JoinRequest));
-        }
     }
 
     @Nested
@@ -163,7 +109,7 @@ class UserServiceTest {
             doReturn(List.of(shipping, shipping2)).when(shippingRepository).findAllByUserId(any());
 
             // When
-            List<GetAddress.Response> addressList = userService.getAddress(1L);
+            List<GetAddress.Response> addressList = memberService.getAddress(1L);
 
             // Then
             assertThat(addressList.size()).isEqualTo(2);
@@ -176,7 +122,7 @@ class UserServiceTest {
             doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
 
             // When
-            userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000");
+            memberService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000");
 
             // Then
             then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
@@ -189,7 +135,7 @@ class UserServiceTest {
             doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
 
             // When
-            userService.updateAddressInfo(1L, 1L, "세한", "01000000000", "DOOR", "1234", "ALWAYS");
+            memberService.updateAddressInfo(1L, 1L, "세한", "01000000000", "DOOR", "1234", "ALWAYS");
             // Then
             then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
         }
@@ -201,7 +147,7 @@ class UserServiceTest {
             doReturn(Optional.empty()).when(shippingRepository).findByIdAndUserId(any(), any());
 
             // When , Then
-            assertThrows(KurlyBaseException.class, () -> userService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000"));
+            assertThrows(KurlyBaseException.class, () -> memberService.updateAddress(1L, 1L, "멀리단길", "regyu jo", "01000000000"));
         }
 
         @Test
@@ -211,7 +157,7 @@ class UserServiceTest {
             doReturn(Optional.of(shipping)).when(shippingRepository).findByIdAndUserId(any(), any());
 
             // When
-            userService.deleteAddress(1L, 1L);
+            memberService.deleteAddress(1L, 1L);
 
             // Then
             then(shippingRepository).should(times(1)).findByIdAndUserId(any(), any());
@@ -231,7 +177,7 @@ class UserServiceTest {
             RegisterPayment.creditRequest request = new RegisterPayment.creditRequest("12341234", "hana", null, "53");
 
             // When
-            userService.addCredit(1L, request);
+            memberService.addCredit(1L, request);
 
             // Then
             then(paymentRepository).should(times(1)).save(any());
@@ -244,7 +190,7 @@ class UserServiceTest {
             RegisterPayment.easyPayRequest request = new RegisterPayment.easyPayRequest("12341234", "hana");
 
             // when
-            userService.addEasyPay(1L, request);
+            memberService.addEasyPay(1L, request);
 
             // then
             then(paymentRepository).should(times(1)).save(any());
@@ -256,11 +202,11 @@ class UserServiceTest {
             // Given
             Payment payment = new Payment(1L, null);
 
-            doReturn(List.of(payment)).when(paymentRepository).findAllByUserIdAndStatus(1L);
-            userService.getPayments(1L);
+            doReturn(List.of(payment)).when(paymentRepository).findAllByUserId(1L);
+            memberService.getPayments(1L);
 
             // then
-            then(paymentRepository).should(times(1)).findAllByUserIdAndStatus(any());
+            then(paymentRepository).should(times(1)).findAllByUserId(any());
         }
 
         @Test
@@ -272,7 +218,7 @@ class UserServiceTest {
             doReturn(Optional.of(payment)).when(paymentRepository).findByUserIdAndId(1L, 1L);
 
             // When
-            userService.deletePayment(1L, 1L);
+            memberService.deletePayment(1L, 1L);
 
             // Then
             then(paymentRepository).should(times(1)).findByUserIdAndId(any(), any());
@@ -285,7 +231,7 @@ class UserServiceTest {
             doReturn(Optional.empty()).when(paymentRepository).findByUserIdAndId(any(), any());
 
             // Then
-            assertThrows(KurlyBaseException.class, () -> userService.deletePayment(1L, 1L));
+            assertThrows(KurlyBaseException.class, () -> memberService.deletePayment(1L, 1L));
         }
 
         @Test
@@ -294,13 +240,13 @@ class UserServiceTest {
             // Given
             UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
 
-            doReturn(Optional.of(user)).when(userRepository).findById(any());
+            doReturn(Optional.of(user)).when(authRepository).findById(any());
 
             // When
-            userService.updatePaymentPassword(1L, request.payPassword());
+            memberService.updatePaymentPassword(1L, request.payPassword());
 
             // Then
-            then(userRepository).should(times(1)).findById(any());
+            then(authRepository).should(times(1)).findById(any());
         }
 
         @Test
@@ -309,10 +255,10 @@ class UserServiceTest {
             // Given
             UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
 
-            doReturn(Optional.empty()).when(userRepository).findById(any());
+            doReturn(Optional.empty()).when(authRepository).findById(any());
 
             // When , Then
-            assertThrows(KurlyBaseException.class, () -> userService.updatePaymentPassword(1L, request.payPassword()));
+            assertThrows(KurlyBaseException.class, () -> memberService.updatePaymentPassword(1L, request.payPassword()));
         }
 
     }
@@ -333,10 +279,10 @@ class UserServiceTest {
         void update_user_password() {
             // Given
             doReturn(true).when(passwordEncoder).matches(any(), any());
-            doReturn(Optional.of(user)).when(userRepository).findById(any());
+            doReturn(Optional.of(user)).when(authRepository).findById(any());
 
             // When
-            userService.findUpdateUser(1L, request);
+            memberService.findUpdateUser(1L, request);
 
             // Then
             assertThat(user.validatePassword(request.password(),passwordEncoder)).isTrue();
@@ -346,10 +292,10 @@ class UserServiceTest {
         @DisplayName("해당 회원이 조회되지 않으면 예외를 던짐")
         void update_fail_notExistsUser() {
             // Given
-            doReturn(Optional.empty()).when(userRepository).findById(any());
+            doReturn(Optional.empty()).when(authRepository).findById(any());
 
             // Then
-            assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
+            assertThrows(KurlyBaseException.class, () -> memberService.findUpdateUser(1L, request));
         }
 
         @Test
@@ -359,10 +305,10 @@ class UserServiceTest {
             UpdateUser.Request request = new UpdateUser.Request("kurly1234", "murly1234", "murly1234"
                     , "sehan", "murly@kurly.com", "01012221212", "male", null);
 
-            doReturn(Optional.of(user)).when(userRepository).findById(any());
+            doReturn(Optional.of(user)).when(authRepository).findById(any());
 
             // When,Then
-            assertThrows(KurlyBaseException.class, () -> userService.findUpdateUser(1L, request));
+            assertThrows(KurlyBaseException.class, () -> memberService.findUpdateUser(1L, request));
         }
     }
 
@@ -379,7 +325,7 @@ class UserServiceTest {
             // given
 
             // when
-            userService.addCart(userId, productId, quantity);
+            memberService.addCart(userId, productId, quantity);
 
             // then
             then(cartRepository).should(times(1)).save(any());
@@ -395,8 +341,8 @@ class UserServiceTest {
             given(cartRepository.findById(any())).willReturn(Optional.of(cart));
 
             // when
-            userService.addCart(userId, productId, quantity);
-            userService.removeCartItem(1L);
+            memberService.addCart(userId, productId, quantity);
+            memberService.removeCartItem(1L);
 
             // then
             then(cartRepository).should(times(1)).save(any());
@@ -418,10 +364,10 @@ class UserServiceTest {
             given(cartRepository.findAllByUserId(any())).willReturn(List.of(cart3));
 
             // when
-            userService.addCart(userId, productId, quantity);
-            userService.addCart(userId, productId + 1, quantity);
-            userService.addCart(userId, productId + 2, quantity);
-            userService.removeCartItemList(request.cartIds());
+            memberService.addCart(userId, productId, quantity);
+            memberService.addCart(userId, productId + 1, quantity);
+            memberService.addCart(userId, productId + 2, quantity);
+            memberService.removeCartItemList(request.cartIds());
             List<Cart> carts = cartRepository.findAllByUserId(userId);
 
             // then
@@ -438,8 +384,8 @@ class UserServiceTest {
             given(cartRepository.findById(any())).willReturn(Optional.of(cart));
 
             // when
-            userService.addCart(userId, productId, quantity);
-            userService.changeItemQuantity(1L, true);
+            memberService.addCart(userId, productId, quantity);
+            memberService.changeItemQuantity(1L, true);
 
             // then
             then(cartRepository).should(times(1)).save(any());
@@ -455,8 +401,8 @@ class UserServiceTest {
             given(cartRepository.findById(any())).willReturn(Optional.of(cart));
 
             // when
-            userService.addCart(userId, productId, quantity);
-            userService.changeItemQuantity(1L, false);
+            memberService.addCart(userId, productId, quantity);
+            memberService.changeItemQuantity(1L, false);
 
             // then
             then(cartRepository).should(times(1)).save(any());
@@ -472,10 +418,10 @@ class UserServiceTest {
             given(cartRepository.findById(any())).willReturn(Optional.of(cart));
 
             // when, then
-            userService.addCart(userId, productId, quantity);
+            memberService.addCart(userId, productId, quantity);
             then(cartRepository).should(times(1)).save(any());
             assertThatExceptionOfType(KurlyBaseException.class)
-                    .isThrownBy(() -> userService.changeItemQuantity(1L, false));
+                    .isThrownBy(() -> memberService.changeItemQuantity(1L, false));
         }
 
 //        @Test
