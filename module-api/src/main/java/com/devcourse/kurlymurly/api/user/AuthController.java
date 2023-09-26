@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.api.user;
+package com.devcourse.kurlymurly.user;
 
 import com.devcourse.kurlymurly.module.auth.AuthService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;

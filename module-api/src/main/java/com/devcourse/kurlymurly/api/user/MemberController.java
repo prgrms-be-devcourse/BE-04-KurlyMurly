@@ -1,12 +1,10 @@
-package com.devcourse.kurlymurly.api.user;
+package com.devcourse.kurlymurly.user;
 
-<<<<<<<< HEAD:module-api/src/main/java/com/devcourse/kurlymurly/api/user/MemberController.java
+<<<<<<<< HEAD:module-api/src/main/java/com/devcourse/kurlymurly/user/MemberController.java
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.service.MemberService;
-========
-import com.devcourse.kurlymurly.module.user.service.UserService;
->>>>>>>> f50bbec ([KM-323] 수정:인증이 필요한 API들에 대해 컨트롤러 분리):module-api/src/main/java/com/devcourse/kurlymurly/user/UserController.java
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
+import com.devcourse.kurlymurly.web.dto.product.review.ReviewResponse;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.cart.CreateCart;
 import com.devcourse.kurlymurly.web.dto.user.cart.RemoveCart;
@@ -16,7 +14,14 @@ import com.devcourse.kurlymurly.web.dto.user.payment.UpdatePayPassword;
 import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
 import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import com.devcourse.kurlymurly.web.dto.user.shipping.UpdateAddress;
-import com.devcourse.kurlymurly.web.product.ReviewResponse;
+========
+import com.devcourse.kurlymurly.module.user.service.UserService;
+import com.devcourse.kurlymurly.web.common.KurlyResponse;
+import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
+import com.devcourse.kurlymurly.web.dto.user.CheckId;
+import com.devcourse.kurlymurly.web.dto.user.Join;
+import com.devcourse.kurlymurly.web.dto.user.Login;
+>>>>>>>> 87195d7 ([KM-323] 수정:인증이 필요한 API들에 대해 컨트롤러 분리):module-api/src/main/java/com/devcourse/kurlymurly/user/UserController.java
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,19 +35,21 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Tag(name = "member", description = "유저 API")
 @RestController
-<<<<<<<< HEAD:module-api/src/main/java/com/devcourse/kurlymurly/api/user/MemberController.java
+<<<<<<<< HEAD:module-api/src/main/java/com/devcourse/kurlymurly/user/MemberController.java
 @RequestMapping("/users")
 public class MemberController {
-    private final MemberService memberService;
 ========
 public class UserController {
     private final UserService userService;
->>>>>>>> f50bbec ([KM-323] 수정:인증이 필요한 API들에 대해 컨트롤러 분리):module-api/src/main/java/com/devcourse/kurlymurly/user/UserController.java
+>>>>>>>> 87195d7 ([KM-323] 수정:인증이 필요한 API들에 대해 컨트롤러 분리):module-api/src/main/java/com/devcourse/kurlymurly/user/UserController.java
+
+    private final MemberService memberService;
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
+<<<<<<<< HEAD:module-api/src/main/java/com/devcourse/kurlymurly/user/MemberController.java
     @Tag(name = "member")
     @GetMapping("/reviews")
     @ResponseStatus(OK)
@@ -51,7 +58,6 @@ public class UserController {
         return KurlyResponse.ok(responses);
     }
 
-<<<<<<<< HEAD:module-api/src/main/java/com/devcourse/kurlymurly/api/user/MemberController.java
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 개인정보 수정 API", responses = {
             @ApiResponse(responseCode = "200", description = "개인정보를 성공적으로 수정한 경우"),
@@ -67,6 +73,7 @@ public class UserController {
             @RequestBody @Valid UpdateUser.Request request
     ) {
         memberService.findUpdateUser(user.getId(), request);
+
         return KurlyResponse.noData();
     }
 
@@ -188,6 +195,7 @@ public class UserController {
     @ResponseStatus(OK)
     public KurlyResponse<Void> deletePayment(@AuthenticationPrincipal User user, @PathVariable Long paymentId) {
         memberService.deletePayment(user.getId(), paymentId);
+
         return KurlyResponse.noData();
     }
 
@@ -317,6 +325,6 @@ public class UserController {
     public KurlyResponse<Void> checkEmail(@RequestBody @Valid CheckEmail.Request request) {
         boolean result = userService.checkEmail(request.email());
         return KurlyResponse.ok(result);
->>>>>>>> f50bbec ([KM-323] 수정:인증이 필요한 API들에 대해 컨트롤러 분리):module-api/src/main/java/com/devcourse/kurlymurly/user/UserController.java
+>>>>>>>> 87195d7 ([KM-323] 수정:인증이 필요한 API들에 대해 컨트롤러 분리):module-api/src/main/java/com/devcourse/kurlymurly/user/UserController.java
     }
 }

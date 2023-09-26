@@ -24,4 +24,8 @@ public enum ReviewFixture {
     public Review toEntity(User user, Product product) {
         return new Review(user, product, content, isSecret);
     }
+
+    public CreateReview.Request toRequest() {
+        return new CreateReview.Request(1L, productId, content, isSecret);
+    }
 }

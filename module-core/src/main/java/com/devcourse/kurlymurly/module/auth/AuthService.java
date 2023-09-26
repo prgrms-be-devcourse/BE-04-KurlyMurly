@@ -32,8 +32,7 @@ public class AuthService {
             PasswordEncoder passwordEncoder,
             JwtTokenProvider tokenProvider,
             AuthenticationManagerBuilder authenticationManagerBuilder,
-            ShippingRepository shippingRepository
-    ) {
+            ShippingRepository shippingRepository) {
         this.authRepository = authRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;

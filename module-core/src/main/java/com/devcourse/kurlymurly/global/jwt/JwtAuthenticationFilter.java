@@ -1,5 +1,7 @@
 package com.devcourse.kurlymurly.global.jwt;
 
+import com.devcourse.kurlymurly.global.exception.ErrorCode;
+import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
