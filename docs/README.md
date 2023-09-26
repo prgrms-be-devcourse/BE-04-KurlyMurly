@@ -69,7 +69,7 @@
 [ERD 바로가기](https://www.erdcloud.com/d/f9HnabjuRZAvYufzS)
 
 ### 모듈 구조
-(삽입 예정)
+![img_5.png](img_5.png)
 
 ## 💜 컨벤션
 - 트렁크 기반 Git  
