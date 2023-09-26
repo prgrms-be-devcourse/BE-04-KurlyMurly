@@ -10,8 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -80,7 +80,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "존재하지 않는 주문일 경우"),
             @ApiResponse(responseCode = "409", description = "주문자가 아닌 경우")
     })
-    @PatchMapping("/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> cancelOrder(
             @AuthenticationPrincipal User user,
