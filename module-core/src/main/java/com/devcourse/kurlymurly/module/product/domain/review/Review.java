@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.product.domain.review;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.BaseEntity;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.user.domain.User;
@@ -13,8 +13,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.BAD_STATE_REVIEW;
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_AUTHOR;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.INORDERABLE_PRODUCT;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_AUTHOR;
 import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.BANNED;
 import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.BEST;
 import static com.devcourse.kurlymurly.module.product.domain.review.Review.Status.DELETED;
@@ -80,7 +80,7 @@ public class Review extends BaseEntity {
 
     private void validateInteractive() {
         if (this.status == DELETED || this.status == BANNED) {
-            throw KurlyBaseException.withId(BAD_STATE_REVIEW, this.getId());
+            throw KurlyBaseException.withId(INORDERABLE_PRODUCT, this.getId());
         }
     }
 

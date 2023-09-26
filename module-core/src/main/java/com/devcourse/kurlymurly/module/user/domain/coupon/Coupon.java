@@ -9,7 +9,7 @@ import jakarta.persistence.Transient;
 @Entity
 @Table(name = "coupons")
 public class Coupon extends BaseEntity {
-    public enum CouponStatus { NORMAL,EXPIRED,USED }
+    public enum CouponStatus {NORMAL, EXPIRED, USED}
 
     @Column(nullable = false)
     private Long userId;

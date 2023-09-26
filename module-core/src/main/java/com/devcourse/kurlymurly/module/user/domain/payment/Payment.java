@@ -11,7 +11,6 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "payments")
 public class Payment extends BaseEntity {
-
     public enum Type {CREDIT, EASY}
 
     public enum Status {DEFAULT, NORMAL, EXPIRED, DELETED}

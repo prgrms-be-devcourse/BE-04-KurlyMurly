@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.product.service;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
@@ -12,7 +12,7 @@ import com.devcourse.kurlymurly.module.product.domain.support.ProductSupportRepo
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NEVER_FAVORITE;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NEVER_FAVORITE;
 
 @Component
 @Transactional
@@ -71,6 +71,7 @@ public class ProductCommand {
     public void favoriteProduct(Long userId, Long productId) {
         Favorite favorite = favoriteRepository.findByUserIdAndProductId(userId, productId)
                 .orElseGet(() -> createFavorite(userId, productId));
+
         favorite.activate();
     }
 
@@ -83,6 +84,7 @@ public class ProductCommand {
     public void cancelFavorite(Long userId, Long productId) {
         Favorite favorite = favoriteRepository.findByUserIdAndProductId(userId, productId)
                 .orElseThrow(() -> new KurlyBaseException(NEVER_FAVORITE));
+
         favorite.softDelete();
     }
 }

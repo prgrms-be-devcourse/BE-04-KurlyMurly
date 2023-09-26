@@ -1,7 +1,6 @@
 package com.devcourse.kurlymurly.module.user.domain.shipping;
 
 import com.devcourse.kurlymurly.module.BaseEntity;
-import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

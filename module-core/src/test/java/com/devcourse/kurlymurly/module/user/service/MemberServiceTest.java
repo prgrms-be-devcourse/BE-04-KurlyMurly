@@ -1,10 +1,10 @@
 package com.devcourse.kurlymurly.module.user.service;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.user.ShippingFixture;
 import com.devcourse.kurlymurly.module.user.UserFixture;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.module.auth.AuthRepository;
+import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.cart.Cart;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
 import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
@@ -12,7 +12,6 @@ import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.user.cart.RemoveCart;
-import com.devcourse.kurlymurly.web.dto.user.Join;
 import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
 import com.devcourse.kurlymurly.web.dto.user.payment.RegisterPayment;
 import com.devcourse.kurlymurly.web.dto.user.payment.UpdatePayPassword;
@@ -47,7 +46,7 @@ class MemberServiceTest {
     private MemberService memberService;
 
     @Mock
-    private AuthRepository authRepository;
+    private UserRepository userRepository;
 
     @Mock
     private PaymentRepository paymentRepository;
@@ -238,13 +237,13 @@ class MemberServiceTest {
             // Given
             UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
 
-            doReturn(Optional.of(user)).when(authRepository).findById(any());
+            doReturn(Optional.of(user)).when(userRepository).findById(any());
 
             // When
             memberService.updatePaymentPassword(1L, request.payPassword());
 
             // Then
-            then(authRepository).should(times(1)).findById(any());
+            then(userRepository).should(times(1)).findById(any());
         }
 
         @Test
@@ -253,7 +252,7 @@ class MemberServiceTest {
             // Given
             UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
 
-            doReturn(Optional.empty()).when(authRepository).findById(any());
+            doReturn(Optional.empty()).when(userRepository).findById(any());
 
             // When , Then
             assertThrows(KurlyBaseException.class, () -> memberService.updatePaymentPassword(1L, request.payPassword()));
@@ -277,7 +276,7 @@ class MemberServiceTest {
         void update_user_password() {
             // Given
             doReturn(true).when(passwordEncoder).matches(any(), any());
-            doReturn(Optional.of(user)).when(authRepository).findById(any());
+            doReturn(Optional.of(user)).when(userRepository).findById(any());
 
             // When
             memberService.findUpdateUser(1L, request);
@@ -290,7 +289,7 @@ class MemberServiceTest {
         @DisplayName("해당 회원이 조회되지 않으면 예외를 던짐")
         void update_fail_notExistsUser() {
             // Given
-            doReturn(Optional.empty()).when(authRepository).findById(any());
+            doReturn(Optional.empty()).when(userRepository).findById(any());
 
             // Then
             assertThrows(KurlyBaseException.class, () -> memberService.findUpdateUser(1L, request));

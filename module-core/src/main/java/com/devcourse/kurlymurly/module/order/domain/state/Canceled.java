@@ -1,8 +1,8 @@
-package com.devcourse.kurlymurly.module.order.domain;
+package com.devcourse.kurlymurly.module.order.domain.state;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.CANCELED_ORDER;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.CANCELED_ORDER;
 
 public class Canceled implements OrderState {
     @Override

@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.module.order.domain;
+package com.devcourse.kurlymurly.module.order.domain.state;
 
 public class Processing implements OrderState {
     @Override

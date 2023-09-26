@@ -1,11 +1,11 @@
 package com.devcourse.kurlymurly.module.product.service;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.category.CategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.CATEGORY_NOT_FOUND;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.CATEGORY_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)

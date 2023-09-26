@@ -1,7 +1,7 @@
 dependencies {
     implementation project(":kurly-core")
 
-    api 'org.springframework.boot:spring-boot-starter-security'
+    implementation("org.springframework.security:spring-security-crypto:6.1.2")
     api 'org.springframework.boot:spring-boot-starter-validation'
 
     // db
@@ -9,23 +9,9 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     runtimeOnly 'com.h2database:h2'
 
-    // jasypt
-    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
-
     // swagger
     api 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
-
-    // jwt
-    implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
-    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
-
-    // test
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.assertj:assertj-core:3.24.2'
 }
 
 bootJar.enabled=false
 jar.enabled=true
-

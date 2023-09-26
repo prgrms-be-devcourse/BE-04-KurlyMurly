@@ -1,8 +1,7 @@
-package com.devcourse.kurlymurly.global.jwt;
+package com.devcourse.kurlymurly.auth.jwt;
 
-import com.devcourse.kurlymurly.global.exception.ErrorCode;
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
-import com.devcourse.kurlymurly.global.service.CustomUserDetailService;
+import com.devcourse.kurlymurly.auth.CustomUserDetailService;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -27,17 +26,25 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.EXPIRED_JWT_TOKEN;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_AUTHORIZED_TOKEN;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_CORRECT_JWT;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_CORRECT_JWT_SIGN;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_SUPPORTED_JWT_TOKEN;
+
 @Component
-public class JwtTokenProvider {
-    private static final Logger log = LoggerFactory.getLogger(JwtTokenProvider.class);
-    private static final long expiration = 30 * 60 * 1000L;
+public class JwtProvider {
+    private static final Logger log = LoggerFactory.getLogger(JwtProvider.class);
+    private static final long EXPIRATION_TIME = 30 * 60 * 1000L;
+    private static final String AUTHORITY = "authority";
 
     private final Key key;
     private final CustomUserDetailService userDetailService;
 
-    public JwtTokenProvider(
+    public JwtProvider(
             @Value("${secret-key}") String secretKey,
-            CustomUserDetailService userDetailService) {
+            CustomUserDetailService userDetailService
+    ) {
         byte[] secretByteKey = DatatypeConverter.parseBase64Binary(secretKey);
         this.key = Keys.hmacShaKeyFor(secretByteKey);
         this.userDetailService = userDetailService;
@@ -50,33 +57,29 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim("authority", authorities)
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .claim(AUTHORITY, authorities)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaims(accessToken);
-        String username = extractUsername(claims);
+        String username = claims.getSubject();
         Collection<? extends GrantedAuthority> authorities = getAuthority(claims);
 
         UserDetails user = userDetailService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(user, null, authorities);
     }
 
-    private String extractUsername(Claims claims) {
-        return claims.getSubject();
-    }
-
     private Collection<? extends GrantedAuthority> getAuthority(Claims claims) {
         try {
-            String[] authorities = claims.get("authority").toString().split(",");
+            String[] authorities = claims.get(AUTHORITY).toString().split(",");
             return Arrays.stream(authorities)
                     .map(SimpleGrantedAuthority::new)
                     .toList();
         } catch (KurlyBaseException e) {
-            throw new KurlyBaseException(ErrorCode.NOT_AUTHORIZED_TOKEN);
+            throw new KurlyBaseException(NOT_AUTHORIZED_TOKEN);
         }
     }
 
@@ -86,13 +89,13 @@ public class JwtTokenProvider {
                 Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
                 return true;
             } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-                log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_CORRECT_JWT_SIGN);
+                log.warn("JWT Exception Occurs : {}", NOT_CORRECT_JWT_SIGN);
             } catch (ExpiredJwtException e) {
-                log.warn("JWT Exception Occurs : {}", ErrorCode.EXPIRED_JWT_TOKEN);
+                log.warn("JWT Exception Occurs : {}", EXPIRED_JWT_TOKEN);
             } catch (UnsupportedJwtException e) {
-                log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_SUPPORTED_JWT_TOKEN);
+                log.warn("JWT Exception Occurs : {}", NOT_SUPPORTED_JWT_TOKEN);
             } catch (IllegalArgumentException e) {
-                log.warn("JWT Exception Occurs : {}", ErrorCode.NOT_CORRECT_JWT);
+                log.warn("JWT Exception Occurs : {}", NOT_CORRECT_JWT);
             }
         }
 

@@ -7,7 +7,6 @@ import java.util.Date;
 @Embeddable
 public class CreditInfo {
     private Date expiredDate;
-
     private String password;
 
     protected CreditInfo() {

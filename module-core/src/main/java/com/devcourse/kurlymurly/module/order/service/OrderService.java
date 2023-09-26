@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.order.service;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.order.domain.Order;
 import com.devcourse.kurlymurly.module.order.domain.OrderItem;
 import com.devcourse.kurlymurly.module.order.domain.OrderRepository;
@@ -11,16 +11,15 @@ import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
 import com.devcourse.kurlymurly.web.dto.order.CreateOrderItem;
 import com.devcourse.kurlymurly.web.dto.order.GetOrderResponse;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PAY_PASSWORD;
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_ORDER;
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_ORDER_HOST;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_CORRECT_PAY_PASSWORD;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.ORDER_NOT_FOUND;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_ORDER_HOST;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,11 +27,9 @@ public class OrderService {
     private static final int REVIEWABLE_DEADLINE = 30;
 
     private final OrderRepository orderRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public OrderService(OrderRepository orderRepository, PasswordEncoder passwordEncoder) {
+    public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -43,15 +40,14 @@ public class OrderService {
 
     @Transactional
     public CreateOrder.Response createOrder(User user, CreateOrder.Request request) {
-        boolean validatePayPassword = user.validatePayPassword(request.payPassword(), passwordEncoder);
-
-        if(validatePayPassword) {
-            Order order = toOrder(user.getId(), request);
-            orderRepository.save(order);
-
-            return new CreateOrder.Response(request.address(), order.getOrderNumber(), order.getActualPayAmount());
-        }
-
+        // todo: seperate layer
+//        if (user.validatePayPassword(request.payPassword(), passwordEncoder)) {
+//            Order order = toOrder(user.getId(), request);
+//            orderRepository.save(order);
+//
+//            return new CreateOrder.Response(request.address(), order.getOrderNumber(), order.getActualPayAmount());
+//        }
+//
         throw new KurlyBaseException(NOT_CORRECT_PAY_PASSWORD);
     }
 
@@ -93,7 +89,7 @@ public class OrderService {
 
     public Order findByIdOrThrow(Long id) {
         return orderRepository.findById(id)
-                .orElseThrow(() -> new KurlyBaseException(NOT_FOUND_ORDER));
+                .orElseThrow(() -> new KurlyBaseException(ORDER_NOT_FOUND));
     }
 
     public List<GetOrderResponse.SimpleInfo> findOrderListSimpleFormByUserId(Long userId) {

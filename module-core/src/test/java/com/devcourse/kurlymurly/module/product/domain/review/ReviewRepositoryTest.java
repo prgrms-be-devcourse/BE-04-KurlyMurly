@@ -1,10 +1,11 @@
 package com.devcourse.kurlymurly.module.product.domain.review;
-import com.devcourse.kurlymurly.module.auth.AuthRepository;
+
 import com.devcourse.kurlymurly.module.product.ProductFixture;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
 import com.devcourse.kurlymurly.module.user.UserFixture;
 import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +28,7 @@ class ReviewRepositoryTest {
     private ReviewRepository reviewRepository;
 
     @Autowired
-    private AuthRepository authRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -40,7 +41,7 @@ class ReviewRepositoryTest {
 
     @BeforeEach
     void setup() {
-        user = authRepository.save(UserFixture.USER_FIXTURE.toEntity());
+        user = userRepository.save(UserFixture.USER_FIXTURE.toEntity());
         product = productRepository.save(ProductFixture.LA_GOGI.toEntity());
     }
 

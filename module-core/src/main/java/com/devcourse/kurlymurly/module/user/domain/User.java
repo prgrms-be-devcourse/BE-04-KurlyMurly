@@ -8,21 +8,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity implements UserDetails {
-
+public class User extends BaseEntity {
     public enum Role {ROLE_USER, ROLE_ADMIN}
 
     public enum UserStatus {CANCEL, NORMAL}
@@ -113,61 +106,24 @@ public class User extends BaseEntity implements UserDetails {
         return this.reward += totalReward;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(Role.ROLE_USER.name()));
-
-        return authorities;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return loginId;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public Tier getTier() {
-        return this.tier;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    public Role getRole() {
-        return role;
+    public boolean isNotAuthor(Long id) {
+        return !Objects.equals(this.getId(), id);
     }
 
     public String getMaskedUserName() {
         return this.name.replaceAll("(?<=.{1})", "*");
     }
 
-    public boolean isNotAuthor(Long id) {
-        return !Objects.equals(this.getId(), id);
+    public String getName() {
+        return name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public User.Role getRole() {
+        return this.role;
     }
 }
 

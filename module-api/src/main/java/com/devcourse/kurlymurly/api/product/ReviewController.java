@@ -4,7 +4,7 @@ import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.product.ReviewRequest;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import com.devcourse.kurlymurly.application.product.ProductFacade;
-import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.auth.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,10 +43,10 @@ public class ReviewController {
     @PostMapping
     @ResponseStatus(OK) // todo: POST /products/1/review
     public KurlyResponse<Void> registerReview(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @RequestBody ReviewRequest.Create request
     ) {
-        productFacade.registerReview(user, request);
+        productFacade.registerReview(user.getUser(), request);
         return KurlyResponse.noData();
     }
 
@@ -70,7 +70,7 @@ public class ReviewController {
     @GetMapping // todo: GET /users/reviews
     @ResponseStatus(OK)
     public KurlyResponse<List<ReviewResponse.Reviewed>> getAllReviewsOnMyPage(
-            @AuthenticationPrincipal User user
+            @AuthenticationPrincipal AuthUser user
     ) {
         List<ReviewResponse.Reviewed> response = productFacade.loadReviewsOfUser(user.getId());
         return KurlyResponse.ok(response);
@@ -86,7 +86,7 @@ public class ReviewController {
     @PatchMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateReviewContent(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long id,
             @RequestBody ReviewRequest.Update request
     ) {
@@ -104,7 +104,7 @@ public class ReviewController {
     @DeleteMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> deleteReview(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long id
     ) {
         productFacade.deleteReview(user.getId(), id);
@@ -120,7 +120,7 @@ public class ReviewController {
     @PostMapping("/{reviewId}/like")
     @ResponseStatus(OK)
     public KurlyResponse<Void> activeReviewLike(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long reviewId
     ) {
         productFacade.likeReview(user.getId(), reviewId);
@@ -136,7 +136,7 @@ public class ReviewController {
     @DeleteMapping("/{reviewId}/like")
     @ResponseStatus(OK)
     public KurlyResponse<Void> cancelReviewLike(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long reviewId
     ) {
         productFacade.cancelReviewLike(user.getId(), reviewId);
