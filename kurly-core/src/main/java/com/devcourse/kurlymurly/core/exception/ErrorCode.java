@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.global.exception;
+package com.devcourse.kurlymurly.core.exception;
 
 import org.springframework.http.HttpStatus;
 
@@ -15,11 +15,8 @@ public enum ErrorCode {
     DELIVERED_ORDER(BAD_REQUEST, "이미 배송된 주문입니다."),
     DELETED_PRODUCT(BAD_REQUEST, "삭제된 상품입니다."),
     NOT_CORRECT_QUANTITY(BAD_REQUEST, "상품의 최소 수량은 1개입니다."),
-    FAIL_USER_LOGIN(NOT_FOUND, "존재하지 않는 계정입니다."),
-    NOT_SAME_PASSWORD(BAD_REQUEST, "동일한 비밀번호를 입력"),
     CLIENT_INPUT_INVALID(BAD_REQUEST, null),
-    NOT_CORRECT_PASSWORD(NOT_FOUND, "현재 비밀번호를 확인해주세요"),
-    BAD_STATE_REVIEW(NOT_FOUND, "삭제되었거나 차단된 후기입니다."),
+    INORDERABLE_PRODUCT(BAD_REQUEST, "주문할 수 없는 상품입니다."),
 
     // 401
     NOT_CORRECT_PAY_PASSWORD(UNAUTHORIZED, "잘못된 결제 비밀번호입니다."),
@@ -28,13 +25,12 @@ public enum ErrorCode {
     EXPIRED_JWT_TOKEN(UNAUTHORIZED, "만료된 토큰입니다."),
     NOT_SUPPORTED_JWT_TOKEN(UNAUTHORIZED, "지원하지 않는 토근입니다."),
     NOT_AUTHORIZED_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
-    CHECK_TOKEN_ERROR(UNAUTHORIZED, "토큰 값을 확인해주세요."),
 
     // 404
     NOT_FOUND_REVIEW(NOT_FOUND, "존재하는 리뷰가 없습니다."),
     NOT_FOUND_REVIEW_LIKE(NOT_FOUND, "존재하는 리뷰 좋아요가 없습니다."),
     NOT_FOUND_ORDER_SUPPORT(NOT_FOUND, "존재하는 1:1 문의 내역이 없습니다."),
-    NOT_FOUND_ORDER(NOT_FOUND, "존재하는 주문 내역이 없습니다."),
+    ORDER_NOT_FOUND(NOT_FOUND, "존재하는 주문 내역이 없습니다."),
     NEVER_FAVORITE(NOT_FOUND, "찜 이력이 존재하지 않습니다."),
     PRODUCT_NOT_FOUND(NOT_FOUND, "존재하는 상품이 없습니다"),
     NEVER_WRITE_PRODUCT_SUPPORT(NOT_FOUND, "작성한 상품 문의가 없습니다"),
@@ -44,6 +40,7 @@ public enum ErrorCode {
     SHIPPING_NOT_FOUND(NOT_FOUND, "주소가 존재하지 않습니다."),
     CATEGORY_NOT_FOUND(NOT_FOUND, "존재하지 않는 카테고리입니다."),
     NEVER_LIKED(NOT_FOUND, "후기를 좋아요한 적이 없습니다."),
+    FAIL_USER_LOGIN(NOT_FOUND, "존재하지 않는 계정입니다."),
 
     // 409
     NOT_ORDER_HOST(CONFLICT, "해당 주문을 주문한 사용자가 아닙니다."),
@@ -67,7 +64,7 @@ public enum ErrorCode {
         this.message = message;
     }
 
-    HttpStatus getHttpStatus() {
+    public HttpStatus getHttpStatus() {
         return httpStatus;
     }
 

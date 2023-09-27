@@ -1,10 +1,10 @@
-package com.devcourse.kurlymurly.global.exception;
+package com.devcourse.kurlymurly.core.exception;
 
-record ErrorResponse(
+public record ErrorResponse(
         String errorCode,
         String message
 ) {
-    static ErrorResponse from(ErrorCode errorCode) {
+    public static ErrorResponse from(ErrorCode errorCode) {
         return new ErrorResponse(errorCode.name(), errorCode.getMessage());
     }
 }

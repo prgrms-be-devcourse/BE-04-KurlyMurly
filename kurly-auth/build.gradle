@@ -1,0 +1,15 @@
+dependencies {
+    implementation(project(":module-core")) // will be deleted
+    implementation(project(":kurly-core"))
+
+    api('org.springframework.boot:spring-boot-starter-security')
+
+    // jwt
+    implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+}
+
+bootJar.enabled=false
+jar.enabled=true

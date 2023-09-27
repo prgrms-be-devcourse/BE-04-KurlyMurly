@@ -1,10 +1,8 @@
-package com.devcourse.kurlymurly.module.user.service;
+package com.devcourse.kurlymurly.auth;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
-import com.devcourse.kurlymurly.module.auth.AuthRepository;
-import com.devcourse.kurlymurly.module.auth.AuthService;
-import com.devcourse.kurlymurly.module.user.UserFixture;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.dto.user.Join;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static com.devcourse.kurlymurly.auth.UserFixture.USER_FIXTURE;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -27,7 +26,7 @@ public class AuthServiceTest {
     private AuthService authService;
 
     @Mock
-    private AuthRepository authRepository;
+    private UserRepository userRepository;
 
     @Mock
     private ShippingRepository shippingRepository;
@@ -35,11 +34,11 @@ public class AuthServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
-    private static User user;
+    private User user;
 
     @BeforeEach
     void setUp() {
-        user = UserFixture.USER_FIXTURE.toEntity();
+        user = USER_FIXTURE.toEntity();
     }
 
     @Nested
@@ -57,7 +56,7 @@ public class AuthServiceTest {
         @DisplayName("회원가입 완료 테스트")
         void join() {
             // Given
-            doReturn(user).when(authRepository).save(any());
+            doReturn(user).when(userRepository).save(any());
             doReturn("encryptedPassword").when(passwordEncoder).encode(any());
 
             // When
@@ -68,7 +67,7 @@ public class AuthServiceTest {
         @DisplayName("아이디가 중복되면 예외를 던짐")
         void join_fail_id_ExistUserInfoException() {
             // Given
-            doReturn(true).when(authRepository).existsByLoginId(any());
+            doReturn(true).when(userRepository).existsByLoginId(any());
 
             // Then
             assertThrows(KurlyBaseException.class, () -> authService.join(joinRequest));
@@ -78,7 +77,7 @@ public class AuthServiceTest {
         @DisplayName("이메일이 중복되면 예외를 던짐")
         void join_fail_email_ExistUserInfoException() {
             // Given
-            doReturn(true).when(authRepository).existsByEmail(any());
+            doReturn(true).when(userRepository).existsByEmail(any());
 
             // Then
             assertThrows(KurlyBaseException.class, () -> authService.join(joinRequest));

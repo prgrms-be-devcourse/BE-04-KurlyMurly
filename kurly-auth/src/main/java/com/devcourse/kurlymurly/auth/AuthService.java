@@ -1,7 +1,8 @@
-package com.devcourse.kurlymurly.module.auth;
+package com.devcourse.kurlymurly.auth;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
-import com.devcourse.kurlymurly.global.jwt.JwtTokenProvider;
+import com.devcourse.kurlymurly.auth.jwt.JwtProvider;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.UserInfo;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
@@ -15,28 +16,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.EXIST_SAME_EMAIL;
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.EXIST_SAME_ID;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.EXIST_SAME_EMAIL;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.EXIST_SAME_ID;
 
 @Service
 @Transactional(readOnly = true)
 public class AuthService {
-    private final AuthRepository authRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider tokenProvider;
+    private final JwtProvider jwtProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final ShippingRepository shippingRepository;
 
     public AuthService(
-            AuthRepository authRepository,
+            UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            JwtTokenProvider tokenProvider,
+            JwtProvider jwtProvider,
             AuthenticationManagerBuilder authenticationManagerBuilder,
             ShippingRepository shippingRepository
     ) {
-        this.authRepository = authRepository;
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.tokenProvider = tokenProvider;
+        this.jwtProvider = jwtProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.shippingRepository = shippingRepository;
     }
@@ -45,7 +46,7 @@ public class AuthService {
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(loginId, password);
         Authentication authorized = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        String token = tokenProvider.createToken(authorized);
+        String token = jwtProvider.createToken(authorized);
 
         return new Login.Response(token, 1800000L);
     }
@@ -62,29 +63,30 @@ public class AuthService {
             throw new KurlyBaseException(EXIST_SAME_EMAIL);
         }
 
-        Long savedId = authRepository.save(newUser).getId();
+        Long savedId = userRepository.save(newUser).getId();
 
-        addAddress(savedId, request.roadAddress(), true);
-    }
-
-    @Transactional
-    public void addAddress(Long userId, String address, boolean isDefault) {
-        Shipping shipping = new Shipping(userId, address, isDefault);
-
+        Shipping shipping = new Shipping(savedId, request.roadAddress(), true);
         shippingRepository.save(shipping);
     }
 
     private User toUser(Join.Request request) {
         UserInfo userInfo = new UserInfo(request.birth(), request.recommender(), request.sex());
 
-        return new User(request.name(), request.loginId(), passwordEncoder.encode(request.password()), request.email(), userInfo, request.phoneNumber());
+        return new User(
+                request.name(),
+                request.loginId(),
+                passwordEncoder.encode(request.password()),
+                request.email(),
+                userInfo,
+                request.phoneNumber()
+        );
     }
 
     public Boolean checkId(String id) {
-        return authRepository.existsByLoginId(id);
+        return userRepository.existsByLoginId(id);
     }
 
     public Boolean checkEmail(String email) {
-        return authRepository.existsByEmail(email);
+        return userRepository.existsByEmail(email);
     }
 }

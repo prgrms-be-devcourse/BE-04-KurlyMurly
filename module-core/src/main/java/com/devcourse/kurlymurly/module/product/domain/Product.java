@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.product.domain;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -9,7 +9,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.DELETED_PRODUCT;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.DELETED_PRODUCT;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.INORDERABLE_PRODUCT;
 
 @Entity
 @Table(name = "products")
@@ -66,7 +67,7 @@ public class Product extends BaseEntity {
 
     public void validateOrderable() {
         if (this.status != Status.NORMAL) {
-            throw new IllegalStateException("주문할 수 없는 상품입니다.");
+            throw KurlyBaseException.withId(INORDERABLE_PRODUCT, this.getId());
         }
     }
 

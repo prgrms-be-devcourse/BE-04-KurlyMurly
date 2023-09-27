@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.api.user;
 
-import com.devcourse.kurlymurly.module.auth.AuthService;
+import com.devcourse.kurlymurly.auth.AuthService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
 import com.devcourse.kurlymurly.web.dto.user.CheckId;

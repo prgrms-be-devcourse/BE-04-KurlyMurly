@@ -90,7 +90,7 @@ public class ProductFacade {
         String imageUrl = imageService.upload(image);
 
         productCommand.create(request.categoryId(), imageUrl, productDomain);
-        return productMapper.toCreateProductResponse(request);
+        return productMapper.toCreateResponse(request);
     }
 
     public void createProductSupport(

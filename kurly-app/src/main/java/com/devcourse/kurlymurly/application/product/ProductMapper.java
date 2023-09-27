@@ -1,14 +1,12 @@
 package com.devcourse.kurlymurly.application.product;
 
+import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
+import com.devcourse.kurlymurly.module.product.domain.SupportDomain;
+import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.web.product.ProductRequest;
 import com.devcourse.kurlymurly.web.product.ProductResponse;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import com.devcourse.kurlymurly.web.product.SupportRequest;
-import com.devcourse.kurlymurly.web.product.SupportResponse;
-import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
-import com.devcourse.kurlymurly.module.product.domain.SupportDomain;
-import com.devcourse.kurlymurly.module.product.domain.review.Review;
-import com.devcourse.kurlymurly.module.product.domain.support.ProductSupport;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,7 +32,7 @@ public class ProductMapper {
         return new SupportDomain(request.title(), request.content(), request.isSecret());
     }
 
-    public ProductResponse.Create toCreateProductResponse(ProductRequest.Create request) {
+    public ProductResponse.Create toCreateResponse(ProductRequest.Create request) {
         return new ProductResponse.Create(
                 request.name(),
                 request.price(),

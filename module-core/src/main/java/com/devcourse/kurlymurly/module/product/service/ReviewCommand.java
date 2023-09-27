@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.product.service;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.review.Review;
 import com.devcourse.kurlymurly.module.product.domain.review.ReviewLike;
@@ -10,7 +10,7 @@ import com.devcourse.kurlymurly.module.user.domain.User;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NEVER_LIKED;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NEVER_LIKED;
 
 @Component
 @Transactional
@@ -72,7 +72,7 @@ public class ReviewCommand {
 
     public void cancelLike(Long userId, Long reviewId) {
         ReviewLike like = reviewLikeRepository.findByUserIdAndReviewId(userId, reviewId)
-                .orElseThrow(() -> new KurlyBaseException(NEVER_LIKED));
+                .orElseThrow(() -> KurlyBaseException.withId(NEVER_LIKED, userId));
         Review review = reviewQuery.findReviewByIdOrThrow(like.getReviewId());
 
         like.cancel();

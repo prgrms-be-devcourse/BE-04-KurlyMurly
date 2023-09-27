@@ -11,7 +11,6 @@ import java.util.List;
 
 import static com.devcourse.kurlymurly.module.order.OrderFixture.HEJOW_ORDER;
 import static com.devcourse.kurlymurly.module.order.OrderFixture.HEJOW_ORDER2;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 class OrderRepositoryTest {

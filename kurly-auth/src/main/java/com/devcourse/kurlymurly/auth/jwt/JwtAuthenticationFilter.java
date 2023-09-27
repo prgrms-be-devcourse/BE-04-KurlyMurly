@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.global.jwt;
+package com.devcourse.kurlymurly.auth.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,11 +16,11 @@ import java.io.IOException;
 @Order(0)
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtTokenProvider tokenProvider;
+    private final JwtProvider tokenProvider;
 
     private static final String BEARER_PREFIX = "Bearer ";
 
-    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider) {
+    public JwtAuthenticationFilter(JwtProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
     }
 
@@ -28,9 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = resolveToken(request);
 
-        boolean isValidToken = tokenProvider.isValidToken(token);
-
-        if (isValidToken) {
+        if (tokenProvider.isValidToken(token)) {
             Authentication authentication = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
@@ -40,12 +38,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        return isBearerToken(bearerToken) ? extractJwt(bearerToken) : null;
+    }
 
-        if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(BEARER_PREFIX.length());
-        }
+    private boolean isBearerToken(String token) {
+        return token != null && token.startsWith(BEARER_PREFIX);
+    }
 
-        return null;
+    private String extractJwt(String bearerToken) {
+        return bearerToken.substring(BEARER_PREFIX.length());
     }
 }
 

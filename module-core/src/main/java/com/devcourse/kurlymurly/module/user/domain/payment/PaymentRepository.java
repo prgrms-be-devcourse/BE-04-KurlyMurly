@@ -11,7 +11,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     Optional<Payment> findByUserIdAndId(Long userId, Long paymentId);
 
     @Query("""
-            SELECT CONCAT(SUBSTRING(p.payInfo, 1, 6), '******', SUBSTRING(p.payInfo, 13, 4)) 
+            SELECT CONCAT(SUBSTRING(p.payInfo, 1, 6), '******', SUBSTRING(p.payInfo, 13, 4))
             FROM Payment p 
             WHERE p.userId = :userId AND p.status IN ('DEFAULT','NORMAL')
             """)

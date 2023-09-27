@@ -1,31 +1,23 @@
 package com.devcourse.kurlymurly.module.order.domain;
 
+import com.devcourse.kurlymurly.module.order.domain.state.OrderState;
+import com.devcourse.kurlymurly.module.order.domain.state.Ordered;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDomain {
     private List<OrderItem> orderItems = new ArrayList<>();
-
     private int totalPrice;
-
     private int totalDiscount;
-
     private String payment;
-
     private String receiver;
-
     private String phoneNumber;
-
     private String address;
-
     private String receiveArea;
-
     private String entranceInfo;
-
     private String packaging;
-
     private OrderState state;
-
     private Order.Status orderStatus;
 
 

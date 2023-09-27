@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.product.service;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.product.ProductSupportFixture;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductRepository;
@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NEVER_FAVORITE;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NEVER_FAVORITE;
 import static com.devcourse.kurlymurly.module.product.ProductFixture.LA_GOGI;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SECRET_SUPPORT_FIXTURE;
 import static com.devcourse.kurlymurly.module.product.ProductSupportFixture.SUPPORT_FIXTURE;

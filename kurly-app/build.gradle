@@ -2,8 +2,9 @@ dependencies {
     implementation project(":module-core")
     implementation project(":module-image")
     implementation project(":kurly-core")
+    implementation project(":kurly-auth")
 
-    api 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 }
 
 bootJar.enabled=false

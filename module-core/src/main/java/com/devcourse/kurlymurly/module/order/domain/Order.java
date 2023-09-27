@@ -1,7 +1,8 @@
 package com.devcourse.kurlymurly.module.order.domain;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.BaseEntity;
+import com.devcourse.kurlymurly.module.order.domain.state.OrderState;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -20,14 +21,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_OWNER;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_OWNER;
 
 @Entity
 @Table(name = "orders")
 public class Order extends BaseEntity {
-    private static final int RANDOM_BOUND = 10000;
-    private static final Random random = new Random();
     private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyMMddss");
+    private static final Random random = new Random();
+    private static final int RANDOM_BOUND = 10000;
 
     public enum Status {
         ORDERED,

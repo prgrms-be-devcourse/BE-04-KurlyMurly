@@ -1,8 +1,8 @@
 package com.devcourse.kurlymurly.module.user.service;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
-import com.devcourse.kurlymurly.module.auth.AuthRepository;
+import com.devcourse.kurlymurly.module.user.domain.UserRepository;
 import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.module.user.domain.cart.Cart;
 import com.devcourse.kurlymurly.module.user.domain.cart.CartRepository;
@@ -21,16 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.CART_NOT_FOUND;
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_PASSWORD;
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_EXISTS_USER;
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_FOUND_PAYMENT;
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.SHIPPING_NOT_FOUND;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.CART_NOT_FOUND;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_EXISTS_USER;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_FOUND_PAYMENT;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.SHIPPING_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
 public class MemberService {
-    private final AuthRepository authRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CartRepository cartRepository;
     private final ShippingRepository shippingRepository;
@@ -38,14 +37,14 @@ public class MemberService {
     private final OrderService orderService;
 
     public MemberService(
-            AuthRepository authRepository,
+            UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             CartRepository cartRepository,
             ShippingRepository shippingRepository,
             PaymentRepository paymentRepository,
             OrderService orderService
     ) {
-        this.authRepository = authRepository;
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.cartRepository = cartRepository;
         this.shippingRepository = shippingRepository;
@@ -59,7 +58,7 @@ public class MemberService {
 
     @Transactional
     public void findUpdateUser(Long userId, UpdateUser.Request request) {
-        User user = authRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> KurlyBaseException.withId(NOT_EXISTS_USER, userId));
 
         updateUserInfo(request, user);
@@ -145,7 +144,7 @@ public class MemberService {
 
     @Transactional
     public void updatePaymentPassword(Long userId, String payPassword) {
-        User user = authRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> KurlyBaseException.withId(NOT_EXISTS_USER, userId));
 
         String encodedPassword = passwordEncoder.encode(payPassword);

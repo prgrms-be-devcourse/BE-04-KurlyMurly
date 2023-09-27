@@ -1,12 +1,12 @@
 package com.devcourse.kurlymurly.module.user.domain.cart;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_CORRECT_QUANTITY;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_CORRECT_QUANTITY;
 
 @Entity
 @Table(name = "carts")

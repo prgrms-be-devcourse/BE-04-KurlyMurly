@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.order.domain.support;
 
-import com.devcourse.kurlymurly.global.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 
 import java.util.Objects;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.NOT_AUTHOR;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_AUTHOR;
 
 @Entity
 @Table(name = "order_supports")

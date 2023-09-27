@@ -4,7 +4,7 @@ import com.devcourse.kurlymurly.application.product.ProductFacade;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
-import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.dto.order.support.AnswerOrderSupport;
 import com.devcourse.kurlymurly.web.product.ProductRequest;
@@ -58,7 +58,7 @@ public class AdminController {
     @PostMapping("/products")
     @ResponseStatus(OK)
     public KurlyResponse<ProductResponse.Create> createProduct(
-            @AuthenticationPrincipal User admin,
+            @AuthenticationPrincipal AuthUser admin,
             @RequestPart MultipartFile image,
             @RequestBody ProductRequest.Create request
     ) {
@@ -76,7 +76,7 @@ public class AdminController {
     @PutMapping("/products/{productId}/sold-out")
     @ResponseStatus(OK)
     public KurlyResponse<Void> soldOutProduct(
-            @AuthenticationPrincipal User admin,
+            @AuthenticationPrincipal AuthUser admin,
             @PathVariable Long productId
     ) {
 //        productFacade.soldOutProduct(productId);
@@ -93,7 +93,7 @@ public class AdminController {
     @DeleteMapping("/products/{productId}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> deleteProduct(
-            @AuthenticationPrincipal User admin,
+            @AuthenticationPrincipal AuthUser admin,
             @PathVariable Long productId
     ) {
 //        productFacade.deleteProduct(productId);
@@ -110,7 +110,7 @@ public class AdminController {
     @PatchMapping("/reviews/{reviewId}/ban")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateToBanned(
-            @AuthenticationPrincipal User admin,
+            @AuthenticationPrincipal AuthUser admin,
             @PathVariable Long reviewId
     ) {
         reviewCommand.banned(reviewId);
@@ -127,7 +127,7 @@ public class AdminController {
     @PatchMapping("/reviews/{reviewId}/best")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateToBest(
-            @AuthenticationPrincipal User admin,
+            @AuthenticationPrincipal AuthUser admin,
             @PathVariable Long reviewId
     ) {
         reviewCommand.toBestReview(reviewId);
@@ -144,7 +144,7 @@ public class AdminController {
     @PatchMapping("/orders/{orderId}/processing")
     @ResponseStatus(OK)
     public KurlyResponse<Void> changeToProcessing(
-            @AuthenticationPrincipal User admin,
+            @AuthenticationPrincipal AuthUser admin,
             @PathVariable Long orderId
     ) {
         orderService.toNextState(orderId);
@@ -161,7 +161,7 @@ public class AdminController {
     @PostMapping("/orders/{orderId}/cancel")
     @ResponseStatus(OK)
     public KurlyResponse<Void> changeToDone(
-            @AuthenticationPrincipal User admin,
+            @AuthenticationPrincipal AuthUser admin,
             @PathVariable Long orderId
     ) {
         orderService.toCancel(orderId);
@@ -179,7 +179,7 @@ public class AdminController {
     @PostMapping("/orderSupports/answer")
     @ResponseStatus(OK)
     public KurlyResponse<Void> changeToAnswered(
-            @AuthenticationPrincipal User admin,
+            @AuthenticationPrincipal AuthUser admin,
             @RequestBody @Valid AnswerOrderSupport.Request answerRequest
     ) {
         orderSupportService.answered(answerRequest.orderSupportId(), answerRequest.content());

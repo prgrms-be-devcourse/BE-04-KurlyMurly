@@ -1,6 +1,7 @@
 dependencies {
     implementation project(":kurly-app")
     implementation project(":kurly-core")
+    implementation project(":kurly-auth")
 
     implementation project(":module-core")
 }

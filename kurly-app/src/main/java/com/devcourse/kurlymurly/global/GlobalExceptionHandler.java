@@ -1,20 +1,22 @@
-package com.devcourse.kurlymurly.global.exception;
+package com.devcourse.kurlymurly.global;
 
+import com.devcourse.kurlymurly.core.exception.ErrorCode;
+import com.devcourse.kurlymurly.core.exception.ErrorResponse;
+import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.CLIENT_INPUT_INVALID;
-import static com.devcourse.kurlymurly.global.exception.ErrorCode.KURLY_SERVER_ERROR;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.CLIENT_INPUT_INVALID;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.KURLY_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @RestControllerAdvice
