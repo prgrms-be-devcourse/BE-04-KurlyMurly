@@ -39,6 +39,10 @@ public class ProductQuery {
         return productRepository.loadProductsByCategory(categoryId, pageable);
     }
 
+    public Page<ProductResponse.GetSimple> getNewProductPageResponse(Pageable pageable) {
+        return productRepository.loadNewProducts(pageable);
+    }
+
     public List<FavoriteResponse.Get> getAllFavoritesByUserId(Long userId) {
         return favoriteRepository.findAllByUserId(userId);
     }
