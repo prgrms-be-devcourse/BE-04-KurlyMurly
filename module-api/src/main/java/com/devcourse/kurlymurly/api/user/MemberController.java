@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.api.user;
 
 import com.devcourse.kurlymurly.auth.AuthUser;
-import com.devcourse.kurlymurly.module.user.service.MemberService;
+import com.devcourse.kurlymurly.domain.user.MemberService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.user.UpdateUser;
 import com.devcourse.kurlymurly.web.user.CreateCart;
@@ -42,19 +42,19 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @Tag(name = "member")
-    @Operation(summary = "[토큰] 작성 가능 리뷰 조회", description = "[토큰 필요] 작성 가능 리뷰 조회 API", responses = {
-            @ApiResponse(responseCode = "200", description = "성공적으로 작성 가능한 리뷰 목록을 가져온 상태"),
-            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러")
-    })
-    @GetMapping("/reviews")
-    @ResponseStatus(OK)
-    public KurlyResponse<List<ReviewResponse.Reviewable>> getReviewableOrdersOnMyPage(
-            @AuthenticationPrincipal AuthUser user
-    ) {
-        List<ReviewResponse.Reviewable> responses = memberService.getAllReviewableOrdersByUserId(user.getId());
-        return KurlyResponse.ok(responses);
-    }
+//    @Tag(name = "member") // todo: seperate Layer
+//    @Operation(summary = "[토큰] 작성 가능 리뷰 조회", description = "[토큰 필요] 작성 가능 리뷰 조회 API", responses = {
+//            @ApiResponse(responseCode = "200", description = "성공적으로 작성 가능한 리뷰 목록을 가져온 상태"),
+//            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러")
+//    })
+//    @GetMapping("/reviews")
+//    @ResponseStatus(OK)
+//    public KurlyResponse<List<ReviewResponse.Reviewable>> getReviewableOrdersOnMyPage(
+//            @AuthenticationPrincipal AuthUser user
+//    ) {
+//        List<ReviewResponse.Reviewable> responses = memberService.getAllReviewableOrdersByUserId(user.getId());
+//        return KurlyResponse.ok(responses);
+//    }
 
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 개인정보 수정 API", responses = {

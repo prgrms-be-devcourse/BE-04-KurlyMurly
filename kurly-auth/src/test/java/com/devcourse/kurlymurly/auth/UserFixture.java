@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.auth;
 
-import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.module.user.domain.UserInfo;
+import com.devcourse.kurlymurly.domain.user.User;
+import com.devcourse.kurlymurly.domain.user.UserInfo;
 
 import java.time.LocalDate;
 

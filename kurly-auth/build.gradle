@@ -1,5 +1,5 @@
 dependencies {
-    implementation(project(":module-core")) // will be deleted
+    implementation(project(':kurly-domain:kurly-user'))
     implementation(project(":kurly-core"))
 
     api('org.springframework.boot:spring-boot-starter-security')

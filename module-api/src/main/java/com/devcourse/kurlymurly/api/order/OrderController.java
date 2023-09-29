@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.api.order;
 
+import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
-import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.order.CreateOrder;
 import com.devcourse.kurlymurly.web.order.GetOrderResponse;
@@ -41,10 +41,10 @@ public class OrderController {
     @PostMapping
     @ResponseStatus(OK)
     public KurlyResponse<CreateOrder.Response> createOrder(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid CreateOrder.Request request
     ) {
-        CreateOrder.Response response = orderService.createOrder(user, request);
+        CreateOrder.Response response = orderService.createOrder(user.getUser(), request);
         return KurlyResponse.ok(response);
     }
 
@@ -67,7 +67,9 @@ public class OrderController {
     })
     @GetMapping
     @ResponseStatus(OK)
-    public KurlyResponse<List<GetOrderResponse.SimpleInfo>> getOrderListOfUserByUserId(@AuthenticationPrincipal User user) {
+    public KurlyResponse<List<GetOrderResponse.SimpleInfo>> getOrderListOfUserByUserId(
+            @AuthenticationPrincipal AuthUser user
+    ) {
         List<GetOrderResponse.SimpleInfo> simpleOrderInfos = orderService.findOrderListSimpleFormByUserId(user.getId());
         return KurlyResponse.ok(simpleOrderInfos);
     }
@@ -83,7 +85,7 @@ public class OrderController {
     @DeleteMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> cancelOrder(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long id
     ) {
         orderService.toCancelByUser(id, user.getId());

@@ -1,0 +1,9 @@
+dependencies {
+    implementation(project(":kurly-core"))
+    api(project(":kurly-domain:kurly-db"))
+
+    implementation("org.springframework.security:spring-security-crypto:6.1.2")
+}
+
+bootJar.enabled=false
+jar.enabled=true

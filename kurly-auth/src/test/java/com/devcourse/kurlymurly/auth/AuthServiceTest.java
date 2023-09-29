@@ -1,9 +1,9 @@
 package com.devcourse.kurlymurly.auth;
 
 import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
-import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.module.user.domain.UserRepository;
-import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
+import com.devcourse.kurlymurly.domain.user.User;
+import com.devcourse.kurlymurly.domain.user.UserRepository;
+import com.devcourse.kurlymurly.domain.user.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.user.Join;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

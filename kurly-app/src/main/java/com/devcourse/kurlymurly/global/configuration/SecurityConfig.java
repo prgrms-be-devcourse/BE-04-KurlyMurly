@@ -18,7 +18,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.util.List;
 
-import static com.devcourse.kurlymurly.module.user.domain.User.Role.ROLE_USER;
+import static com.devcourse.kurlymurly.domain.user.User.Role.ROLE_USER;
 
 @Configuration
 @EnableWebSecurity

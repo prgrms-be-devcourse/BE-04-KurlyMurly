@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.api.order;
 
+import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
-import com.devcourse.kurlymurly.module.user.domain.User;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.order.CreateOrderSupport;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +42,7 @@ public class OrderSupportController {
     @PostMapping
     @ResponseStatus(OK)
     public KurlyResponse<CreateOrderSupport.Response> takeOrderSupport(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid CreateOrderSupport.Request request
     ) {
         CreateOrderSupport.Response OrderSupportResponse = orderSupportService.takeOrderSupport(user.getId(), request);
@@ -56,7 +56,9 @@ public class OrderSupportController {
     })
     @GetMapping
     @ResponseStatus(OK)
-    public KurlyResponse<List<CreateOrderSupport.Response>> findAllByUserId(@AuthenticationPrincipal User user) {
+    public KurlyResponse<List<CreateOrderSupport.Response>> findAllByUserId(
+            @AuthenticationPrincipal AuthUser user
+    ) {
         List<CreateOrderSupport.Response> orderSupportResponses = orderSupportService.findAllByUserId(user.getId());
         return KurlyResponse.ok(orderSupportResponses);
     }
@@ -72,7 +74,7 @@ public class OrderSupportController {
     @PatchMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateOrderSupport(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long id,
             @RequestBody @Valid CreateOrderSupport.UpdateRequest request
     ) {
@@ -91,7 +93,7 @@ public class OrderSupportController {
     @DeleteMapping("/{id}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> deleteOrderSupport(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long id
     ) {
         orderSupportService.deleteOrderSupport(user.getId(), id);
