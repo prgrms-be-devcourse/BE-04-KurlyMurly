@@ -6,19 +6,19 @@ import static com.devcourse.kurlymurly.web.user.GetAddress.Response;
 
 public sealed interface GetAddress permits Response {
     record Response(
-            @Schema(name = "기본 배송지 여부")
+            @Schema(description = "기본 배송지 여부")
             boolean isDefault,
 
-            @Schema(name = "샛별 배송지 여부")
+            @Schema(description = "샛별 배송지 여부")
             boolean isExpress,
 
-            @Schema(name = "도로명 주소 + 상세 주소")
+            @Schema(description = "도로명 주소 + 상세 주소")
             String address,
 
-            @Schema(name = "수취인")
+            @Schema(description = "수취인")
             String receiver,
 
-            @Schema(name = "연락처")
+            @Schema(description = "연락처")
             String phoneNumber
     ) implements GetAddress {
     }

@@ -13,23 +13,23 @@ import static com.devcourse.kurlymurly.web.order.CreateOrderSupport.UpdateReques
 public sealed interface CreateOrderSupport permits Request, Response, UpdateRequest {
     record Request(
             @NotNull(message = "빈 값이 들어올 수 없습니다.")
-            @Schema(name = "주문 아이디")
+            @Schema(description = "주문 아이디")
             Long orderId,
 
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
-            @Schema(name = "주문 고유 번호")
+            @Schema(description = "주문 고유 번호")
             String orderNumber,
 
             @NotNull(message = "빈 값이 들어올 수 없습니다.")
-            @Schema(name = "1대1 문의 타입", allowableValues = {"DELIVERY", "MISSING", "PRODUCT", "ORDER", "EVENT", "ETC"})
+            @Schema(description = "1대1 문의 타입", allowableValues = {"DELIVERY", "MISSING", "PRODUCT", "ORDER", "EVENT", "ETC"})
             String type,
 
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
-            @Schema(name = "1대1 문의 제목")
+            @Schema(description = "1대1 문의 제목")
             String title,
 
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
-            @Schema(name = "1대1 문의 내용")
+            @Schema(description = "1대1 문의 내용")
             String content
     ) implements CreateOrderSupport {
     }
@@ -45,11 +45,11 @@ public sealed interface CreateOrderSupport permits Request, Response, UpdateRequ
 
     record UpdateRequest(
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
-            @Schema(name = "수정할 1대1 문의 제목")
+            @Schema(description = "수정할 1대1 문의 제목")
             String title,
 
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
-            @Schema(name = "수정할 1대1 문의 내용")
+            @Schema(description = "수정할 1대1 문의 내용")
             String content
     ) implements CreateOrderSupport {
     }

@@ -10,7 +10,7 @@ public sealed interface AddAddress permits Request {
     record Request(
             @NotBlank(message = "배송받을 주소를 입력해주세요.")
             @Length(max = 100)
-            @Schema(name = "도로명 주소")
+            @Schema(description = "도로명 주소")
             String roadAddress
     ) implements AddAddress {
     }
