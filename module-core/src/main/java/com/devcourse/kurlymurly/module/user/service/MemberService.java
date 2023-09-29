@@ -11,9 +11,9 @@ import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
 import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
-import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
-import com.devcourse.kurlymurly.web.dto.user.payment.RegisterPayment;
-import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
+import com.devcourse.kurlymurly.web.user.UpdateUser;
+import com.devcourse.kurlymurly.web.user.RegisterPayment;
+import com.devcourse.kurlymurly.web.user.GetAddress;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -116,7 +116,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void addCredit(Long userId, RegisterPayment.creditRequest request) {
+    public void addCredit(Long userId, RegisterPayment.CreditRequest request) {
         CreditInfo creditInfo = new CreditInfo(request.expiredDate(), request.password());
         Payment credit = new Payment(userId, request.payInfo(), creditInfo);
 
@@ -124,7 +124,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void addEasyPay(Long userId, RegisterPayment.easyPayRequest request) {
+    public void addEasyPay(Long userId, RegisterPayment.EasyPayRequest request) {
         Payment easyPay = new Payment(userId, request.payInfo());
 
         paymentRepository.save(easyPay);

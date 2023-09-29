@@ -19,7 +19,7 @@ public record KurlyPagingRequest(
         @Schema(description = "페이지 수")
         int page,
 
-        @Schema(requiredMode = NOT_REQUIRED, allowableValues = {"DESC", "ASC"})
+        @Schema(description = "정렬 방향", requiredMode = NOT_REQUIRED, allowableValues = {"DESC", "ASC"})
         Direction sort
 ) {
     private static final int INDEX_GAP = 1;

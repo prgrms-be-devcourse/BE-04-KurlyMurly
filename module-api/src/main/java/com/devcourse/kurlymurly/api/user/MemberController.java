@@ -1,17 +1,17 @@
 package com.devcourse.kurlymurly.api.user;
 
-import com.devcourse.kurlymurly.module.user.domain.User;
+import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.module.user.service.MemberService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
-import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
-import com.devcourse.kurlymurly.web.dto.user.cart.CreateCart;
-import com.devcourse.kurlymurly.web.dto.user.cart.RemoveCart;
-import com.devcourse.kurlymurly.web.dto.user.cart.UpdateCart;
-import com.devcourse.kurlymurly.web.dto.user.payment.RegisterPayment;
-import com.devcourse.kurlymurly.web.dto.user.payment.UpdatePayPassword;
-import com.devcourse.kurlymurly.web.dto.user.shipping.AddAddress;
-import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
-import com.devcourse.kurlymurly.web.dto.user.shipping.UpdateAddress;
+import com.devcourse.kurlymurly.web.user.UpdateUser;
+import com.devcourse.kurlymurly.web.user.CreateCart;
+import com.devcourse.kurlymurly.web.user.RemoveCart;
+import com.devcourse.kurlymurly.web.user.UpdateCart;
+import com.devcourse.kurlymurly.web.user.RegisterPayment;
+import com.devcourse.kurlymurly.web.user.UpdatePayPassword;
+import com.devcourse.kurlymurly.web.user.AddAddress;
+import com.devcourse.kurlymurly.web.user.GetAddress;
+import com.devcourse.kurlymurly.web.user.UpdateAddress;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,7 +49,9 @@ public class MemberController {
     })
     @GetMapping("/reviews")
     @ResponseStatus(OK)
-    public KurlyResponse<List<ReviewResponse.Reviewable>> getReviewableOrdersOnMyPage(@AuthenticationPrincipal User user) {
+    public KurlyResponse<List<ReviewResponse.Reviewable>> getReviewableOrdersOnMyPage(
+            @AuthenticationPrincipal AuthUser user
+    ) {
         List<ReviewResponse.Reviewable> responses = memberService.getAllReviewableOrdersByUserId(user.getId());
         return KurlyResponse.ok(responses);
     }
@@ -65,7 +67,7 @@ public class MemberController {
     @PutMapping("/info")
     @ResponseStatus(OK)
     public KurlyResponse<Void> update(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid UpdateUser.Request request
     ) {
         memberService.findUpdateUser(user.getId(), request);
@@ -80,7 +82,7 @@ public class MemberController {
     @PostMapping("/shipping")
     @ResponseStatus(OK)
     public KurlyResponse<Void> addAddress(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid AddAddress.Request request
     ) {
         memberService.addAddress(user.getId(), request.roadAddress(), false);
@@ -94,7 +96,9 @@ public class MemberController {
     })
     @GetMapping("/shipping/list")
     @ResponseStatus(OK)
-    public KurlyResponse<List<GetAddress.Response>> getAddress(@AuthenticationPrincipal User user) {
+    public KurlyResponse<List<GetAddress.Response>> getAddress(
+            @AuthenticationPrincipal AuthUser user
+    ) {
         List<GetAddress.Response> addressList = memberService.getAddress(user.getId());
         return KurlyResponse.ok(addressList);
     }
@@ -107,7 +111,10 @@ public class MemberController {
     })
     @PutMapping("/shipping")
     @ResponseStatus(OK)
-    public KurlyResponse<Void> updateAddress(@AuthenticationPrincipal User user, @RequestBody @Valid UpdateAddress.Request request) {
+    public KurlyResponse<Void> updateAddress(
+            @AuthenticationPrincipal AuthUser user,
+            @RequestBody @Valid UpdateAddress.Request request
+    ) {
         memberService.updateAddress(user.getId(), request.addressId(), request.description(), request.receiver(), request.contact());
         return KurlyResponse.noData();
     }
@@ -120,8 +127,11 @@ public class MemberController {
     })
     @PostMapping("/shipping/info")
     @ResponseStatus(OK)
-    public KurlyResponse<Void> updateAddressInfo(@AuthenticationPrincipal User user, @RequestBody @Valid UpdateAddress.InfoRequest request) {
-        memberService.updateAddressInfo(user.getId(), request.addressId(), request.receiver(), request.contact(), request.receiveArea().name(), request.entrancePassword(), request.messageAlertTime().name());
+    public KurlyResponse<Void> updateAddressInfo(
+            @AuthenticationPrincipal AuthUser user,
+            @RequestBody @Valid UpdateAddress.InfoRequest request
+    ) {
+        memberService.updateAddressInfo(user.getId(), request.addressId(), request.receiver(), request.contact(), request.receiveArea(), request.entrancePassword(), request.messageAlertTime());
         return KurlyResponse.noData();
     }
 
@@ -133,7 +143,10 @@ public class MemberController {
     })
     @DeleteMapping("/shipping/{addressId}")
     @ResponseStatus(OK)
-    public KurlyResponse<Void> deleteAddress(@AuthenticationPrincipal User user, @PathVariable Long addressId) {
+    public KurlyResponse<Void> deleteAddress(
+            @AuthenticationPrincipal AuthUser user,
+            @PathVariable Long addressId
+    ) {
         memberService.deleteAddress(user.getId(), addressId);
         return KurlyResponse.noData();
     }
@@ -146,8 +159,8 @@ public class MemberController {
     @PostMapping("/register-credit")
     @ResponseStatus(OK)
     public KurlyResponse<Void> addCredit(
-            @AuthenticationPrincipal User user,
-            @RequestBody @Valid RegisterPayment.creditRequest request
+            @AuthenticationPrincipal AuthUser user,
+            @RequestBody @Valid RegisterPayment.CreditRequest request
     ) {
         memberService.addCredit(user.getId(), request);
         return KurlyResponse.noData();
@@ -161,8 +174,8 @@ public class MemberController {
     @PostMapping("/register-easy")
     @ResponseStatus(OK)
     public KurlyResponse<Void> addEasyPay(
-            @AuthenticationPrincipal User user,
-            @RequestBody @Valid RegisterPayment.easyPayRequest request
+            @AuthenticationPrincipal AuthUser user,
+            @RequestBody @Valid RegisterPayment.EasyPayRequest request
     ) {
         memberService.addEasyPay(user.getId(), request);
         return KurlyResponse.noData();
@@ -175,7 +188,7 @@ public class MemberController {
     })
     @GetMapping("/payment/list")
     @ResponseStatus(OK)
-    public KurlyResponse<List<String>> getPayment(@AuthenticationPrincipal User user) {
+    public KurlyResponse<List<String>> getPayment(@AuthenticationPrincipal AuthUser user) {
         List<String> creditList = memberService.getPayments(user.getId());
         return KurlyResponse.ok(creditList);
     }
@@ -188,7 +201,10 @@ public class MemberController {
     })
     @DeleteMapping("/payment/{paymentId}")
     @ResponseStatus(OK)
-    public KurlyResponse<Void> deletePayment(@AuthenticationPrincipal User user, @PathVariable Long paymentId) {
+    public KurlyResponse<Void> deletePayment(
+            @AuthenticationPrincipal AuthUser user,
+            @PathVariable Long paymentId
+    ) {
         memberService.deletePayment(user.getId(), paymentId);
         return KurlyResponse.noData();
     }
@@ -202,7 +218,7 @@ public class MemberController {
     @PostMapping("/pay-password")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updatePaymentPassword(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid UpdatePayPassword.Request request
     ) {
         memberService.updatePaymentPassword(user.getId(), request.payPassword());
@@ -218,7 +234,7 @@ public class MemberController {
     @PostMapping("/carts")
     @ResponseStatus(OK)
     public KurlyResponse<Void> addCart(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid CreateCart.Request request
     ) {
         memberService.addCart(user.getId(), request.productId(), request.quantity());
@@ -234,7 +250,7 @@ public class MemberController {
     @DeleteMapping("/carts/{cartId}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> removeProduct(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long cartId
     ) {
         memberService.removeCartItem(cartId);
@@ -250,7 +266,7 @@ public class MemberController {
     @DeleteMapping("/carts")
     @ResponseStatus(OK)
     public KurlyResponse<Void> removeCartItemList(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid RemoveCart.Request removeProductList
     ) {
         memberService.removeCartItemList(removeProductList.cartIds());
@@ -266,7 +282,7 @@ public class MemberController {
     @PutMapping("/carts")
     @ResponseStatus(OK)
     public KurlyResponse<Void> changeItemQuantity(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid UpdateCart.Request updateCart
     ) {
         memberService.changeItemQuantity(updateCart.cartId(), updateCart.isIncrease());

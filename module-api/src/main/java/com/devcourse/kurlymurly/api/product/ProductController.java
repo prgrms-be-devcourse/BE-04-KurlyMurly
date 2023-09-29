@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.api.product;
 
+import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.web.common.KurlyPagingRequest;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.product.FavoriteResponse;
@@ -8,7 +9,6 @@ import com.devcourse.kurlymurly.web.product.ReviewRequest;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import com.devcourse.kurlymurly.web.product.SupportRequest;
 import com.devcourse.kurlymurly.application.product.ProductFacade;
-import com.devcourse.kurlymurly.module.user.domain.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,7 +47,7 @@ public class ProductController {
     })
     @GetMapping("/favorites") // GET /users/favorites
     @ResponseStatus(OK)
-    public KurlyResponse<List<FavoriteResponse.Get>> getFavorites(@AuthenticationPrincipal User user) {
+    public KurlyResponse<List<FavoriteResponse.Get>> getFavorites(@AuthenticationPrincipal AuthUser user) {
         List<FavoriteResponse.Get> get = productFacade.getUserFavorites(user.getId());
         return KurlyResponse.ok(get);
     }
@@ -99,7 +99,7 @@ public class ProductController {
     @PostMapping("/{id}/support")
     @ResponseStatus(OK)
     public KurlyResponse<Void> createProductSupport(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long id,
             @RequestBody SupportRequest.Create request
     ) {
@@ -115,7 +115,7 @@ public class ProductController {
     @PostMapping("/{id}/favorite")
     @ResponseStatus(OK)
     public KurlyResponse<Void> favoriteProduct(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long id
     ) {
         productFacade.favoriteProduct(user.getId(), id);
@@ -132,7 +132,7 @@ public class ProductController {
     @PutMapping("/supports/{supportId}")
     @ResponseStatus(OK)
     public KurlyResponse<Void> updateProductSupport(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long supportId,
             @RequestBody SupportRequest.Update request
     ) {
@@ -149,7 +149,7 @@ public class ProductController {
     @DeleteMapping("/{id}/favorite")
     @ResponseStatus(OK)
     public KurlyResponse<Void> cancelFavorite(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long id
     ) {
         productFacade.cancelFavorite(user.getId(), id);

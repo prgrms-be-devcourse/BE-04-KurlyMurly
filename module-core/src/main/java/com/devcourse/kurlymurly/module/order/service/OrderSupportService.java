@@ -3,9 +3,7 @@ package com.devcourse.kurlymurly.module.order.service;
 import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupportRepository;
-import com.devcourse.kurlymurly.web.dto.order.support.CreateOrderSupport;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.devcourse.kurlymurly.web.order.CreateOrderSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,14 +37,9 @@ public class OrderSupportService {
                 request.type(),
                 request.title(),
                 request.content(),
-                orderSupport.getStatus(),
+                orderSupport.getStatus().name(),
                 orderSupport.getCreateAt()
         );
-    }
-
-
-    public Page<OrderSupport> findOrderSupport(Pageable pageable) {
-        return orderSupportRepository.findAll(pageable);
     }
 
     public OrderSupport findByIdOrThrow(Long id) {
@@ -66,10 +59,10 @@ public class OrderSupportService {
 
     private CreateOrderSupport.Response toResponse(OrderSupport orderSupport) {
         return new CreateOrderSupport.Response(
-                orderSupport.getType(),
+                orderSupport.getType().name(),
                 orderSupport.getTitle(),
                 orderSupport.getContent(),
-                orderSupport.getStatus(),
+                orderSupport.getStatus().name(),
                 orderSupport.getCreateAt()
         );
     }

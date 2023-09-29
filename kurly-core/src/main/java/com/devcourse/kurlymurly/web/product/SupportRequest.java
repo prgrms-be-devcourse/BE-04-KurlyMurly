@@ -14,30 +14,30 @@ public sealed interface SupportRequest permits Create, Update {
 
     record Create(
             @NotBlank(message = "제목에는 빈 값이 들어올 수 없습니다.")
-            @Schema(name = "문의 제목")
+            @Schema(description = "문의 제목")
             String title,
 
             @NotBlank(message = "내용에는 빈 값이 들어올 수 없습니다.")
-            @Schema(name = "문의 내용")
+            @Schema(description = "문의 내용")
             String content,
 
             @NotNull(message = "비밀 여부에 빈 값이 들어올 수 없습니다.")
-            @Schema(name = "비밀글 여부")
+            @Schema(description = "비밀글 여부")
             boolean isSecret
     ) implements SupportRequest {
     }
 
     record Update(
             @NotBlank(message = "제목에는 빈 값이 들어올 수 없습니다.")
-            @Schema(name = "문의 제목")
+            @Schema(description = "문의 제목")
             String title,
 
             @NotBlank(message = "내용에는 빈 값이 들어올 수 없습니다.")
-            @Schema(name = "문의 내용")
+            @Schema(description = "문의 내용")
             String content,
 
             @NotNull(message = "비밀 여부에 빈 값이 들어올 수 없습니다.")
-            @Schema(name = "비밀글 여부")
+            @Schema(description = "비밀글 여부")
             boolean isSecret
     ) implements SupportRequest {
     }

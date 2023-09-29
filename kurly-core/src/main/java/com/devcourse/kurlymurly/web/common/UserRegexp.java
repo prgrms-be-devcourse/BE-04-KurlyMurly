@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.web.dto;
+package com.devcourse.kurlymurly.web.common;
 
 public class UserRegexp {
     private UserRegexp() {
