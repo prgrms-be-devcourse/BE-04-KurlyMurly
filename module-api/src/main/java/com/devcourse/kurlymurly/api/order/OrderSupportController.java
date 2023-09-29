@@ -25,7 +25,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @Tag(name = "orderSupport", description = "1:1 문의 API")
 @RestController
-@RequestMapping("/orderSupports")
+@RequestMapping("/inquiries")
 public class OrderSupportController {
     private final OrderSupportService orderSupportService;
 

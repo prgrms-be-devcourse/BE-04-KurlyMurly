@@ -64,6 +64,17 @@ public class ProductController {
         return KurlyResponse.ok(responses);
     }
 
+    @Tag(name = "product")
+    @Operation(summary = "신상품 페이지 가져오기", description = "신상품 목록을 페이징으로 보여준다.")
+    @GetMapping("/new")
+    @ResponseStatus(OK)
+    public KurlyResponse<Page<ProductResponse.GetSimple>> getProductPagingOfNewProducts(
+            @ModelAttribute KurlyPagingRequest request
+    ) {
+        Page<ProductResponse.GetSimple> responses = productFacade.loadNewProductPageResponse(request.toPageable());
+        return KurlyResponse.ok(responses);
+    }
+
     @Tag(name = "review")
     @Operation(summary = "상품 리뷰 가져오기", description = "해당 상품에 대한 리뷰 조회 API", responses = {
             @ApiResponse(responseCode = "200", description = "[페이징 정보] 성공적으로 상품의 후기를 가져온 상태"),
