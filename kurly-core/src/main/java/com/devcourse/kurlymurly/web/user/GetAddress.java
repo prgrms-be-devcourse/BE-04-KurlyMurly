@@ -1,8 +1,10 @@
-package com.devcourse.kurlymurly.web.dto.user.shipping;
+package com.devcourse.kurlymurly.web.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public sealed interface GetAddress permits GetAddress.Response {
+import static com.devcourse.kurlymurly.web.user.GetAddress.Response;
+
+public sealed interface GetAddress permits Response {
     record Response(
             @Schema(name = "기본 배송지 여부")
             boolean isDefault,

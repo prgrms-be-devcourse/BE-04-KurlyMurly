@@ -1,9 +1,12 @@
-package com.devcourse.kurlymurly.web.dto.user;
+package com.devcourse.kurlymurly.web.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
-public sealed interface Login permits Login.Request, Login.Response {
+import static com.devcourse.kurlymurly.web.user.Login.Request;
+import static com.devcourse.kurlymurly.web.user.Login.Response;
+
+public sealed interface Login permits Request, Response {
     record Request(
             @NotBlank(message = "아이디를 입력해주세요.")
             @Schema(name = "로그인 아이디")

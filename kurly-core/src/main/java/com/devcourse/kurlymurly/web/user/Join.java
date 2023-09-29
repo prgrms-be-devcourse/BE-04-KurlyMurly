@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.web.dto.user;
+package com.devcourse.kurlymurly.web.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -8,12 +8,13 @@ import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 
-import static com.devcourse.kurlymurly.web.dto.UserRegexp.EMAIL_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.UserRegexp.PASSWORD_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.UserRegexp.PHONE_NUMBER_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.UserRegexp.USER_NAME_REGEXP;
+import static com.devcourse.kurlymurly.web.common.UserRegexp.EMAIL_REGEXP;
+import static com.devcourse.kurlymurly.web.common.UserRegexp.PASSWORD_REGEXP;
+import static com.devcourse.kurlymurly.web.common.UserRegexp.PHONE_NUMBER_REGEXP;
+import static com.devcourse.kurlymurly.web.common.UserRegexp.USER_NAME_REGEXP;
+import static com.devcourse.kurlymurly.web.user.Join.Request;
 
-public sealed interface Join permits Join.Request {
+public sealed interface Join permits Request {
     record Request(
             @NotBlank(message = "사용할 아이디를 입력해주세요.")
             @Schema(name = "사용할 아이디")

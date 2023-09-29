@@ -59,12 +59,11 @@ public class OrderSupport extends BaseEntity {
     protected OrderSupport() {
     }
 
-    public OrderSupport(Long userId, Long orderId, String orderNumber, Type type,
-                        String title, String content) {
+    public OrderSupport(Long userId, Long orderId, String orderNumber, String type, String title, String content) {
         this.userId = userId;
         this.orderId = orderId;
         this.orderNumber = orderNumber;
-        this.type = type;
+        this.type = Type.valueOf(type);
         this.title = title;
         this.content = content;
         this.status = Status.PREPARE;

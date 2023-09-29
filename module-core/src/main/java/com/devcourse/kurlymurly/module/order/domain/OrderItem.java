@@ -14,6 +14,9 @@ public class OrderItem {
     private String productName;
 
     @Column(nullable = false)
+    private String imageUrl;
+
+    @Column(nullable = false)
     private int totalPrice;
 
     @Column(nullable = false)
@@ -25,9 +28,10 @@ public class OrderItem {
     protected OrderItem() {
     }
 
-    public OrderItem(Long productId, String productName, int totalPrice, int quantity) {
+    public OrderItem(Long productId, String productName, String imageUrl, int totalPrice, int quantity) {
         this.productId = productId;
         this.productName = productName;
+        this.imageUrl = imageUrl;
         this.totalPrice = totalPrice;
         this.quantity = quantity;
         this.isReviewed = false;

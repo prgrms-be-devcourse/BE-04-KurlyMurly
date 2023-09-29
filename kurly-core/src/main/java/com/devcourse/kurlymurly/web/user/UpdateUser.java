@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.web.dto.user;
+package com.devcourse.kurlymurly.web.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -7,12 +7,13 @@ import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 
-import static com.devcourse.kurlymurly.web.dto.UserRegexp.EMAIL_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.UserRegexp.PASSWORD_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.UserRegexp.PHONE_NUMBER_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.UserRegexp.USER_NAME_REGEXP;
+import static com.devcourse.kurlymurly.web.common.UserRegexp.EMAIL_REGEXP;
+import static com.devcourse.kurlymurly.web.common.UserRegexp.PASSWORD_REGEXP;
+import static com.devcourse.kurlymurly.web.common.UserRegexp.PHONE_NUMBER_REGEXP;
+import static com.devcourse.kurlymurly.web.common.UserRegexp.USER_NAME_REGEXP;
+import static com.devcourse.kurlymurly.web.user.UpdateUser.Request;
 
-public sealed interface UpdateUser permits UpdateUser.Request {
+public sealed interface UpdateUser permits Request {
     record Request(
             @NotBlank(message = "현재 비밀번호를 확인해주세요.")
             @Schema(name = "현재 비밀번호")

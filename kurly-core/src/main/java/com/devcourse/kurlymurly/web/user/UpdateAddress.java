@@ -1,16 +1,17 @@
-package com.devcourse.kurlymurly.web.dto.user.shipping;
+package com.devcourse.kurlymurly.web.user;
 
-import com.devcourse.kurlymurly.module.user.domain.shipping.Info;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
-import static com.devcourse.kurlymurly.web.dto.UserRegexp.PHONE_NUMBER_REGEXP;
-import static com.devcourse.kurlymurly.web.dto.UserRegexp.USER_NAME_REGEXP;
+import static com.devcourse.kurlymurly.web.common.UserRegexp.PHONE_NUMBER_REGEXP;
+import static com.devcourse.kurlymurly.web.common.UserRegexp.USER_NAME_REGEXP;
+import static com.devcourse.kurlymurly.web.user.UpdateAddress.InfoRequest;
+import static com.devcourse.kurlymurly.web.user.UpdateAddress.Request;
 
-public sealed interface UpdateAddress permits UpdateAddress.Request, UpdateAddress.InfoRequest {
+public sealed interface UpdateAddress permits Request, InfoRequest {
     record Request(
             @NotNull(message = "수정할 주소 id 값이 없습니다.")
             @Schema(name = "배송 주소 id값")
@@ -48,14 +49,14 @@ public sealed interface UpdateAddress permits UpdateAddress.Request, UpdateAddre
 
             @NotNull(message = "받으실 장소를 선택해주세요.")
             @Schema(name = "받으실 장소", allowableValues = {"DOOR", "OFFICE", "LOCKER", "ETC"})
-            Info.Area receiveArea,
+            String receiveArea,
 
             @Schema(name = "공용 현관 비밀번호")
             String entrancePassword,
 
             @NotNull(message = "메세지를 받을 시간을 선택해주세요.")
             @Schema(name = "배송 메세지 전송 시간", allowableValues = {"ALWAYS", "AFTER_7_AM"})
-            Info.AlertTime messageAlertTime
+            String messageAlertTime
     ) implements UpdateAddress {
     }
 }

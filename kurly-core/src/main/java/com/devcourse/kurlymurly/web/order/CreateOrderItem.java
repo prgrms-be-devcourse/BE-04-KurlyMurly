@@ -1,11 +1,11 @@
-package com.devcourse.kurlymurly.web.dto.order;
+package com.devcourse.kurlymurly.web.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-import static com.devcourse.kurlymurly.web.dto.order.CreateOrderItem.Request;
+import static com.devcourse.kurlymurly.web.order.CreateOrderItem.Request;
 
 public sealed interface CreateOrderItem permits Request {
     record Request(
@@ -16,6 +16,10 @@ public sealed interface CreateOrderItem permits Request {
             @NotBlank(message = "빈 값이 들어올 수 없습니다.")
             @Schema(name = "상품 이름")
             String productName,
+
+            @NotBlank(message = "이미지 경로에 빈 값이 들어올 수 없습니다.")
+            @Schema(name = "상품 사진")
+            String imageUrl,
 
             @Positive(message = "0보다 작은 값이 들어올 수 없습니다.")
             @Schema(name = "총 주문 금액")

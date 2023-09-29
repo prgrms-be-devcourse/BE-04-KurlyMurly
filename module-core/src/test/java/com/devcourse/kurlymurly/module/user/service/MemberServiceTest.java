@@ -11,11 +11,11 @@ import com.devcourse.kurlymurly.module.user.domain.payment.Payment;
 import com.devcourse.kurlymurly.module.user.domain.payment.PaymentRepository;
 import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
 import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
-import com.devcourse.kurlymurly.web.dto.user.cart.RemoveCart;
-import com.devcourse.kurlymurly.web.dto.user.UpdateUser;
-import com.devcourse.kurlymurly.web.dto.user.payment.RegisterPayment;
-import com.devcourse.kurlymurly.web.dto.user.payment.UpdatePayPassword;
-import com.devcourse.kurlymurly.web.dto.user.shipping.GetAddress;
+import com.devcourse.kurlymurly.web.user.RemoveCart;
+import com.devcourse.kurlymurly.web.user.UpdateUser;
+import com.devcourse.kurlymurly.web.user.RegisterPayment;
+import com.devcourse.kurlymurly.web.user.UpdatePayPassword;
+import com.devcourse.kurlymurly.web.user.GetAddress;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -171,7 +171,7 @@ class MemberServiceTest {
         @DisplayName("신용카드 결제 수단 추가 테스트")
         void add_credit() {
             // Given
-            RegisterPayment.creditRequest request = new RegisterPayment.creditRequest("12341234", "hana", null, "53");
+            RegisterPayment.CreditRequest request = new RegisterPayment.CreditRequest("12341234", "hana", null, "53");
 
             // When
             memberService.addCredit(1L, request);
@@ -184,7 +184,7 @@ class MemberServiceTest {
         @DisplayName("간편결제 결제 수단 추가 테스트")
         void add_easy_pay() {
             // given
-            RegisterPayment.easyPayRequest request = new RegisterPayment.easyPayRequest("12341234", "hana");
+            RegisterPayment.EasyPayRequest request = new RegisterPayment.EasyPayRequest("12341234", "hana");
 
             // when
             memberService.addEasyPay(1L, request);

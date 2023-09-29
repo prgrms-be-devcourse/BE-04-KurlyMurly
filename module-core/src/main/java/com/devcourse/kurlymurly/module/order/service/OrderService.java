@@ -7,19 +7,20 @@ import com.devcourse.kurlymurly.module.order.domain.OrderRepository;
 import com.devcourse.kurlymurly.module.order.domain.PaymentInfo;
 import com.devcourse.kurlymurly.module.order.domain.ShippingInfo;
 import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.web.dto.order.CreateOrder;
-import com.devcourse.kurlymurly.web.dto.order.CreateOrderItem;
-import com.devcourse.kurlymurly.web.dto.order.GetOrderResponse;
+import com.devcourse.kurlymurly.web.order.CreateOrder;
+import com.devcourse.kurlymurly.web.order.CreateOrderItem;
+import com.devcourse.kurlymurly.web.order.GetOrderResponse;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_CORRECT_PAY_PASSWORD;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.ORDER_NOT_FOUND;
 import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_ORDER_HOST;
+import static com.devcourse.kurlymurly.core.exception.ErrorCode.ORDER_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)
@@ -72,7 +73,7 @@ public class OrderService {
         return new GetOrderResponse.DetailInfo(
                 order.getId(),
                 order.getOrderNumber(),
-                order.getOrderItems(),
+                new ArrayList<>(),
                 paymentInfo.getTotalPrice(),
                 paymentInfo.getDeliveryFee(),
                 paymentInfo.getTotalDiscount(),
@@ -92,6 +93,7 @@ public class OrderService {
                 .orElseThrow(() -> new KurlyBaseException(ORDER_NOT_FOUND));
     }
 
+    // todo: 삭제된 것 제외하고 가져오기
     public List<GetOrderResponse.SimpleInfo> findOrderListSimpleFormByUserId(Long userId) {
         return orderRepository.findAllByUserId(userId).stream()
                 .map(this::toSimpleInfo)
@@ -159,13 +161,15 @@ public class OrderService {
     }
 
     private OrderItem toOrderItem(CreateOrderItem.Request request) {
-        return new OrderItem(request.productId(), request.productName(), request.totalPrice(), request.quantity());
+        return new OrderItem(request.productId(), request.productName(), request.imageUrl(), request.totalPrice(), request.quantity());
     }
 
+    // todo: 의존성 제거
     private PaymentInfo paymentInfo(CreateOrder.Request request) {
         return new PaymentInfo(request.totalPrice(), request.totalDiscount(), request.payment());
     }
 
+    // todo: 의존성 제거
     private ShippingInfo shippingInfo(CreateOrder.Request request) {
         return new ShippingInfo(request.receiver(), request.phoneNumber(), request.address(), request.receiveArea(), request.entranceInfo(), request.packaging());
     }

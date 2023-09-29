@@ -2,10 +2,10 @@ package com.devcourse.kurlymurly.api.user;
 
 import com.devcourse.kurlymurly.auth.AuthService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
-import com.devcourse.kurlymurly.web.dto.user.CheckEmail;
-import com.devcourse.kurlymurly.web.dto.user.CheckId;
-import com.devcourse.kurlymurly.web.dto.user.Join;
-import com.devcourse.kurlymurly.web.dto.user.Login;
+import com.devcourse.kurlymurly.web.user.CheckEmail;
+import com.devcourse.kurlymurly.web.user.CheckId;
+import com.devcourse.kurlymurly.web.user.Join;
+import com.devcourse.kurlymurly.web.user.Login;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

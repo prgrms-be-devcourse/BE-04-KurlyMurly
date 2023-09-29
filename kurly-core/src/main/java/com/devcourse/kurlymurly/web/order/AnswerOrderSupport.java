@@ -1,10 +1,10 @@
-package com.devcourse.kurlymurly.web.dto.order.support;
+package com.devcourse.kurlymurly.web.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import static com.devcourse.kurlymurly.web.dto.order.support.AnswerOrderSupport.*;
+import static com.devcourse.kurlymurly.web.order.AnswerOrderSupport.*;
 
 public sealed interface AnswerOrderSupport permits Request {
     record Request(

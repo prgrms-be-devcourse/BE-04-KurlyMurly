@@ -20,7 +20,6 @@ public class OrderDomain {
     private OrderState state;
     private Order.Status orderStatus;
 
-
     public OrderDomain(List<OrderItem> orderItems,
                        int totalPrice,
                        int totalDiscount,

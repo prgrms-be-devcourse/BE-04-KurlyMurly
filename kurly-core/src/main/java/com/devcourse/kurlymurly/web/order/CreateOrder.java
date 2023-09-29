@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.web.dto.order;
+package com.devcourse.kurlymurly.web.order;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -8,14 +8,14 @@ import jakarta.validation.constraints.Positive;
 
 import java.util.List;
 
-import static com.devcourse.kurlymurly.web.dto.order.CreateOrder.Request;
-import static com.devcourse.kurlymurly.web.dto.order.CreateOrder.Response;
+import static com.devcourse.kurlymurly.web.order.CreateOrder.Request;
+import static com.devcourse.kurlymurly.web.order.CreateOrder.Response;
 
 public sealed interface CreateOrder permits Request, Response {
     record Request(
             @NotNull(message = "빈 값이 들어올 수 없습니다.")
-            @Schema(name = "주문 상품 정보들") @Valid
-            List<CreateOrderItem.Request> orderItems,
+            @Schema(name = "주문 상품 정보들")
+            @Valid List<CreateOrderItem.Request> orderItems,
 
             @Positive(message = "0보다 작은 값이 들어올 수 없습니다.")
             @Schema(name = "총 주문 금액")
@@ -59,6 +59,10 @@ public sealed interface CreateOrder permits Request, Response {
     ) implements CreateOrder {
     }
 
-    record Response(String address, String orderNumber, int totalPrice) implements CreateOrder {
+    record Response(
+            String address,
+            String orderNumber,
+            int totalPrice
+    ) implements CreateOrder {
     }
 }

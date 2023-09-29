@@ -6,7 +6,7 @@ import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
 import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
 import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
-import com.devcourse.kurlymurly.web.dto.order.support.AnswerOrderSupport;
+import com.devcourse.kurlymurly.web.order.AnswerOrderSupport;
 import com.devcourse.kurlymurly.web.product.ProductRequest;
 import com.devcourse.kurlymurly.web.product.ProductResponse;
 import io.swagger.v3.oas.annotations.Operation;
