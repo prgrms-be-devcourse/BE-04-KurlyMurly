@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.api.user;
 
 import com.devcourse.kurlymurly.auth.AuthUser;
-import com.devcourse.kurlymurly.domain.user.MemberService;
+import com.devcourse.kurlymurly.application.member.MemberFacade;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.user.UpdateUser;
 import com.devcourse.kurlymurly.web.user.CreateCart;
@@ -36,25 +36,25 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/users")
 public class MemberController {
-    private final MemberService memberService;
+    private final MemberFacade memberFacade;
 
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
+    public MemberController(MemberFacade memberFacade) {
+        this.memberFacade = memberFacade;
     }
 
-//    @Tag(name = "member") // todo: seperate Layer
-//    @Operation(summary = "[토큰] 작성 가능 리뷰 조회", description = "[토큰 필요] 작성 가능 리뷰 조회 API", responses = {
-//            @ApiResponse(responseCode = "200", description = "성공적으로 작성 가능한 리뷰 목록을 가져온 상태"),
-//            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러")
-//    })
-//    @GetMapping("/reviews")
-//    @ResponseStatus(OK)
-//    public KurlyResponse<List<ReviewResponse.Reviewable>> getReviewableOrdersOnMyPage(
-//            @AuthenticationPrincipal AuthUser user
-//    ) {
-//        List<ReviewResponse.Reviewable> responses = memberService.getAllReviewableOrdersByUserId(user.getId());
-//        return KurlyResponse.ok(responses);
-//    }
+    @Tag(name = "member")
+    @Operation(summary = "[토큰] 작성 가능 리뷰 조회", description = "[토큰 필요] 작성 가능 리뷰 조회 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 작성 가능한 리뷰 목록을 가져온 상태"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러")
+    })
+    @GetMapping("/reviews")
+    @ResponseStatus(OK)
+    public KurlyResponse<List<ReviewResponse.Reviewable>> getReviewableOrdersOnMyPage(
+            @AuthenticationPrincipal AuthUser user
+    ) {
+        List<ReviewResponse.Reviewable> responses = memberFacade.getAllReviewableOrdersByUserId(user.getId());
+        return KurlyResponse.ok(responses);
+    }
 
     @Tag(name = "member")
     @Operation(description = "[토큰 필요] 개인정보 수정 API", responses = {
@@ -70,7 +70,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid UpdateUser.Request request
     ) {
-        memberService.findUpdateUser(user.getId(), request);
+        memberFacade.updateUserInfo(user.getId(), request);
         return KurlyResponse.noData();
     }
 
@@ -85,7 +85,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid AddAddress.Request request
     ) {
-        memberService.addAddress(user.getId(), request.roadAddress(), false);
+        memberFacade.addAddress(user.getId(), request.roadAddress(), false);
         return KurlyResponse.noData();
     }
 
@@ -99,7 +99,7 @@ public class MemberController {
     public KurlyResponse<List<GetAddress.Response>> getAddress(
             @AuthenticationPrincipal AuthUser user
     ) {
-        List<GetAddress.Response> addressList = memberService.getAddress(user.getId());
+        List<GetAddress.Response> addressList = memberFacade.loadAllAddress(user.getId());
         return KurlyResponse.ok(addressList);
     }
 
@@ -115,7 +115,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid UpdateAddress.Request request
     ) {
-        memberService.updateAddress(user.getId(), request.addressId(), request.description(), request.receiver(), request.contact());
+        memberFacade.updateAddress(user.getId(), request.addressId(), request.description(), request.receiver(), request.contact());
         return KurlyResponse.noData();
     }
 
@@ -131,7 +131,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid UpdateAddress.InfoRequest request
     ) {
-        memberService.updateAddressInfo(user.getId(), request.addressId(), request.receiver(), request.contact(), request.receiveArea(), request.entrancePassword(), request.messageAlertTime());
+        memberFacade.updateAddressInfo(user.getId(), request.addressId(), request.receiver(), request.contact(), request.receiveArea(), request.entrancePassword(), request.messageAlertTime());
         return KurlyResponse.noData();
     }
 
@@ -147,7 +147,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @PathVariable Long addressId
     ) {
-        memberService.deleteAddress(user.getId(), addressId);
+        memberFacade.deleteAddress(user.getId(), addressId);
         return KurlyResponse.noData();
     }
 
@@ -162,7 +162,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid RegisterPayment.CreditRequest request
     ) {
-        memberService.addCredit(user.getId(), request);
+        memberFacade.addCredit(user.getId(), request);
         return KurlyResponse.noData();
     }
 
@@ -177,7 +177,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid RegisterPayment.EasyPayRequest request
     ) {
-        memberService.addEasyPay(user.getId(), request);
+        memberFacade.addEasyPay(user.getId(), request);
         return KurlyResponse.noData();
     }
 
@@ -189,7 +189,7 @@ public class MemberController {
     @GetMapping("/payment/list")
     @ResponseStatus(OK)
     public KurlyResponse<List<String>> getPayment(@AuthenticationPrincipal AuthUser user) {
-        List<String> creditList = memberService.getPayments(user.getId());
+        List<String> creditList = memberFacade.loadAllPayments(user.getId());
         return KurlyResponse.ok(creditList);
     }
 
@@ -205,7 +205,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @PathVariable Long paymentId
     ) {
-        memberService.deletePayment(user.getId(), paymentId);
+        memberFacade.deletePayment(user.getId(), paymentId);
         return KurlyResponse.noData();
     }
 
@@ -221,7 +221,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid UpdatePayPassword.Request request
     ) {
-        memberService.updatePaymentPassword(user.getId(), request.payPassword());
+        memberFacade.updatePaymentPassword(user.getId(), request.payPassword());
         return KurlyResponse.noData();
     }
 
@@ -237,7 +237,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid CreateCart.Request request
     ) {
-        memberService.addCart(user.getId(), request.productId(), request.quantity());
+        memberFacade.addCart(user.getId(), request.productId(), request.quantity());
         return KurlyResponse.noData();
     }
 
@@ -253,7 +253,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @PathVariable Long cartId
     ) {
-        memberService.removeCartItem(cartId);
+        memberFacade.removeCartItem(cartId);
         return KurlyResponse.noData();
     }
 
@@ -269,7 +269,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid RemoveCart.Request removeProductList
     ) {
-        memberService.removeCartItemList(removeProductList.cartIds());
+        memberFacade.removeCartItemList(removeProductList.cartIds());
         return KurlyResponse.noData();
     }
 
@@ -285,7 +285,7 @@ public class MemberController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid UpdateCart.Request updateCart
     ) {
-        memberService.changeItemQuantity(updateCart.cartId(), updateCart.isIncrease());
+        memberFacade.changeItemQuantity(updateCart.cartId(), updateCart.isIncrease());
         return KurlyResponse.noData();
     }
 }
