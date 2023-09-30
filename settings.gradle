@@ -1,8 +1,15 @@
 rootProject.name = 'kurly-murly'
-include 'module-admin'
-include 'module-api'
-include 'module-core'
-include 'module-image'
+
+include 'kurly-api'
+include 'kurly-api:kurly-admin-api'
+include 'kurly-api:kurly-user-api'
+
 include 'kurly-app'
-include 'kurly-core'
 include 'kurly-auth'
+include 'module-image'
+
+include 'kurly-domain'
+include 'kurly-domain:kurly-db'
+include 'kurly-domain:kurly-user'
+
+include 'kurly-core'

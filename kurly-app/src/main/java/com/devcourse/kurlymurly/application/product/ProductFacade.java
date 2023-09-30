@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.application.product;
 
+import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.web.product.FavoriteResponse;
 import com.devcourse.kurlymurly.web.product.ProductRequest;
 import com.devcourse.kurlymurly.web.product.ProductResponse;
@@ -17,7 +18,6 @@ import com.devcourse.kurlymurly.module.product.service.ProductCommand;
 import com.devcourse.kurlymurly.module.product.service.ProductQuery;
 import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
 import com.devcourse.kurlymurly.module.product.service.ReviewQuery;
-import com.devcourse.kurlymurly.module.user.domain.User;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

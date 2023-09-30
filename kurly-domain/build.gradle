@@ -1,0 +1,8 @@
+dependencies {
+    implementation project(":kurly-core")
+    api project(":kurly-domain:kurly-db")
+    implementation project(":kurly-domain:kurly-user")
+}
+
+bootJar.enabled=false
+jar.enabled=true

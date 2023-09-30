@@ -1,5 +1,6 @@
 dependencies {
-    implementation project(":module-core")
+    implementation project(':kurly-domain')
+    api project(':kurly-domain:kurly-user')
     implementation project(":module-image")
     implementation project(":kurly-core")
     implementation project(":kurly-auth")

@@ -2,11 +2,11 @@ package com.devcourse.kurlymurly.auth;
 
 import com.devcourse.kurlymurly.auth.jwt.JwtProvider;
 import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
-import com.devcourse.kurlymurly.module.user.domain.UserRepository;
-import com.devcourse.kurlymurly.module.user.domain.User;
-import com.devcourse.kurlymurly.module.user.domain.UserInfo;
-import com.devcourse.kurlymurly.module.user.domain.shipping.Shipping;
-import com.devcourse.kurlymurly.module.user.domain.shipping.ShippingRepository;
+import com.devcourse.kurlymurly.domain.user.User;
+import com.devcourse.kurlymurly.domain.user.UserInfo;
+import com.devcourse.kurlymurly.domain.user.UserRepository;
+import com.devcourse.kurlymurly.domain.user.shipping.Shipping;
+import com.devcourse.kurlymurly.domain.user.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.user.Join;
 import com.devcourse.kurlymurly.web.user.Login;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

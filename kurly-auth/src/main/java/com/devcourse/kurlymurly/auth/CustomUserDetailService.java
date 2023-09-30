@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.auth;
 
 import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
-import com.devcourse.kurlymurly.module.user.domain.UserRepository;
+import com.devcourse.kurlymurly.domain.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
