@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    include:
+      - db
+      - jwt
+      - jasypt
+      - image
+
+logging:
+  level:
+    org:
+      springframework:
+        core:
+          LocalVariableTableParameterNameDiscoverer: error
+
+springdoc:
+  use-fqn: true
