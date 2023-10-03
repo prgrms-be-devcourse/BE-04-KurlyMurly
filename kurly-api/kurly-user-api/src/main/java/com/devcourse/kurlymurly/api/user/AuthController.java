@@ -45,7 +45,7 @@ public class AuthController {
             @ApiResponse(responseCode = "409", description = "이미 가입된 아이디를 입력한 경우"),
             @ApiResponse(responseCode = "409", description = "이미 가입된 이메일을 입력한 경우")
     })
-    @PostMapping("/signUp")
+    @PostMapping("/sign-up")
     @ResponseStatus(OK)
     public KurlyResponse<Void> join(@RequestBody @Valid Join.Request request) {
         authService.join(request);
