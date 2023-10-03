@@ -1,2 +1,6 @@
+dependencies {
+    implementation project(":kurly-app")
+}
+
 bootJar.enabled=false
 jar.enabled=true

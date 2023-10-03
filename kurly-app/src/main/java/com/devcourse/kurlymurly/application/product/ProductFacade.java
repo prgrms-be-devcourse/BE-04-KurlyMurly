@@ -8,7 +8,7 @@ import com.devcourse.kurlymurly.web.product.ReviewRequest;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import com.devcourse.kurlymurly.web.product.SupportRequest;
 import com.devcourse.kurlymurly.web.product.SupportResponse;
-import com.devcourse.kurlymurly.image.service.ImageService;
+import com.devcourse.kurlymurly.application.image.ImageUploader;
 import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.module.product.domain.Product;
 import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
@@ -35,7 +35,7 @@ public class ProductFacade {
     private final ReviewCommand reviewCommand;
     private final OrderService orderService;
     private final ProductMapper productMapper;
-    private final ImageService imageService;
+    private final ImageUploader imageUploader;
 
     public ProductFacade(
             ProductQuery productQuery,
@@ -44,7 +44,7 @@ public class ProductFacade {
             ReviewCommand reviewCommand,
             OrderService orderService,
             ProductMapper productMapper,
-            ImageService imageService
+            ImageUploader imageUploader
     ) {
         this.productQuery = productQuery;
         this.productCommand = productCommand;
@@ -52,7 +52,7 @@ public class ProductFacade {
         this.reviewCommand = reviewCommand;
         this.orderService = orderService;
         this.productMapper = productMapper;
-        this.imageService = imageService;
+        this.imageUploader = imageUploader;
     }
 
     public List<FavoriteResponse.Get> getUserFavorites(Long userId) {
@@ -93,7 +93,7 @@ public class ProductFacade {
             @Valid ProductRequest.Create request
     ) {
         ProductDomain productDomain = productMapper.toProductDomain(request);
-        String imageUrl = imageService.upload(image);
+        String imageUrl = imageUploader.upload(image);
 
         productCommand.create(request.categoryId(), imageUrl, productDomain);
         return productMapper.toCreateResponse(request);

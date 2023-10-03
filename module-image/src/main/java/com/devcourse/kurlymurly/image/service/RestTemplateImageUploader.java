@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.image.service;
 
+import com.devcourse.kurlymurly.application.image.ImageUploader;
 import com.devcourse.kurlymurly.image.common.CustomInputStreamResource;
 import com.devcourse.kurlymurly.image.exception.ImageConvertFailException;
 import com.devcourse.kurlymurly.image.exception.ImageUploadFailException;
@@ -19,7 +20,7 @@ import java.io.IOException;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA;
 
 @Component
-class RestTemplateImageService implements ImageService {
+class RestTemplateImageUploader implements ImageUploader {
     private static final String IMAGE_KEY = "image";
     private static final String API_KEY = "key";
 
@@ -31,7 +32,7 @@ class RestTemplateImageService implements ImageService {
     @Value("${kurly.image.key}")
     private String apiKey;
 
-    public RestTemplateImageService(RestTemplate restTemplate) {
+    public RestTemplateImageUploader(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

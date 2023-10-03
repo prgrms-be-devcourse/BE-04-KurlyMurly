@@ -7,8 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class MemberMapper {
     public GetAddress.Response toGetAddressResponse(Shipping shipping) {
-        return new GetAddress.Response(shipping.isDefault(), shipping.getAddress().isExpress()
-                , shipping.getAddress().getDescribedAddress(), shipping.getInfo().getReceiver()
-                , shipping.getInfo().getContact());
+        return new GetAddress.Response(shipping.isDefault(),
+                shipping.getAddress().isExpress(),
+                shipping.getAddress().getDescribedAddress(),
+                shipping.getInfo().getReceiver(),
+                shipping.getInfo().getContact()
+        );
     }
 }
