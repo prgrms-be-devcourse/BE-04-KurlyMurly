@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.module.order;
 
 import com.devcourse.kurlymurly.module.order.domain.Order;
-import com.devcourse.kurlymurly.module.order.domain.OrderItem;
+import com.devcourse.kurlymurly.module.order.domain.OrderLine;
 import com.devcourse.kurlymurly.module.order.domain.PaymentInfo;
 import com.devcourse.kurlymurly.module.order.domain.ShippingInfo;
 import com.devcourse.kurlymurly.web.order.CreateOrder;
@@ -90,9 +90,9 @@ public enum OrderFixture {
         );
     }
 
-    private List<OrderItem> toOrderItems() {
+    private List<OrderLine> toOrderItems() {
         return orderItemRequests.stream()
-                .map(request -> new OrderItem(
+                .map(request -> new OrderLine(
                         request.productId(),
                         request.productName(),
                         request.imageUrl(),

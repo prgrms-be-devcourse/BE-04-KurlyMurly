@@ -8,10 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -92,30 +90,18 @@ public class User extends BaseEntity {
         this.payPassword = payPassword;
     }
 
-    public boolean validatePayPassword(String payPassword, PasswordEncoder encoder) {
-        return encoder.matches(payPassword, this.payPassword);
-    }
-
-    public boolean validatePassword(String password, PasswordEncoder encoder) {
-        return encoder.matches(password, this.password);
-    }
-
     public int saveReward(Reward reward, int totalPrice) {
         int totalReward = reward.saveReward(totalPrice);
 
         return this.reward += totalReward;
     }
 
-    public boolean isNotAuthor(Long id) {
-        return !Objects.equals(this.getId(), id);
-    }
-
-    public String getMaskedUserName() {
-        return this.name.replaceAll("(?<=.{1})", "*");
-    }
-
     public String getName() {
         return name;
+    }
+
+    public String getLoginId() {
+        return loginId;
     }
 
     public String getPassword() {

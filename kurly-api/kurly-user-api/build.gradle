@@ -3,6 +3,7 @@ dependencies {
     implementation project(":kurly-core")
     implementation project(":kurly-auth")
     implementation project(':kurly-domain')
+    implementation project(':kurly-image')
 }
 
 bootJar.enabled=true

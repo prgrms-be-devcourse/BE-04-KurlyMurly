@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDomain {
-    private List<OrderItem> orderItems = new ArrayList<>();
+    private List<OrderLine> orderItems = new ArrayList<>();
     private int totalPrice;
     private int totalDiscount;
     private String payment;
@@ -20,7 +20,7 @@ public class OrderDomain {
     private OrderState state;
     private Order.Status orderStatus;
 
-    public OrderDomain(List<OrderItem> orderItems,
+    public OrderDomain(List<OrderLine> orderItems,
                        int totalPrice,
                        int totalDiscount,
                        String payment,

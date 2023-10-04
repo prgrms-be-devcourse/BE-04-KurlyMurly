@@ -54,6 +54,8 @@ public enum ErrorCode {
 
     // 500
     KURLY_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 문제입니다. 관리자에게 문의바랍니다."),
+    IMAGE_UPLOAD_FAIL(INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),
+    IMAGE_CONVERT_FAIL(INTERNAL_SERVER_ERROR, "파일 변환에 실패했습니다."),
     ;
 
     private final HttpStatus httpStatus;

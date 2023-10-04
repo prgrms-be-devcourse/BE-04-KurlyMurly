@@ -1,10 +1,10 @@
 package com.devcourse.kurlymurly.api.product;
 
+import com.devcourse.kurlymurly.application.product.ProductFacade;
+import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.product.ReviewRequest;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
-import com.devcourse.kurlymurly.application.product.ProductFacade;
-import com.devcourse.kurlymurly.auth.AuthUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,7 +46,7 @@ public class ReviewController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody ReviewRequest.Create request
     ) {
-        productFacade.registerReview(user.getUser(), request);
+        productFacade.registerReview(user.getId(), request);
         return KurlyResponse.noData();
     }
 

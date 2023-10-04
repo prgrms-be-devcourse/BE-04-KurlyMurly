@@ -1,6 +1,15 @@
 package com.devcourse.kurlymurly.application.product;
 
-import com.devcourse.kurlymurly.domain.user.User;
+import com.devcourse.kurlymurly.application.image.ImageUploader;
+import com.devcourse.kurlymurly.domain.product.Product;
+import com.devcourse.kurlymurly.domain.product.ProductDomain;
+import com.devcourse.kurlymurly.domain.product.SupportDomain;
+import com.devcourse.kurlymurly.domain.product.review.Review;
+import com.devcourse.kurlymurly.domain.service.ProductCommand;
+import com.devcourse.kurlymurly.domain.service.ProductQuery;
+import com.devcourse.kurlymurly.domain.service.ReviewCommand;
+import com.devcourse.kurlymurly.domain.service.ReviewQuery;
+import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.web.product.FavoriteResponse;
 import com.devcourse.kurlymurly.web.product.ProductRequest;
 import com.devcourse.kurlymurly.web.product.ProductResponse;
@@ -8,16 +17,6 @@ import com.devcourse.kurlymurly.web.product.ReviewRequest;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import com.devcourse.kurlymurly.web.product.SupportRequest;
 import com.devcourse.kurlymurly.web.product.SupportResponse;
-import com.devcourse.kurlymurly.image.service.ImageService;
-import com.devcourse.kurlymurly.module.order.service.OrderService;
-import com.devcourse.kurlymurly.module.product.domain.Product;
-import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
-import com.devcourse.kurlymurly.module.product.domain.SupportDomain;
-import com.devcourse.kurlymurly.module.product.domain.review.Review;
-import com.devcourse.kurlymurly.module.product.service.ProductCommand;
-import com.devcourse.kurlymurly.module.product.service.ProductQuery;
-import com.devcourse.kurlymurly.module.product.service.ReviewCommand;
-import com.devcourse.kurlymurly.module.product.service.ReviewQuery;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +34,7 @@ public class ProductFacade {
     private final ReviewCommand reviewCommand;
     private final OrderService orderService;
     private final ProductMapper productMapper;
-    private final ImageService imageService;
+    private final ImageUploader imageUploader;
 
     public ProductFacade(
             ProductQuery productQuery,
@@ -44,7 +43,7 @@ public class ProductFacade {
             ReviewCommand reviewCommand,
             OrderService orderService,
             ProductMapper productMapper,
-            ImageService imageService
+            ImageUploader imageUploader
     ) {
         this.productQuery = productQuery;
         this.productCommand = productCommand;
@@ -52,7 +51,7 @@ public class ProductFacade {
         this.reviewCommand = reviewCommand;
         this.orderService = orderService;
         this.productMapper = productMapper;
-        this.imageService = imageService;
+        this.imageUploader = imageUploader;
     }
 
     public List<FavoriteResponse.Get> getUserFavorites(Long userId) {
@@ -93,7 +92,7 @@ public class ProductFacade {
             @Valid ProductRequest.Create request
     ) {
         ProductDomain productDomain = productMapper.toProductDomain(request);
-        String imageUrl = imageService.upload(image);
+        String imageUrl = imageUploader.upload(image);
 
         productCommand.create(request.categoryId(), imageUrl, productDomain);
         return productMapper.toCreateResponse(request);
@@ -118,14 +117,14 @@ public class ProductFacade {
     }
 
     public void registerReview(
-            User user,
+            Long userId,
             @Valid ReviewRequest.Create request
     ) {
         Product product = productQuery.findProductByIdOrThrow(request.productId());
         product.validateSupportable();
 
-        reviewCommand.create(user, product, request.content(), request.isSecret());
-        orderService.reviewOrderItem(request.orderId(), request.productId());
+        reviewCommand.create(userId, product.getId(), product.getName(), request.content(), request.isSecret());
+        orderService.reviewOrderLine(request.orderId(), request.productId());
     }
 
     public void favoriteProduct(Long userId, Long productId) {
