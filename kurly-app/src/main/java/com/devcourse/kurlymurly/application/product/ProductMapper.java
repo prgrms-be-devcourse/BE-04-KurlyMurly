@@ -1,8 +1,8 @@
 package com.devcourse.kurlymurly.application.product;
 
-import com.devcourse.kurlymurly.module.product.domain.ProductDomain;
-import com.devcourse.kurlymurly.module.product.domain.SupportDomain;
-import com.devcourse.kurlymurly.module.product.domain.review.Review;
+import com.devcourse.kurlymurly.domain.product.ProductDomain;
+import com.devcourse.kurlymurly.domain.product.SupportDomain;
+import com.devcourse.kurlymurly.domain.product.review.Review;
 import com.devcourse.kurlymurly.web.product.ProductRequest;
 import com.devcourse.kurlymurly.web.product.ProductResponse;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;

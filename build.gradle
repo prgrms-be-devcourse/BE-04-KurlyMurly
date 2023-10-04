@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'application'
     id 'org.springframework.boot' version '3.1.2'
     id 'io.spring.dependency-management' version '1.1.2'
 }
@@ -7,18 +8,20 @@ plugins {
 allprojects {
     group = 'com.devcourse'
     version = '0.0.1-SNAPSHOT'
-}
-
-subprojects {
-    apply plugin: 'java-library'
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
-
-    sourceCompatibility = 20
 
     repositories {
         mavenCentral()
     }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'application'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    sourceCompatibility = 20
+    mainClassName = 'com.devcourse.kurlymurly.KurlyMurlyApplication'
 
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
