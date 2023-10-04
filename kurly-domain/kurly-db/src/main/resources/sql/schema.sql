@@ -1,3 +1,55 @@
+DROP TABLE IF EXISTS users;
+CREATE TABLE users
+(
+    user_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR (10) NOT NULL,
+    login_id VARCHAR (50) NOT NULL,
+    password VARCHAR (255) NOT NULL,
+    tier VARCHAR (15) NOT NULL,
+    reward INTEGER NOT NULL,
+    email VARCHAR (50) NOT NULL,
+    sex VARCHAR (10) NOT NULL,
+    birth DATETIME(6) NOT NULL,
+    pay_password VARCHAR (255),
+    recommender VARCHAR (50),
+    phone_number VARCHAR (15),
+    role VARCHAR (10),
+    status VARCHAR (10) NOT NULL,
+    created_at DATETIME(6),
+    updated_at DATETIME(6));
+
+DROP TABLE IF EXISTS shippings;
+CREATE TABLE shippings
+(
+    shipping_id        BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id            BIGINT       NOT NULL,
+    road_address       VARCHAR(100) NOT NULL,
+    description        VARCHAR(100),
+    is_express         BOOLEAN      NOT NULL,
+    receiver           VARCHAR(30)  NOT NULL,
+    contact            VARCHAR(15)  NOT NULL,
+    receive_area       VARCHAR(15)  NOT NULL,
+    entrance_password  VARCHAR(10)  NOT NULL,
+    message_alert_time VARCHAR(20)  NOT NULL,
+    is_default         BOOLEAN      NOT NULL,
+    created_at         DATETIME(6),
+    updated_at         DATETIME(6)
+);
+
+DROP TABLE IF EXISTS payments;
+CREATE TABLE payments
+(
+    payment_id   BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id      BIGINT      NOT NULL,
+    pay_info     VARCHAR(20) NOT NULL,
+    type         VARCHAR(15) NOT NULL,
+    password     VARCHAR(20),
+    expired_date DATETIME(6),
+    status       VARCHAR(10) NOT NULL,
+    created_at   DATETIME(6),
+    updated_at   DATETIME(6)
+);
+
 DROP TABLE IF EXISTS categories;
 CREATE TABLE categories
 (
