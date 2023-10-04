@@ -45,8 +45,8 @@ public class Order extends BaseEntity {
     private String orderNumber;
 
     @ElementCollection
-    @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))
-    private List<OrderItem> orderItems = new ArrayList<>();
+    @CollectionTable(name = "order_lines", joinColumns = @JoinColumn(name = "order_id"))
+    private List<OrderLine> orderLines = new ArrayList<>();
 
     @Embedded
     private PaymentInfo paymentInfo;
@@ -67,10 +67,10 @@ public class Order extends BaseEntity {
     protected Order() {
     }
 
-    public Order(Long userId, List<OrderItem> orderItems, PaymentInfo paymentInfo, ShippingInfo shippingInfo) {
+    public Order(Long userId, List<OrderLine> orderLines, PaymentInfo paymentInfo, ShippingInfo shippingInfo) {
         this.userId = userId;
         this.orderNumber = generateOrderNumber();
-        this.orderItems = orderItems;
+        this.orderLines = orderLines;
         this.paymentInfo = paymentInfo;
         this.shippingInfo = shippingInfo;
         this.status = Status.ORDERED;
@@ -98,8 +98,8 @@ public class Order extends BaseEntity {
         return currentDate + randomDigits;
     }
 
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
+    public List<OrderLine> getOrderItems() {
+        return orderLines;
     }
 
     public Status getStatus() {
@@ -122,20 +122,20 @@ public class Order extends BaseEntity {
         return shippingInfo;
     }
 
-    public void markReviewedOrder(Long productId) {
+    public void reviewOrderLine(Long productId) {
         this.getOrderItems().stream()
                 .filter(orderItem -> orderItem.isSameProduct(productId))
                 .findFirst()
-                .ifPresent(OrderItem::reviewed);
+                .ifPresent(OrderLine::reviewed);
     }
 
     public String getSimpleProducts() {
-        if(orderItems.size() == 1) {
-            return orderItems.get(0).getProductName();
+        if(orderLines.size() == 1) {
+            return orderLines.get(0).getProductName();
         }
 
-        String productName = orderItems.get(0).getProductName() + " 외 " ;
-        int size = orderItems.size() - 1;
+        String productName = orderLines.get(0).getProductName() + " 외 " ;
+        int size = orderLines.size() - 1;
 
         return productName + size + "건";
     }

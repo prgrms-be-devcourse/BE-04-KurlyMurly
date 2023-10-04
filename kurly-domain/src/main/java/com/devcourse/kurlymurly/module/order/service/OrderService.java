@@ -3,7 +3,7 @@ package com.devcourse.kurlymurly.module.order.service;
 import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.module.order.domain.Order;
-import com.devcourse.kurlymurly.module.order.domain.OrderItem;
+import com.devcourse.kurlymurly.module.order.domain.OrderLine;
 import com.devcourse.kurlymurly.module.order.domain.OrderRepository;
 import com.devcourse.kurlymurly.module.order.domain.PaymentInfo;
 import com.devcourse.kurlymurly.module.order.domain.ShippingInfo;
@@ -34,9 +34,9 @@ public class OrderService {
     }
 
     @Transactional
-    public void reviewOrderItem(Long id, Long productId) {
+    public void reviewOrderLine(Long id, Long productId) {
         Order order = findByIdOrThrow(id);
-        order.markReviewedOrder(productId);
+        order.reviewOrderLine(productId);
     }
 
     @Transactional
@@ -53,7 +53,7 @@ public class OrderService {
     }
 
     private Order toOrder(Long userId, CreateOrder.Request request) {
-        List<OrderItem> orderItems = toOrderItems(request.orderItems());
+        List<OrderLine> orderItems = toOrderItems(request.orderItems());
         PaymentInfo paymentInfo = paymentInfo(request);
         ShippingInfo shippingInfo = shippingInfo(request);
 
@@ -117,12 +117,12 @@ public class OrderService {
 
         return orderRepository.findAllReviewableOrdersByUserIdWithinThirtyDays(userId, allowedPeriod).stream()
                 .flatMap(order -> order.getOrderItems().stream()
-                        .filter(OrderItem::isNotReviewed)
+                        .filter(OrderLine::isNotReviewed)
                         .map(orderItem -> toReviewableResponse(order, orderItem)))
                 .toList();
     }
 
-    private ReviewResponse.Reviewable toReviewableResponse(Order order, OrderItem orderItem) {
+    private ReviewResponse.Reviewable toReviewableResponse(Order order, OrderLine orderItem) {
         LocalDateTime delivered = order.getUpdatedAt();
         return new ReviewResponse.Reviewable(
                 orderItem.getProductId(),
@@ -154,14 +154,14 @@ public class OrderService {
         order.toCancel();
     }
 
-    private List<OrderItem> toOrderItems(List<CreateOrderItem.Request> requests) {
+    private List<OrderLine> toOrderItems(List<CreateOrderItem.Request> requests) {
         return requests.stream()
                 .map(this::toOrderItem)
                 .toList();
     }
 
-    private OrderItem toOrderItem(CreateOrderItem.Request request) {
-        return new OrderItem(request.productId(), request.productName(), request.imageUrl(), request.totalPrice(), request.quantity());
+    private OrderLine toOrderItem(CreateOrderItem.Request request) {
+        return new OrderLine(request.productId(), request.productName(), request.imageUrl(), request.totalPrice(), request.quantity());
     }
 
     // todo: 의존성 제거

@@ -14,7 +14,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByIdAndUserId(Long id, Long userId);
 
     @Query("SELECT o " +
-            "FROM Order o JOIN FETCH o.orderItems ot " +
+            "FROM Order o JOIN FETCH o.orderLines ot " +
             "WHERE o.status = 'DELIVERED' AND o.deliveredAt > :allowed AND o.userId = :userId ")
     List<Order> findAllReviewableOrdersByUserIdWithinThirtyDays(@Param("userId") Long userId, @Param("allowed") LocalDateTime allowed);
 }
