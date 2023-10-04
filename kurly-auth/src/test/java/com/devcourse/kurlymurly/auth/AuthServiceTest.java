@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.auth;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.domain.user.UserRepository;
 import com.devcourse.kurlymurly.domain.user.shipping.ShippingRepository;

@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.common.configuration;
+package com.devcourse.kurlymurly.global.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

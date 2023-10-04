@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.core.exception;
+package com.devcourse.kurlymurly.common.exception;
 
 import org.springframework.http.HttpStatus;
 

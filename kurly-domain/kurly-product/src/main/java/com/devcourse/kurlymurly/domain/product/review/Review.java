@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.domain.product.review;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.data.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,8 +10,8 @@ import jakarta.persistence.Table;
 
 import java.util.Objects;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.INORDERABLE_PRODUCT;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_AUTHOR;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.INORDERABLE_PRODUCT;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_AUTHOR;
 import static com.devcourse.kurlymurly.domain.product.review.Review.Status.BANNED;
 import static com.devcourse.kurlymurly.domain.product.review.Review.Status.BEST;
 import static com.devcourse.kurlymurly.domain.product.review.Review.Status.DELETED;

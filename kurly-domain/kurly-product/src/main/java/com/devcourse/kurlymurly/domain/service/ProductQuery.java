@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.domain.service;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.domain.product.Product;
 import com.devcourse.kurlymurly.domain.product.ProductRepository;
 import com.devcourse.kurlymurly.domain.product.favorite.FavoriteRepository;
@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NEVER_WRITE_PRODUCT_SUPPORT;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.PRODUCT_NOT_FOUND;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NEVER_WRITE_PRODUCT_SUPPORT;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.PRODUCT_NOT_FOUND;
 
 @Component
 @Transactional(readOnly = true)

@@ -1,9 +1,8 @@
 package com.devcourse.kurlymurly.global;
 
-import com.devcourse.kurlymurly.core.exception.ErrorCode;
-import com.devcourse.kurlymurly.core.exception.ErrorResponse;
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
-import jakarta.servlet.http.HttpServletRequest;
+import com.devcourse.kurlymurly.common.exception.ErrorCode;
+import com.devcourse.kurlymurly.common.exception.ErrorResponse;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.CLIENT_INPUT_INVALID;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.KURLY_SERVER_ERROR;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.CLIENT_INPUT_INVALID;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.KURLY_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
@@ -41,10 +40,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
         @ResponseStatus(BAD_REQUEST)
-        public ErrorResponse handleValidationFailException(HttpServletRequest request, MethodArgumentNotValidException e) {
+        public ErrorResponse handleValidationFailException(MethodArgumentNotValidException e) {
             String errorMessage = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-            String requestURI = request.getRequestURI();
-            log.info("ValidationFailed at {} : {}", requestURI, errorMessage);
+            log.info("ValidationFailed : {}", errorMessage);
             return new ErrorResponse(CLIENT_INPUT_INVALID.name(), errorMessage);
     }
 

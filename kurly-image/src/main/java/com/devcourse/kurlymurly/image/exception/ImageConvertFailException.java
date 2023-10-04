@@ -1,10 +1,11 @@
 package com.devcourse.kurlymurly.image.exception;
 
-import com.devcourse.kurlymurly.core.exception.ErrorCode;
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
+
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.IMAGE_CONVERT_FAIL;
 
 public class ImageConvertFailException extends KurlyBaseException {
     public ImageConvertFailException(Throwable cause) {
-        super(ErrorCode.IMAGE_CONVERT_FAIL, cause);
+        super(IMAGE_CONVERT_FAIL, cause);
     }
 }

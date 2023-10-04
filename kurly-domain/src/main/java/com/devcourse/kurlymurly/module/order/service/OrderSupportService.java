@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.order.service;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupport;
 import com.devcourse.kurlymurly.module.order.domain.support.OrderSupportRepository;
 import com.devcourse.kurlymurly.web.order.CreateOrderSupport;
@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_FOUND_ORDER_SUPPORT;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_FOUND_ORDER_SUPPORT;
 
 @Service
 @Transactional(readOnly = true)
