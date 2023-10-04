@@ -1,8 +1,10 @@
 dependencies {
-    implementation project(':kurly-domain:kurly-user')
-    implementation project(':kurly-support')
-
     api('org.springframework.boot:spring-boot-starter-security')
+
+    implementation project(':kurly-domain:kurly-user')
+    implementation project(':kurly-support:kurly-web-support')
+    implementation project(':kurly-support:kurly-common-support')
+    implementation('org.springframework.boot:spring-boot-starter-web')
 
     // jwt
     implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'

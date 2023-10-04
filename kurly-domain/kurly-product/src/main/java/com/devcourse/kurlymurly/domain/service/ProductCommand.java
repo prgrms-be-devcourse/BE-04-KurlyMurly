@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.domain.service;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.domain.product.Product;
 import com.devcourse.kurlymurly.domain.product.ProductDomain;
 import com.devcourse.kurlymurly.domain.product.ProductRepository;
@@ -12,7 +12,7 @@ import com.devcourse.kurlymurly.domain.product.support.ProductSupportRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NEVER_FAVORITE;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NEVER_FAVORITE;
 
 @Component
 @Transactional

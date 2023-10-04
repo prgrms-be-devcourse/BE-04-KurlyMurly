@@ -1,6 +1,6 @@
 dependencies {
     implementation project(":kurly-app")
-    implementation project(':kurly-support')
+    implementation project(':kurly-support:kurly-common-support')
 }
 
 bootJar.enabled=false

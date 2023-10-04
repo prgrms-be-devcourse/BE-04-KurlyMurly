@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.auth;
 
 import com.devcourse.kurlymurly.auth.jwt.JwtProvider;
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.domain.user.UserInfo;
 import com.devcourse.kurlymurly.domain.user.UserRepository;
@@ -16,8 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.EXIST_SAME_EMAIL;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.EXIST_SAME_ID;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.EXIST_SAME_EMAIL;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.EXIST_SAME_ID;
 
 @Service
 @Transactional(readOnly = true)

@@ -1,7 +1,8 @@
 dependencies {
-    implementation project(':kurly-support')
     api project(":kurly-domain:kurly-db")
 
+    implementation project(':kurly-support:kurly-web-support')
+    implementation project(':kurly-support:kurly-common-support')
     implementation("org.springframework.security:spring-security-crypto:6.1.2")
 }
 

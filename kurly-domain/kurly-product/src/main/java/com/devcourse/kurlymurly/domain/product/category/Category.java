@@ -25,8 +25,4 @@ public class Category extends BaseEntity {
     public String getName() {
         return name;
     }
-
-    public String getSubCategory() {
-        return subCategory;
-    }
 }

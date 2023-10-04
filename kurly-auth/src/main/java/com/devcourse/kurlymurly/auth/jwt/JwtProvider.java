@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.auth.jwt;
 
 import com.devcourse.kurlymurly.auth.CustomUserDetailService;
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -26,11 +26,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.EXPIRED_JWT_TOKEN;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_AUTHORIZED_TOKEN;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_CORRECT_JWT;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_CORRECT_JWT_SIGN;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_SUPPORTED_JWT_TOKEN;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.EXPIRED_JWT_TOKEN;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_AUTHORIZED_TOKEN;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_CORRECT_JWT;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_CORRECT_JWT_SIGN;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_SUPPORTED_JWT_TOKEN;
 
 @Component
 public class JwtProvider {

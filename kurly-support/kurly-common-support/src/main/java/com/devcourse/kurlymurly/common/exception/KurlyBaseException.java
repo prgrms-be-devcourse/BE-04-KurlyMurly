@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.core.exception;
+package com.devcourse.kurlymurly.common.exception;
 
 public class KurlyBaseException extends RuntimeException {
     private static final String ID_PREFIX = " ID: ";

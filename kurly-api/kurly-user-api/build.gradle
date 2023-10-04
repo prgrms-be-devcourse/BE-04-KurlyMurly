@@ -1,8 +1,6 @@
 dependencies {
-    implementation project(":kurly-app")
-    implementation project(':kurly-support')
-    implementation project(":kurly-auth")
-    implementation project(':kurly-domain')
+    implementation project(':kurly-domain') // delete
+    implementation project(':kurly-app')
     implementation project(':kurly-image')
 }
 

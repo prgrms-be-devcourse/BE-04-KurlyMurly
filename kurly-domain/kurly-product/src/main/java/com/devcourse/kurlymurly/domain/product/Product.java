@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.domain.product;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.data.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -9,8 +9,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.DELETED_PRODUCT;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.INORDERABLE_PRODUCT;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.DELETED_PRODUCT;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.INORDERABLE_PRODUCT;
 
 @Entity
 @Table(name = "products")

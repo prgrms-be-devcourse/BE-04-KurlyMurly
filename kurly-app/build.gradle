@@ -1,9 +1,11 @@
 dependencies {
-    implementation project(':kurly-domain')
+    api project(":kurly-auth")
     api project(':kurly-domain:kurly-user')
-    api project(':kurly-domain:kurly-product')
-    implementation project(':kurly-support')
-    implementation project(":kurly-auth")
+    api project(':kurly-support:kurly-web-support')
+    api project(':kurly-domain:kurly-product') // implementation
+
+    implementation project(':kurly-support:kurly-common-support')
+    implementation project(':kurly-domain') // delete
 
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 }

@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.order.domain;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.data.BaseEntity;
 import com.devcourse.kurlymurly.module.order.domain.state.OrderState;
 import jakarta.persistence.CollectionTable;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_OWNER;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_OWNER;
 
 @Entity
 @Table(name = "orders")
