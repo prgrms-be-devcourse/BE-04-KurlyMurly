@@ -15,13 +15,13 @@ services:
     image: mysql
     container_name: mysql
     ports:
-      - 3306:3306
+      - 3305:3306
     volumes:
       - data:/var/lib/mysql
       - config:/etc/mysql/conf.d
     environment:
-      - MYSQL_ROOT_PASSWORD=ENC(KUQPNozqm8BhAT3tT30P9hB7VllUovWo)
-      - MYSQL_USER=ENC(GGO0fgzs3AA/MidOHKNG6w==)
-      - MYSQL_PASSWORD=ENC(KUQPNozqm8BhAT3tT30P9hB7VllUovWo)
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_USER=kdt
+      - MYSQL_PASSWORD=password
     platform: linux/arm64/v8
     restart: always
