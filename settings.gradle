@@ -4,7 +4,7 @@ include 'kurly-api'
 include 'kurly-api:kurly-admin-api'
 include 'kurly-api:kurly-user-api'
 
-include 'kurly-app'
+include 'kurly-core'
 include 'kurly-auth'
 include 'kurly-image'
 
