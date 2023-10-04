@@ -1,6 +1,6 @@
 dependencies {
-    api project(":kurly-auth")
     api project(':kurly-domain:kurly-user')
+    api project(":kurly-internal:kurly-auth")
     api project(':kurly-support:kurly-web-support')
     api project(':kurly-domain:kurly-product') // implementation
 
