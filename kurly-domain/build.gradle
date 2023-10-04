@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(":kurly-core")
+    implementation project(':kurly-support')
     api project(":kurly-domain:kurly-db")
     implementation project(":kurly-domain:kurly-user")
 }

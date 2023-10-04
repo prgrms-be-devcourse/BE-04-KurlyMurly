@@ -13,4 +13,4 @@ include 'kurly-domain:kurly-db'
 include 'kurly-domain:kurly-user'
 include 'kurly-domain:kurly-product'
 
-include 'kurly-core'
+include 'kurly-support'
