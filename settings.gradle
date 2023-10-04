@@ -5,8 +5,10 @@ include 'kurly-api:kurly-admin-api'
 include 'kurly-api:kurly-user-api'
 
 include 'kurly-core'
-include 'kurly-auth'
-include 'kurly-image'
+
+include 'kurly-internal'
+include 'kurly-internal:kurly-auth'
+include 'kurly-internal:kurly-image'
 
 include 'kurly-domain'
 include 'kurly-domain:kurly-db'
