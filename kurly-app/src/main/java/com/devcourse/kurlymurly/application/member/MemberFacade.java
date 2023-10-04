@@ -1,7 +1,8 @@
 package com.devcourse.kurlymurly.application.member;
 
-import com.devcourse.kurlymurly.domain.user.MemberCommand;
-import com.devcourse.kurlymurly.domain.user.MemberQuery;
+import com.devcourse.kurlymurly.domain.service.MemberCommand;
+import com.devcourse.kurlymurly.domain.service.MemberQuery;
+import com.devcourse.kurlymurly.domain.service.ProductQuery;
 import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.domain.user.cart.Cart;
 import com.devcourse.kurlymurly.domain.user.payment.Payment;
@@ -21,17 +22,20 @@ public class MemberFacade {
     private final MemberCommand memberCommand;
     private final OrderService orderService;
     private final MemberMapper memberMapper;
+    private final ProductQuery productQuery;
 
     public MemberFacade(
             MemberQuery memberQuery,
             MemberCommand memberCommand,
             OrderService orderService,
-            MemberMapper memberMapper
+            MemberMapper memberMapper,
+            ProductQuery productQuery
     ) {
         this.memberQuery = memberQuery;
         this.memberCommand = memberCommand;
         this.orderService = orderService;
         this.memberMapper = memberMapper;
+        this.productQuery = productQuery;
     }
 
     public List<ReviewResponse.Reviewable> getAllReviewableOrdersByUserId(Long userId) {
@@ -98,6 +102,7 @@ public class MemberFacade {
     }
 
     public void addCart(Long id, Long productId, int quantity) {
+        productQuery.validateOrderable(productId);
         memberCommand.addCart(id, productId, quantity);
     }
 

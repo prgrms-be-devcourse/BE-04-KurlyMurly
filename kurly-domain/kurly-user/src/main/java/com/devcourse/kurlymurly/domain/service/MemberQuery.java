@@ -1,6 +1,8 @@
-package com.devcourse.kurlymurly.domain.user;
+package com.devcourse.kurlymurly.domain.service;
 
 import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.domain.user.User;
+import com.devcourse.kurlymurly.domain.user.UserRepository;
 import com.devcourse.kurlymurly.domain.user.cart.Cart;
 import com.devcourse.kurlymurly.domain.user.cart.CartRepository;
 import com.devcourse.kurlymurly.domain.user.payment.Payment;
