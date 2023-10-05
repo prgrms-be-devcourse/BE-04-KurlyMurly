@@ -29,7 +29,7 @@ import static com.devcourse.kurlymurly.domain.user.User.Role.ROLE_USER;
 @EnableWebSecurity
 public class SecurityConfig {
     private final JwtProvider jwtProvider;
-    private final String[] permitUrls = {"/login/**","/sign-up","/check-id","/check-email"};
+    private final String[] permitUrls = {"/login","/sign-up","/check-id","/check-email"};
     private final String[] restrictedAdminUrls = {"/"};
 
     public SecurityConfig(JwtProvider jwtProvider) {
