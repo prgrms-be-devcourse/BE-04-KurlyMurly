@@ -27,6 +27,15 @@ public record KurlyPagingRequest(
     private static final Direction DEFAULT_DIRECTION = Direction.DESC;
     private static final String SORTING_CRITERIA = "createAt";
 
+    public KurlyPagingRequest(int page, Direction sort) {
+        this.page = page;
+        this.sort = sort;
+    }
+
+    public KurlyPagingRequest(int page) {
+        this(page, null);
+    }
+
     public Pageable toPageable() {
         return PageRequest.of(
                 page - INDEX_GAP,

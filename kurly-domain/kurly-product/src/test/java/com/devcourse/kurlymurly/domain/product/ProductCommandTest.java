@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.devcourse.kurlymurly.core.exception.ErrorCode.NEVER_FAVORITE;
+import static com.devcourse.kurlymurly.domain.product.Product.Status.BEST;
 import static com.devcourse.kurlymurly.domain.product.Product.Status.DELETED;
 import static com.devcourse.kurlymurly.domain.product.Product.Status.SOLD_OUT;
 import static com.devcourse.kurlymurly.domain.product.ProductFixture.LA_GOGI;
@@ -115,6 +116,40 @@ class ProductCommandTest {
             // when, then
             assertThatExceptionOfType(KurlyBaseException.class)
                     .isThrownBy(() -> productCommand.deleteProduct(productId));
+        }
+    }
+
+    @Nested
+    @DisplayName("베스트 상품 테스트")
+    class bestProductTest {
+        @Test
+        @DisplayName("관리자가 해당 상품을 베스트 상품으로 변경한다.")
+        void updateProductToBest_Success() {
+            // given
+            Product product = LA_GOGI.toEntity();
+            given(productQuery.findProductByIdOrThrow(any())).willReturn(product);
+
+            // when
+            productCommand.updateProductToBest(product.getId());
+
+            // then
+            then(productQuery).should(times(1)).findProductByIdOrThrow(any());
+            assertThat(product.getStatus()).isEqualTo(BEST);
+        }
+
+        @Test
+        @DisplayName("삭제된 상품을 베스트 상태로 변경하면 예외를 던진다.")
+        void updateProductToBest_Fail_ByDeletedProduct() {
+            // given
+            Product product = LA_GOGI.toEntity();
+            product.softDelete();
+
+            given(productQuery.findProductByIdOrThrow(any())).willReturn(product);
+
+            // when, then
+            assertThatExceptionOfType(KurlyBaseException.class)
+                    .isThrownBy(() -> productCommand.updateProductToBest(product.getId()));
+            then(productQuery).should(times(1)).findProductByIdOrThrow(any());
         }
     }
 
