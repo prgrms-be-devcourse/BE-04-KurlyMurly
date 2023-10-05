@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.api.order;
 
 import com.devcourse.kurlymurly.auth.AuthUser;
-import com.devcourse.kurlymurly.module.order.service.OrderSupportService;
+import com.devcourse.kurlymurly.domain.service.OrderSupportService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.order.CreateOrderSupport;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,8 +45,8 @@ public class OrderSupportController {
             @AuthenticationPrincipal AuthUser user,
             @RequestBody @Valid CreateOrderSupport.Request request
     ) {
-        CreateOrderSupport.Response OrderSupportResponse = orderSupportService.takeOrderSupport(user.getId(), request);
-        return KurlyResponse.ok(OrderSupportResponse);
+        CreateOrderSupport.Response response = orderSupportService.takeOrderSupport(user.getId(), request);
+        return KurlyResponse.ok(response);
     }
 
     @Tag(name = "orderSupport")

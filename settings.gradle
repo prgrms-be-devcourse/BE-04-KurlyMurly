@@ -14,6 +14,7 @@ include 'kurly-domain'
 include 'kurly-domain:kurly-db'
 include 'kurly-domain:kurly-user'
 include 'kurly-domain:kurly-product'
+include 'kurly-domain:kurly-order'
 
 include 'kurly-support'
 include 'kurly-support:kurly-web-support'

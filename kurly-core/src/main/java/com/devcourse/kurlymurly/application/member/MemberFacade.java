@@ -2,12 +2,12 @@ package com.devcourse.kurlymurly.application.member;
 
 import com.devcourse.kurlymurly.domain.service.MemberCommand;
 import com.devcourse.kurlymurly.domain.service.MemberQuery;
+import com.devcourse.kurlymurly.domain.service.OrderService;
 import com.devcourse.kurlymurly.domain.service.ProductQuery;
 import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.domain.user.cart.Cart;
 import com.devcourse.kurlymurly.domain.user.payment.Payment;
 import com.devcourse.kurlymurly.domain.user.shipping.Shipping;
-import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import com.devcourse.kurlymurly.web.user.GetAddress;
 import com.devcourse.kurlymurly.web.user.RegisterPayment;
