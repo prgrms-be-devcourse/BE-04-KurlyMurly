@@ -8,7 +8,7 @@ import com.devcourse.kurlymurly.domain.order.PaymentInfo;
 import com.devcourse.kurlymurly.domain.order.ShippingInfo;
 import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.web.order.CreateOrder;
-import com.devcourse.kurlymurly.web.order.CreateOrderItem;
+import com.devcourse.kurlymurly.web.order.CreateOrderLine;
 import com.devcourse.kurlymurly.web.order.GetOrderResponse;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import org.springframework.stereotype.Service;
@@ -34,9 +34,9 @@ public class OrderService {
     }
 
     @Transactional
-    public void reviewOrderLine(Long id, Long productId) {
+    public void reviewOrderLine(Long id, int lineIndex) {
         Order order = findByIdOrThrow(id);
-        order.reviewOrderLine(productId);
+        order.reviewOrderLine(lineIndex);
     }
 
     @Transactional
@@ -116,7 +116,7 @@ public class OrderService {
         LocalDateTime allowedPeriod = LocalDateTime.now().minusDays(REVIEWABLE_DEADLINE);
 
         return orderRepository.findAllReviewableOrdersByUserIdWithinThirtyDays(userId, allowedPeriod).stream()
-                .flatMap(order -> order.getOrderItems().stream()
+                .flatMap(order -> order.getOrderLines().stream()
                         .filter(OrderLine::isNotReviewed)
                         .map(orderItem -> toReviewableResponse(order, orderItem)))
                 .toList();
@@ -142,7 +142,7 @@ public class OrderService {
     @Transactional
     public void toCancel(Long id) {
         Order order = findByIdOrThrow(id); // todo: entity에서 domain으로 변경
-        order.toCancel();
+        order.cancel();
     }
 
     @Transactional
@@ -151,16 +151,16 @@ public class OrderService {
                 .orElseThrow(() -> new KurlyBaseException(NOT_ORDER_HOST));
 
         order.validateOrdersOwner(userId);
-        order.toCancel();
+        order.cancel();
     }
 
-    private List<OrderLine> toOrderItems(List<CreateOrderItem.Request> requests) {
+    private List<OrderLine> toOrderItems(List<CreateOrderLine.Request> requests) {
         return requests.stream()
                 .map(this::toOrderItem)
                 .toList();
     }
 
-    private OrderLine toOrderItem(CreateOrderItem.Request request) {
+    private OrderLine toOrderItem(CreateOrderLine.Request request) {
         return new OrderLine(request.productId(), request.productName(), request.imageUrl(), request.totalPrice(), request.quantity());
     }
 

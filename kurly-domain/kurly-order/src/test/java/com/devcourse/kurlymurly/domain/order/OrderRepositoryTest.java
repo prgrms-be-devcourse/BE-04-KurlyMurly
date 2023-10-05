@@ -23,7 +23,7 @@ class OrderRepositoryTest {
         Order order2 = HEJOW_ORDER2.toEntity();
 //        order1.toDelivered();
 //        order2.toDelivered();
-        order1.reviewOrderLine(1L);
+        order1.reviewOrderLine(1);
 
         orderRepository.saveAll(List.of(order1, order2));
     }

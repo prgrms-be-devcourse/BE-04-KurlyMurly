@@ -5,14 +5,14 @@ import com.devcourse.kurlymurly.domain.order.OrderLine;
 import com.devcourse.kurlymurly.domain.order.PaymentInfo;
 import com.devcourse.kurlymurly.domain.order.ShippingInfo;
 import com.devcourse.kurlymurly.web.order.CreateOrder;
-import com.devcourse.kurlymurly.web.order.CreateOrderItem;
+import com.devcourse.kurlymurly.web.order.CreateOrderLine;
 
 import java.util.List;
 
 public enum OrderFixture {
     HEJOW_ORDER(1L, List.of(
-            new CreateOrderItem.Request(1L, "소고기", "", 30000, 2),
-            new CreateOrderItem.Request(2L, "비싼 소고기", "", 20000, 1)),
+            new CreateOrderLine.Request(1L, "소고기", "", 30000, 2),
+            new CreateOrderLine.Request(2L, "비싼 소고기", "", 20000, 1)),
             50000,
             0,
             "컬리페이(국민은행)",
@@ -24,8 +24,8 @@ public enum OrderFixture {
             "공동현관 비밀번호(****)",
             "종이 포장재"),
     HEJOW_ORDER2(1L, List.of(
-            new CreateOrderItem.Request(1L, "소고기", "", 30000, 2),
-            new CreateOrderItem.Request(2L, "비싼 소고기", "", 20000, 1)),
+            new CreateOrderLine.Request(1L, "소고기", "", 30000, 2),
+            new CreateOrderLine.Request(2L, "비싼 소고기", "", 20000, 1)),
                     50000,
                     0,
                     "컬리페이(국민은행)",
@@ -38,7 +38,7 @@ public enum OrderFixture {
                     "종이 포장재");
 
     private final Long userId;
-    private final List<CreateOrderItem.Request> orderItemRequests;
+    private final List<CreateOrderLine.Request> orderItemRequests;
     private final int totalPrice;
     private final int totalDiscount;
     private final String payment;
@@ -50,7 +50,7 @@ public enum OrderFixture {
     private final String entranceInfo;
     private final String packaging;
 
-    OrderFixture(Long userId, List<CreateOrderItem.Request> orderItemRequests, int totalPrice, int totalDiscount, String payment, String payPassword, String receiver, String phoneNumber, String address, String receiveArea, String entranceInfo, String packaging) {
+    OrderFixture(Long userId, List<CreateOrderLine.Request> orderItemRequests, int totalPrice, int totalDiscount, String payment, String payPassword, String receiver, String phoneNumber, String address, String receiveArea, String entranceInfo, String packaging) {
         this.userId = userId;
         this.orderItemRequests = orderItemRequests;
         this.totalPrice = totalPrice;

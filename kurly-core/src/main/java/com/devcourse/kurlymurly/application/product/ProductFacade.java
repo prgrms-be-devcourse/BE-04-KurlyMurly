@@ -124,7 +124,7 @@ public class ProductFacade {
         product.validateSupportable();
 
         reviewCommand.create(userId, product.getId(), product.getName(), request.content(), request.isSecret());
-        orderService.reviewOrderLine(request.orderId(), request.productId());
+        orderService.reviewOrderLine(request.orderId(), request.lineIndex());
     }
 
     public void favoriteProduct(Long userId, Long productId) {

@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-import static com.devcourse.kurlymurly.web.order.CreateOrderItem.Request;
+import static com.devcourse.kurlymurly.web.order.CreateOrderLine.Request;
 
-public sealed interface CreateOrderItem permits Request {
+public sealed interface CreateOrderLine permits Request {
     record Request(
             @NotNull(message = "빈 값이 들어올 수 없습니다.")
             @Schema(description = "상품 아이디")
@@ -28,6 +28,6 @@ public sealed interface CreateOrderItem permits Request {
             @Positive(message = "0보다 작은 값이 들어올 수 없습니다.")
             @Schema(description = "주문 수량")
             int quantity
-    ) implements CreateOrderItem {
+    ) implements CreateOrderLine {
     }
 }

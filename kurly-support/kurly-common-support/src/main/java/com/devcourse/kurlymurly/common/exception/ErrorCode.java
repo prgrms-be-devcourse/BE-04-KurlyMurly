@@ -17,6 +17,7 @@ public enum ErrorCode {
     NOT_CORRECT_QUANTITY(BAD_REQUEST, "상품의 최소 수량은 1개입니다."),
     CLIENT_INPUT_INVALID(BAD_REQUEST, null),
     INORDERABLE_PRODUCT(BAD_REQUEST, "주문할 수 없는 상품입니다."),
+    INVALID_ORDER_LINE_INDEX(BAD_REQUEST, "주문 상품 인덱스로 잘못된 값이 들어왔습니다."),
 
     // 401
     NOT_CORRECT_PAY_PASSWORD(UNAUTHORIZED, "잘못된 결제 비밀번호입니다."),

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.INVALID_ORDER_LINE_INDEX;
 import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_OWNER;
 
 @Entity
@@ -78,15 +79,11 @@ public class Order extends BaseEntity {
         this.status = Status.ORDERED;
     }
 
-    public void updateStatus(Status status) {
-        this.status = status;
-    }
-
     public void toNextState() {
         this.orderState = orderState.nextState();
     }
 
-    public void toCancel() {
+    public void cancel() {
         this.status = Status.CANCELED;
         //this.orderState = orderState.cancel();
     }
@@ -112,10 +109,6 @@ public class Order extends BaseEntity {
         return orderNumber;
     }
 
-    public int getActualPayAmount() {
-        return paymentInfo.getActualPayAmount();
-    }
-
     public PaymentInfo getPaymentInfo() {
         return paymentInfo;
     }
@@ -124,11 +117,16 @@ public class Order extends BaseEntity {
         return shippingInfo;
     }
 
-    public void reviewOrderLine(Long productId) {
-        this.getOrderItems().stream()
-                .filter(orderItem -> orderItem.isSameProduct(productId))
-                .findFirst()
-                .ifPresent(OrderLine::reviewed);
+    public void reviewOrderLine(int lineIndex) {
+        validateOrderLineIndex(lineIndex);
+        OrderLine orderLine = orderLines.get(lineIndex);
+        orderLine.reviewed();
+    }
+
+    private void validateOrderLineIndex(int lineIndex) {
+        if (orderLines.size() <= lineIndex) {
+            throw new KurlyBaseException(INVALID_ORDER_LINE_INDEX);
+        }
     }
 
     public String getSimpleProducts() {

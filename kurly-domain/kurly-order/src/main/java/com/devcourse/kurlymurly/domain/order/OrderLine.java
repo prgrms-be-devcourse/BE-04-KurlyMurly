@@ -45,10 +45,6 @@ public class OrderLine {
         return productName;
     }
 
-    public boolean isSameProduct(Long productId) {
-        return Objects.equals(this.productId, productId);
-    }
-
     public void reviewed() {
         this.isReviewed = true;
     }
