@@ -76,6 +76,12 @@ public class ProductFacade {
         return productQuery.getNewProductPageResponse(pageable);
     }
 
+    public Page<ProductResponse.GetSimple> loadBestProductPageResponse(
+            @Valid Pageable pageable
+    ) {
+        return productQuery.getBestProductPageResponse(pageable);
+    }
+
     public Slice<ReviewResponse.OfProduct> loadReviewsOfProduct(
             Long productId,
             @Valid ReviewRequest.OfProduct request

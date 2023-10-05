@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.api.product;
 
+import com.devcourse.kurlymurly.application.product.ProductFacade;
 import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.web.common.KurlyPagingRequest;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
@@ -8,7 +9,6 @@ import com.devcourse.kurlymurly.web.product.ProductResponse;
 import com.devcourse.kurlymurly.web.product.ReviewRequest;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import com.devcourse.kurlymurly.web.product.SupportRequest;
-import com.devcourse.kurlymurly.application.product.ProductFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -72,6 +72,17 @@ public class ProductController {
             @ModelAttribute KurlyPagingRequest request
     ) {
         Page<ProductResponse.GetSimple> responses = productFacade.loadNewProductPageResponse(request.toPageable());
+        return KurlyResponse.ok(responses);
+    }
+
+    @Tag(name = "product")
+    @Operation(summary = "베스트 상품 페이지 가져오기", description = "베스트 상품 목록을 페이징으로 보여준다.")
+    @GetMapping("/best")
+    @ResponseStatus(OK)
+    public KurlyResponse<Page<ProductResponse.GetSimple>> getProductPagingOfBestProducts(
+            @ModelAttribute KurlyPagingRequest request
+    ) {
+        Page<ProductResponse.GetSimple> responses = productFacade.loadBestProductPageResponse(request.toPageable());
         return KurlyResponse.ok(responses);
     }
 

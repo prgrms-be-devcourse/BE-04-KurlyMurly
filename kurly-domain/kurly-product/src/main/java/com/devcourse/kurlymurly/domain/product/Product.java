@@ -18,7 +18,7 @@ public class Product extends BaseEntity {
     /** 샛별 배송, 일반 배송 */
     public enum Delivery { EXPRESS, NORMAL }
 
-    public enum Status { NORMAL, SOLD_OUT, DELETED }
+    public enum Status { NORMAL, SOLD_OUT, DELETED, BEST }
 
     @Column(nullable = false)
     private Long categoryId;
@@ -84,6 +84,11 @@ public class Product extends BaseEntity {
     public void soldOut() {
         validateSupportable();
         this.status = Status.SOLD_OUT;
+    }
+
+    public void toBest() {
+        validateSupportable();
+        this.status = Status.BEST;
     }
 
     public String getName() {
