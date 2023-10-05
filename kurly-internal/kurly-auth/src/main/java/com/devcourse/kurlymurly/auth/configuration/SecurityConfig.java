@@ -1,10 +1,13 @@
 package com.devcourse.kurlymurly.auth.configuration;
 
 import com.devcourse.kurlymurly.auth.jwt.JwtAuthenticationFilter;
+import com.devcourse.kurlymurly.auth.jwt.JwtProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,13 +28,12 @@ import static com.devcourse.kurlymurly.domain.user.User.Role.ROLE_USER;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    private final String[] restrictedUserUrls = {"/"};
+    private final JwtProvider jwtProvider;
+    private final String[] permitUrls = {"/login/**","/sign-up","/check-id","/check-email"};
     private final String[] restrictedAdminUrls = {"/"};
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    public SecurityConfig(JwtProvider jwtProvider) {
+        this.jwtProvider = jwtProvider;
     }
 
     @Bean
@@ -42,6 +44,11 @@ public class SecurityConfig {
     @Bean
     MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
         return new MvcRequestMatcher.Builder(introspector);
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(permitUrls);
     }
 
     @Bean
@@ -75,7 +82,7 @@ public class SecurityConfig {
 //                                .requestMatchers(restrictedAdminUrls).hasAuthority((ROLE_ADMIN.productName()))
                                         .anyRequest().permitAll()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
