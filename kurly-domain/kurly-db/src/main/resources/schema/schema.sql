@@ -174,8 +174,9 @@ CREATE TABLE orders
 DROP TABLE IF EXISTS order_lines;
 CREATE TABLE order_lines
 (
+    order_id     BIGINT       NOT NULL,
     product_id   BIGINT       NOT NULL,
-    user_id      BIGINT       NOT NULL,
+    line_index   INT          NOT NULL,
     product_name VARCHAR(50)  NOT NULL,
     image_url    VARCHAR(255) NOT NULL,
     total_price  INT          NOT NULL,

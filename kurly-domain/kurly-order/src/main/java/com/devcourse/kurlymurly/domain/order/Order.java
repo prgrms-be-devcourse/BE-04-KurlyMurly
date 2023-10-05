@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -46,6 +47,7 @@ public class Order extends BaseEntity {
 
     @ElementCollection
     @CollectionTable(name = "order_lines", joinColumns = @JoinColumn(name = "order_id"))
+    @OrderColumn(name = "line_index")
     private List<OrderLine> orderLines = new ArrayList<>();
 
     @Embedded
@@ -98,7 +100,7 @@ public class Order extends BaseEntity {
         return currentDate + randomDigits;
     }
 
-    public List<OrderLine> getOrderItems() {
+    public List<OrderLine> getOrderLines() {
         return orderLines;
     }
 
