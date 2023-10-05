@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.module.order.service;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.module.order.domain.Order;
 import com.devcourse.kurlymurly.module.order.domain.OrderLine;
@@ -18,9 +18,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_CORRECT_PAY_PASSWORD;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_ORDER_HOST;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.ORDER_NOT_FOUND;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_CORRECT_PAY_PASSWORD;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_ORDER_HOST;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.ORDER_NOT_FOUND;
 
 @Service
 @Transactional(readOnly = true)

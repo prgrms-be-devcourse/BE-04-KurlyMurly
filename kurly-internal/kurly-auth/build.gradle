@@ -1,0 +1,17 @@
+dependencies {
+    api('org.springframework.boot:spring-boot-starter-security')
+
+    implementation project(':kurly-domain:kurly-user')
+    implementation project(':kurly-support:kurly-web-support')
+    implementation project(':kurly-support:kurly-common-support')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+
+    // jwt
+    implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+}
+
+bootJar.enabled=false
+jar.enabled=true

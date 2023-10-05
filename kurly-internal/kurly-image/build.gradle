@@ -1,0 +1,7 @@
+dependencies {
+    implementation project(':kurly-core')
+    implementation project(':kurly-support:kurly-common-support')
+}
+
+bootJar.enabled=false
+jar.enabled=true

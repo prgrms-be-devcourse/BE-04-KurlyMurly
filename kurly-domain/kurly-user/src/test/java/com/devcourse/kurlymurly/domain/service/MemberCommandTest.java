@@ -1,6 +1,5 @@
 package com.devcourse.kurlymurly.domain.service;
 
-import com.devcourse.kurlymurly.domain.service.MemberCommand;
 import com.devcourse.kurlymurly.domain.user.ShippingFixture;
 import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.domain.user.payment.Payment;

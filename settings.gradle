@@ -4,13 +4,17 @@ include 'kurly-api'
 include 'kurly-api:kurly-admin-api'
 include 'kurly-api:kurly-user-api'
 
-include 'kurly-app'
-include 'kurly-auth'
-include 'kurly-image'
+include 'kurly-core'
+
+include 'kurly-internal'
+include 'kurly-internal:kurly-auth'
+include 'kurly-internal:kurly-image'
 
 include 'kurly-domain'
 include 'kurly-domain:kurly-db'
 include 'kurly-domain:kurly-user'
 include 'kurly-domain:kurly-product'
 
-include 'kurly-core'
+include 'kurly-support'
+include 'kurly-support:kurly-web-support'
+include 'kurly-support:kurly-common-support'

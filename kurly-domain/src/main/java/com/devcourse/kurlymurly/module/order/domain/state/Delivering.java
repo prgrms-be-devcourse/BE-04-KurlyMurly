@@ -1,8 +1,8 @@
 package com.devcourse.kurlymurly.module.order.domain.state;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.DELIVERED_ORDER;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.DELIVERED_ORDER;
 
 public class Delivering implements OrderState {
     @Override

@@ -1,9 +1,7 @@
 dependencies {
-    implementation project(":kurly-app")
-    implementation project(":kurly-core")
-    implementation project(":kurly-auth")
-    implementation project(':kurly-domain')
-    implementation project(':kurly-image')
+    implementation project(':kurly-domain') // delete
+    implementation project(':kurly-core')
+    implementation project(':kurly-internal:kurly-image')
 }
 
 bootJar.enabled=true

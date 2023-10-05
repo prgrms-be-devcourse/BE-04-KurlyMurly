@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.domain.service;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.domain.user.UserRepository;
 import com.devcourse.kurlymurly.domain.user.cart.Cart;
@@ -14,10 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.CART_NOT_FOUND;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_EXISTS_USER;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_FOUND_PAYMENT;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.SHIPPING_NOT_FOUND;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.CART_NOT_FOUND;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_EXISTS_USER;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_FOUND_PAYMENT;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.SHIPPING_NOT_FOUND;
 
 @Component
 @Transactional(readOnly = true)

@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.domain.service;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.domain.product.review.Review;
 import com.devcourse.kurlymurly.domain.product.review.ReviewLike;
 import com.devcourse.kurlymurly.domain.product.review.ReviewLikeRepository;
@@ -8,7 +8,7 @@ import com.devcourse.kurlymurly.domain.product.review.ReviewRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NEVER_LIKED;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NEVER_LIKED;
 
 @Component
 @Transactional

@@ -1,7 +1,13 @@
 dependencies {
-    api('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0')
-    implementation('org.springframework.boot:spring-boot-starter-validation')
-    implementation('org.springframework.data:spring-data-commons:3.1.2')
+    api project(':kurly-domain:kurly-user')
+    api project(":kurly-internal:kurly-auth")
+    api project(':kurly-support:kurly-web-support')
+    api project(':kurly-domain:kurly-product') // implementation
+
+    implementation project(':kurly-support:kurly-common-support')
+    implementation project(':kurly-domain') // delete
+
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 }
 
 bootJar.enabled=false

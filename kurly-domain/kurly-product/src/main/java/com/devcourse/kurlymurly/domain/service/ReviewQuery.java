@@ -1,6 +1,6 @@
 package com.devcourse.kurlymurly.domain.service;
 
-import com.devcourse.kurlymurly.core.exception.KurlyBaseException;
+import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.domain.product.review.Review;
 import com.devcourse.kurlymurly.domain.product.review.ReviewLike;
 import com.devcourse.kurlymurly.domain.product.review.ReviewLikeRepository;
@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_FOUND_REVIEW;
-import static com.devcourse.kurlymurly.core.exception.ErrorCode.NOT_FOUND_REVIEW_LIKE;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_FOUND_REVIEW;
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.NOT_FOUND_REVIEW_LIKE;
 
 @Component
 @Transactional(readOnly = true)
