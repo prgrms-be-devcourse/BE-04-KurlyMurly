@@ -12,6 +12,7 @@ import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import com.devcourse.kurlymurly.web.user.GetAddress;
 import com.devcourse.kurlymurly.web.user.RegisterPayment;
 import com.devcourse.kurlymurly.web.user.UpdateUser;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,19 +24,22 @@ public class MemberFacade {
     private final OrderService orderService;
     private final MemberMapper memberMapper;
     private final ProductQuery productQuery;
+    private final PasswordEncoder passwordEncoder;
 
     public MemberFacade(
             MemberQuery memberQuery,
             MemberCommand memberCommand,
             OrderService orderService,
             MemberMapper memberMapper,
-            ProductQuery productQuery
+            ProductQuery productQuery,
+            PasswordEncoder passwordEncoder
     ) {
         this.memberQuery = memberQuery;
         this.memberCommand = memberCommand;
         this.orderService = orderService;
         this.memberMapper = memberMapper;
         this.productQuery = productQuery;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<ReviewResponse.Reviewable> getAllReviewableOrdersByUserId(Long userId) {
@@ -44,8 +48,9 @@ public class MemberFacade {
 
     public void updateUserInfo(Long userId, UpdateUser.Request request) {
         User user = memberQuery.getUser(userId);
+        String editPassword = passwordEncoder.encode(request.password());
 
-        memberCommand.updateUserInfo(request, user);
+        memberCommand.updateUserInfo(request, editPassword, user);
     }
 
     public void addAddress(Long userId, String address, boolean isDefault) {
@@ -97,8 +102,8 @@ public class MemberFacade {
 
     public void updatePaymentPassword(Long userId, String payPassword) {
         User user = memberQuery.getUser(userId);
-
-        memberCommand.updatePaymentPassword(user, payPassword);
+        String encodedPassword = passwordEncoder.encode(payPassword);
+        memberCommand.updatePaymentPassword(user, encodedPassword);
     }
 
     public void addCart(Long id, Long productId, int quantity) {

@@ -17,14 +17,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.devcourse.kurlymurly.domain.user.UserFixture.USER_FIXTURE;
 import static com.devcourse.kurlymurly.module.user.PaymentFixture.PAYMENT_FIXTURE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,9 +35,6 @@ class MemberCommandTest {
 
     @Mock
     private ShippingRepository shippingRepository;
-
-    @Mock
-    private PasswordEncoder passwordEncoder;
 
     private static User user;
 
@@ -62,11 +57,8 @@ class MemberCommandTest {
         @Test
         @DisplayName("개인정보 변경 테스트")
         void update_user() {
-            // Given
-            doReturn("encryptedPassword").when(passwordEncoder).encode(any());
-
             // When
-            memberCommand.updateUserInfo(request, user);
+            memberCommand.updateUserInfo(request, "encryptedPassword", user);
 
             // Then
             assertThat(user.getName()).isEqualTo("sehan");
@@ -185,13 +177,8 @@ class MemberCommandTest {
             // Given
             UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
 
-            doReturn("encryptedPassword").when(passwordEncoder).encode(any());
-
             // When
-            memberCommand.updatePaymentPassword(user, request.payPassword());
-
-            // Then
-            then(passwordEncoder).should(times(1)).encode(any());
+            memberCommand.updatePaymentPassword(user, "encodedPayPassword");
         }
     }
 }
