@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.application.member;
 
-import com.devcourse.kurlymurly.domain.service.MemberCommand;
-import com.devcourse.kurlymurly.domain.service.MemberQuery;
+import com.devcourse.kurlymurly.domain.service.UserCommand;
+import com.devcourse.kurlymurly.domain.service.UserQuery;
 import com.devcourse.kurlymurly.domain.service.ProductQuery;
 import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.domain.user.cart.Cart;
@@ -18,26 +18,26 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class MemberFacade {
-    private final MemberQuery memberQuery;
-    private final MemberCommand memberCommand;
+public class UserFacade {
+    private final UserQuery userQuery;
+    private final UserCommand userCommand;
     private final OrderService orderService;
-    private final MemberMapper memberMapper;
+    private final UserMapper userMapper;
     private final ProductQuery productQuery;
     private final PasswordEncoder passwordEncoder;
 
-    public MemberFacade(
-            MemberQuery memberQuery,
-            MemberCommand memberCommand,
+    public UserFacade(
+            UserQuery userQuery,
+            UserCommand userCommand,
             OrderService orderService,
-            MemberMapper memberMapper,
+            UserMapper userMapper,
             ProductQuery productQuery,
             PasswordEncoder passwordEncoder
     ) {
-        this.memberQuery = memberQuery;
-        this.memberCommand = memberCommand;
+        this.userQuery = userQuery;
+        this.userCommand = userCommand;
         this.orderService = orderService;
-        this.memberMapper = memberMapper;
+        this.userMapper = userMapper;
         this.productQuery = productQuery;
         this.passwordEncoder = passwordEncoder;
     }
@@ -47,84 +47,84 @@ public class MemberFacade {
     }
 
     public void updateUserInfo(Long userId, UpdateUser.Request request) {
-        User user = memberQuery.getUser(userId);
+        User user = userQuery.getUser(userId);
         String editPassword = passwordEncoder.encode(request.password());
 
-        memberCommand.updateUserInfo(request, editPassword, user);
+        userCommand.updateUserInfo(request, editPassword, user);
     }
 
     public void addAddress(Long userId, String address, boolean isDefault) {
-        memberCommand.addAddress(userId, address, isDefault);
+        userCommand.addAddress(userId, address, isDefault);
     }
 
     public List<GetAddress.Response> loadAllAddress(Long userId) {
-        return memberQuery.getAllAddress(userId).stream()
-                .map(memberMapper::toGetAddressResponse)
+        return userQuery.getAllAddress(userId).stream()
+                .map(userMapper::toGetAddressResponse)
                 .toList();
     }
 
     public void updateAddress(Long userId, Long addressId, String description, String receiver, String contact) {
-        Shipping shipping = memberQuery.findAddress(userId, addressId);
+        Shipping shipping = userQuery.findAddress(userId, addressId);
 
-        memberCommand.updateAddress(shipping, description, receiver, contact);
+        userCommand.updateAddress(shipping, description, receiver, contact);
     }
 
     public void updateAddressInfo(Long userId, Long addressId, String receiver, String contact, String receiveArea,
                                   String entrancePassword, String alertTime) {
-        Shipping shipping = memberQuery.findAddress(userId, addressId);
+        Shipping shipping = userQuery.findAddress(userId, addressId);
 
-        memberCommand.updateAddressInfo(shipping, receiver, contact, receiveArea, entrancePassword, alertTime);
+        userCommand.updateAddressInfo(shipping, receiver, contact, receiveArea, entrancePassword, alertTime);
     }
 
     public void deleteAddress(Long userId, Long addressId) {
-        Shipping shipping = memberQuery.findAddress(userId, addressId);
+        Shipping shipping = userQuery.findAddress(userId, addressId);
 
-        memberCommand.deleteAddress(shipping);
+        userCommand.deleteAddress(shipping);
     }
 
     public void addCredit(Long userId, RegisterPayment.CreditRequest request) {
-        memberCommand.addCredit(userId, request);
+        userCommand.addCredit(userId, request);
     }
 
     public void addEasyPay(Long userId, RegisterPayment.EasyPayRequest request) {
-        memberCommand.addEasyPay(userId, request);
+        userCommand.addEasyPay(userId, request);
     }
 
     public List<String> loadAllPayments(Long userId) {
-        return memberQuery.getAllPayments(userId);
+        return userQuery.getAllPayments(userId);
     }
 
     public void deletePayment(Long userId, Long paymentId) {
-        Payment payment = memberQuery.getPayment(userId, paymentId);
+        Payment payment = userQuery.getPayment(userId, paymentId);
 
-        memberCommand.deletePayment(payment);
+        userCommand.deletePayment(payment);
     }
 
     public void updatePaymentPassword(Long userId, String payPassword) {
-        User user = memberQuery.getUser(userId);
+        User user = userQuery.getUser(userId);
         String encodedPassword = passwordEncoder.encode(payPassword);
-        memberCommand.updatePaymentPassword(user, encodedPassword);
+        userCommand.updatePaymentPassword(user, encodedPassword);
     }
 
     public void addCart(Long id, Long productId, int quantity) {
         productQuery.validateOrderable(productId);
-        memberCommand.addCart(id, productId, quantity);
+        userCommand.addCart(id, productId, quantity);
     }
 
     public void removeCartItem(Long cartId) {
-        Cart cart = memberQuery.getCart(cartId);
+        Cart cart = userQuery.getCart(cartId);
 
-        memberCommand.removeCartItem(cart);
+        userCommand.removeCartItem(cart);
     }
 
     public void removeCartItemList(List<Long> cartIds) {
-        List<Cart> carts = memberQuery.getAllCarts(cartIds);
+        List<Cart> carts = userQuery.getAllCarts(cartIds);
 
-        memberCommand.removeCartItemList(carts);
+        userCommand.removeCartItemList(carts);
     }
 
     public void changeItemQuantity(Long cartId, boolean isIncrease) {
-        Cart cart = memberQuery.getCart(cartId);
+        Cart cart = userQuery.getCart(cartId);
 
         cart.updateQuantity(isIncrease);
     }

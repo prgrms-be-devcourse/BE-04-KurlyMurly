@@ -26,9 +26,9 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-class MemberCommandTest {
+class UserCommandTest {
     @InjectMocks
-    private MemberCommand memberCommand;
+    private UserCommand userCommand;
 
     @Mock
     private PaymentRepository paymentRepository;
@@ -58,7 +58,7 @@ class MemberCommandTest {
         @DisplayName("개인정보 변경 테스트")
         void update_user() {
             // When
-            memberCommand.updateUserInfo(request, "encryptedPassword", user);
+            userCommand.updateUserInfo(request, "encryptedPassword", user);
 
             // Then
             assertThat(user.getName()).isEqualTo("sehan");
@@ -99,7 +99,7 @@ class MemberCommandTest {
         @DisplayName("주소 정보 변경 테스트")
         void update_address() {
             // When
-            memberCommand.updateAddress(shipping, "멀리단길", "ray", "01000000000");
+            userCommand.updateAddress(shipping, "멀리단길", "ray", "01000000000");
 
             // Then
             assertThat(shipping.getAddress().getDescribedAddress()).isEqualTo("컬리단길 멀리단길");
@@ -109,7 +109,7 @@ class MemberCommandTest {
         @DisplayName("배송 요청사항 변경 테스트")
         void update_address_info() {
             // When
-            memberCommand.updateAddressInfo(shipping, "sehan", "01000000000", "DOOR", "1234", "ALWAYS");
+            userCommand.updateAddressInfo(shipping, "sehan", "01000000000", "DOOR", "1234", "ALWAYS");
 
             // Then
             assertThat(shipping.getInfo().getReceiver()).isEqualTo("sehan");
@@ -119,7 +119,7 @@ class MemberCommandTest {
         @DisplayName("주소 삭제 테스트")
         void delete_address() {
             // When
-            memberCommand.deleteAddress(shipping);
+            userCommand.deleteAddress(shipping);
 
             // Then
             then(shippingRepository).should(times(1)).delete(any());
@@ -145,7 +145,7 @@ class MemberCommandTest {
             RegisterPayment.CreditRequest request = new RegisterPayment.CreditRequest("12341234", "hana", null, "53");
 
             // When
-            memberCommand.addCredit(1L, request);
+            userCommand.addCredit(1L, request);
 
             // Then
             then(paymentRepository).should(times(1)).save(any());
@@ -158,7 +158,7 @@ class MemberCommandTest {
             RegisterPayment.EasyPayRequest request = new RegisterPayment.EasyPayRequest("12341234", "hana");
 
             // when
-            memberCommand.addEasyPay(1L, request);
+            userCommand.addEasyPay(1L, request);
 
             // then
             then(paymentRepository).should(times(1)).save(any());
@@ -168,7 +168,7 @@ class MemberCommandTest {
         @DisplayName("결제 수단 삭제 테스트")
         void delete_payment() {
             // When
-            memberCommand.deletePayment(payment);
+            userCommand.deletePayment(payment);
         }
 
         @Test
@@ -178,7 +178,7 @@ class MemberCommandTest {
             UpdatePayPassword.Request request = new UpdatePayPassword.Request("123456");
 
             // When
-            memberCommand.updatePaymentPassword(user, "encodedPayPassword");
+            userCommand.updatePaymentPassword(user, "encodedPayPassword");
         }
     }
 }

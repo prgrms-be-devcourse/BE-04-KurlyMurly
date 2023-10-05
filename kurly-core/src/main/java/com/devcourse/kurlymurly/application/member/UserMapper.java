@@ -5,7 +5,7 @@ import com.devcourse.kurlymurly.web.user.GetAddress;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MemberMapper {
+public class UserMapper {
     public GetAddress.Response toGetAddressResponse(Shipping shipping) {
         return new GetAddress.Response(shipping.isDefault(),
                 shipping.getAddress().isExpress(),

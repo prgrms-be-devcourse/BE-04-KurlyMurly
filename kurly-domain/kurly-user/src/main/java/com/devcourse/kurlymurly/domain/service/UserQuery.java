@@ -21,13 +21,13 @@ import static com.devcourse.kurlymurly.common.exception.ErrorCode.SHIPPING_NOT_F
 
 @Component
 @Transactional(readOnly = true)
-public class MemberQuery {
+public class UserQuery {
     private final UserRepository userRepository;
     private final ShippingRepository shippingRepository;
     private final PaymentRepository paymentRepository;
     private final CartRepository cartRepository;
 
-    public MemberQuery(
+    public UserQuery(
             UserRepository userRepository,
             ShippingRepository shippingRepository,
             PaymentRepository paymentRepository,

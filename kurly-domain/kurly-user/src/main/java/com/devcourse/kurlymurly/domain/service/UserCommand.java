@@ -17,12 +17,12 @@ import java.util.List;
 
 @Component
 @Transactional
-public class MemberCommand {
+public class UserCommand {
     private final PaymentRepository paymentRepository;
     private final ShippingRepository shippingRepository;
     private final CartRepository cartRepository;
 
-    public MemberCommand(
+    public UserCommand(
             PaymentRepository paymentRepository,
             ShippingRepository shippingRepository,
             CartRepository cartRepository
