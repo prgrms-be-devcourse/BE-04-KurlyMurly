@@ -33,10 +33,9 @@ class OrderRepositoryTest {
     void findAllReviewableOrdersByUserIdWithinThirtyDays() {
         // given
         Long userId = 1L;
-        LocalDateTime allowed = LocalDateTime.now().minusDays(30);
 
         // when
-        List<Order> orders = orderRepository.findAllReviewableOrdersByUserIdWithinThirtyDays(userId, allowed);
+        orderRepository.findAllReviewableOrdersByUserIdWithinThirtyDays(userId);
 
         // then
 //        assertThat(orders).isNotEmpty().hasSize(2);

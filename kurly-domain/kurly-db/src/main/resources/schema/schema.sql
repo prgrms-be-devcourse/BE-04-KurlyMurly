@@ -66,8 +66,8 @@ CREATE TABLE categories
     id           BIGINT PRIMARY KEY AUTO_INCREMENT,
     name         VARCHAR(20) NOT NULL,
     sub_category VARCHAR(20) NOT NULL,
-    created_at   TIMESTAMP(6),
-    updated_at   TIMESTAMP(6)
+    created_at   DATETIME(6),
+    updated_at   DATETIME(6)
 );
 
 DROP TABLE IF EXISTS products;
@@ -89,8 +89,8 @@ CREATE TABLE products
     expiration_information VARCHAR(50)  NOT NULL,
     status                 VARCHAR(15)  NOT NULL,
     is_kurly_only          BOOLEAN      NOT NULL,
-    created_at             TIMESTAMP(6),
-    updated_at             TIMESTAMP(6)
+    created_at             DATETIME(6),
+    updated_at             DATETIME(6)
 );
 
 DROP TABLE IF EXISTS product_supports;
@@ -104,8 +104,8 @@ CREATE TABLE product_supports
     content      TEXT         NOT NULL,
     is_secret    BOOLEAN      NOT NULL,
     status       VARCHAR(15)  NOT NULL,
-    created_at   TIMESTAMP(6),
-    updated_at   TIMESTAMP(6)
+    created_at   DATETIME(6),
+    updated_at   DATETIME(6)
 );
 
 DROP TABLE IF EXISTS favorites;
@@ -115,8 +115,8 @@ CREATE TABLE favorites
     user_id    BIGINT  NOT NULL,
     product_id BIGINT  NOT NULL,
     is_deleted BOOLEAN NOT NULL,
-    created_at TIMESTAMP(6),
-    updated_at TIMESTAMP(6),
+    created_at DATETIME(6),
+    updated_at DATETIME(6),
     FOREIGN KEY (product_id) REFERENCES products (id)
 );
 

@@ -3,8 +3,6 @@ package com.devcourse.kurlymurly.domain.order;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
-import java.util.Objects;
-
 @Embeddable
 public class OrderLine {
     @Column(nullable = false)
@@ -35,10 +33,6 @@ public class OrderLine {
         this.totalPrice = totalPrice;
         this.quantity = quantity;
         this.isReviewed = false;
-    }
-
-    public Long getProductId() {
-        return productId;
     }
 
     public String getProductName() {

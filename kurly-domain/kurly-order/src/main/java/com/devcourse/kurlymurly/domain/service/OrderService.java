@@ -14,7 +14,6 @@ import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +24,6 @@ import static com.devcourse.kurlymurly.common.exception.ErrorCode.ORDER_NOT_FOUN
 @Service
 @Transactional(readOnly = true)
 public class OrderService {
-    private static final int REVIEWABLE_DEADLINE = 30;
-
     private final OrderRepository orderRepository;
 
     public OrderService(OrderRepository orderRepository) {
@@ -111,26 +108,8 @@ public class OrderService {
         );
     }
 
-    // todo: 쿼리에서 리뷰가 작성되지 않은 주문 가져오도록 수정
     public List<ReviewResponse.Reviewable> getAllReviewableOrdersByUserId(Long userId) {
-        LocalDateTime allowedPeriod = LocalDateTime.now().minusDays(REVIEWABLE_DEADLINE);
-
-        return orderRepository.findAllReviewableOrdersByUserIdWithinThirtyDays(userId, allowedPeriod).stream()
-                .flatMap(order -> order.getOrderLines().stream()
-                        .filter(OrderLine::isNotReviewed)
-                        .map(orderItem -> toReviewableResponse(order, orderItem)))
-                .toList();
-    }
-
-    private ReviewResponse.Reviewable toReviewableResponse(Order order, OrderLine orderItem) {
-        LocalDateTime delivered = order.getUpdatedAt();
-        return new ReviewResponse.Reviewable(
-                orderItem.getProductId(),
-                orderItem.getProductName(),
-                order.getOrderNumber(),
-                delivered,
-                delivered.plusDays(REVIEWABLE_DEADLINE)
-        );
+        return orderRepository.findAllReviewableOrdersByUserIdWithinThirtyDays(userId);
     }
 
     @Transactional

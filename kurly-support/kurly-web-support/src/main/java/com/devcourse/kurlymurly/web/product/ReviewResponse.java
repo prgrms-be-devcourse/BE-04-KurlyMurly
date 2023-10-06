@@ -9,11 +9,12 @@ import static com.devcourse.kurlymurly.web.product.ReviewResponse.Reviewed;
 
 public sealed interface ReviewResponse permits Reviewable, Reviewed, OfProduct, Like {
     record Reviewable(
-        Long productId,
-        String productName,
-        String orderNumber,
-        LocalDateTime deliveredAt,
-        LocalDateTime reviewDeadLine
+            Long productId,
+            String productName,
+            Integer lineIndex,
+            String imageUrl,
+            LocalDateTime deliveredAt,
+            LocalDateTime reviewDeadLine
     ) implements ReviewResponse {
     }
 
