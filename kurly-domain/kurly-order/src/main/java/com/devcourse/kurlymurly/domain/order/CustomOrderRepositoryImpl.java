@@ -14,7 +14,7 @@ class CustomOrderRepositoryImpl implements CustomOrderRepository {
     }
 
     @Override
-    public List<ReviewResponse.Reviewable> findAllReviewableOrdersByUserIdWithinThirtyDays(Long userId) {
+    public List<ReviewResponse.Reviewable> findReviewableOrdersByUserIdWithinThirtyDays(Long userId) {
         String sql = """
                 SELECT ol.product_id AS productId, ol.product_name AS productName, ol.line_index AS lineIndex,
                     ol.image_url AS imageUrl, o.delivered_at AS deliveredAt, DATE_ADD(o.delivered_at, INTERVAL 30 DAY) AS reviewDeadLine

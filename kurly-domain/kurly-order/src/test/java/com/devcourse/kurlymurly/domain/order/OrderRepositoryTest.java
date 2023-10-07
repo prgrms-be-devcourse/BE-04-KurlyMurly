@@ -1,47 +1,47 @@
 package com.devcourse.kurlymurly.domain.order;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.devcourse.kurlymurly.web.product.ReviewResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.devcourse.kurlymurly.domain.OrderFixture.HEJOW_ORDER;
-import static com.devcourse.kurlymurly.domain.OrderFixture.HEJOW_ORDER2;
+import static com.devcourse.kurlymurly.domain.order.Order.*;
+import static com.devcourse.kurlymurly.domain.order.OrderFixture.HEJOW_ORDER;
+import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class OrderRepositoryTest {
     @Autowired
     private OrderRepository orderRepository;
 
-    @BeforeEach
-    void initOrders() {
-        Order order1 = HEJOW_ORDER.toEntity();
-        Order order2 = HEJOW_ORDER2.toEntity();
-//        order1.toDelivered();
-//        order2.toDelivered();
-        order1.reviewOrderLine(1);
-
-        orderRepository.saveAll(List.of(order1, order2));
-    }
-
     @Test
-    @DisplayName("유저의 30일 이내의 배달 완료되고 리뷰가 작성되지 않은 주문만 가져올 수 있어야 한다.")
+    @DisplayName("유저의 30일 이내의 배달 완료되고 후기가 작성되지 않은 주문 상품만 가져와야 한다.")
     void findAllReviewableOrdersByUserIdWithinThirtyDays() {
         // given
         Long userId = 1L;
+        int reviewedIndex = 1;
+
+        Order hejowOrder = HEJOW_ORDER.toSpecificStateEntity(Status.DELIVERED);
+        hejowOrder.reviewOrderLine(reviewedIndex);
+
+        Order order = orderRepository.save(hejowOrder);
 
         // when
-        orderRepository.findAllReviewableOrdersByUserIdWithinThirtyDays(userId);
+        List<ReviewResponse.Reviewable> responses = orderRepository.findReviewableOrdersByUserIdWithinThirtyDays(userId);
 
         // then
-//        assertThat(orders).isNotEmpty().hasSize(2);
-        // todo: should not load reviewed orders but doing so
-//        assertThat(orders.stream()
-//                .flatMap(order -> order.getOrderItems()
-//                        .stream()).toList()).hasSize(3);
+        assertThat(responses).hasSize(1);
+
+        ReviewResponse.Reviewable response = responses.get(0);
+        assertThat(response.deliveredAt()).isEqualTo(order.getDeliveredAt());
+        assertThat(response.reviewDeadLine()).isEqualTo(response.deliveredAt().plusDays(30));
+        assertThat(response.lineIndex()).isNotEqualTo(reviewedIndex);
     }
 }

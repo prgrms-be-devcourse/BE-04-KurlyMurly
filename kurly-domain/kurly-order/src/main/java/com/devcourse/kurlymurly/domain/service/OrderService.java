@@ -99,7 +99,7 @@ public class OrderService {
 
     private GetOrderResponse.SimpleInfo toSimpleInfo(Order order) {
         return new GetOrderResponse.SimpleInfo(
-                order.getSimpleProducts(),
+                order.summarizeOrderLines(),
                 order.getOrderNumber(),
                 order.getPaymentInfo().getPayment(),
                 order.getPaymentInfo().getActualPayAmount(),
@@ -109,13 +109,13 @@ public class OrderService {
     }
 
     public List<ReviewResponse.Reviewable> getAllReviewableOrdersByUserId(Long userId) {
-        return orderRepository.findAllReviewableOrdersByUserIdWithinThirtyDays(userId);
+        return orderRepository.findReviewableOrdersByUserIdWithinThirtyDays(userId);
     }
 
     @Transactional
     public void toNextState(Long id) {
         Order order = findByIdOrThrow(id); // todo: entity에서 domain으로 변경
-        order.toNextState();
+        order.nextState();
     }
 
     @Transactional

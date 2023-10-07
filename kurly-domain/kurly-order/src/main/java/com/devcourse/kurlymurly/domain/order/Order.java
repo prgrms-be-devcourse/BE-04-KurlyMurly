@@ -2,7 +2,12 @@ package com.devcourse.kurlymurly.domain.order;
 
 import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import com.devcourse.kurlymurly.data.BaseEntity;
+import com.devcourse.kurlymurly.domain.order.state.Canceled;
+import com.devcourse.kurlymurly.domain.order.state.Delivered;
+import com.devcourse.kurlymurly.domain.order.state.Delivering;
 import com.devcourse.kurlymurly.domain.order.state.OrderState;
+import com.devcourse.kurlymurly.domain.order.state.Ordered;
+import com.devcourse.kurlymurly.domain.order.state.Processing;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -32,12 +37,18 @@ public class Order extends BaseEntity {
     private static final Random random = new Random();
     private static final int RANDOM_BOUND = 10000;
 
-    public enum Status {
-        ORDERED,
-        PROCESSING,
-        DELIVERING,
-        DELIVERED,
-        CANCELED
+    public enum Status { // 주문 완료, 출고 중, 배달 중, 배달 완료, 취소
+        ORDERED, PROCESSING, DELIVERING, DELIVERED, CANCELED;
+
+        OrderState generateState() {
+            return switch (this) {
+                case ORDERED -> new Ordered();
+                case PROCESSING -> new Processing();
+                case DELIVERING -> new Delivering();
+                case DELIVERED -> new Delivered();
+                case CANCELED -> new Canceled();
+            };
+        }
     }
 
     @Column(nullable = false)
@@ -70,28 +81,45 @@ public class Order extends BaseEntity {
     protected Order() {
     }
 
-    public Order(Long userId, List<OrderLine> orderLines, PaymentInfo paymentInfo, ShippingInfo shippingInfo) {
+    Order(Long userId, List<OrderLine> orderLines, PaymentInfo paymentInfo, ShippingInfo shippingInfo,
+                 LocalDateTime deliveredAt, Status status, OrderState orderState) {
         this.userId = userId;
         this.orderNumber = generateOrderNumber();
         this.orderLines = orderLines;
         this.paymentInfo = paymentInfo;
         this.shippingInfo = shippingInfo;
-        this.status = Status.ORDERED;
+        this.deliveredAt = deliveredAt;
+        this.status = status;
+        this.orderState = orderState;
     }
 
-    public void toNextState() {
-        this.orderState = orderState.nextState();
+    public Order(Long userId, List<OrderLine> orderLines, PaymentInfo paymentInfo, ShippingInfo shippingInfo) {
+        this(userId, orderLines, paymentInfo, shippingInfo, null, Status.ORDERED, new Ordered());
+    }
+
+    public void nextState() {
+        if (orderState == null) {
+            this.orderState = status.generateState();
+        }
+
+        this.orderState = orderState.nextState(this);
     }
 
     public void cancel() {
-        this.status = Status.CANCELED;
-        //this.orderState = orderState.cancel();
+        this.orderState = orderState.cancel(this);
+    }
+
+    public void updateStatus(Order.Status status) {
+        this.status = status;
+    }
+
+    public void delivered() {
+        updateStatus(Status.DELIVERED);
+        this.deliveredAt = LocalDateTime.now();
     }
 
     private String generateOrderNumber() {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        String currentDate = localDateTime.format(dateFormat);
-
+        String currentDate = LocalDateTime.now().format(dateFormat);
         int randomDigits = random.nextInt(RANDOM_BOUND);
 
         return currentDate + randomDigits;
@@ -103,6 +131,10 @@ public class Order extends BaseEntity {
 
     public Status getStatus() {
         return status;
+    }
+
+    public LocalDateTime getDeliveredAt() {
+        return deliveredAt;
     }
 
     public String getOrderNumber() {
@@ -129,15 +161,11 @@ public class Order extends BaseEntity {
         }
     }
 
-    public String getSimpleProducts() {
-        if(orderLines.size() == 1) {
-            return orderLines.get(0).getProductName();
-        }
+    public String summarizeOrderLines() {
+        int size = orderLines.size();
+        String firstLineName = orderLines.get(0).getProductName();
 
-        String productName = orderLines.get(0).getProductName() + " 외 " ;
-        int size = orderLines.size() - 1;
-
-        return productName + size + "건";
+        return size != 1 ? String.format("%s 외 %d건", firstLineName, size - 1) : firstLineName;
     }
 
     public void validateOrdersOwner(Long userId) {

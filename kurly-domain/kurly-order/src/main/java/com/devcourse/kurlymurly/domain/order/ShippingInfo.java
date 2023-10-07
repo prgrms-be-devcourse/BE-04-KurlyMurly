@@ -8,7 +8,7 @@ public class ShippingInfo {
     @Column(length = 10, nullable = false)
     private String receiver;
 
-    @Column(length = 15, nullable = false)
+    @Column(length = 30, nullable = false)
     private String phoneNumber;
 
     @Column(length = 50, nullable = false)

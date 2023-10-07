@@ -44,15 +44,6 @@ public class OrderDomain {
         orderStatus = Order.Status.ORDERED;
     }
 
-    public void toNextState() {
-        this.state = state.nextState();
-    }
-
-    public void toCancel() {
-        this.state = state.cancel();
-        orderStatus = Order.Status.CANCELED;
-    }
-
     public Order toEntity(Long userId) {
         return new Order(
                 userId,

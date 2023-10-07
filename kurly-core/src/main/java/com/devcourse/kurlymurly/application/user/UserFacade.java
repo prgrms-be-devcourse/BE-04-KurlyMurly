@@ -1,6 +1,7 @@
 package com.devcourse.kurlymurly.application.user;
 
 import com.devcourse.kurlymurly.auth.AuthService;
+import com.devcourse.kurlymurly.domain.service.OrderService;
 import com.devcourse.kurlymurly.domain.service.UserCommand;
 import com.devcourse.kurlymurly.domain.service.UserQuery;
 import com.devcourse.kurlymurly.domain.service.ProductQuery;
@@ -8,12 +9,10 @@ import com.devcourse.kurlymurly.domain.user.User;
 import com.devcourse.kurlymurly.domain.user.cart.Cart;
 import com.devcourse.kurlymurly.domain.user.payment.Payment;
 import com.devcourse.kurlymurly.domain.user.shipping.Shipping;
-import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import com.devcourse.kurlymurly.web.user.GetAddress;
 import com.devcourse.kurlymurly.web.user.RegisterPayment;
 import com.devcourse.kurlymurly.web.user.UpdateUser;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

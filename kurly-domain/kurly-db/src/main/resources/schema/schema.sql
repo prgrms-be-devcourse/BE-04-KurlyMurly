@@ -152,7 +152,6 @@ CREATE TABLE orders
 (
     id                BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id           BIGINT              NOT NULL,
-    shipping_id       BIGINT              NOT NULL,
     order_number      VARCHAR(255) UNIQUE NOT NULL,
     delivery_fee      INT                 NOT NULL,
     total_price       INT                 NOT NULL,
@@ -160,7 +159,7 @@ CREATE TABLE orders
     actual_pay_amount INT                 NOT NULL,
     payment           VARCHAR(10)         NOT NULL,
     receiver          VARCHAR(10)         NOT NULL,
-    phone_number      VARCHAR(10)         NOT NULL,
+    phone_number      VARCHAR(30)         NOT NULL,
     address           VARCHAR(50)         NOT NULL,
     receive_area      VARCHAR(15)         NOT NULL,
     entrance_info     VARCHAR(30)         NOT NULL,
