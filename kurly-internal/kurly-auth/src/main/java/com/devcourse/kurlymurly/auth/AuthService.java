@@ -71,15 +71,19 @@ public class AuthService {
 
     private User toUser(Join.Request request) {
         UserInfo userInfo = new UserInfo(request.birth(), request.recommender(), request.sex());
-
+        String encodedPassword = encodePassword(request.password());
         return new User(
                 request.name(),
                 request.loginId(),
-                passwordEncoder.encode(request.password()),
+                encodedPassword,
                 request.email(),
                 userInfo,
                 request.phoneNumber()
         );
+    }
+
+    public String encodePassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
     }
 
     public Boolean checkId(String id) {
