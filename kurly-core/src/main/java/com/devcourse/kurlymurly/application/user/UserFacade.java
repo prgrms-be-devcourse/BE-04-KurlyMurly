@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.application.user;
 
+import com.devcourse.kurlymurly.auth.AuthService;
 import com.devcourse.kurlymurly.domain.service.UserCommand;
 import com.devcourse.kurlymurly.domain.service.UserQuery;
 import com.devcourse.kurlymurly.domain.service.ProductQuery;
@@ -24,7 +25,7 @@ public class UserFacade {
     private final OrderService orderService;
     private final UserMapper userMapper;
     private final ProductQuery productQuery;
-    private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
     public UserFacade(
             UserQuery userQuery,
@@ -32,14 +33,14 @@ public class UserFacade {
             OrderService orderService,
             UserMapper userMapper,
             ProductQuery productQuery,
-            PasswordEncoder passwordEncoder
+            AuthService authService
     ) {
         this.userQuery = userQuery;
         this.userCommand = userCommand;
         this.orderService = orderService;
         this.userMapper = userMapper;
         this.productQuery = productQuery;
-        this.passwordEncoder = passwordEncoder;
+        this.authService = authService;
     }
 
     public List<ReviewResponse.Reviewable> getAllReviewableOrdersByUserId(Long userId) {
@@ -48,7 +49,7 @@ public class UserFacade {
 
     public void updateUserInfo(Long userId, UpdateUser.Request request) {
         User user = userQuery.getUser(userId);
-        String editPassword = passwordEncoder.encode(request.password());
+        String editPassword = authService.encodePassword(request.password());
 
         userCommand.updateUserInfo(request, editPassword, user);
     }
@@ -102,7 +103,7 @@ public class UserFacade {
 
     public void updatePaymentPassword(Long userId, String payPassword) {
         User user = userQuery.getUser(userId);
-        String encodedPassword = passwordEncoder.encode(payPassword);
+        String encodedPassword = authService.encodePassword(payPassword);
         userCommand.updatePaymentPassword(user, encodedPassword);
     }
 
