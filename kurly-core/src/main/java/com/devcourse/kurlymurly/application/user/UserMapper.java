@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.application.member;
+package com.devcourse.kurlymurly.application.user;
 
 import com.devcourse.kurlymurly.domain.user.shipping.Shipping;
 import com.devcourse.kurlymurly.web.user.GetAddress;

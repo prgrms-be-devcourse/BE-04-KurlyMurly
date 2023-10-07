@@ -1,4 +1,4 @@
-package com.devcourse.kurlymurly.application.member;
+package com.devcourse.kurlymurly.application.user;
 
 import com.devcourse.kurlymurly.domain.service.UserCommand;
 import com.devcourse.kurlymurly.domain.service.UserQuery;
