@@ -5,11 +5,11 @@ import com.devcourse.kurlymurly.domain.product.Product;
 import com.devcourse.kurlymurly.domain.product.ProductDomain;
 import com.devcourse.kurlymurly.domain.product.SupportDomain;
 import com.devcourse.kurlymurly.domain.product.review.Review;
+import com.devcourse.kurlymurly.domain.service.OrderService;
 import com.devcourse.kurlymurly.domain.service.ProductCommand;
 import com.devcourse.kurlymurly.domain.service.ProductQuery;
 import com.devcourse.kurlymurly.domain.service.ReviewCommand;
 import com.devcourse.kurlymurly.domain.service.ReviewQuery;
-import com.devcourse.kurlymurly.module.order.service.OrderService;
 import com.devcourse.kurlymurly.web.product.FavoriteResponse;
 import com.devcourse.kurlymurly.web.product.ProductRequest;
 import com.devcourse.kurlymurly.web.product.ProductResponse;
@@ -124,7 +124,7 @@ public class ProductFacade {
         product.validateSupportable();
 
         reviewCommand.create(userId, product.getId(), product.getName(), request.content(), request.isSecret());
-        orderService.reviewOrderLine(request.orderId(), request.productId());
+        orderService.reviewOrderLine(request.orderId(), request.lineIndex());
     }
 
     public void favoriteProduct(Long userId, Long productId) {

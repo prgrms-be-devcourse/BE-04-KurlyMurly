@@ -15,7 +15,7 @@ public sealed interface CreateOrder permits Request, Response {
     record Request(
             @NotNull(message = "빈 값이 들어올 수 없습니다.")
             @Schema(description = "주문 상품 정보들")
-            @Valid List<CreateOrderItem.Request> orderItems,
+            @Valid List<CreateOrderLine.Request> orderItems,
 
             @Positive(message = "0보다 작은 값이 들어올 수 없습니다.")
             @Schema(description = "총 주문 금액")

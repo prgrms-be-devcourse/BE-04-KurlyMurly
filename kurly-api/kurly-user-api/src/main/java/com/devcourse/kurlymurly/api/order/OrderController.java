@@ -1,7 +1,7 @@
 package com.devcourse.kurlymurly.api.order;
 
 import com.devcourse.kurlymurly.auth.AuthUser;
-import com.devcourse.kurlymurly.module.order.service.OrderService;
+import com.devcourse.kurlymurly.domain.service.OrderService;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.order.CreateOrder;
 import com.devcourse.kurlymurly.web.order.GetOrderResponse;

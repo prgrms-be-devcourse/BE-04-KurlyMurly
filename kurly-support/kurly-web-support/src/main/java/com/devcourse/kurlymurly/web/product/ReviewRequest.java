@@ -3,6 +3,7 @@ package com.devcourse.kurlymurly.web.product;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import static com.devcourse.kurlymurly.web.product.ReviewRequest.Create;
 import static com.devcourse.kurlymurly.web.product.ReviewRequest.Like;
@@ -18,6 +19,10 @@ public sealed interface ReviewRequest permits Create, Update, Like, OfProduct {
             @NotNull(message = "상품 번호로 빈 값이 들어올 수 없습니다.")
             @Schema(description = "상품 id")
             Long productId,
+
+            @PositiveOrZero(message = "주문 상품 번호로 음수가 입력될 수 없습니다.")
+            @Schema(description = "주문 상품 인덱스")
+            int lineIndex,
 
             @NotBlank(message = "내용에는 빈 값이 들어올 수 없습니다.")
             @Schema(description = "리뷰 내용")

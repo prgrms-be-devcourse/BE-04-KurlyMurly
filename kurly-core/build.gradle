@@ -3,6 +3,7 @@ dependencies {
     api project(":kurly-internal:kurly-auth")
     api project(':kurly-support:kurly-web-support')
     api project(':kurly-domain:kurly-product') // implementation
+    api project(':kurly-domain:kurly-order') // implementation
 
     implementation project(':kurly-support:kurly-common-support')
     implementation project(':kurly-domain') // delete

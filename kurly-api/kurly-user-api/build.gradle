@@ -1,5 +1,4 @@
 dependencies {
-    implementation project(':kurly-domain') // delete
     implementation project(':kurly-core')
     implementation project(':kurly-internal:kurly-image')
 }

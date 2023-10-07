@@ -1,0 +1,9 @@
+dependencies {
+    implementation project(":kurly-domain:kurly-db")
+    implementation project(":kurly-domain:kurly-user") // delete
+    implementation project(':kurly-support:kurly-web-support')
+    implementation project(':kurly-support:kurly-common-support')
+}
+
+bootJar.enabled=false
+jar.enabled=true

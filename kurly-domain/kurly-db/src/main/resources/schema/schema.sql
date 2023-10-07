@@ -66,8 +66,8 @@ CREATE TABLE categories
     id           BIGINT PRIMARY KEY AUTO_INCREMENT,
     name         VARCHAR(20) NOT NULL,
     sub_category VARCHAR(20) NOT NULL,
-    created_at   TIMESTAMP(6),
-    updated_at   TIMESTAMP(6)
+    created_at   DATETIME(6),
+    updated_at   DATETIME(6)
 );
 
 DROP TABLE IF EXISTS products;
@@ -89,8 +89,8 @@ CREATE TABLE products
     expiration_information VARCHAR(50)  NOT NULL,
     status                 VARCHAR(15)  NOT NULL,
     is_kurly_only          BOOLEAN      NOT NULL,
-    created_at             TIMESTAMP(6),
-    updated_at             TIMESTAMP(6)
+    created_at             DATETIME(6),
+    updated_at             DATETIME(6)
 );
 
 DROP TABLE IF EXISTS product_supports;
@@ -104,8 +104,8 @@ CREATE TABLE product_supports
     content      TEXT         NOT NULL,
     is_secret    BOOLEAN      NOT NULL,
     status       VARCHAR(15)  NOT NULL,
-    created_at   TIMESTAMP(6),
-    updated_at   TIMESTAMP(6)
+    created_at   DATETIME(6),
+    updated_at   DATETIME(6)
 );
 
 DROP TABLE IF EXISTS favorites;
@@ -115,8 +115,8 @@ CREATE TABLE favorites
     user_id    BIGINT  NOT NULL,
     product_id BIGINT  NOT NULL,
     is_deleted BOOLEAN NOT NULL,
-    created_at TIMESTAMP(6),
-    updated_at TIMESTAMP(6),
+    created_at DATETIME(6),
+    updated_at DATETIME(6),
     FOREIGN KEY (product_id) REFERENCES products (id)
 );
 
@@ -152,7 +152,6 @@ CREATE TABLE orders
 (
     id                BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id           BIGINT              NOT NULL,
-    shipping_id       BIGINT              NOT NULL,
     order_number      VARCHAR(255) UNIQUE NOT NULL,
     delivery_fee      INT                 NOT NULL,
     total_price       INT                 NOT NULL,
@@ -160,7 +159,7 @@ CREATE TABLE orders
     actual_pay_amount INT                 NOT NULL,
     payment           VARCHAR(10)         NOT NULL,
     receiver          VARCHAR(10)         NOT NULL,
-    phone_number      VARCHAR(10)         NOT NULL,
+    phone_number      VARCHAR(30)         NOT NULL,
     address           VARCHAR(50)         NOT NULL,
     receive_area      VARCHAR(15)         NOT NULL,
     entrance_info     VARCHAR(30)         NOT NULL,
@@ -174,8 +173,9 @@ CREATE TABLE orders
 DROP TABLE IF EXISTS order_lines;
 CREATE TABLE order_lines
 (
+    order_id     BIGINT       NOT NULL,
     product_id   BIGINT       NOT NULL,
-    user_id      BIGINT       NOT NULL,
+    line_index   INT          NOT NULL,
     product_name VARCHAR(50)  NOT NULL,
     image_url    VARCHAR(255) NOT NULL,
     total_price  INT          NOT NULL,
