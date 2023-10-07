@@ -11,33 +11,28 @@ import com.devcourse.kurlymurly.domain.user.shipping.ShippingRepository;
 import com.devcourse.kurlymurly.web.user.RegisterPayment;
 import com.devcourse.kurlymurly.web.user.UpdateUser;
 import jakarta.transaction.Transactional;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 @Transactional
-public class MemberCommand {
-    private final PasswordEncoder passwordEncoder;
+public class UserCommand {
     private final PaymentRepository paymentRepository;
     private final ShippingRepository shippingRepository;
     private final CartRepository cartRepository;
 
-    public MemberCommand(
-            PasswordEncoder passwordEncoder,
+    public UserCommand(
             PaymentRepository paymentRepository,
             ShippingRepository shippingRepository,
             CartRepository cartRepository
     ) {
-        this.passwordEncoder = passwordEncoder;
         this.paymentRepository = paymentRepository;
         this.shippingRepository = shippingRepository;
         this.cartRepository = cartRepository;
     }
 
-    public void updateUserInfo(UpdateUser.Request request, User user) {
-        String editPassword = passwordEncoder.encode(request.password());
+    public void updateUserInfo(UpdateUser.Request request, String editPassword, User user) {
         user.update(request.name(), editPassword, request.email(), request.sex(), request.birth(), request.phoneNumber());
     }
 
@@ -77,9 +72,7 @@ public class MemberCommand {
         payment.deletePayment();
     }
 
-    public void updatePaymentPassword(User user, String payPassword) {
-        String encodedPassword = passwordEncoder.encode(payPassword);
-
+    public void updatePaymentPassword(User user, String encodedPassword) {
         user.updatePayPassword(encodedPassword);
     }
 
