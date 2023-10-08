@@ -37,7 +37,6 @@ public class GlobalExceptionHandler {
 
     /**
      * Bean Validation 실패를 잡아주는 예외 핸들러
-     *
      * @Validated는 아직 미적용
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -65,7 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ErrorResponse handleUnexpectedException(RuntimeException e) {
-        log.warn("UnexpectedException Occurs : {},{}", e.getMessage(), e.getClass());
+        log.warn("UnexpectedException Occurs : {}", e.getMessage());
         return ErrorResponse.from(KURLY_SERVER_ERROR);
     }
 }
