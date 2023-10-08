@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -36,23 +37,25 @@ public class GlobalExceptionHandler {
 
     /**
      * Bean Validation 실패를 잡아주는 예외 핸들러
+     *
      * @Validated는 아직 미적용
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-        @ResponseStatus(BAD_REQUEST)
-        public ErrorResponse handleValidationFailException(MethodArgumentNotValidException e) {
-            String errorMessage = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-            log.info("ValidationFailed : {}", errorMessage);
-            return new ErrorResponse(CLIENT_INPUT_INVALID.name(), errorMessage);
+    @ResponseStatus(BAD_REQUEST)
+    public ErrorResponse handleValidationFailException(MethodArgumentNotValidException e) {
+        String errorMessage = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        log.info("ValidationFailed : {}", errorMessage);
+        return new ErrorResponse(CLIENT_INPUT_INVALID.name(), errorMessage);
     }
 
     /**
      * 인증 실패 예외를 잡아주는 핸들러
      */
-    @ExceptionHandler(BadCredentialsException.class)
+    @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(UNPROCESSABLE_ENTITY)
-    public ErrorResponse handleUnexpectedException(BadCredentialsException e) {
-        log.warn("BadCredentialException Occurs : {}", e.getMessage());
+    public ErrorResponse handleUnexpectedException(AuthenticationException e) {
+        log.warn("LoginFailed : {}", e.getClass().getSimpleName());
+        log.warn("ErrorMessage : {}", e.getMessage());
         return ErrorResponse.from(ErrorCode.BAD_CREDENTIAL);
     }
 
@@ -62,7 +65,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ErrorResponse handleUnexpectedException(RuntimeException e) {
-        log.warn("UnexpectedException Occurs : {}", e.getMessage());
+        log.warn("UnexpectedException Occurs : {},{}", e.getMessage(), e.getClass());
         return ErrorResponse.from(KURLY_SERVER_ERROR);
     }
 }
