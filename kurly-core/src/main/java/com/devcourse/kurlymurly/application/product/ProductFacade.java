@@ -77,7 +77,7 @@ public class ProductFacade {
     }
 
     public Page<ProductResponse.GetSimple> loadBestProductPageResponse(
-            @Valid Pageable pageable
+            Pageable pageable
     ) {
         return productQuery.getBestProductPageResponse(pageable);
     }
