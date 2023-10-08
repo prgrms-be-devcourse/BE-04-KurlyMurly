@@ -63,6 +63,11 @@ public class ProductCommand {
         product.soldOut();
     }
 
+    public void updateProductToBest(Long id) {
+        Product product = productQuery.findProductByIdOrThrow(id);
+        product.toBest();
+    }
+
     public void deleteProduct(Long id) {
         Product product = productQuery.findProductByIdOrThrow(id);
         product.softDelete();
