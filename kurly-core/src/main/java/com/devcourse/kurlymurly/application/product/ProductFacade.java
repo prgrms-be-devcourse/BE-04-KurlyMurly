@@ -87,15 +87,14 @@ public class ProductFacade {
         return reviewQuery.getAllReviewsOfUser(userId);
     }
 
-    public ProductResponse.Create createProduct(
+    public void createProduct(
             MultipartFile image,
             @Valid ProductRequest.Create request
     ) {
         ProductDomain productDomain = productMapper.toProductDomain(request);
-        String imageUrl = imageUploader.upload(image);
-
-        productCommand.create(request.categoryId(), imageUrl, productDomain);
-        return productMapper.toCreateResponse(request);
+        imageUploader.upload(image).thenAccept(imageUrl ->
+                productCommand.create(request.categoryId(), imageUrl, productDomain)
+        );
     }
 
     public void createProductSupport(

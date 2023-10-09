@@ -5,7 +5,6 @@ import com.devcourse.kurlymurly.auth.jwt.JwtProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -29,7 +28,7 @@ import static com.devcourse.kurlymurly.domain.user.User.Role.ROLE_USER;
 @EnableWebSecurity
 public class SecurityConfig {
     private final JwtProvider jwtProvider;
-    private final String[] permitUrls = {"/login","/sign-up","/check-id","/check-email"};
+    private final String[] permitUrls = {"/login", "/sign-up", "/check-id", "/check-email"};
     private final String[] restrictedAdminUrls = {"/"};
 
     public SecurityConfig(JwtProvider jwtProvider) {
