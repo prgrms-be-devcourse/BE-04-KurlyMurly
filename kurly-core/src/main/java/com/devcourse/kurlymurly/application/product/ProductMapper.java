@@ -4,7 +4,6 @@ import com.devcourse.kurlymurly.domain.product.ProductDomain;
 import com.devcourse.kurlymurly.domain.product.SupportDomain;
 import com.devcourse.kurlymurly.domain.product.review.Review;
 import com.devcourse.kurlymurly.web.product.ProductRequest;
-import com.devcourse.kurlymurly.web.product.ProductResponse;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import com.devcourse.kurlymurly.web.product.SupportRequest;
 import org.springframework.stereotype.Component;
@@ -30,16 +29,6 @@ public class ProductMapper {
 
     public SupportDomain toSupportDomain(SupportRequest request) {
         return new SupportDomain(request.title(), request.content(), request.isSecret());
-    }
-
-    public ProductResponse.Create toCreateResponse(ProductRequest.Create request) {
-        return new ProductResponse.Create(
-                request.name(),
-                request.price(),
-                request.delivery(),
-                request.storageType(),
-                request.saleUnit()
-        );
     }
 
     public ReviewResponse.Reviewed toReviewedResponse(Review review) {

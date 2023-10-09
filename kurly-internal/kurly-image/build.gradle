@@ -1,6 +1,7 @@
 dependencies {
     implementation project(':kurly-core')
     implementation project(':kurly-support:kurly-common-support')
+    implementation project(':kurly-support:kurly-async-support')
 }
 
 bootJar.enabled=false

@@ -1,14 +1,13 @@
 package com.devcourse.kurlymurly.api.admin;
 
 import com.devcourse.kurlymurly.application.product.ProductFacade;
+import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.domain.service.OrderService;
 import com.devcourse.kurlymurly.domain.service.OrderSupportService;
 import com.devcourse.kurlymurly.domain.service.ReviewCommand;
-import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
 import com.devcourse.kurlymurly.web.order.AnswerOrderSupport;
 import com.devcourse.kurlymurly.web.product.ProductRequest;
-import com.devcourse.kurlymurly.web.product.ProductResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -57,13 +56,13 @@ public class AdminController {
     })
     @PostMapping("/products")
     @ResponseStatus(OK)
-    public KurlyResponse<ProductResponse.Create> createProduct(
+    public KurlyResponse<Void> createProduct(
             @AuthenticationPrincipal AuthUser admin,
             @RequestPart MultipartFile image,
-            @RequestBody ProductRequest.Create request
+            @RequestPart ProductRequest.Create request
     ) {
-        ProductResponse.Create response = productFacade.createProduct(image, request);
-        return KurlyResponse.ok(response);
+        productFacade.createProduct(image, request);
+        return KurlyResponse.noData();
     }
 
     @Tag(name = "admin")

@@ -1,18 +1,8 @@
 package com.devcourse.kurlymurly.web.product;
 
-import static com.devcourse.kurlymurly.web.product.ProductResponse.Create;
 import static com.devcourse.kurlymurly.web.product.ProductResponse.GetSimple;
 
-public sealed interface ProductResponse permits Create, GetSimple {
-    record Create(
-            String productName,
-            int price,
-            String delivery,
-            String StorageType,
-            String saleUnit
-    ) implements ProductResponse {
-    }
-
+public sealed interface ProductResponse permits GetSimple {
     record GetSimple(
             String imageUrl,
             String delivery,

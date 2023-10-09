@@ -4,8 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class KurlyMurlyApplication {
+public class KurlyMurlyAdminApplication {
     public static void main(String[] args) {
-        SpringApplication.run(KurlyMurlyApplication.class, args);
+        SpringApplication.run(KurlyMurlyAdminApplication.class, args);
     }
 }
