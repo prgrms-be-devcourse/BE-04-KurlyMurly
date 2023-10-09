@@ -6,7 +6,6 @@ import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,7 +51,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(UNPROCESSABLE_ENTITY)
-    public ErrorResponse handleUnexpectedException(AuthenticationException e) {
+    public ErrorResponse handleLoginFailException(AuthenticationException e) {
         log.warn("LoginFailed : {}", e.getClass().getSimpleName());
         log.warn("ErrorMessage : {}", e.getMessage());
         return ErrorResponse.from(ErrorCode.BAD_CREDENTIAL);
@@ -63,7 +62,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleUnexpectedException(RuntimeException e) {
+    public ErrorResponse handleLoginFailException(RuntimeException e) {
         log.warn("UnexpectedException Occurs : {}", e.getMessage());
         return ErrorResponse.from(KURLY_SERVER_ERROR);
     }
