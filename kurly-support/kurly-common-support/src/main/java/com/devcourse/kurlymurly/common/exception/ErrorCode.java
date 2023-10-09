@@ -24,9 +24,8 @@ public enum ErrorCode {
     NOT_CORRECT_JWT_SIGN(UNAUTHORIZED, "잘못된 JWT SIGN값입니다."),
     NOT_CORRECT_JWT(UNAUTHORIZED, "잘못된 JWT 토큰입니다."),
     EXPIRED_JWT_TOKEN(UNAUTHORIZED, "만료된 토큰입니다."),
-    NOT_SUPPORTED_JWT_TOKEN(UNAUTHORIZED, "지원하지 않는 토근입니다."),
+    NOT_SUPPORTED_JWT_TOKEN(UNAUTHORIZED, "지원하지 않는 토큰입니다."),
     NOT_AUTHORIZED_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
-    CHECK_TOKEN_ERROR(BAD_REQUEST, "토큰 값을 확인해주세요."),
 
     // 404
     NOT_FOUND_REVIEW(NOT_FOUND, "존재하는 리뷰가 없습니다."),
