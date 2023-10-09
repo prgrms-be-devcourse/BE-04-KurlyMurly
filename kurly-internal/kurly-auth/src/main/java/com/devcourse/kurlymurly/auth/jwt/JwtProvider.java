@@ -74,16 +74,8 @@ public class JwtProvider {
         }
     }
 
-    public void validateToken(String token) {
-        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-    }
-
     private Claims parseClaims(String accessToken) {
-        try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
     }
 }
 
