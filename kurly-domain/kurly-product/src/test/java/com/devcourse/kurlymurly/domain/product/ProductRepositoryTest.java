@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.data.domain.Sort.Direction;
 
 @DataJpaTest
 class ProductRepositoryTest {
@@ -23,6 +24,8 @@ class ProductRepositoryTest {
 
     private Product product;
 
+    private static final Direction DEFAULT_DIRECTION = Direction.DESC;
+
     @BeforeEach
     void init() {
         product = productRepository.save(ProductFixture.LA_GOGI.toEntity());
@@ -33,7 +36,7 @@ class ProductRepositoryTest {
     void loadProductsByCategory_Success() {
         // given
         Long categoryId = 1L;
-        KurlyPagingRequest pagingRequest = new KurlyPagingRequest(1, null);
+        KurlyPagingRequest pagingRequest = new KurlyPagingRequest(1, DEFAULT_DIRECTION);
         Pageable request = pagingRequest.toPageable();
 
         // when
@@ -50,13 +53,33 @@ class ProductRepositoryTest {
     @DisplayName("삭제되지 않은 일주일 내의 상품들을 리뷰 수와 함께 GetProduct.SimpleResponse에 담아야 한다.")
     void loadNewProducts_Success() {
         // given
-        KurlyPagingRequest pagingRequest = new KurlyPagingRequest(1, null);
+        KurlyPagingRequest pagingRequest = new KurlyPagingRequest(1, DEFAULT_DIRECTION);
         Pageable request = pagingRequest.toPageable();
 
         entityManager.clear();
 
         // when
         Page<ProductResponse.GetSimple> responses = productRepository.loadNewProducts(request);
+
+        // then
+        assertThat(responses).isNotEmpty().hasSize(1);
+
+        ProductResponse.GetSimple response = responses.get().toList().get(0);
+        assertThat(response.reviewCount()).isNotNull().isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("베스트 상품 리스트를 리뷰 수와 함께 GetProduct.SimpleResponse에 담아야 한다.")
+    void loadBestProducts_Success() {
+        // given
+        product.toBest();
+        KurlyPagingRequest pagingRequest = new KurlyPagingRequest(1, DEFAULT_DIRECTION);
+        Pageable request = pagingRequest.toPageable();
+
+        entityManager.flush();
+
+        // when
+        Page<ProductResponse.GetSimple> responses = productRepository.loadBestProducts(request);
 
         // then
         assertThat(responses).isNotEmpty().hasSize(1);
