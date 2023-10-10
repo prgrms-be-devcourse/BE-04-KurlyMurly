@@ -6,12 +6,15 @@ import com.devcourse.kurlymurly.common.exception.KurlyBaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import static com.devcourse.kurlymurly.common.exception.ErrorCode.LOGIN_FAILED;
 import static com.devcourse.kurlymurly.common.exception.ErrorCode.CLIENT_INPUT_INVALID;
 import static com.devcourse.kurlymurly.common.exception.ErrorCode.KURLY_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -47,14 +50,13 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 인증 실패 예외를 잡아주는 핸들러
+     * 로그인 실패 예외를 잡아주는 핸들러
      */
-    @ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler({BadCredentialsException.class, InternalAuthenticationServiceException.class})
     @ResponseStatus(UNPROCESSABLE_ENTITY)
     public ErrorResponse handleLoginFailException(AuthenticationException e) {
-        log.warn("LoginFailed : {}", e.getClass().getSimpleName());
-        log.warn("ErrorMessage : {}", e.getMessage());
-        return ErrorResponse.from(ErrorCode.BAD_CREDENTIAL);
+        log.warn("Login Failed : {}", e.getMessage());
+        return ErrorResponse.from(LOGIN_FAILED);
     }
 
     /**
@@ -62,7 +64,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleLoginFailException(RuntimeException e) {
+    public ErrorResponse handleUnexpectedException(RuntimeException e) {
         log.warn("UnexpectedException Occurs : {}", e.getMessage());
         return ErrorResponse.from(KURLY_SERVER_ERROR);
     }

@@ -51,7 +51,7 @@ public enum ErrorCode {
     EXIST_SAME_EMAIL(CONFLICT, "사용 불가능한 이메일 입니다."),
 
     // 422
-    BAD_CREDENTIAL(UNPROCESSABLE_ENTITY, "아이디, 비밀번호를 확인해주세요."),
+    LOGIN_FAILED(UNPROCESSABLE_ENTITY, "아이디, 비밀번호를 확인해주세요."),
 
     // 500
     KURLY_SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 내부 문제입니다. 관리자에게 문의바랍니다."),
