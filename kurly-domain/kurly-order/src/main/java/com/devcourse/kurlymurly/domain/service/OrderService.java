@@ -113,14 +113,14 @@ public class OrderService {
     }
 
     @Transactional
-    public void toNextState(Long id) {
-        Order order = findByIdOrThrow(id); // todo: entity에서 domain으로 변경
+    public void progressOrder(Long id) {
+        Order order = findByIdOrThrow(id);
         order.nextState();
     }
 
     @Transactional
-    public void toCancel(Long id) {
-        Order order = findByIdOrThrow(id); // todo: entity에서 domain으로 변경
+    public void cancelOrder(Long id) {
+        Order order = findByIdOrThrow(id);
         order.cancel();
     }
 

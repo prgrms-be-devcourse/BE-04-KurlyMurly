@@ -17,7 +17,6 @@ import com.devcourse.kurlymurly.web.product.ProductResponse;
 import com.devcourse.kurlymurly.web.product.ReviewRequest;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
 import com.devcourse.kurlymurly.web.product.SupportRequest;
-import com.devcourse.kurlymurly.web.product.SupportResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
