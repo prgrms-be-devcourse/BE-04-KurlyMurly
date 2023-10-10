@@ -1,5 +1,6 @@
 package com.devcourse.kurlymurly.api.user;
 
+import com.devcourse.kurlymurly.application.product.ProductFacade;
 import com.devcourse.kurlymurly.application.user.UserFacade;
 import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
@@ -40,9 +41,28 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("/users")
 public class UserController {
     private final UserFacade userFacade;
+    private final ProductFacade productFacade;
 
-    public UserController(UserFacade userFacade) {
+    public UserController(
+            UserFacade userFacade,
+            ProductFacade productFacade
+    ) {
         this.userFacade = userFacade;
+        this.productFacade = productFacade;
+    }
+
+    @Tag(name = "user")
+    @Operation(summary = "[토큰] 유저 리뷰 조회", description = "[토큰 필요] 사용자가 작성한 리뷰 조회 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 상품의 후기를 가져온 상태"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러")
+    })
+    @GetMapping("/reviews")
+    @ResponseStatus(OK)
+    public KurlyResponse<List<ReviewResponse.Reviewed>> loadAllReviewsOnMyPage(
+            @AuthenticationPrincipal AuthUser user
+    ) {
+        List<ReviewResponse.Reviewed> response = productFacade.loadReviewsOfUser(user.getId());
+        return KurlyResponse.ok(response);
     }
 
     @Tag(name = "user")

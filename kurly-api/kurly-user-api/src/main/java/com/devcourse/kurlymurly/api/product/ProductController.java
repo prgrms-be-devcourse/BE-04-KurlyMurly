@@ -119,6 +119,24 @@ public class ProductController {
     }
 
     @Tag(name = "product")
+    @Operation(summary = "[토큰] 상품 리뷰 등록", description = "[토큰 필요] 리뷰 등록 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 review를 등록한 경우"),
+            @ApiResponse(responseCode = "400", description = "삭제된 상품에 후기를 작성해서 발생하는 에러"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러"),
+            @ApiResponse(responseCode = "404", description = "주문 정보를 읽어오지 못해서 발생하는 에러")
+    })
+    @PostMapping("/{id}/review")
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> registerReview(
+            @AuthenticationPrincipal AuthUser user,
+            @PathVariable("id") Long productId,
+            @RequestBody ReviewRequest.Create request
+    ) {
+        productFacade.registerReview(user.getId(), productId, request);
+        return KurlyResponse.noData();
+    }
+
+    @Tag(name = "product")
     @Operation(summary = "상품 찜하기", description = "[토큰 필요] 상품을 찜 목록에 등록한다.", responses = {
             @ApiResponse(responseCode = "204", description = "성공적으로 찜 목록에 등록했습니다."),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아 발생하는 에러")

@@ -118,9 +118,10 @@ public class ProductFacade {
 
     public void registerReview(
             Long userId,
+            Long productId,
             @Valid ReviewRequest.Create request
     ) {
-        Product product = productQuery.findProductByIdOrThrow(request.productId());
+        Product product = productQuery.findProductByIdOrThrow(productId);
         product.validateSupportable();
 
         reviewCommand.create(userId, product.getId(), product.getName(), request.content(), request.isSecret());
