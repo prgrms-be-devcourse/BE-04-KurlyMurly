@@ -10,9 +10,11 @@ import com.devcourse.kurlymurly.domain.user.cart.Cart;
 import com.devcourse.kurlymurly.domain.user.payment.Payment;
 import com.devcourse.kurlymurly.domain.user.shipping.Shipping;
 import com.devcourse.kurlymurly.web.product.ReviewResponse;
+import com.devcourse.kurlymurly.web.product.SupportResponse;
 import com.devcourse.kurlymurly.web.user.GetAddress;
 import com.devcourse.kurlymurly.web.user.RegisterPayment;
 import com.devcourse.kurlymurly.web.user.UpdateUser;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -44,6 +46,10 @@ public class UserFacade {
 
     public List<ReviewResponse.Reviewable> getAllReviewableOrdersByUserId(Long userId) {
         return orderService.getAllReviewableOrdersByUserId(userId);
+    }
+
+    public Slice<SupportResponse.Create> loadAllMyInquiries(Long userId, Long lastId) {
+        return productQuery.getTenSupportsOfUserFromLastId(userId, lastId);
     }
 
     public void updateUserInfo(Long userId, UpdateUser.Request request) {

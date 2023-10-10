@@ -58,11 +58,6 @@ public class ProductFacade {
         return productQuery.getAllFavoritesByUserId(userId);
     }
 
-    // todo : user api
-    public Slice<SupportResponse.Create> loadAllMyInquiries(Long userId, Long lastId) {
-        return productQuery.getTenSupportsOfUserPageFromLastId(userId, lastId);
-    }
-
     public Page<ProductResponse.GetSimple> loadProductPageResponse(
             Long categoryId,
             @Valid KurlyPagingRequest request

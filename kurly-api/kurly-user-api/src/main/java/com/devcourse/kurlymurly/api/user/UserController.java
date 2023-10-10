@@ -3,6 +3,7 @@ package com.devcourse.kurlymurly.api.user;
 import com.devcourse.kurlymurly.application.user.UserFacade;
 import com.devcourse.kurlymurly.auth.AuthUser;
 import com.devcourse.kurlymurly.web.common.KurlyResponse;
+import com.devcourse.kurlymurly.web.product.SupportResponse;
 import com.devcourse.kurlymurly.web.user.UpdateUser;
 import com.devcourse.kurlymurly.web.user.CreateCart;
 import com.devcourse.kurlymurly.web.user.RemoveCart;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,6 +43,21 @@ public class UserController {
 
     public UserController(UserFacade userFacade) {
         this.userFacade = userFacade;
+    }
+
+    @Tag(name = "user")
+    @Operation(summary = "[토큰] 유저가 작성한 상품 문의를 10개씩 가져온다", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 상품 문의들을 가져온다."),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러")
+    })
+    @GetMapping("/inquiries")
+    @ResponseStatus(OK)
+    public KurlyResponse<Slice<SupportResponse.Create>> loadTenInquiries(
+            @AuthenticationPrincipal AuthUser user,
+            @RequestParam Long last
+    ) {
+        Slice<SupportResponse.Create> responses = userFacade.loadAllMyInquiries(user.getId(), last);
+        return KurlyResponse.ok(responses);
     }
 
     @Tag(name = "user")
