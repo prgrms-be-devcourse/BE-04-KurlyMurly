@@ -19,7 +19,6 @@ function Favorite() {
 
   return (
     <div className="App">
-      {/*TODO: 갯수 넣기*/}
       <h1>찜한 상품({items.length})</h1>
       <table border="1" width="500" height="300" align="center">
         <thead>

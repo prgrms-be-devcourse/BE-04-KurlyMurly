@@ -25,7 +25,6 @@ const JwtInterceptor = () => {
     },
   );
 
-  // todo: response interceptor
   return { instance };
 };
 
