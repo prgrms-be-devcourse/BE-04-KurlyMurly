@@ -10,6 +10,7 @@ import com.devcourse.kurlymurly.domain.service.ProductCommand;
 import com.devcourse.kurlymurly.domain.service.ProductQuery;
 import com.devcourse.kurlymurly.domain.service.ReviewCommand;
 import com.devcourse.kurlymurly.domain.service.ReviewQuery;
+import com.devcourse.kurlymurly.web.common.KurlyPagingRequest;
 import com.devcourse.kurlymurly.web.product.FavoriteResponse;
 import com.devcourse.kurlymurly.web.product.ProductRequest;
 import com.devcourse.kurlymurly.web.product.ProductResponse;
@@ -19,7 +20,6 @@ import com.devcourse.kurlymurly.web.product.SupportRequest;
 import com.devcourse.kurlymurly.web.product.SupportResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,27 +59,27 @@ public class ProductFacade {
     }
 
     // todo : user api
-    public Slice<SupportResponse.Create> getAllMySupports(Long userId, Long lastId) {
+    public Slice<SupportResponse.Create> loadAllMyInquiries(Long userId, Long lastId) {
         return productQuery.getTenSupportsOfUserPageFromLastId(userId, lastId);
     }
 
     public Page<ProductResponse.GetSimple> loadProductPageResponse(
             Long categoryId,
-            @Valid Pageable pageable
+            @Valid KurlyPagingRequest request
     ) {
-        return productQuery.getProductsPageOfCategory(categoryId, pageable);
+        return productQuery.getProductsPageOfCategory(categoryId, request.toPageable());
     }
 
     public Page<ProductResponse.GetSimple> loadNewProductPageResponse(
-            @Valid Pageable pageable
+            @Valid KurlyPagingRequest request
     ) {
-        return productQuery.getNewProductPageResponse(pageable);
+        return productQuery.getNewProductPageResponse(request.toPageable());
     }
 
     public Page<ProductResponse.GetSimple> loadBestProductPageResponse(
-            Pageable pageable
+            @Valid KurlyPagingRequest request
     ) {
-        return productQuery.getBestProductPageResponse(pageable);
+        return productQuery.getBestProductPageResponse(request.toPageable());
     }
 
     public Slice<ReviewResponse.OfProduct> loadReviewsOfProduct(

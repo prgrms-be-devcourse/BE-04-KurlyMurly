@@ -60,7 +60,7 @@ public class ProductController {
             @PathVariable Long categoryId,
             @ModelAttribute KurlyPagingRequest request
     ) {
-        Page<ProductResponse.GetSimple> responses = productFacade.loadProductPageResponse(categoryId, request.toPageable());
+        Page<ProductResponse.GetSimple> responses = productFacade.loadProductPageResponse(categoryId, request);
         return KurlyResponse.ok(responses);
     }
 
@@ -71,7 +71,7 @@ public class ProductController {
     public KurlyResponse<Page<ProductResponse.GetSimple>> getProductPagingOfNewProducts(
             @ModelAttribute KurlyPagingRequest request
     ) {
-        Page<ProductResponse.GetSimple> responses = productFacade.loadNewProductPageResponse(request.toPageable());
+        Page<ProductResponse.GetSimple> responses = productFacade.loadNewProductPageResponse(request);
         return KurlyResponse.ok(responses);
     }
 
@@ -82,7 +82,7 @@ public class ProductController {
     public KurlyResponse<Page<ProductResponse.GetSimple>> getProductPagingOfBestProducts(
             @ModelAttribute KurlyPagingRequest request
     ) {
-        Page<ProductResponse.GetSimple> responses = productFacade.loadBestProductPageResponse(request.toPageable());
+        Page<ProductResponse.GetSimple> responses = productFacade.loadBestProductPageResponse(request);
         return KurlyResponse.ok(responses);
     }
 
