@@ -60,7 +60,7 @@ public class ProductController {
             @PathVariable Long categoryId,
             @ModelAttribute KurlyPagingRequest request
     ) {
-        Page<ProductResponse.GetSimple> responses = productFacade.loadProductPageResponse(categoryId, request.toPageable());
+        Page<ProductResponse.GetSimple> responses = productFacade.loadProductPageResponse(categoryId, request);
         return KurlyResponse.ok(responses);
     }
 
@@ -71,7 +71,7 @@ public class ProductController {
     public KurlyResponse<Page<ProductResponse.GetSimple>> getProductPagingOfNewProducts(
             @ModelAttribute KurlyPagingRequest request
     ) {
-        Page<ProductResponse.GetSimple> responses = productFacade.loadNewProductPageResponse(request.toPageable());
+        Page<ProductResponse.GetSimple> responses = productFacade.loadNewProductPageResponse(request);
         return KurlyResponse.ok(responses);
     }
 
@@ -82,7 +82,7 @@ public class ProductController {
     public KurlyResponse<Page<ProductResponse.GetSimple>> getProductPagingOfBestProducts(
             @ModelAttribute KurlyPagingRequest request
     ) {
-        Page<ProductResponse.GetSimple> responses = productFacade.loadBestProductPageResponse(request.toPageable());
+        Page<ProductResponse.GetSimple> responses = productFacade.loadBestProductPageResponse(request);
         return KurlyResponse.ok(responses);
     }
 
@@ -115,6 +115,24 @@ public class ProductController {
             @RequestBody SupportRequest.Create request
     ) {
         productFacade.createProductSupport(user.getId(), id, request);
+        return KurlyResponse.noData();
+    }
+
+    @Tag(name = "product")
+    @Operation(summary = "[토큰] 상품 리뷰 등록", description = "[토큰 필요] 리뷰 등록 API", responses = {
+            @ApiResponse(responseCode = "200", description = "성공적으로 review를 등록한 경우"),
+            @ApiResponse(responseCode = "400", description = "삭제된 상품에 후기를 작성해서 발생하는 에러"),
+            @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러"),
+            @ApiResponse(responseCode = "404", description = "주문 정보를 읽어오지 못해서 발생하는 에러")
+    })
+    @PostMapping("/{id}/review")
+    @ResponseStatus(OK)
+    public KurlyResponse<Void> registerReview(
+            @AuthenticationPrincipal AuthUser user,
+            @PathVariable("id") Long productId,
+            @RequestBody ReviewRequest.Create request
+    ) {
+        productFacade.registerReview(user.getId(), productId, request);
         return KurlyResponse.noData();
     }
 

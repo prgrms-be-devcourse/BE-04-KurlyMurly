@@ -127,7 +127,6 @@ class OrderSupportServiceTest {
         // given
         OrderSupport orderSupport = createOrderSupportEntity(request);
         AnswerOrderSupport.Request answerRequest = new AnswerOrderSupport.Request(
-                1L,
                 "문의해 주셔서 감사합니다. 해당 문의에 대한 답변입니다."
         );
 

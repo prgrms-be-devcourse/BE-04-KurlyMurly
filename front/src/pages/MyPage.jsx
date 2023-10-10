@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
 const MyPage = () => {
-  // todo: 인증된 유저만 접근할 수 있게
   const navigate = useNavigate();
 
   return (
@@ -11,9 +10,7 @@ const MyPage = () => {
         onClick={() => {
           navigate(`/mypage/order`);
         }}
-      >
-        주문 내역 {/* todo */}
-      </button>
+      ></button>
       <button
         onClick={() => {
           navigate(`/mypage/review`);
@@ -39,9 +36,7 @@ const MyPage = () => {
         onClick={() => {
           navigate(`/mypage/inquiry/products`);
         }}
-      >
-        상품 문의 {/* todo */}
-      </button>
+      ></button>
       <button
         onClick={() => {
           navigate(`/mypage/inquiry`);

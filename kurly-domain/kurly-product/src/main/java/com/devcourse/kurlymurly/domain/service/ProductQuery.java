@@ -51,7 +51,7 @@ public class ProductQuery {
         return favoriteRepository.findAllByUserId(userId);
     }
 
-    public Slice<SupportResponse.Create> getTenSupportsOfUserPageFromLastId(Long userId, Long lastId) {
+    public Slice<SupportResponse.Create> getTenSupportsOfUserFromLastId(Long userId, Long lastId) {
         return productSupportRepository.findTenByUserIdFromStartId(userId, lastId + DEFAULT_PAGE_SIZE);
     }
 
