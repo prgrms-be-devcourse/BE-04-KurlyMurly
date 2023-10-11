@@ -85,7 +85,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "성공적으로 작성 가능한 리뷰 목록을 가져온 상태"),
             @ApiResponse(responseCode = "401", description = "토큰을 넣지 않아서 발생하는 에러")
     })
-    @GetMapping("/reviews")
+    @GetMapping("/reviews/available")
     @ResponseStatus(OK)
     public KurlyResponse<List<ReviewResponse.Reviewable>> getReviewableOrdersOnMyPage(
             @AuthenticationPrincipal AuthUser user
