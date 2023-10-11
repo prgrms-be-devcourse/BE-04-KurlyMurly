@@ -49,7 +49,7 @@ public class OrderSupport extends BaseEntity {
     @Column(nullable = false, columnDefinition = "text")
     private String content;
 
-    @Column(nullable = true)
+    @Column(columnDefinition = "text")
     private String answerContent;
 
     @Enumerated(value = EnumType.STRING)

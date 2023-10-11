@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class User extends BaseEntity {
     public enum Role {ROLE_USER, ROLE_ADMIN}
 
-    public enum UserStatus {CANCEL, NORMAL}
+    public enum Status {CANCEL, NORMAL}
 
     public enum Tier {
         THE_PURPLE,
@@ -59,7 +59,7 @@ public class User extends BaseEntity {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false, length = 10)
-    private UserStatus status;
+    private Status status;
 
     protected User() {
     }
@@ -75,7 +75,7 @@ public class User extends BaseEntity {
         this.info = info;
         this.phoneNumber = phoneNumber;
         this.role = Role.ROLE_USER;
-        this.status = UserStatus.NORMAL;
+        this.status = Status.NORMAL;
     }
 
     public void update(String name, String password, String email, String sex, LocalDate birth, String phoneNumber) {

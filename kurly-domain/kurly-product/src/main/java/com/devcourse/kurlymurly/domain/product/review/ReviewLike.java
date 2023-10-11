@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "review_likes")
 public class ReviewLike extends BaseEntity {
-    @Column(nullable = false)
+    @Column(name = "like_user_id", nullable = false)
     private Long userId;
 
     @Column(nullable = false)

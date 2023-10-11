@@ -1,5 +1,4 @@
-DROP TABLE IF EXISTS users;
-CREATE TABLE users
+CREATE TABLE IF NOT EXISTS users
 (
     id           BIGINT PRIMARY KEY AUTO_INCREMENT,
     name         VARCHAR(10)  NOT NULL,
@@ -9,7 +8,7 @@ CREATE TABLE users
     reward       INTEGER      NOT NULL,
     email        VARCHAR(50)  NOT NULL,
     sex          VARCHAR(10)  NOT NULL,
-    birth        DATETIME(6)  NOT NULL,
+    birth        DATE         NOT NULL,
     pay_password VARCHAR(255),
     recommender  VARCHAR(50),
     phone_number VARCHAR(15),
@@ -19,17 +18,17 @@ CREATE TABLE users
     updated_at   DATETIME(6)
 );
 
-DROP TABLE IF EXISTS carts;
-CREATE TABLE carts
+CREATE TABLE IF NOT EXISTS carts
 (
     id         BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id    BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
-    quantity   INT    NOT NULL
+    quantity   INT    NOT NULL,
+    created_at DATETIME(6),
+    updated_at DATETIME(6)
 );
 
-DROP TABLE IF EXISTS shippings;
-CREATE TABLE shippings
+CREATE TABLE IF NOT EXISTS shippings
 (
     id                 BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id            BIGINT       NOT NULL,
@@ -46,8 +45,7 @@ CREATE TABLE shippings
     updated_at         DATETIME(6)
 );
 
-DROP TABLE IF EXISTS payments;
-CREATE TABLE payments
+CREATE TABLE IF NOT EXISTS payments
 (
     id           BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id      BIGINT      NOT NULL,
@@ -60,8 +58,7 @@ CREATE TABLE payments
     updated_at   DATETIME(6)
 );
 
-DROP TABLE IF EXISTS categories;
-CREATE TABLE categories
+CREATE TABLE IF NOT EXISTS categories
 (
     id           BIGINT PRIMARY KEY AUTO_INCREMENT,
     name         VARCHAR(20) NOT NULL,
@@ -70,8 +67,7 @@ CREATE TABLE categories
     updated_at   DATETIME(6)
 );
 
-DROP TABLE IF EXISTS products;
-CREATE TABLE products
+CREATE TABLE IF NOT EXISTS products
 (
     id                     BIGINT PRIMARY KEY AUTO_INCREMENT,
     category_id            BIGINT       NOT NULL,
@@ -93,8 +89,7 @@ CREATE TABLE products
     updated_at             DATETIME(6)
 );
 
-DROP TABLE IF EXISTS product_supports;
-CREATE TABLE product_supports
+CREATE TABLE IF NOT EXISTS product_supports
 (
     id           BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id      BIGINT       NOT NULL,
@@ -108,8 +103,7 @@ CREATE TABLE product_supports
     updated_at   DATETIME(6)
 );
 
-DROP TABLE IF EXISTS favorites;
-CREATE TABLE favorites
+CREATE TABLE IF NOT EXISTS favorites
 (
     id         BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id    BIGINT  NOT NULL,
@@ -120,8 +114,7 @@ CREATE TABLE favorites
     FOREIGN KEY (product_id) REFERENCES products (id)
 );
 
-DROP TABLE IF EXISTS reviews;
-CREATE TABLE reviews
+CREATE TABLE IF NOT EXISTS reviews
 (
     id           BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id      BIGINT      NOT NULL,
@@ -135,8 +128,7 @@ CREATE TABLE reviews
     updated_at   DATETIME(6)
 );
 
-DROP TABLE IF EXISTS review_likes;
-CREATE TABLE review_likes
+CREATE TABLE IF NOT EXISTS review_likes
 (
     id           BIGINT PRIMARY KEY AUTO_INCREMENT,
     like_user_id BIGINT  NOT NULL,
@@ -147,8 +139,7 @@ CREATE TABLE review_likes
 );
 
 
-DROP TABLE IF EXISTS orders;
-CREATE TABLE orders
+CREATE TABLE IF NOT EXISTS orders
 (
     id                BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id           BIGINT              NOT NULL,
@@ -170,8 +161,7 @@ CREATE TABLE orders
     updated_at        DATETIME(6)
 );
 
-DROP TABLE IF EXISTS order_lines;
-CREATE TABLE order_lines
+CREATE TABLE IF NOT EXISTS order_lines
 (
     order_id     BIGINT       NOT NULL,
     product_id   BIGINT       NOT NULL,
@@ -183,17 +173,17 @@ CREATE TABLE order_lines
     is_reviewed  BOOLEAN      NOT NULL
 );
 
-DROP TABLE IF EXISTS order_supports;
-CREATE TABLE order_supports
+CREATE TABLE IF NOT EXISTS order_supports
 (
-    id           BIGINT PRIMARY KEY AUTO_INCREMENT,
-    type         VARCHAR(15)         NOT NULL,
-    user_id      BIGINT              NOT NULL,
-    order_id     BIGINT              NOT NULL,
-    order_number VARCHAR(255) UNIQUE NOT NULL,
-    title        VARCHAR(30)         NOT NULL,
-    content      TEXT                NOT NULL,
-    status       VARCHAR(15)         NOT NULL,
-    created_at   DATETIME(6),
-    updated_at   DATETIME(6)
+    id             BIGINT PRIMARY KEY AUTO_INCREMENT,
+    type           VARCHAR(15)         NOT NULL,
+    user_id        BIGINT              NOT NULL,
+    order_id       BIGINT              NOT NULL,
+    order_number   VARCHAR(255) UNIQUE NOT NULL,
+    title          VARCHAR(30)         NOT NULL,
+    content        TEXT                NOT NULL,
+    answer_content TEXT,
+    status         VARCHAR(15)         NOT NULL,
+    created_at     DATETIME(6),
+    updated_at     DATETIME(6)
 );
