@@ -51,7 +51,7 @@
 ### 개발 환경
 
 <img src="https://img.shields.io/badge/Java  20-007396?style=flat-square&logo=openJDK&logoColor=white&style=flat"/></a>
-<img src="https://img.shields.io/badge/Spring Boot 3.1.3-6DB33F?style=flat-square&logo=Springboot&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/Spring Boot 3.1.2-6DB33F?style=flat-square&logo=Springboot&logoColor=white&style=flat"/></a>
 <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat-&logo=springsecurity&logoColor=white&style=flat"/></a>
 <img src="https://img.shields.io/badge/Spring Data JPA-gray?style=flat-square&logo=DataJPA&logoColor=white&style=flat"/></a>
 </br>
@@ -60,6 +60,7 @@
 <img src="https://img.shields.io/badge/Junit-25A162?style=flat-&logo=JUnit5&logoColor=white&style=flat"/></a>
 <img src="https://img.shields.io/badge/Gradle-4429A1?style=flat-square&logo=gradle&logoColor=white&style=flat"/></a>
 <img src="https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=Swagger&logoColor=white&style=flat"/></a>
+<img src="https://img.shields.io/badge/Flyway-CC0200?logo=flyway&logoColor=fff&style=flat-square"/></a>
 </br>
 
 ### ERD
@@ -69,7 +70,7 @@
 [ERD 바로가기](https://www.erdcloud.com/d/f9HnabjuRZAvYufzS)
 
 ### 모듈 구조
-![img_7.png](img_7.png)
+![img_3.png](img_3.png)
 
 ## 💜 컨벤션
 - 트렁크 기반 Git  
@@ -89,5 +90,3 @@
 ### 💜 팀 페이지
 🔮️ [팀 노션](https://www.notion.so/backend-devcourse/Team-Project-bb03676699354455902ecc34ff24440d) </br>
 🔮️ [지라](https://2jie0516.atlassian.net/jira/software/projects/KM/boards/1?assignee=62c79dadb6357aecd7c7d360) </br>
-
-![footer](https://capsule-render.vercel.app/api?type=waving&&customColorList=10,1,10color=gradient&height=10&section=footer)
